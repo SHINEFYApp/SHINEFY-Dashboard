@@ -1,8 +1,8 @@
 import i18n from './i18n'
 import { useEffect } from 'react';
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 import Home from './pages/home';
-import About from './pages/About';
+import LogIn from './pages/logIn/logIn';
 
 function App() {
   //change dir
@@ -14,8 +14,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </>
   )
