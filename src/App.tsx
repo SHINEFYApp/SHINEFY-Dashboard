@@ -1,6 +1,3 @@
-import { t } from 'i18next'
-import './App.css'
-import { Button } from './components/ui/button'
 import i18n from './i18n'
 import { useEffect } from 'react';
 import { Route, Routes } from 'react-router';
