@@ -1,0 +1,107 @@
+# Tailwind CSS v4 Configuration
+
+## Files Setup
+
+### `src/index.css`
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+/* Primary Colors (Amber/Yellow) */
+--color-primary-50: #FFFBEB;
+--color-primary-100: #FEF3C7;
+--color-primary-200: #FDE68A;
+--color-primary-300: #FCD34D;
+--color-primary-400: #FBBF24;
+--color-primary-500: #F59E0B;
+--color-primary-600: #FFC107;
+--color-primary-700: #F97316;
+--color-primary-800: #EA580C;
+--color-primary-900: #DC2626;
+
+/* Secondary Colors (Gray) */
+--color-secondary-50: #F9FAFB;
+--color-secondary-100: #F3F4F6;
+--color-secondary-200: #E5E7EB;
+--color-secondary-300: #D1D5DB;
+--color-secondary-400: #9CA3AF;
+--color-secondary-500: #6B7280;
+--color-secondary-600: #4B5563;
+--color-secondary-700: #374151;
+--color-secondary-800: #1F2937;
+--color-secondary-900: #111827;
+
+/* Accent Colors (Same as Primary) */
+--color-accent-50: #FFFBEB;
+--color-accent-100: #FEF3C7;
+--color-accent-200: #FDE68A;
+--color-accent-300: #FCD34D;
+--color-accent-400: #FBBF24;
+--color-accent-500: #F59E0B;
+--color-accent-600: #FFC107;
+--color-accent-700: #F97316;
+--color-accent-800: #EA580C;
+--color-accent-900: #DC2626;
+
+/* Typography */
+--font-sans: "Inter", "Cairo", system-ui, sans-serif;
+
+/* Shadows */
+--shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+--shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+--shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+--shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+--shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+/* Animations */
+--animate-fade-in: fade-in 0.3s ease-in-out;
+--animate-slide-down: slide-down 0.3s ease-in-out;
+--animate-slide-up: slide-up 0.3s ease-in-out;
+--animate-scale-up: scale-up 0.3s ease-in-out;
+}
+
+@keyframes fade-in {
+0% { opacity: 0; }
+100% { opacity: 1; }
+}
+
+@keyframes slide-down {
+0% { transform: translateY(-20px); opacity: 0; }
+100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-up {
+0% { transform: translateY(20px); opacity: 0; }
+100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scale-up {
+0% { transform: scale(0.5); opacity: 0; }
+100% { transform: scale(1); opacity: 1; }
+}
+
+@layer base {
+body {
+@apply font-sans;
+}
+}
+
+
+### `postcss.config.js`
+export default {
+plugins: {
+'@tailwindcss/postcss': {},
+autoprefixer: {},
+},
+}
+
+
+### `tailwind.config.js`
+export default {
+content: [
+"./index.html",
+"./src/**/*.{js,ts,jsx,tsx}",
+],
+};
