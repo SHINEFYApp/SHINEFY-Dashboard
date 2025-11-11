@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatedTabs } from '../../components/booking/AnimatedTabs';
 import { ProgressSteps } from '../../components/booking/ProgressSteps';
-import ServicesStep1 from '../../components/booking/tabs/services/ServicesStep1';
+import ServicesStep1 from '../../components/booking/tabs/services/steps/ServicesStep1';
 import type { FormData } from '../../types/bookings';
+import ServicesStep2 from '../../components/booking/tabs/services/steps/ServicesStep2';
+import ServicesStep3 from '../../components/booking/tabs/services/steps/ServicesStep3';
+import ServicesStep4 from '../../components/booking/tabs/services/steps/ServicesStep4';
 
 const CreateBookings = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -26,6 +29,14 @@ const CreateBookings = () => {
             vehicle: '',
             bookingDate: '',
             bookingTime: '',
+            mainService: '',
+            extraServices: [],
+            serviceBoy: '',
+            coupon: '',
+            paymentMethod: '',
+            walletAmount: '',
+            userNote: '',
+            adminNotes: '',
         },
         package: {},
     });
@@ -101,7 +112,10 @@ const CreateBookings = () => {
             description: 'Write notes',
         },
     ];
-
+    const handleSubmit = () => {
+        console.log('Final form data:', formData);
+        alert('Booking submitted successfully!');
+    };
     // Render content based on active tab and current step
     const renderStepContent = () => {
         if (activeTab === 'services') {
@@ -115,17 +129,32 @@ const CreateBookings = () => {
                         />
                     );
                 case 2:
-                    return <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                        <p>Services Step 2</p>
-                    </div>;
+                    return (
+                        <ServicesStep2
+                            onNext={handleNextStep}
+                            onBack={handlePreviousStep}
+                            formData={formData.services}
+                            onDataChange={(data) => updateFormData('services', data)}
+                        />
+                    );
                 case 3:
-                    return <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                        <p>Services Step 3</p>
-                    </div>;
+                    return (
+                        <ServicesStep3
+                            onNext={handleNextStep}
+                            onBack={handlePreviousStep}
+                            formData={formData.services}
+                            onDataChange={(data) => updateFormData('services', data)}
+                        />
+                    );
                 case 4:
-                    return <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                        <p>Services Step 4</p>
-                    </div>;
+                    return (
+                        <ServicesStep4
+                            onBack={handlePreviousStep}
+                            onSubmit={handleSubmit}
+                            formData={formData.services}
+                            onDataChange={(data) => updateFormData('services', data)}
+                        />
+                    );
                 default:
                     return (
                         <ServicesStep1

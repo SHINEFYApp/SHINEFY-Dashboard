@@ -1,22 +1,9 @@
 import { useState } from 'react';
-import { cn } from '../../../../lib/utils';
+import { cn } from '../../../../utils/utils';
 import { IoClose } from 'react-icons/io5';
 import car from '../../../../assets/car.svg';
 import { CheckIcon } from 'lucide-react';
-
-interface Vehicle {
-    id: string;
-    name: string;
-    type: string;
-    image: string;
-}
-
-interface VehicleSelectionModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSelect: (vehicles: Vehicle[]) => void;
-    selectedVehicles: Vehicle[];
-}
+import type { Vehicle, VehicleSelectionModalProps } from '../../../../types/bookings';
 
 export const VehicleSelectionModal = ({
     isOpen,

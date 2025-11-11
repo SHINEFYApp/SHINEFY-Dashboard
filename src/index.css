@@ -151,3 +151,11 @@ textarea:focus {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

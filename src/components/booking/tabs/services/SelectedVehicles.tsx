@@ -1,17 +1,6 @@
 import { CheckIcon } from 'lucide-react';
 import addVehicle from '../../../../assets/addVehicle.svg';
-
-interface Vehicle {
-    id: string;
-    name: string;
-    type: string;
-    image: string;
-}
-
-interface SelectedVehiclesProps {
-    vehicles: Vehicle[];
-    onAddClick: () => void;
-}
+import type { SelectedVehiclesProps } from '../../../../types/bookings';
 
 export const SelectedVehicles = ({ vehicles, onAddClick }: SelectedVehiclesProps) => {
     if (vehicles.length === 0) {

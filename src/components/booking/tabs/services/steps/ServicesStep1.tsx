@@ -2,34 +2,16 @@ import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { IoCallOutline, IoLocationOutline } from 'react-icons/io5';
-import { FormInput } from '../../../../common/FormInput';
-import { FormDropdown } from '../../../../common/FormDropdown';
-import { FormDatePicker } from '../../../../common/FormDatePicker';
-import { FormTimePicker } from '../../../../common/FormTimePicker';
-import { Button } from '../../../ui/button';
-import { SelectedVehicles } from './SelectedVehicles';
-import { VehicleSelectionModal } from './VehicleSelectionModal';
+import { FormInput } from '../../../../../common/FormInput';
+import { FormDropdown } from '../../../../../common/FormDropdown';
+import { FormDatePicker } from '../../../../../common/FormDatePicker';
+import { FormTimePicker } from '../../../../../common/FormTimePicker';
+import { Button } from '../../../../ui/button';
+import { SelectedVehicles } from '../SelectedVehicles';
+import { VehicleSelectionModal } from '../VehicleSelectionModal';
+import type { ServicesStep1Props, Vehicle } from '../../../../../types/bookings';
+import { Calendar, Clock } from 'lucide-react';
 
-interface Vehicle {
-    id: string;
-    name: string;
-    type: string;
-    image: string;
-}
-
-interface ServicesFormData {
-    phoneNumber: string;
-    address: string;
-    vehicles: Vehicle[];
-    bookingDate: string;
-    bookingTime: string;
-}
-
-interface ServicesStep1Props {
-    onNext: () => void;
-    formData: ServicesFormData;
-    onDataChange: (data: Partial<ServicesFormData>) => void;
-}
 
 const ServicesStep1 = ({ onNext, formData, onDataChange }: ServicesStep1Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,7 +46,7 @@ const ServicesStep1 = ({ onNext, formData, onDataChange }: ServicesStep1Props) =
                     onNext();
                 }}
             >
-                {({ isValid, dirty }) => (
+                {({ isValid }) => (
                     <Form>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <FormInput
@@ -103,29 +85,21 @@ const ServicesStep1 = ({ onNext, formData, onDataChange }: ServicesStep1Props) =
                             <FormDatePicker
                                 name="bookingDate"
                                 label="Select Booking Date"
-                                icon={
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                }
+                                icon={<Calendar className='size-5' />}
                             />
 
                             <FormTimePicker
                                 name="bookingTime"
                                 label="Select Booking Time"
-                                icon={
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                }
+                                icon={<Clock className='size-5' />}
                             />
                         </div>
 
                         <div className="flex justify-start">
                             <Button
                                 type="submit"
-                                disabled={!(isValid && dirty)}
-                                className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                disabled={!isValid}
+                                className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-2 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                             >
                                 Next
                             </Button>

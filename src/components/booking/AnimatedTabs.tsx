@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import type { AnimatedTabsProps } from '../../types/common';
 
 export const AnimatedTabs: FC<AnimatedTabsProps> = ({

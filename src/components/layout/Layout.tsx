@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import type { LayoutProps } from '../../types/layout';
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
@@ -23,7 +23,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Update current path on navigation
     useEffect(() => {
         const handleLocationChange = () => {
             setCurrentPath(window.location.pathname);

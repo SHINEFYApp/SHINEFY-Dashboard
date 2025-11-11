@@ -8,11 +8,11 @@ import {
 } from '../ui/dropdown-menu';
 import { IoChevronDown } from 'react-icons/io5';
 import { BsGrid } from 'react-icons/bs';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import type { BreadcrumbItem, NavbarProps } from '../../types/layout';
 import { routeConfig } from '../../constants/data';
 
-export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/bookings/create' }) => {
+export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/dashboard' }) => {
 
     const { pageTitle, breadcrumbs } = useMemo(() => {
         const config = routeConfig[currentPath] || {
