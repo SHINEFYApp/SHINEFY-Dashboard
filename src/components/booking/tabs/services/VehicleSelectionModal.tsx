@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { cn } from '../../../../utils/utils';
 import { IoClose } from 'react-icons/io5';
-import car from '../../../../assets/car.svg';
 import { CheckIcon } from 'lucide-react';
 import type { Vehicle, VehicleSelectionModalProps } from '../../../../types/bookings';
+import { dummyDataVehicles } from '../../../../constants/data';
 
 export const VehicleSelectionModal = ({
     isOpen,
@@ -12,51 +12,6 @@ export const VehicleSelectionModal = ({
     selectedVehicles,
 }: VehicleSelectionModalProps) => {
     const [selected, setSelected] = useState<Vehicle[]>(selectedVehicles);
-
-    const vehicles: Vehicle[] = [
-        {
-            id: '1',
-            name: 'Porsche 718 Cayman S',
-            type: 'Coupe',
-            image: car,
-        },
-        {
-            id: '2',
-            name: 'Porsche 718 Cayman S',
-            type: 'Coupe',
-            image: car,
-        },
-        {
-            id: '3',
-            name: 'Porsche 718 Cayman S',
-            type: 'Coupe',
-            image: car,
-        },
-        {
-            id: '4',
-            name: 'Porsche 718 Cayman S',
-            type: 'Coupe',
-            image: car,
-        },
-        {
-            id: '5',
-            name: 'Porsche 718 Cayman S',
-            type: 'Coupe',
-            image: car,
-        },
-        {
-            id: '6',
-            name: 'Porsche 718 Cayman S',
-            type: 'Coupe',
-            image: car,
-        },
-        {
-            id: '7',
-            name: 'Porsche 718 Cayman S',
-            type: 'Coupe',
-            image: car,
-        },
-    ];
 
     const toggleVehicle = (vehicle: Vehicle) => {
         const isSelected = selected.some((v) => v.id === vehicle.id);
@@ -104,7 +59,7 @@ export const VehicleSelectionModal = ({
                     {/* Vehicle Grid */}
                     <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {vehicles.map((vehicle) => {
+                            {dummyDataVehicles.map((vehicle) => {
                                 const isSelected = selected.some((v) => v.id === vehicle.id);
                                 return (
                                     <button

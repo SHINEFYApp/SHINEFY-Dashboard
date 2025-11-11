@@ -1,11 +1,11 @@
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Checkbox } from "../../components/ui/checkbox";
 import { BsEye } from "react-icons/bs";
 
-export default function LogInForm(){
+export default function LogInForm() {
 
-    return(
+    return (
         <div className=" absolute top-0 left-0 flex justify-center items-center size-full bg-white/20 backdrop-blur-[17.5px] z-20">
             <div className=" w-[506px] h-[487px] flex flex-col gap-[30px] p-5 md:p-0">
                 <div className="flex">
@@ -52,5 +52,5 @@ export default function LogInForm(){
 
             </div>
         </div>
-    )
+    );
 }

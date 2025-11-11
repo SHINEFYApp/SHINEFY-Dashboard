@@ -5,7 +5,7 @@ export interface ServicesFormData {
     bookingDate: string;
     bookingTime: string;
     mainService: string;
-    extraServices: string[];
+    extraServices: ExtraService[];
     serviceBoy: string;
     coupon: string;
     paymentMethod: 'cash' | 'credit' | 'free' | '';

@@ -4,13 +4,9 @@ import { IoCarSportOutline, IoPeopleOutline } from 'react-icons/io5';
 import { FormDropdown } from '../../../../../common/FormDropdown';
 import { Button } from '../../../../ui/button';
 import type { ServicesStep2Props } from '../../../../../types/bookings';
+import { availableExtraServices } from '../../../../../constants/data';
 
 const ServicesStep2 = ({ onNext, onBack, formData, onDataChange }: ServicesStep2Props) => {
-    // Available extra services (would come from API)
-    const availableExtraServices = [
-        { id: '1', name: 'SHINEFY Deep Cleaning' },
-        { id: '2', name: 'test service' },
-    ];
 
     const validationSchema = Yup.object({
         mainService: Yup.string().required('Please select a service'),

@@ -1,9 +1,9 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button } from '../../../../ui/button';
+import type { ServicesStep4Props } from '../../../../../types/bookings';
 
 const ServicesStep4 = ({ onBack, onSubmit, formData, onDataChange }: ServicesStep4Props) => {
-
 
     const validationSchema = Yup.object({
         userNote: Yup.string(),

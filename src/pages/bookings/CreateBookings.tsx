@@ -7,6 +7,7 @@ import type { FormData } from '../../types/bookings';
 import ServicesStep2 from '../../components/booking/tabs/services/steps/ServicesStep2';
 import ServicesStep3 from '../../components/booking/tabs/services/steps/ServicesStep3';
 import ServicesStep4 from '../../components/booking/tabs/services/steps/ServicesStep4';
+import { createBookingSteps, createBookingTabs } from '../../constants/data';
 
 const CreateBookings = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -27,16 +28,18 @@ const CreateBookings = () => {
             phoneNumber: '',
             address: '',
             vehicle: '',
+            vehicles: [],
             bookingDate: '',
             bookingTime: '',
             mainService: '',
-            extraServices: [],
+            extraServices: [] as any,
             serviceBoy: '',
             coupon: '',
             paymentMethod: '',
             walletAmount: '',
             userNote: '',
             adminNotes: '',
+
         },
         package: {},
     });
@@ -89,29 +92,7 @@ const CreateBookings = () => {
         }));
     };
 
-    const tabs = [
-        { id: 'services', label: 'Services Booking' },
-        { id: 'package', label: 'Package Booking' },
-    ];
 
-    const steps = [
-        {
-            title: 'Step One',
-            description: 'Enter customer data',
-        },
-        {
-            title: 'Step Two',
-            description: 'Enter service data',
-        },
-        {
-            title: 'Step Three',
-            description: 'Payment Method',
-        },
-        {
-            title: 'Step Four',
-            description: 'Write notes',
-        },
-    ];
     const handleSubmit = () => {
         console.log('Final form data:', formData);
         alert('Booking submitted successfully!');
@@ -196,14 +177,14 @@ const CreateBookings = () => {
             {/* Tabs */}
             <div className="mb-8">
                 <AnimatedTabs
-                    tabs={tabs}
+                    tabs={createBookingTabs}
                     activeTab={activeTab}
                     onTabChange={handleTabChange}
                 />
             </div>
 
             {/* Progress Steps */}
-            <ProgressSteps steps={steps} currentStep={currentStep} />
+            <ProgressSteps steps={createBookingSteps} currentStep={currentStep} />
 
             {/* Step Content */}
             <div className="mt-8">{renderStepContent()}</div>

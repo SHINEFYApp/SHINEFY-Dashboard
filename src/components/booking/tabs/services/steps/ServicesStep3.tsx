@@ -6,9 +6,8 @@ import { Button } from '../../../../ui/button';
 import { IoTicketOutline, IoWalletOutline } from 'react-icons/io5';
 import { cn } from '../../../../../utils/utils';
 import type { ServicesStep3Props } from '../../../../../types/bookings';
-import cash from '../../../../../assets/icons/cash.svg';
-import credit from '../../../../../assets/icons/credit.svg';
-import free from '../../../../../assets/icons/free.svg';
+import { paymentMethods } from '../../../../../constants/data';
+
 const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3Props) => {
     const [selectedPayment, setSelectedPayment] = useState<string>(formData.paymentMethod || '');
 
@@ -16,23 +15,6 @@ const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3
         paymentMethod: Yup.string().required('Please select a payment method'),
     });
 
-    const paymentMethods = [
-        {
-            id: 'cash',
-            label: 'Cash',
-            icon: cash,
-        },
-        {
-            id: 'credit',
-            label: 'Credit',
-            icon: credit,
-        },
-        {
-            id: 'free',
-            label: 'Free',
-            icon: free,
-        },
-    ];
 
     const handlePaymentSelect = (method: string, setFieldValue: any) => {
         setSelectedPayment(method);
@@ -55,7 +37,7 @@ const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3
                 validationSchema={validationSchema}
                 enableReinitialize
                 onSubmit={(values) => {
-                    onDataChange(values);
+                    onDataChange(values as any);
                     onNext();
                 }}
             >
