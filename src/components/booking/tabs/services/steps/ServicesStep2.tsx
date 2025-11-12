@@ -47,7 +47,7 @@ const ServicesStep2 = ({ onNext, onBack, formData, onDataChange }: ServicesStep2
     };
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 animate-scale-up">
+        <>
             <h2 className="text-2xl font-bold text-gray-900 mb-8">
                 Enter reservation data
             </h2>
@@ -159,7 +159,7 @@ const ServicesStep2 = ({ onNext, onBack, formData, onDataChange }: ServicesStep2
                     </Form>
                 )}
             </Formik>
-        </div>
+        </>
     );
 };
 

@@ -18,6 +18,9 @@ export interface ServicesStep1Props {
     onNext: () => void;
     formData: ServicesFormData;
     onDataChange: (data: Partial<ServicesFormData>) => void;
+    onRemoveVehicle: (vehicleId: string) => void;
+    registerValidation: (validationFn: () => Promise<boolean>) => void;
+    onValidationChange: (isValid: boolean) => void;
 }
 
 export interface ServicesFormData {
@@ -47,8 +50,8 @@ export interface Vehicle {
 export interface SelectedVehiclesProps {
     vehicles: Vehicle[];
     onAddClick: () => void;
+    onRemoveVehicle?: (vehicleId: string) => void;
 }
-
 
 export interface VehicleSelectionModalProps {
     isOpen: boolean;
@@ -74,6 +77,8 @@ export interface ServicesStep2Props {
     onBack: () => void;
     formData: ServicesStep2Data;
     onDataChange: (data: Partial<ServicesStep2Data>) => void;
+    registerValidation: (validationFn: () => Promise<boolean>) => void;
+    onValidationChange: (isValid: boolean) => void;
 }
 
 export interface ServicesStep3Data {
@@ -85,8 +90,10 @@ export interface ServicesStep3Data {
 export interface ServicesStep3Props {
     onNext: () => void;
     onBack: () => void;
-    formData: ServicesStep3Data;
-    onDataChange: (data: Partial<ServicesStep3Data>) => void;
+    formData: ServicesStep2Data;
+    onDataChange: (data: Partial<ServicesStep2Data>) => void;
+    registerValidation: (validationFn: () => Promise<boolean>) => void;
+    onValidationChange: (isValid: boolean) => void;
 }
 
 export interface ServicesStep4Data {
@@ -96,7 +103,8 @@ export interface ServicesStep4Data {
 
 export interface ServicesStep4Props {
     onBack: () => void;
-    onSubmit: () => void;
-    formData: ServicesStep4Data;
-    onDataChange: (data: Partial<ServicesStep4Data>) => void;
+    formData: ServicesStep2Data;
+    onDataChange: (data: Partial<ServicesStep2Data>) => void;
+    registerValidation: (validationFn: () => Promise<boolean>) => void;
+    onValidationChange: (isValid: boolean) => void;
 }

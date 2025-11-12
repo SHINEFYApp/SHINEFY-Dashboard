@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '../../../../utils/utils';
 import { IoClose } from 'react-icons/io5';
 import { CheckIcon } from 'lucide-react';
@@ -12,6 +12,11 @@ export const VehicleSelectionModal = ({
     selectedVehicles,
 }: VehicleSelectionModalProps) => {
     const [selected, setSelected] = useState<Vehicle[]>(selectedVehicles);
+
+    // Sync modal selection with parent's selectedVehicles whenever modal opens or selectedVehicles change
+    useEffect(() => {
+        setSelected(selectedVehicles);
+    }, [selectedVehicles, isOpen]);
 
     const toggleVehicle = (vehicle: Vehicle) => {
         const isSelected = selected.some((v) => v.id === vehicle.id);
@@ -27,6 +32,12 @@ export const VehicleSelectionModal = ({
         onClose();
     };
 
+    const handleCancel = () => {
+        // Reset to original selection when canceling
+        setSelected(selectedVehicles);
+        onClose();
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -34,7 +45,7 @@ export const VehicleSelectionModal = ({
             {/* Backdrop */}
             <div
                 className="fixed inset-0 bg-black/50 z-40 animate-fade-in"
-                onClick={onClose}
+                onClick={handleCancel}
             />
 
             {/* Modal */}
@@ -44,15 +55,10 @@ export const VehicleSelectionModal = ({
                     <div className="flex items-center justify-between p-6 border-b border-gray-100">
                         <h2 className="text-2xl font-bold text-gray-900">Select Vehicle</h2>
                         <button
-                            onClick={onClose}
+                            onClick={handleCancel}
                             className="text-gray-400 hover:text-gray-600 transition-colors"
                         >
                             <IoClose className="w-8 h-8" />
-                        </button>
-                        <button
-                            className="px-6 py-2 border-2 border-green-500 text-green-600 rounded-xl font-semibold hover:bg-green-50 transition-colors"
-                        >
-                            Add New Vehicle
                         </button>
                     </div>
 
@@ -75,13 +81,15 @@ export const VehicleSelectionModal = ({
                                         {/* Checkmark */}
                                         {isSelected && (
                                             <div className="absolute top-4 right-4 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-scale-up">
-                                                <CheckIcon className='text-white' />
+                                                <CheckIcon className="text-white" />
                                             </div>
                                         )}
 
                                         {/* Vehicle Info */}
                                         <div className="text-left mb-4">
-                                            <h3 className="font-bold text-gray-900 mb-1">{vehicle.name}</h3>
+                                            <h3 className="font-bold text-gray-900 mb-1">
+                                                {vehicle.name}
+                                            </h3>
                                             <p className="text-sm text-gray-500">{vehicle.type}</p>
                                         </div>
 
@@ -101,19 +109,24 @@ export const VehicleSelectionModal = ({
 
                     {/* Footer */}
                     <div className="flex items-center justify-between gap-4 p-6 border-t border-gray-100">
-                        <button
-                            onClick={onClose}
-                            className="flex-1 py-4 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors"
-                        >
-                            Back
-                        </button>
-                        <button
-                            onClick={handleDone}
-                            disabled={selected.length === 0}
-                            className="flex-1 py-4 bg-primary hover:bg-primary-600 text-gray-900 rounded-xl font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            Done
-                        </button>
+                        <p className="text-sm text-gray-600">
+                            {selected.length} vehicle(s) selected
+                        </p>
+                        <div className="flex gap-4">
+                            <button
+                                onClick={handleCancel}
+                                className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDone}
+                                disabled={selected.length === 0}
+                                className="px-8 py-3 bg-primary hover:bg-primary-600 text-gray-900 rounded-xl font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Done
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
