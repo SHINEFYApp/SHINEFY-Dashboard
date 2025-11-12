@@ -30,7 +30,7 @@ export const ProgressSteps: FC<ProgressStepsProps> = ({
 
                 {/* Progress Line */}
                 <div
-                    className="absolute top-6 left-0 h-0.5 bg-green-500 transition-all duration-500 ease-out"
+                    className="absolute top-6 left-0 h-0.5 bg-[#4CAF50] transition-all duration-500 ease-out"
                     style={{
                         left: '24px',
                         width:
@@ -45,15 +45,14 @@ export const ProgressSteps: FC<ProgressStepsProps> = ({
                     const isActive = currentStep === stepNumber;
                     const isCompleted = completedSteps.includes(stepNumber);
 
-                    // Can click on: completed steps, current step, or next step if current is validated
                     const isClickable =
-                        stepNumber < currentStep || // Previous steps
-                        stepNumber === currentStep || // Current step
-                        (stepNumber === currentStep + 1 && validatedSteps.includes(currentStep)); // Next step if current validated
+                        stepNumber < currentStep ||
+                        stepNumber === currentStep ||
+                        (stepNumber === currentStep + 1 && validatedSteps.includes(currentStep));
 
                     return (
                         <div key={index} className="flex-1 relative z-10">
-                            <div className="flex flex-col items-center">
+                            <div className={`flex flex-col ${index === steps.length - 1 ? 'items-end' : stepNumber === 1 ? 'items-start' : 'items-center'}`}>
                                 {/* Circle Button */}
                                 <button
                                     type="button"
@@ -62,13 +61,13 @@ export const ProgressSteps: FC<ProgressStepsProps> = ({
                                     className={cn(
                                         'w-12 h-12 rounded-full flex items-center justify-center font-semibold text-base transition-all duration-300 border-2',
                                         isCompleted
-                                            ? 'bg-green-500 border-green-500 text-white'
+                                            ? 'bg-[#4CAF50] border-[#4CAF50] text-white'
                                             : isActive
-                                                ? 'bg-white border-green-500 text-green-500'
+                                                ? 'bg-white border-[#4CAF50] text-[#4CAF50]'
                                                 : 'bg-white border-gray-300 text-gray-400',
                                         isClickable
                                             ? 'cursor-pointer hover:scale-110 hover:shadow-lg'
-                                            : 'cursor-not-allowed opacity-60'
+                                            : 'cursor-not-allowed'
                                     )}
                                 >
                                     {isCompleted ? (
@@ -79,7 +78,7 @@ export const ProgressSteps: FC<ProgressStepsProps> = ({
                                 </button>
 
                                 {/* Step Text */}
-                                <div className="mt-4 text-center">
+                                <div className={`mt-4 ${index === steps.length - 1 ? 'text-end' : stepNumber === 1 ? 'text-start' : 'text-center'}`}>
                                     <p
                                         className={cn(
                                             'text-base font-bold mb-1 transition-colors duration-200',
