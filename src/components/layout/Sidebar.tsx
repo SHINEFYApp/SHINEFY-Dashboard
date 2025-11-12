@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MdDashboard } from 'react-icons/md';
 import { BsCalendarEvent } from 'react-icons/bs';
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
@@ -138,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                     >
                                         <div className="relative pl-6 space-y-2">
                                             {/* Vertical Line */}
-                                            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-600" />
+                                            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-600 h-[78%]" />
 
                                             {item.subItems.map((subItem, index) => {
                                                 const isActive = currentPath === subItem.path;

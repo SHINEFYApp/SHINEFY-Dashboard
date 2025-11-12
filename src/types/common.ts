@@ -7,6 +7,8 @@ export interface ProgressStepsProps {
     steps: Step[];
     currentStep: number;
     className?: string;
+    completedSteps?: number[];
+    onStepClick?: (stepNumber: number) => void;
 }
 
 export interface Tab {

@@ -1,0 +1,135 @@
+import { useState, useEffect } from 'react';
+import { cn } from '../../../../utils/utils';
+import { IoClose } from 'react-icons/io5';
+import { CheckIcon } from 'lucide-react';
+import type { Vehicle, VehicleSelectionModalProps } from '../../../../types/bookings';
+import { dummyDataVehicles } from '../../../../constants/data';
+
+export const VehicleSelectionModal = ({
+    isOpen,
+    onClose,
+    onSelect,
+    selectedVehicles,
+}: VehicleSelectionModalProps) => {
+    const [selected, setSelected] = useState<Vehicle[]>(selectedVehicles);
+
+    // Sync modal selection with parent's selectedVehicles whenever modal opens or selectedVehicles change
+    useEffect(() => {
+        setSelected(selectedVehicles);
+    }, [selectedVehicles, isOpen]);
+
+    const toggleVehicle = (vehicle: Vehicle) => {
+        const isSelected = selected.some((v) => v.id === vehicle.id);
+        if (isSelected) {
+            setSelected(selected.filter((v) => v.id !== vehicle.id));
+        } else {
+            setSelected([...selected, vehicle]);
+        }
+    };
+
+    const handleDone = () => {
+        onSelect(selected);
+        onClose();
+    };
+
+    const handleCancel = () => {
+        // Reset to original selection when canceling
+        setSelected(selectedVehicles);
+        onClose();
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <>
+            {/* Backdrop */}
+            <div
+                className="fixed inset-0 bg-black/50 z-40 animate-fade-in"
+                onClick={handleCancel}
+            />
+
+            {/* Modal */}
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden animate-scale-up">
+                    {/* Header */}
+                    <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                        <h2 className="text-2xl font-bold text-gray-900">Select Vehicle</h2>
+                        <button
+                            onClick={handleCancel}
+                            className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                            <IoClose className="w-8 h-8" />
+                        </button>
+                    </div>
+
+                    {/* Vehicle Grid */}
+                    <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {dummyDataVehicles.map((vehicle) => {
+                                const isSelected = selected.some((v) => v.id === vehicle.id);
+                                return (
+                                    <button
+                                        key={vehicle.id}
+                                        onClick={() => toggleVehicle(vehicle)}
+                                        className={cn(
+                                            'relative p-6 rounded-2xl border-2 transition-all duration-200 hover:shadow-lg',
+                                            isSelected
+                                                ? 'border-green-500 bg-green-50'
+                                                : 'border-gray-200 bg-white hover:border-gray-300'
+                                        )}
+                                    >
+                                        {/* Checkmark */}
+                                        {isSelected && (
+                                            <div className="absolute top-4 right-4 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-scale-up">
+                                                <CheckIcon className="text-white" />
+                                            </div>
+                                        )}
+
+                                        {/* Vehicle Info */}
+                                        <div className="text-left mb-4">
+                                            <h3 className="font-bold text-gray-900 mb-1">
+                                                {vehicle.name}
+                                            </h3>
+                                            <p className="text-sm text-gray-500">{vehicle.type}</p>
+                                        </div>
+
+                                        {/* Vehicle Image */}
+                                        <div className="flex items-center justify-center">
+                                            <img
+                                                src={vehicle.image}
+                                                alt={vehicle.name}
+                                                className="w-full h-32 object-contain"
+                                            />
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between gap-4 p-6 border-t border-gray-100">
+                        <p className="text-sm text-gray-600">
+                            {selected.length} vehicle(s) selected
+                        </p>
+                        <div className="flex gap-4">
+                            <button
+                                onClick={handleCancel}
+                                className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDone}
+                                disabled={selected.length === 0}
+                                className="px-8 py-3 bg-primary hover:bg-primary-600 text-gray-900 rounded-xl font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Done
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};

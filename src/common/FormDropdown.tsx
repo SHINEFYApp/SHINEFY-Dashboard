@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useField } from 'formik';
-import { cn } from '../lib/utils';
+import { cn } from '../utils/utils';
 import { IoCheckmarkCircle, IoChevronDown } from 'react-icons/io5';
 import type { FormDropdownProps } from '../types/common';
 
