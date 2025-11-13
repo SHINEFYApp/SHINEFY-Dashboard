@@ -1,7 +1,7 @@
 import './logInStyle.css'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
+import { Checkbox } from "../../components/ui/checkbox"
 import { BsEye } from "react-icons/bs";
 import Thunder from "@/assets/images/logIn/thunder.png";
 export default function LogIn() {
@@ -52,7 +52,6 @@ export default function LogIn() {
                     </div>
                 </div>
             </div>
-
         </section>
     );
 }

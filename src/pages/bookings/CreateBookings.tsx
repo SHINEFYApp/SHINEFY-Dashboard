@@ -3,27 +3,26 @@ import { useSearchParams } from 'react-router-dom';
 import { AnimatedTabs } from '../../components/booking/AnimatedTabs';
 import { ProgressSteps } from '../../components/booking/ProgressSteps';
 import type { FormData } from '../../types/bookings';
-import ServicesStep1 from '../../components/booking/tabs/services/steps/ServicesStep1';
-import ServicesStep2 from '../../components/booking/tabs/services/steps/ServicesStep2';
-import ServicesStep3 from '../../components/booking/tabs/services/steps/ServicesStep3';
-import ServicesStep4 from '../../components/booking/tabs/services/steps/ServicesStep4';
-import { createBookingSteps, createBookingTabs } from '../../constants/data';
+
+// import { FindStep } from
+import { createBackageBookingSteps, createBookingSteps, createBookingTabs } from '../../constants/data';
+import { FindStep } from './bookingSteps';
 
 const CreateBookings = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const validTabs = ['services', 'package'];
-
     const [completedSteps, setCompletedSteps] = useState<number[]>([]);
     const [validatedSteps, setValidatedSteps] = useState<number[]>([]); // Track which steps are valid
     const stepValidationRef = useRef<(() => Promise<boolean>) | null>(null);
-
     const getValidTab = (): string => {
         const tabParam = searchParams.get('tab');
         return tabParam && validTabs.includes(tabParam) ? tabParam : 'services';
     };
-
+    
     const [activeTab, setActiveTab] = useState<string>(getValidTab());
     const [currentStep, setCurrentStep] = useState<number>(1);
+
+    const StepComponent = FindStep(activeTab , currentStep)
 
     const [formData, setFormData] = useState<FormData>({
         services: {
@@ -42,7 +41,20 @@ const CreateBookings = () => {
             userNote: '',
             adminNotes: '',
         },
-        package: {},
+        package: {
+            phoneNumber: '' ,
+            address: '' ,
+            vehicle: '' ,
+            vehicles: [] ,
+            bookingDate: '' ,
+            bookingTime: '' ,
+            mainPackage : ''  ,
+            mainService: '' ,
+            extraServices: [] ,
+            serviceBoy: '' ,
+            userNote: '' ,
+            adminNotes: '' ,
+        },
     });
 
     useEffect(() => {
@@ -144,82 +156,6 @@ const CreateBookings = () => {
         alert('Booking submitted successfully!');
     };
 
-    const renderStepContent = () => {
-        if (activeTab === 'services') {
-            switch (currentStep) {
-                case 1:
-                    return (
-                        <ServicesStep1
-                            onNext={handleNextStep}
-                            formData={formData.services}
-                            onDataChange={(data) => updateFormData('services', data)}
-                            onRemoveVehicle={handleRemoveVehicle}
-                            registerValidation={registerStepValidation}
-                            onValidationChange={(isValid) => updateStepValidation(1, isValid)}
-                        />
-                    );
-                case 2:
-                    return (
-                        <ServicesStep2
-                            onNext={handleNextStep}
-                            onBack={handlePreviousStep}
-                            formData={formData.services}
-                            onDataChange={(data) => updateFormData('services', data)}
-                            registerValidation={registerStepValidation}
-                            onValidationChange={(isValid) => updateStepValidation(2, isValid)}
-                        />
-                    );
-                case 3:
-                    return (
-                        <ServicesStep3
-                            onNext={handleNextStep}
-                            onBack={handlePreviousStep}
-                            formData={formData.services}
-                            onDataChange={(data) => updateFormData('services', data)}
-                            registerValidation={registerStepValidation}
-                            onValidationChange={(isValid) => updateStepValidation(3, isValid)}
-                        />
-                    );
-                case 4:
-                    return (
-                        <ServicesStep4
-                            onBack={handlePreviousStep}
-                            onSubmit={handleSubmit}
-                            formData={formData.services}
-                            onDataChange={(data) => updateFormData('services', data)}
-                            registerValidation={registerStepValidation}
-                            onValidationChange={(isValid) => updateStepValidation(4, isValid)}
-                        />
-                    );
-                default:
-                    return (
-                        <ServicesStep1
-                            onNext={handleNextStep}
-                            formData={formData.services}
-                            onDataChange={(data) => updateFormData('services', data)}
-                            onRemoveVehicle={handleRemoveVehicle}
-                            registerValidation={registerStepValidation}
-                            onValidationChange={(isValid) => updateStepValidation(1, isValid)}
-                        />
-                    );
-            }
-        } else {
-            switch (currentStep) {
-                case 1:
-                    return (
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                            <p>Package Step 1</p>
-                        </div>
-                    );
-                default:
-                    return (
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-                            <p>Package Step 1</p>
-                        </div>
-                    );
-            }
-        }
-    };
 
     return (
         <div className="w-full animate-fade-in bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -241,7 +177,33 @@ const CreateBookings = () => {
                 />
             )}
 
-            <div className="mt-8">{renderStepContent()}</div>
+            {activeTab === 'package' && (
+                <ProgressSteps
+                    steps={createBackageBookingSteps}
+                    currentStep={currentStep}
+                    completedSteps={completedSteps}
+                    validatedSteps={validatedSteps}
+                    onStepClick={handleStepClick}
+                />
+            )}
+
+            <div className="mt-8">
+                <StepComponent
+                    onNext={handleNextStep}
+                    onBack={handlePreviousStep}
+                    onSubmit={handleSubmit}
+                    formData={activeTab === 'services' ? formData.services : formData.package}
+                    onDataChange={(data: any) =>
+                        updateFormData(activeTab === 'services' ? 'services' : 'package', data)
+                    }
+                    onRemoveVehicle={handleRemoveVehicle}
+                    registerValidation={registerStepValidation}
+                    onValidationChange={(isValid: boolean) =>
+                        updateStepValidation(currentStep, isValid)
+                    }
+                    userPackageInput={activeTab !== 'services'}
+                />
+            </div>
         </div>
     );
 };

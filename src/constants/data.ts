@@ -47,6 +47,21 @@ export const createBookingSteps = [
     },
 ];
 
+export const createBackageBookingSteps = [
+    {
+        title: 'Step One',
+        description: 'Enter customer data',
+    },
+    {
+        title: 'Step Two',
+        description: 'Enter service data',
+    },
+    {
+        title: 'Step Three',
+        description: 'Write notes',
+    },
+];
+
 export const dummyDataVehicles: Vehicle[] = [
     {
         id: '1',

@@ -5,11 +5,13 @@ import { FormDropdown } from '../../../../../common/FormDropdown';
 import { Button } from '../../../../ui/button';
 import type { ServicesStep2Props } from '../../../../../types/bookings';
 import { availableExtraServices } from '../../../../../constants/data';
+import { Package } from 'lucide-react';
 
-const ServicesStep2 = ({ onNext, onBack, formData, onDataChange }: ServicesStep2Props) => {
+const ServicesStep2 = ({ onNext, onBack, userPackageInput , formData, onDataChange }: ServicesStep2Props) => {
 
     const validationSchema = Yup.object({
         mainService: Yup.string().required('Please select a service'),
+        mainPackage: Yup.string().required('Please select a package'),
         serviceBoy: Yup.string().required('Please select a service boy'),
     });
 
@@ -46,6 +48,8 @@ const ServicesStep2 = ({ onNext, onBack, formData, onDataChange }: ServicesStep2
         return service?.quantity || 0;
     };
 
+    console.log(formData)
+
     return (
         <>
             <h2 className="text-2xl font-bold text-gray-900 mb-8">
@@ -55,6 +59,7 @@ const ServicesStep2 = ({ onNext, onBack, formData, onDataChange }: ServicesStep2
             <Formik
                 initialValues={{
                     mainService: formData.mainService || '',
+                    mainPackage: formData.mainPackage || '',
                     serviceBoy: formData.serviceBoy || '',
                 }}
                 validationSchema={validationSchema}
@@ -66,12 +71,30 @@ const ServicesStep2 = ({ onNext, onBack, formData, onDataChange }: ServicesStep2
             >
                 {({ isValid }) => (
                     <Form>
+                        
+
+                        <div className={`mb-8 ${userPackageInput ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : ' md:w-1/2 w-full'}`}>
+                        {/* user packages Selection */}
+                            {userPackageInput &&
+                                <FormDropdown
+                                    name="mainPackage"
+                                    label="User Packages"
+                                    placeholder="Select User Package"
+                                    icon={<Package className="w-5 h-5" />}
+                                    options={[
+                                        'package one',
+                                        'package two',
+                                        'package three',
+                                        'package four',
+                                    ]}
+                                />
+                            }
                         {/* Main Services Selection */}
-                        <div className="mb-8 md:w-1/2 w-full">
                             <FormDropdown
                                 name="mainService"
                                 label="Services"
                                 placeholder="Select Services"
+                                className='w-full'
                                 icon={<IoCarSportOutline className="w-5 h-5" />}
                                 options={[
                                     'Full Car Wash',
