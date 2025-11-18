@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { cn } from '../../utils/utils';
 import { Check } from 'lucide-react';
 
+
 interface ProgressStepsProps {
     steps: { title: string; description: string; }[];
     currentStep: number;

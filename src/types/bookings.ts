@@ -14,9 +14,24 @@ export interface ServicesFormData {
     adminNotes: string;
 }
 
+export interface PackageFormData {
+    phoneNumber: string;
+    address: string;
+    vehicle: string;
+    vehicles: Vehicle[];
+    bookingDate: string;
+    bookingTime: string;
+    mainPackage : string ;
+    mainService: string;
+    extraServices: ExtraService[];
+    serviceBoy: string;
+    userNote: string;
+    adminNotes: string;
+}
+
 export interface ServicesStep1Props {
     onNext: () => void;
-    formData: ServicesFormData;
+    formData: ServicesFormData | PackageFormData;
     onDataChange: (data: Partial<ServicesFormData>) => void;
     onRemoveVehicle: (vehicleId: string) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
@@ -32,14 +47,12 @@ export interface ServicesFormData {
     bookingTime: string;
 }
 
-export interface PackageFormData {
-    [key: string]: any;
-}
 
 export interface FormData {
     services: ServicesFormData;
     package: PackageFormData;
 }
+
 export interface Vehicle {
     id: string;
     name: string;
@@ -68,6 +81,7 @@ export interface ExtraService {
 
 export interface ServicesStep2Data {
     mainService: string;
+    mainPackage?: string ;
     extraServices: ExtraService[];
     serviceBoy: string;
 }
@@ -75,6 +89,7 @@ export interface ServicesStep2Data {
 export interface ServicesStep2Props {
     onNext: () => void;
     onBack: () => void;
+    userPackageInput?: boolean ; //user package input in package tap
     formData: ServicesStep2Data;
     onDataChange: (data: Partial<ServicesStep2Data>) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
@@ -107,4 +122,5 @@ export interface ServicesStep4Props {
     onDataChange: (data: Partial<ServicesStep2Data>) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
     onValidationChange: (isValid: boolean) => void;
+    onSubmit: () => void;
 }

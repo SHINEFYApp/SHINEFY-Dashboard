@@ -65,7 +65,7 @@ const ServicesStep1 = ({
                             setTouched({
                                 phoneNumber: true,
                                 address: true,
-                                vehicles: true,
+                                vehicles: [],
                                 bookingDate: true,
                                 bookingTime: true,
                             });
