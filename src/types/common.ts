@@ -39,6 +39,7 @@ export interface FormInputProps {
     type?: 'text' | 'tel' | 'email' | 'password' | 'number';
     icon?: React.ReactNode;
     disabled?: boolean;
+    checkmark?: boolean;
     className?: string;
 }
 
@@ -58,5 +59,44 @@ export interface FormDatePickerProps {
     placeholder?: string;
     icon?: React.ReactNode;
     disabled?: boolean;
+    checkmark: boolean;
     className?: string;
+}
+
+export interface Column<T> {
+    key: string;
+    title: string;
+    render?: (value: any, row: T, index: number) => React.ReactNode;
+    width?: string;
+}
+
+export interface TableProps<T> {
+    columns: Column<T>[];
+    data: T[];
+    currentPage: number;
+    totalPages: number;
+    totalEntries: number;
+    pageSize: number;
+    onPageChange: (page: number) => void;
+    isLoading?: boolean;
+}
+
+export interface PaginationProps {
+    currentPage: number;
+    totalPages: number;
+    totalEntries: number;
+    pageSize: number;
+    onPageChange: (page: number) => void;
+}
+
+export interface DetailRowProps {
+    label: string;
+    value: string | number;
+    type?: "text" | "badge";
+    badgeColor?: "yellow" | "green" | "blue" | "red" | "purple";
+    actionButton?: {
+        text: string;
+        icon?: React.ReactNode;
+        onClick: () => void;
+    };
 }

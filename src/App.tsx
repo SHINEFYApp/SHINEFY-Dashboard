@@ -5,6 +5,8 @@ import Home from './pages/home';
 import LogIn from './pages/logIn/logIn';
 import CreateBookings from './pages/bookings/CreateBookings';
 import { Layout } from './components/layout/Layout';
+import ManageBooking from './pages/bookings/manage_booking/ManageBooking';
+import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingDetails';
 
 function App() {
   const location = useLocation();
@@ -29,6 +31,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/bookings/create" element={<CreateBookings />} />
+            <Route path="/bookings/manage" element={<ManageBooking />} />
+            <Route path="/bookings/manage/:id" element={<ManageBookingDetails />} />
           </Routes>
         </Layout>
       )}

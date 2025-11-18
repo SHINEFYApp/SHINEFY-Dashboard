@@ -1,3 +1,4 @@
+// CREATE BOOKING
 export interface ServicesFormData {
     phoneNumber: string;
     address: string;
@@ -107,4 +108,10 @@ export interface ServicesStep4Props {
     onDataChange: (data: Partial<ServicesStep2Data>) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
     onValidationChange: (isValid: boolean) => void;
+}
+
+// MANAGE BOOKINGS
+export interface FilterFormValues {
+    search: string;
+    date: string;
 }

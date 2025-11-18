@@ -114,3 +114,50 @@ export const availableExtraServices = [
     { id: '1', name: 'SHINEFY Deep Cleaning' },
     { id: '2', name: 'test service' },
 ];
+
+// Example for booking table data
+export const dummyTableData: any[] = [
+    {
+        bookingNumber: "BK001",
+        customerName: "Mahmoud",
+        serviceBoyName: "Ahmed",
+        serviceName: "SHINEFY VIP",
+        paymentMethod: "Cash",
+        totalAmount: "500",
+    },
+    {
+        bookingNumber: "BK002",
+        customerName: "Mahmoud",
+        serviceBoyName: "Ali",
+        serviceName: "SHINEFY VIP",
+        paymentMethod: "Cash",
+        totalAmount: "600",
+    },
+    {
+        bookingNumber: "BK003",
+        customerName: "Mahmoud",
+        serviceBoyName: "Hassan",
+        serviceName: "SHINEFY VIP",
+        paymentMethod: "Cash",
+        totalAmount: "450",
+    },
+    {
+        bookingNumber: "BK004",
+        customerName: "Mahmoud",
+        serviceBoyName: "Omar",
+        serviceName: "SHINEFY VIP",
+        paymentMethod: "Cash",
+        totalAmount: "700",
+    },
+];
+
+export const dummyDays = [
+    "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
+    "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
+    "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
+];
+export const dummyYears = ["2023", "2024", "2025"];
+export const dummyMonths = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
