@@ -3,23 +3,30 @@ import { Search, Calendar, SlidersHorizontal } from "lucide-react";
 import { Formik, Form } from "formik";
 import { FormDatePicker } from "../../../common/FormDatePicker";
 import { FormInput } from "../../../common/FormInput";
-import type { FilterFormValues } from "../../../types/bookings";
+import type { FilterFormValues, FilterFormValuesManageSlots , ManageBookingsAndSlotsProps } from "../../../types/bookings";
 import type { Column } from "../../../types/common";
 import { CustomTable } from "../../../common/CustomTable";
 import { dummyTableData } from "../../../constants/data";
 import { useNavigate } from "react-router";
+import { FormDropdown } from "../../../common/FormDropdown";
 
-const ManageBookings = () => {
+const ManageBookingsAndSlots = ({headTitle , manageSectionFromComponant} : ManageBookingsAndSlotsProps) => {
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
     const pageSize = 10;
 
-    const initialValues: FilterFormValues = {
+    const manageBookingInitialValues: FilterFormValues = {
         search: "",
         date: "",
     };
 
-    const handleSubmit = (values: FilterFormValues) => {
+    const manageSlotsInitialValues: FilterFormValuesManageSlots = {
+        type: "",
+        status : "" ,
+        date: "",
+    };
+
+    const handleSubmit = (values: FilterFormValues | FilterFormValuesManageSlots) => {
         console.log("Search values:", values);
     };
 
@@ -69,40 +76,60 @@ const ManageBookings = () => {
         setCurrentPage(page);
     };
 
+    const types = ['type one' , 'type two' , 'type three']
+    const status = ['Open' , 'Closed' ]
+    const exportTypes = ['CSV' , 'Excel' , 'PDF' ]
+
     return (
         <div className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl">
             {/* Filter Section */}
             <div className="mb-6 px-4">
-                <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+                <Formik<FilterFormValues | FilterFormValuesManageSlots> initialValues={manageSectionFromComponant === 'manage bookings' ? manageBookingInitialValues : manageSlotsInitialValues} onSubmit={handleSubmit}>
                     {() => (
                         <Form>
                             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
                                 {/* Left Side */}
                                 <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
                                     {/* Title */}
-                                    <div className="flex flex-col min-w-[140px]">
+                                    <div className={`flex flex-col min-w-[140px] ${manageSectionFromComponant === 'manage slots' ? 'min-w-[101px]' : 'min-w-[140px]' }`}>
                                         <h1 className="text-xl md:text-2xl font-bold text-secondary-900">
-                                            Filter
+                                            {headTitle.one}
                                         </h1>
                                         <p className="text-xs md:text-sm text-secondary-500">
-                                            Manage Bookings
+                                            {headTitle.two}
                                         </p>
                                     </div>
 
+                                    {/* Type DropList Manage slots */}
+                                    {manageSectionFromComponant === 'manage slots' && 
+                                        <div className={`w-full md:w-[178px] -space-y-2`}>
+                                            <FormDropdown name="type" label="" placeholder="Type" options={types} className="mb-2" />
+                                        </div>
+                                    }
+
+                                    {/* Status DropList Manage slots */}
+                                    {manageSectionFromComponant === 'manage slots' && 
+                                        <div className="w-full md:w-[178px] -space-y-2">
+                                            <FormDropdown name="status" label="" placeholder="Status" options={status} className="mb-2" />
+                                        </div>
+                                    }
+
                                     {/* Search Input */}
-                                    <div className="w-full md:w-52 lg:w-60 -space-y-2">
-                                        <FormInput
-                                            name="search"
-                                            label=""
-                                            placeholder="Search"
-                                            icon={<Search className="w-5 h-5" />}
-                                            className="mb-0"
-                                            checkmark={false}
-                                        />
-                                    </div>
+                                    {manageSectionFromComponant === 'manage bookings' &&
+                                        <div className="w-full md:w-52 lg:w-60 -space-y-2">
+                                            <FormInput
+                                                name="search"
+                                                label=""
+                                                placeholder="Search"
+                                                icon={<Search className="w-5 h-5" />}
+                                                className="mb-0"
+                                                checkmark={false}
+                                            />
+                                        </div>
+                                    }
 
                                     {/* Date Picker */}
-                                    <div className="w-full md:w-48 lg:w-56 -space-y-2">
+                                    <div className={`w-full ${manageSectionFromComponant === 'manage slots' ? 'md:w-[150px]' : 'md:w-48 lg:w-56'} -space-y-2`}>
                                         <FormDatePicker
                                             name="date"
                                             label=""
@@ -122,13 +149,31 @@ const ManageBookings = () => {
                                     </button>
                                 </div>
 
-                                {/* Right Side */}
-                                <button
-                                    type="button"
-                                    className="py-3 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0 self-end lg:self-auto"
-                                >
-                                    <SlidersHorizontal className="w-5 h-5 text-secondary-700" />
-                                </button>
+                                {/*Right Side manage bookings */}
+                                {manageSectionFromComponant === 'manage bookings' &&
+                                    <button
+                                        type="button"
+                                        className="py-3 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0 self-end lg:self-auto"
+                                        >
+                                            <SlidersHorizontal className="w-5 h-5 text-secondary-700" />
+                                    </button>
+                                }
+
+                                {/*Right Side manage slots */}
+                                {manageSectionFromComponant === 'manage slots' && 
+                                    <div className="flex flex-col lg:flex-row items-center gap-5">
+                                        <div className="w-full lg:w-[135px]">
+                                            <FormDropdown name="export" label="" placeholder="Export" options={exportTypes} className="mb-2" />
+                                        </div>
+                                        <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
+                                        <button
+                                            type="button"
+                                            className="w-full lg:w-[94px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
+                                            >
+                                                Add Slot
+                                        </button>
+                                    </div>
+                                }
                             </div>
                         </Form>
                     )}
@@ -149,4 +194,4 @@ const ManageBookings = () => {
     );
 };
 
-export default ManageBookings;
+export default ManageBookingsAndSlots;
