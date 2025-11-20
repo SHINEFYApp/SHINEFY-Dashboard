@@ -89,19 +89,29 @@ const CreateBookings = () => {
             }
         }
 
+        
         if (!completedSteps.includes(currentStep)) {
             setCompletedSteps([...completedSteps, currentStep]);
         }
-
+        
         if (currentStep < 4) {
             setCurrentStep(currentStep + 1);
         }
+        
+        if(activeTab === 'package' && currentStep === 2) {
+            setCurrentStep(currentStep + 2);
+        }
     };
-
+    
     const handlePreviousStep = () => {
         if (currentStep > 1) {
             setCurrentStep(currentStep - 1);
         }
+
+        if(activeTab === 'package' && currentStep === 4) {
+            setCurrentStep(currentStep - 2);
+        }
+        
     };
 
     const handleStepClick = async (stepNumber: number) => {

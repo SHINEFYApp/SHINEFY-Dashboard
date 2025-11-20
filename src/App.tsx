@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './pages/home';
 import LogIn from './pages/logIn/logIn';
-import CreateBookings from './pages/bookings/CreateBookings';
 import { Layout } from './components/layout/Layout';
+import CreateBookings from './pages/bookings/CreateBookings';
 
 function App() {
   const location = useLocation();

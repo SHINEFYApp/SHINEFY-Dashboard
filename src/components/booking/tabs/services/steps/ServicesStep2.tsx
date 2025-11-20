@@ -9,7 +9,12 @@ import { Package } from 'lucide-react';
 
 const ServicesStep2 = ({ onNext, onBack, userPackageInput , formData, onDataChange }: ServicesStep2Props) => {
 
-    const validationSchema = Yup.object({
+    const validationSchemaServicesBooking = Yup.object({
+        mainService: Yup.string().required('Please select a service'),
+        serviceBoy: Yup.string().required('Please select a service boy'),
+    });
+
+    const validationSchemaPackagesBooking = Yup.object({
         mainService: Yup.string().required('Please select a service'),
         mainPackage: Yup.string().required('Please select a package'),
         serviceBoy: Yup.string().required('Please select a service boy'),
@@ -48,7 +53,6 @@ const ServicesStep2 = ({ onNext, onBack, userPackageInput , formData, onDataChan
         return service?.quantity || 0;
     };
 
-    console.log(formData)
 
     return (
         <>
@@ -59,10 +63,10 @@ const ServicesStep2 = ({ onNext, onBack, userPackageInput , formData, onDataChan
             <Formik
                 initialValues={{
                     mainService: formData.mainService || '',
-                    mainPackage: formData.mainPackage || '',
+                    // mainPackage: formData.mainPackage || '',
                     serviceBoy: formData.serviceBoy || '',
                 }}
-                validationSchema={validationSchema}
+                validationSchema={userPackageInput ? validationSchemaPackagesBooking : validationSchemaServicesBooking}
                 enableReinitialize
                 onSubmit={(values) => {
                     onDataChange(values);
