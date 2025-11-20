@@ -166,6 +166,90 @@ export const dummyTableData: any[] = [
     },
 ];
 
+// Example for booking Slots table data
+export const dummySlotTableData: any[] = [
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+];
+
 export const dummyDays = [
     "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
     "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu",

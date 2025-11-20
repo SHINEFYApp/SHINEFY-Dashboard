@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Calendar, SlidersHorizontal } from "lucide-react";
+import { Search, Calendar, SlidersHorizontal, Trash2, ArrowUpToLine } from "lucide-react";
 import { Formik, Form } from "formik";
 import { FormDatePicker } from "../../../common/FormDatePicker";
 import { FormInput } from "../../../common/FormInput";
@@ -7,6 +7,7 @@ import type { FilterFormValues, FilterFormValuesManageSlots , ManageBookingsAndS
 import type { Column } from "../../../types/common";
 import { CustomTable } from "../../../common/CustomTable";
 import { dummyTableData } from "../../../constants/data";
+import { dummySlotTableData } from "../../../constants/data";
 import { useNavigate } from "react-router";
 import { FormDropdown } from "../../../common/FormDropdown";
 
@@ -68,6 +69,53 @@ const ManageBookingsAndSlots = ({headTitle , manageSectionFromComponant} : Manag
                 >
                     View Details
                 </button>
+            ),
+        },
+    ];
+
+    const columnsManageSlot: Column<any>[] = [
+        {
+            key: "slotDate",
+            title: "Slot Date",
+        },
+        {
+            key: "createDateAndTim",
+            title: "Create Date & Tim",
+        },
+        {
+            key: "type",
+            title: "Type",
+        },
+        {
+            key: "startTime",
+            title: "Start Time",
+        },
+        {
+            key: "endTime",
+            title: "End Time",
+        },
+        {
+            key: "status",
+            title: "Status",
+        },
+        {
+            key: "action",
+            title: "Action",
+            render: () => (
+                <div className="flex gap-2 items-center">
+                    <button
+                        className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3.5 py-3 font-semibold transition-colors"
+                        onClick={() => alert('updated item')}
+                        >
+                        <ArrowUpToLine /> update
+                    </button>
+                    <button
+                        className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-3.5 py-3 font-semibold transition-colors"
+                        onClick={() => alert('deleted item')}
+                        >
+                        <Trash2 /> delete
+                    </button>
+                </div>
             ),
         },
     ];
@@ -163,7 +211,7 @@ const ManageBookingsAndSlots = ({headTitle , manageSectionFromComponant} : Manag
                                 {manageSectionFromComponant === 'manage slots' && 
                                     <div className="flex flex-col lg:flex-row items-center gap-5">
                                         <div className="w-full lg:w-[135px]">
-                                            <FormDropdown name="export" label="" placeholder="Export" options={exportTypes} className="mb-2" />
+                                            <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2" />
                                         </div>
                                         <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                                         <button
@@ -182,8 +230,8 @@ const ManageBookingsAndSlots = ({headTitle , manageSectionFromComponant} : Manag
 
             {/* Table Section */}
             <CustomTable
-                columns={columns}
-                data={dummyTableData}
+                columns={manageSectionFromComponant === 'manage bookings' ? columns : columnsManageSlot}
+                data={manageSectionFromComponant === 'manage bookings' ? dummyTableData : dummySlotTableData}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}
