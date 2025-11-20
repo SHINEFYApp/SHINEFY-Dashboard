@@ -12,6 +12,7 @@ export const FormDatePicker = ({
     label,
     placeholder = 'Select date',
     icon,
+    checkmark = true,
     disabled = false,
     className,
 }: FormDatePickerProps) => {
@@ -51,10 +52,10 @@ export const FormDatePicker = ({
                             className={cn(
                                 'w-full text-left rounded-xl border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200',
                                 icon && 'pl-12',
-                                isValid && 'pr-12',
+                                isValid && checkmark && 'pr-12',
                                 hasError
                                     ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200'
-                                    : isValid
+                                    : isValid && checkmark
                                         ? 'border-green-500 bg-green-50 focus:border-green-500 focus:ring-2 focus:ring-green-200'
                                         : 'border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20',
                                 disabled && 'cursor-not-allowed opacity-60',
@@ -64,7 +65,7 @@ export const FormDatePicker = ({
                             {field.value || placeholder}
                         </button>
 
-                        {isValid && (
+                        {isValid && checkmark && (
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 animate-scale-up pointer-events-none">
                                 <IoCheckmarkCircle className="w-5 h-5 text-green-500" />
                             </div>

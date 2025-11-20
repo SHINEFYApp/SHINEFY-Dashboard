@@ -1,3 +1,4 @@
+// CREATE BOOKING
 export interface ServicesFormData {
     phoneNumber: string;
     address: string;
@@ -21,7 +22,7 @@ export interface PackageFormData {
     vehicles: Vehicle[];
     bookingDate: string;
     bookingTime: string;
-    mainPackage : string ;
+    mainPackage: string;
     mainService: string;
     extraServices: ExtraService[];
     serviceBoy: string;
@@ -81,7 +82,7 @@ export interface ExtraService {
 
 export interface ServicesStep2Data {
     mainService: string;
-    mainPackage?: string ;
+    mainPackage?: string;
     extraServices: ExtraService[];
     serviceBoy: string;
 }
@@ -89,7 +90,7 @@ export interface ServicesStep2Data {
 export interface ServicesStep2Props {
     onNext: () => void;
     onBack: () => void;
-    userPackageInput?: boolean ; //user package input in package tap
+    userPackageInput?: boolean; //user package input in package tap
     formData: ServicesStep2Data;
     onDataChange: (data: Partial<ServicesStep2Data>) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
@@ -123,4 +124,10 @@ export interface ServicesStep4Props {
     registerValidation: (validationFn: () => Promise<boolean>) => void;
     onValidationChange: (isValid: boolean) => void;
     onSubmit: () => void;
+}
+
+// MANAGE BOOKINGS
+export interface FilterFormValues {
+    search: string;
+    date: string;
 }
