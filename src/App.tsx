@@ -8,6 +8,7 @@ import { Layout } from './components/layout/Layout';
 import ManageBooking from './pages/bookings/manage_booking/ManageBooking';
 import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingDetails';
 import ManageSlot from './pages/bookings/manage_slot/manageSlot';
+import AddVehicles from './pages/vehicles/addVehicles';
 
 function App() {
   const location = useLocation();
@@ -35,6 +36,7 @@ function App() {
             <Route path="/bookings/manage" element={<ManageBooking />} />
             <Route path="/bookings/slot" element={<ManageSlot />} />
             <Route path="/bookings/manage/:id" element={<ManageBookingDetails />} />
+            <Route path="/vehicles/add" element={<AddVehicles />} />
           </Routes>
         </Layout>
       )}

@@ -21,6 +21,14 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Slot']
     },
+    '/vehicles/add': {
+        title: 'Vehicles',
+        breadcrumbs: ['Vehicles' , 'Add']
+    },
+    '/vehicles/manage': {
+        title: 'Vehicles',
+        breadcrumbs: ['Vehicles' , 'Manage']
+    },
 };
 
 export const createBookingTabs = [

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MdDashboard } from 'react-icons/md';
 import { BsCalendarEvent } from 'react-icons/bs';
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5';
@@ -7,9 +7,18 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
+import { CarFront } from 'lucide-react';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
+
+    useEffect(() => {
+        if (currentPath.startsWith('/vehicles')) {
+            setExpandedMenu('Vehicles');
+        } else if (currentPath.startsWith('/bookings')) {
+            setExpandedMenu('Bookings');
+        }
+    }, [currentPath]);
 
     const menuItems: MenuItem[] = [
         {
@@ -39,6 +48,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 },
             ],
         },
+        {
+            icon: <CarFront className="w-5 h-5" />,
+            label: 'Vehicles',
+            isActive: currentPath?.startsWith('/vehicles'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Add Vehicle',
+                    path: '/vehicles/add'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Vehicle',
+                    path: '/vehicles/manage'
+                }
+            ],
+        },
     ];
 
     const toggleSubmenu = (label: string) => {
@@ -51,6 +77,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             toggleSubmenu(item.label);
         } else if (item.path) {
             window.location.href = item.path;
+            if (item.label === 'Bookings') {
+                setExpandedMenu('Bookings');
+            } else if (item.label === 'Vehicles') {
+                setExpandedMenu('Vehicles');
+            } else {
+                setExpandedMenu(null);
+            }
         }
     };
 
@@ -72,9 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {/* Menu Items */}
                 <nav className="mt-6 px-3 space-y-2">
                     {menuItems.map((item) => {
-                        const isMenuActive = item.path
-                            ? currentPath === item.path
-                            : item.isActive;
+                        const isMenuActive = item.path ? currentPath === item.path : item.isActive;
 
                         return (
                             <div key={item.label} className="relative">
@@ -138,7 +169,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                     >
                                         <div className="relative pl-6 space-y-2">
                                             {/* Vertical Line */}
-                                            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-600 h-[78%]" />
+                                            <div className={`absolute left-6 top-0 bottom-0 w-0.5 bg-gray-600 ${item.subItems.length === 3 ? 'h-[78%]' : 'h-[60%]'}`} />
 
                                             {item.subItems.map((subItem, index) => {
                                                 const isActive = currentPath === subItem.path;

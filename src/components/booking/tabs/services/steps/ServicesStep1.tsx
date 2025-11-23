@@ -41,7 +41,7 @@ const ServicesStep1 = ({
             <h2 className="text-2xl font-bold text-gray-900 mb-8">
                 Enter reservation data
             </h2>
-
+;2
             <Formik
                 initialValues={{
                     phoneNumber: formData.phoneNumber,
@@ -130,8 +130,7 @@ const ServicesStep1 = ({
                                 <FormDatePicker
                                     name="bookingDate"
                                     label="Select Booking Date"
-                                    icon={<Calendar className="size-5" />}
-                                />
+                                    icon={<Calendar className="size-5" />} checkmark={false}                                />
 
                                 <FormTimePicker
                                     name="bookingTime"
