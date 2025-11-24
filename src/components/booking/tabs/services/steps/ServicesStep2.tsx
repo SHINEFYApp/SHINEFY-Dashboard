@@ -9,7 +9,12 @@ import { Package } from 'lucide-react';
 
 const ServicesStep2 = ({ onNext, onBack, userPackageInput , formData, onDataChange }: ServicesStep2Props) => {
 
-    const validationSchema = Yup.object({
+    const validationSchemaServicesBooking = Yup.object({
+        mainService: Yup.string().required('Please select a service'),
+        serviceBoy: Yup.string().required('Please select a service boy'),
+    });
+
+    const validationSchemaPackageBooking = Yup.object({
         mainService: Yup.string().required('Please select a service'),
         mainPackage: Yup.string().required('Please select a package'),
         serviceBoy: Yup.string().required('Please select a service boy'),
@@ -62,7 +67,7 @@ const ServicesStep2 = ({ onNext, onBack, userPackageInput , formData, onDataChan
                     mainPackage: formData.mainPackage || '',
                     serviceBoy: formData.serviceBoy || '',
                 }}
-                validationSchema={validationSchema}
+                validationSchema={userPackageInput ? validationSchemaPackageBooking : validationSchemaServicesBooking}
                 enableReinitialize
                 onSubmit={(values) => {
                     onDataChange(values);

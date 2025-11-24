@@ -21,7 +21,7 @@ export const ProgressSteps: FC<ProgressStepsProps> = ({
     className,
 }) => {
     return (
-        <div className={cn('w-full py-8', className)}>
+        <div className={cn('w-full py-8 overflow-hidden', className)}>
             <div className="flex items-start justify-between relative">
                 {/* Background Line */}
                 <div

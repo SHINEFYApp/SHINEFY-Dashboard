@@ -1,11 +1,16 @@
 import CompletedBookingChart from "../../../components/booking/manageBooking/CompletedBookingChart";
-import ManageBookingFilter from "../../../components/booking/manageBooking/ManageBookingFilter";
+import ManageBookingsAndSlots from "../../../components/booking/manageBooking/ManageBookingFilter";
 import RatedReportsChart from "../../../components/booking/manageBooking/RatedReportsChart";
+
+const headTitle:{one : string , two : string} = {
+    one : 'Filter',
+    two : 'Manage Bookings'
+} 
 
 const ManageBooking = () => {
     return (
         <main>
-            <ManageBookingFilter />
+            <ManageBookingsAndSlots headTitle={headTitle} manageSectionFromComponant={'manage bookings'} />
             <CompletedBookingChart />
             <RatedReportsChart />
         </main>

@@ -131,3 +131,16 @@ export interface FilterFormValues {
     search: string;
     date: string;
 }
+
+// MANAGE SLOTS
+export interface FilterFormValuesManageSlots {
+    type: String ;
+    status :String ;
+    date: String ;
+}
+
+// ManageBookingsAndSlots props
+export interface ManageBookingsAndSlotsProps {
+    headTitle : {one : string , two : string},
+    manageSectionFromComponant : string
+}

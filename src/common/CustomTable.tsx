@@ -66,6 +66,8 @@ export function CustomTable<T extends Record<string, any>>({
                                             key={column.key}
                                             className={cn(
                                                 "px-6 py-4 text-sm text-gray-600",
+                                                row[column.key] === 'Close' && 'text-red-600 font-bold text-[15px]' ,
+                                                row[column.key] === 'Open' && 'text-green-600 font-bold text-[15px]' ,
                                                 colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
                                             )}
                                         >

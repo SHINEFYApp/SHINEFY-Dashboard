@@ -21,6 +21,14 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Slot']
     },
+    '/vehicles/add': {
+        title: 'Vehicles',
+        breadcrumbs: ['Vehicles' , 'Add']
+    },
+    '/vehicles/manage': {
+        title: 'Vehicles',
+        breadcrumbs: ['Vehicles' , 'Manage']
+    },
 };
 
 export const createBookingTabs = [
@@ -166,6 +174,90 @@ export const dummyTableData: any[] = [
     },
 ];
 
+// Example for booking Slots table data
+export const dummySlotTableData: any[] = [
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Open',
+    },
+    {
+        slotDate : '02-06-2025',
+        createDateAndTim : '31-May-23 08:23 PM',
+        type : 'Other',
+        startTime : '02:00 AM',
+        endTime : '02:00 AM',
+        status : 'Close',
+    },
+];
+
 export const dummyDays = [
     "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
     "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
@@ -176,3 +268,4 @@ export const dummyMonths = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
+
