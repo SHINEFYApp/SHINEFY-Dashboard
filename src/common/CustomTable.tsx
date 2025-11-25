@@ -66,18 +66,19 @@ export function CustomTable<T extends Record<string, any>>({
                                             key={column.key}
                                             className={cn(
                                                 "px-6 py-4 text-sm text-gray-600",
-                                                row[column.key] === 'Close' && 'text-red-600 font-bold text-[15px]' ,
-                                                row[column.key] === 'Open' && 'text-green-600 font-bold text-[15px]' ,
+                                              (row[column.key] === 'Close' || row[column.key] === 'Deactivated') && 'text-red-600 font-bold text-[15px]' ,
+                                              (row[column.key] === 'Open' || row[column.key] === 'Activated') && 'text-green-600 font-bold text-[15px]' ,
                                                 colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
                                             )}
                                         >
-                                            {column.render
-                                                ? column.render(
-                                                    row[column.key],
-                                                    row,
-                                                    rowIndex
-                                                )
-                                                : row[column.key]}
+                                            {/* {column.render ? column.render( row[column.key], row, rowIndex) : row[column.key]} */}
+                                            {column.render 
+                                                ? column.render(row[column.key], row, rowIndex) 
+                                                : column.key.toLowerCase() === "image" ? 
+                                                    <div className="w-10 h-10 bg-black/30 rounded-xl"></div>
+                                                    :
+                                                    row[column.key]
+                                            }
                                         </td>
                                     ))}
                                 </tr>

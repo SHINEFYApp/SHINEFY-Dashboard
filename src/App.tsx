@@ -9,6 +9,7 @@ import ManageBooking from './pages/bookings/manage_booking/ManageBooking';
 import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingDetails';
 import ManageSlot from './pages/bookings/manage_slot/manageSlot';
 import AddVehicles from './pages/vehicles/addVehicles';
+import ManageSubAdmin from './pages/users&staff/manageSubAdmin';
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
             <Route path="/bookings/slot" element={<ManageSlot />} />
             <Route path="/bookings/manage/:id" element={<ManageBookingDetails />} />
             <Route path="/vehicles/add" element={<AddVehicles />} />
+            <Route path="/users&staff/manage/subAdmin" element={<ManageSubAdmin />} />
           </Routes>
         </Layout>
       )}

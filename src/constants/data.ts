@@ -29,6 +29,22 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Vehicles',
         breadcrumbs: ['Vehicles' , 'Manage']
     },
+    '/users&staff/manage/users': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Users']
+    },
+    '/users&staff/manage/subAdmin': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Sub Admin']
+    },
+    '/users&staff/manage/serviceBoy': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Service Boy']
+    },
+    '/users&staff/manage/usersWallet': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Users Wallet']
+    },
 };
 
 export const createBookingTabs = [
@@ -255,6 +271,90 @@ export const dummySlotTableData: any[] = [
         startTime : '02:00 AM',
         endTime : '02:00 AM',
         status : 'Close',
+    },
+];
+
+// Example for manage sub admins table data
+export const dummyManageSubAdmins: any[] = [
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Activated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Deactivated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Activated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Deactivated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Activated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Deactivated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Activated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Deactivated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Activated',
+    },
+    {
+        image : '',
+        name : 'eid fathy',
+        email : 'other',
+        phoneNumber : '+201004894245',
+        registrationOn : '21-Nov-22 12:10 PM',
+        status : 'Deactivated',
     },
 ];
 

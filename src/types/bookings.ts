@@ -139,8 +139,15 @@ export interface FilterFormValuesManageSlots {
     date: String ;
 }
 
-// ManageBookingsAndSlots props
+// MANAGE MANGE SUB ADMIN
+export interface FilterFormValuesManageSubAdmin {
+    search : string,
+    franchise : string
+}
+
+// Table props
+export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin';
+
 export interface ManageBookingsAndSlotsProps {
-    headTitle : {one : string , two : string},
-    manageSectionFromComponant : string
+    manageSectionFromComponant : ManageSectionKey
 }
