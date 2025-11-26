@@ -89,7 +89,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 },
                 {
                     icon: null,
-                    label: 'Manage Vehicle',
+                    label: 'Manage Users Wallet',
                     path: '/users&staff/manage/usersWallet'
                 }
             ],

@@ -1,3 +1,5 @@
+
+
 export interface Step {
     title: string;
     description: string;
@@ -32,6 +34,11 @@ export interface FormTimePickerProps {
     className?: string;
 }
 
+export interface smsStatus {
+    status : boolean ,
+    isSms : boolean
+}
+
 export interface FormInputProps {
     name: string;
     label: string;
@@ -41,6 +48,8 @@ export interface FormInputProps {
     disabled?: boolean;
     checkmark?: boolean;
     className?: string;
+    receiveSms?: smsStatus;
+    setReceiveSms?: React.Dispatch<React.SetStateAction<smsStatus>> ;
 }
 
 export interface FormDropdownProps {
@@ -100,3 +109,16 @@ export interface DetailRowProps {
         onClick: () => void;
     };
 }
+
+//drop down with multi select
+export type MenuType = {
+  Key: number;
+  title: string;
+  options: string[];
+};
+
+//drop down with multi select props
+export type ChildProps = {
+    selectedOptions: Record<string, string[]>;
+    setSelectedOptions: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+};

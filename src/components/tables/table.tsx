@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
-import type { FilterFormValues, FilterFormValuesManageSlots , FilterFormValuesManageSubAdmin, ManageBookingsAndSlotsProps } from "../../types/bookings";
+import type { FilterFormValues, FilterFormValuesManageSlots , FilterFormValuesManageSubAdmin, FilterFormValuesUserWallets, ManageBookingsAndSlotsProps } from "../../types/bookings";
 import { CustomTable } from "../../common/CustomTable";
-import { dummyManageSubAdmins, dummyTableData } from "../../constants/data";
-import { dummySlotTableData } from "../../constants/data";
-import { Tables } from "./tablesLayout";
+import { dummyManageSubAdmins, dummyTableData , dummySlotTableData , dummyUserWallets } from "../../constants/data";
+import { exportTypes, Tables } from "./tablesLayout";
+import { FormDropdown } from "../../common/FormDropdown";
 
 
-const Table = ({ manageSectionFromComponant} : ManageBookingsAndSlotsProps) => {
+const Table = ({ manageSectionFromComponant , openWindowAddAmount , setOpenWindowAddAmount} : ManageBookingsAndSlotsProps) => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
 
-    const handleSubmit = (values: FilterFormValues | FilterFormValuesManageSlots | FilterFormValuesManageSubAdmin) => {
+    const handleSubmit = (values: FilterFormValues | FilterFormValuesManageSlots | FilterFormValuesManageSubAdmin | FilterFormValuesUserWallets) => {
         console.log("Search values:", values);
     };
 
@@ -30,7 +30,8 @@ const Table = ({ manageSectionFromComponant} : ManageBookingsAndSlotsProps) => {
             <div className="mb-6 px-4">
                 <Formik<FilterFormValues |
                     FilterFormValuesManageSlots |
-                    FilterFormValuesManageSubAdmin
+                    FilterFormValuesManageSubAdmin |
+                    FilterFormValuesUserWallets
                     >initialValues={Tables[manageSectionFromComponant].InitialValues} onSubmit={handleSubmit}>
                     {() => (
                         <Form>
@@ -57,9 +58,27 @@ const Table = ({ manageSectionFromComponant} : ManageBookingsAndSlotsProps) => {
                                 </div>
 
                                 {/* right side */}
-                                {Tables[manageSectionFromComponant].head.rightSide.map((el , index) => {
-                                    return React.cloneElement(el, { key: index })
-                                })}
+                                
+                                {manageSectionFromComponant !== 'userWallets' &&
+                                 Tables[manageSectionFromComponant].head.rightSide.map((el , index) => {
+                                     return React.cloneElement(el, {
+                                         key: index
+                                        })
+                                    })}
+                                {manageSectionFromComponant === 'userWallets' && 
+                                    <div className="flex flex-col lg:flex-row items-center gap-5">
+                                        <button
+                                            type="button"
+                                            onClick={() => setOpenWindowAddAmount?.(true)}
+                                            className="w-full lg:w-[179px] py-3 flex justify-center items-center bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
+                                        >
+                                            Add Wallet Amount
+                                        </button>
+                                        <div className="w-full lg:w-[135px]">
+                                            <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2 w-full" />
+                                        </div>
+                                    </div>
+                                }
                                 
                             </div>
                         </Form>
@@ -70,7 +89,7 @@ const Table = ({ manageSectionFromComponant} : ManageBookingsAndSlotsProps) => {
             {/* Table Section */}
             <CustomTable
                 columns={Tables[manageSectionFromComponant].columns}
-                data={manageSectionFromComponant === 'manageBookings' ? dummyTableData : manageSectionFromComponant === 'manageSlots' ? dummySlotTableData : dummyManageSubAdmins}
+                data={manageSectionFromComponant === 'manageBookings' ? dummyTableData : manageSectionFromComponant === 'manageSlots' ? dummySlotTableData : manageSectionFromComponant === 'userWallets' ? dummyUserWallets : dummyManageSubAdmins}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}

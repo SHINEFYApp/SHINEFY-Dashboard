@@ -3,6 +3,7 @@ import car from '../assets/car.svg';
 import cash from '../assets/icons/cash.svg';
 import credit from '../assets/icons/credit.svg';
 import free from '../assets/icons/free.svg';
+import type { MenuType } from "../types/common";
 
 export const routeConfig: Record<string, { title: string; breadcrumbs: string[]; }> = {
     '/dashboard': {
@@ -44,6 +45,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/users&staff/manage/usersWallet': {
         title: 'Users & Stuff',
         breadcrumbs: ['Users & Stuff' , 'Manage' , 'Users Wallet']
+    },
+    '/users&staff/manage/subAdmin/addSubAdmin': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Sub Admin' , 'Add']
     },
 };
 
@@ -356,6 +361,183 @@ export const dummyManageSubAdmins: any[] = [
         registrationOn : '21-Nov-22 12:10 PM',
         status : 'Deactivated',
     },
+];
+// Example for manage sub admins table data
+export const dummyUserWallets: any[] = [
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        userName: 'Youssif El Helaly',
+        mobileNumber: '+201101255511',
+        amountType: 'Credit',
+        type: '7.50',
+        reason: 'Cashback',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+//drop down with multi selections and options
+
+export const menus: MenuType[] = [
+     {
+        Key: 1,
+        title: "Dashboard",
+        options: ["Dashboard"],
+    },
+    {
+        Key: 2,
+        title: "Services & Extras",
+        options: [
+            "Services one",
+            "Services two",
+            "Services three",
+            "Services four",
+            "Services five",
+        ],
+    },
+    {
+        Key: 3,
+        title: "Products & Orders",
+        options: ["Order one", "Order two", "Order three"],
+    },
+    {
+        Key: 4,
+        title: "Bookings",
+        options: ["Bookings one", "Bookings two", "Bookings three"],
+    },
+    {
+        Key: 5,
+        title: "Products & Orders",
+        options: ["Order one", "Order two", "Order three"],
+    },
+    {
+        Key: 6,
+        title: "Products & Orders",
+        options: ["Order one", "Order two", "Order three"],
+    },
+    {
+        Key: 7,
+        title: "Vehicles",
+        options: ["Vehicle one", "Vehicle two", "Vehicle three"],
+    },
+    {
+        Key: 8,
+        title: "Products & Orders",
+        options: ["Order one", "Order two", "Order three"],
+    },
+    {
+        Key: 9,
+        title: "Reports",
+        options: ["Report A", "Report B", "Report C"],
+    },
+    {
+        Key: 10,
+        title: "Users & Staff",
+        options: ["Permission A", "Permission B", "Permission C"],
+    },
+    {
+        Key: 11,
+        title: "Financial & Points",
+        options: ["Finance A", "Finance B", "Finance C"],
+    },
+    {
+        Key: 12,
+        title: "Settings & Content",
+        options: ["Setting 1", "Setting 2", "Setting 3"],
+    },
+    {
+        Key: 13,
+        title: "Geography and Regions",
+        options: ["Region 1", "Region 2", "Region 3"],
+    },
+    {
+        Key: 14,
+        title: "Communication & Support",
+        options: ["Support 1", "Support 2", "Support 3"],
+    },
+    {
+        Key: 15,
+        title: "Franchise",
+        options: ["Franchise 1", "Franchise 2", "Franchise 3"],
+    }
 ];
 
 export const dummyDays = [

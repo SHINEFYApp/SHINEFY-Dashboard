@@ -27,7 +27,7 @@ export default function AddVehicles(){
     });
 
     return(
-        <section>
+        <main>
             <div className="w-full bg-white shadow-md p-4 h-screen md:p-6 rounded-2xl">
                 <h1 className="text-[20px] font-bold mb-8">Enter vehicle information</h1>
                 <Formik
@@ -119,6 +119,6 @@ export default function AddVehicles(){
                     )}
                 </Formik>
             </div>
-        </section>
+        </main>
     )
 }

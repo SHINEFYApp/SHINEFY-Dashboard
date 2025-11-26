@@ -117,6 +117,7 @@ textarea:focus {
   outline: none;
 }
 
+
 /* Custom scrollbar for time picker */
 .scrollbar-thin::-webkit-scrollbar {
   height: 6px;

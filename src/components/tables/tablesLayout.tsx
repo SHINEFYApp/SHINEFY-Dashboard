@@ -6,7 +6,7 @@ import { useNavigate } from "react-router"
 
 const types = ['type one', 'type two', 'type three']
 const status = ['Open', 'Closed']
-const exportTypes = ['CSV', 'Excel', 'PDF']
+export const exportTypes = ['CSV', 'Excel', 'PDF']
 const Franchise = ['Franchise one', 'Franchise two', 'Franchise three']
 
 export const Tables = {
@@ -229,16 +229,16 @@ export const Tables = {
             ],
             rightSide: [
                 <div className="flex flex-col lg:flex-row items-center gap-5">
-                    <button
+                    <a href="/users&staff/manage/subAdmin/addSubAdmin"
                         type="button"
-                        className="w-full lg:w-[179px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
+                        className="w-full lg:w-[179px] py-3 flex justify-center items-center bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
                     >
-                        Add Slot
-                    </button>
+                        Add Sub Admin
+                    </a>
+                    <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                     <div className="w-full lg:w-[135px]">
                         <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2 w-full" />
                     </div>
-                    <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                 </div>
             ]
         },
@@ -299,6 +299,64 @@ export const Tables = {
                     </div>
                 ),
             },
+        ]
+    },
+    userWallets: {
+        InitialValues: {
+            search : ''
+        },
+        head: {
+            headTitle: {
+                one: '',
+                two: ''
+            },
+            leftSide: [
+                <div className="w-full md:w-52 lg:w-[446px] mb-2 -space-y-2">
+                    <FormInput
+                        name="search"
+                        label=""
+                        placeholder="Search"
+                        icon={<Search className="w-5 h-5" />}
+                        className="mb-0"
+                        checkmark={false}
+                    />
+                </div>,
+                <button
+                    type="submit"
+                    className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
+                >
+                    Search
+                </button>
+            ],
+            rightSide: [
+                
+            ]
+        },
+        columns: [
+            {
+                key: "userName",
+                title: "User Name",
+            },
+            {
+                key: "mobileNumber",
+                title: "Mobile Number",
+            },
+            {
+                key: "amountType",
+                title: "Amount typr",
+            },
+            {
+                key: "type",
+                title: "Type",
+            },
+            {
+                key: "reason",
+                title: "Reason",
+            },
+            {
+                key: "createDateAndTime",
+                title: "Create Date & Time",
+            }
         ]
     },
 };

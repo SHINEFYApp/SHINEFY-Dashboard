@@ -1,3 +1,5 @@
+import type { Dispatch, SetStateAction } from "react";
+
 // CREATE BOOKING
 export interface ServicesFormData {
     phoneNumber: string;
@@ -145,9 +147,16 @@ export interface FilterFormValuesManageSubAdmin {
     franchise : string
 }
 
+// USER WALLETS
+export interface FilterFormValuesUserWallets{
+    search : string,
+}
+
 // Table props
-export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin';
+export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets';
 
 export interface ManageBookingsAndSlotsProps {
     manageSectionFromComponant : ManageSectionKey
+    openWindowAddAmount? : boolean
+    setOpenWindowAddAmount? : Dispatch<SetStateAction<boolean | undefined>>
 }

@@ -3,6 +3,7 @@ import { useField } from 'formik';
 import { cn } from '../utils/utils';
 import { IoCheckmarkCircle } from 'react-icons/io5';
 import type { FormInputProps } from '../types/common';
+import { Check } from 'lucide-react';
 
 export const FormInput: FC<FormInputProps> = ({
     name,
@@ -13,10 +14,17 @@ export const FormInput: FC<FormInputProps> = ({
     disabled = false,
     checkmark = true,
     className,
+    receiveSms,
+    setReceiveSms
 }) => {
     const [field, meta] = useField(name);
     const hasError = meta.touched && meta.error;
     const isValid = meta.touched && !meta.error && field.value;
+
+    const handleToggle = () => {
+        if (!receiveSms) return;
+        setReceiveSms?.({ ...receiveSms, isSms: !receiveSms?.isSms});
+    };
 
     return (
         <div className={cn('space-y-2', className)}>
@@ -52,12 +60,14 @@ export const FormInput: FC<FormInputProps> = ({
                     )}
                 />
 
+
                 {/* Success checkmark */}
                 {isValid && checkmark && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 animate-scale-up">
                         <IoCheckmarkCircle className="w-5 h-5 text-green-500" />
                     </div>
                 )}
+
             </div>
 
             {/* Error message */}
@@ -65,6 +75,20 @@ export const FormInput: FC<FormInputProps> = ({
                 <p className="text-xs text-red-500 animate-slide-down pl-1">
                     {meta.error}
                 </p>
+            )}
+
+            {/* receiveSms to manage sub admins */}
+            {receiveSms?.status && (
+                <div className="py-2">
+                    <button onClick={handleToggle} type='button' className='flex gap-2 font-extrabold text-[14px] items-center'>
+                        {receiveSms.isSms ? 
+                            <span className='w-5 rounded h-5 bg-green-600 flex justify-center items-center'><Check color='white' size={15}/></span>
+                            :
+                            <span className='w-5 rounded h-5 border border-black flex justify-center items-center'></span>
+                        }
+                        Receive Sms
+                    </button>
+                </div>
             )}
         </div>
     );
