@@ -10,7 +10,7 @@ import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingD
 import ManageSlot from './pages/bookings/manage_slot/manageSlot';
 import AddVehicles from './pages/vehicles/addVehicles';
 import ManageSubAdmin from './pages/users&staff/manageSubAdmin';
-import AddSubAdmin from './pages/users&staff/AddSubAdmin';
+import AddSubAdmin from './pages/users&staff/addSubAdmin';
 import UsersWallets from './pages/users&staff/userWallets';
 
 function App() {
