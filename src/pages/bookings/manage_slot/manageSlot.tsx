@@ -1,14 +1,9 @@
-import ManageBookingFilter from "../../../components/booking/manageBooking/ManageBookingFilter";
-
-const headTitle:{one : string , two : string} = {
-    one : 'Filter',
-    two : 'Manage Slot'
-} 
+import Table from "../../../components/tables/table";
 
 const ManageSlot = () => {
     return (
         <main>
-            <ManageBookingFilter headTitle={headTitle} manageSectionFromComponant={'manage slots'} />
+            <Table manageSectionFromComponant={'manageSlots'} />
         </main>
     );
 };

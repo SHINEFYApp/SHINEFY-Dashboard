@@ -7,7 +7,7 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { CarFront } from 'lucide-react';
+import { CarFront, Users } from 'lucide-react';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
@@ -17,6 +17,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Vehicles');
         } else if (currentPath.startsWith('/bookings')) {
             setExpandedMenu('Bookings');
+        } else if (currentPath.startsWith('/users&staff/manage')) {
+            setExpandedMenu('Users & Staff');
         }
     }, [currentPath]);
 
@@ -62,6 +64,33 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     icon: null,
                     label: 'Manage Vehicle',
                     path: '/vehicles/manage'
+                }
+            ],
+        },
+        {
+            icon: <Users className="w-5 h-5" />,
+            label: 'Users & Staff',
+            isActive: currentPath?.startsWith('/users&staff/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Users',
+                    path: '/users&staff/manage/users'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Sub Admin',
+                    path: '/users&staff/manage/subAdmin'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Service Boy',
+                    path: '/users&staff/manage/serviceBoy'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Users Wallet',
+                    path: '/users&staff/manage/usersWallet'
                 }
             ],
         },
@@ -169,7 +198,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                     >
                                         <div className="relative pl-6 space-y-2">
                                             {/* Vertical Line */}
-                                            <div className={`absolute left-6 top-0 bottom-0 w-0.5 bg-gray-600 ${item.subItems.length === 3 ? 'h-[78%]' : 'h-[60%]'}`} />
+                                            <div className={`absolute left-6 top-0 bottom-0 w-0.5 bg-gray-600 ${item.subItems.length === 2 ? 'h-[60%]' : 'h-[79%]'}`} />
 
                                             {item.subItems.map((subItem, index) => {
                                                 const isActive = currentPath === subItem.path;

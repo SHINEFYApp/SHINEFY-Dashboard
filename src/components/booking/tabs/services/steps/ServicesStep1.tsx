@@ -41,7 +41,6 @@ const ServicesStep1 = ({
             <h2 className="text-2xl font-bold text-gray-900 mb-8">
                 Enter reservation data
             </h2>
-;2
             <Formik
                 initialValues={{
                     phoneNumber: formData.phoneNumber,
