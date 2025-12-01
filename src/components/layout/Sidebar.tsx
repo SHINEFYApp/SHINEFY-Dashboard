@@ -8,6 +8,7 @@ import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
 import { CarFront, Users } from 'lucide-react';
+import { Link } from 'react-router';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
@@ -139,8 +140,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                         return (
                             <div key={item.label} className="relative">
                                 {item.path && !item.subItems ? (
-                                    <a
-                                        href={item.path}
+                                    <Link
+                                        to={item.path}
                                         className={cn(
                                             "w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 relative",
                                             isMenuActive
@@ -156,7 +157,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                                 </span>
                                             )}
                                         </div>
-                                    </a>
+                                    </Link>
                                 ) : (
                                     <button
                                         onClick={() => handleMenuClick(item)}
@@ -221,8 +222,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                                             />
                                                         </svg>
 
-                                                        <a
-                                                            href={subItem.path}
+                                                        <Link
+                                                            to={subItem.path}
                                                             className={cn(
                                                                 "flex items-center gap-3 pl-8 pr-4 py-3 text-sm rounded-xl transition-all duration-200 group relative",
                                                                 isActive
@@ -236,7 +237,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                                                 className="w-5 h-5 transition-all duration-200"
                                                             />
                                                             <span className="whitespace-nowrap">{subItem.label}</span>
-                                                        </a>
+                                                        </Link>
                                                     </div>
                                                 );
                                             })}
