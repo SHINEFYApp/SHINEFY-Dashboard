@@ -1,17 +1,5 @@
-import type { ComponentType } from "react";
+import type { DetailRowProps } from "../../types/bookings";
 import { cn } from "../../utils/utils";
-
-export interface DetailRowProps {
-    label: string;
-    value: string | number;
-    type?: "text" | "badge";
-    badgeColor?: "yellow" | "green" | "blue" | "red" | "purple";
-    actionButton?: {
-        text: string;
-        icon?: ComponentType<{ className?: string; }>;
-        onClick: () => void;
-    };
-}
 
 export const DetailRow = ({
     label,

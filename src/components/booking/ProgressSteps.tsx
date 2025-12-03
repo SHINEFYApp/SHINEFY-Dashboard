@@ -1,16 +1,7 @@
 import type { FC } from 'react';
 import { cn } from '../../utils/utils';
 import { Check } from 'lucide-react';
-
-
-interface ProgressStepsProps {
-    steps: { title: string; description: string; }[];
-    currentStep: number;
-    completedSteps?: number[];
-    validatedSteps?: number[]; // Steps that have valid data
-    onStepClick?: (stepNumber: number) => void;
-    className?: string;
-}
+import type { ProgressStepsProps } from '../../types/bookings';
 
 export const ProgressSteps: FC<ProgressStepsProps> = ({
     steps,

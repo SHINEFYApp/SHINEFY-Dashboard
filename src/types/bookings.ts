@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction } from "react";
+import type { ComponentType, Dispatch, SetStateAction } from "react";
 
 // CREATE BOOKING
 export interface ServicesFormData {
@@ -150,4 +150,37 @@ export interface ManageBookingsAndSlotsProps {
     manageSectionFromComponant: ManageSectionKey;
     openWindowAddAmount?: boolean;
     setOpenWindowAddAmount?: Dispatch<SetStateAction<boolean | undefined>>;
+}
+
+export interface DetailRowProps {
+    label: string;
+    value: string | number;
+    type?: "text" | "badge";
+    badgeColor?: "yellow" | "green" | "blue" | "red" | "purple";
+    actionButton?: {
+        text: string;
+        icon?: ComponentType<{ className?: string; }>;
+        onClick: () => void;
+    };
+}
+
+export interface ProgressStepsProps {
+    steps: { title: string; description: string; }[];
+    currentStep: number;
+    completedSteps?: number[];
+    validatedSteps?: number[]; // Steps that have valid data
+    onStepClick?: (stepNumber: number) => void;
+    className?: string;
+}
+
+export interface ReportFilters {
+    status: string;
+    startDate: string;
+    endDate: string;
+}
+
+export interface ReportFilters {
+    status: string;
+    startDate: string;
+    endDate: string;
 }
