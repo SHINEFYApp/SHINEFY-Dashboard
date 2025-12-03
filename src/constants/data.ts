@@ -4,6 +4,9 @@ import cash from '../assets/icons/cash.svg';
 import credit from '../assets/icons/credit.svg';
 import free from '../assets/icons/free.svg';
 import type { MenuType } from "../types/common";
+import { Eye } from "lucide-react";
+import type { DetailRowProps } from "../types/common";
+import carImage from "../assets/car.svg";
 
 export const routeConfig: Record<string, { title: string; breadcrumbs: string[]; }> = {
     '/dashboard': {
@@ -24,31 +27,31 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     },
     '/vehicles/add': {
         title: 'Vehicles',
-        breadcrumbs: ['Vehicles' , 'Add']
+        breadcrumbs: ['Vehicles', 'Add']
     },
     '/vehicles/manage': {
         title: 'Vehicles',
-        breadcrumbs: ['Vehicles' , 'Manage']
+        breadcrumbs: ['Vehicles', 'Manage']
     },
     '/users&staff/manage/users': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Users']
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Users']
     },
     '/users&staff/manage/subAdmin': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Sub Admin']
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin']
     },
     '/users&staff/manage/serviceBoy': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Service Boy']
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Service Boy']
     },
     '/users&staff/manage/usersWallet': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Users Wallet']
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Users Wallet']
     },
     '/users&staff/manage/subAdmin/addSubAdmin': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff' , 'Manage' , 'Sub Admin' , 'Add']
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin', 'Add']
     },
 };
 
@@ -198,168 +201,168 @@ export const dummyTableData: any[] = [
 // Example for booking Slots table data
 export const dummySlotTableData: any[] = [
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Open',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Open',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Close',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Close',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Open',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Open',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Close',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Close',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Open',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Open',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Close',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Close',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Open',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Open',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Close',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Close',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Open',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Open',
     },
     {
-        slotDate : '02-06-2025',
-        createDateAndTim : '31-May-23 08:23 PM',
-        type : 'Other',
-        startTime : '02:00 AM',
-        endTime : '02:00 AM',
-        status : 'Close',
+        slotDate: '02-06-2025',
+        createDateAndTim: '31-May-23 08:23 PM',
+        type: 'Other',
+        startTime: '02:00 AM',
+        endTime: '02:00 AM',
+        status: 'Close',
     },
 ];
 
 // Example for manage sub admins table data
 export const dummyManageSubAdmins: any[] = [
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Activated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Deactivated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Deactivated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Activated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Deactivated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Deactivated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Activated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Deactivated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Deactivated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Activated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Deactivated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Deactivated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Activated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
     },
     {
-        image : '',
-        name : 'eid fathy',
-        email : 'other',
-        phoneNumber : '+201004894245',
-        registrationOn : '21-Nov-22 12:10 PM',
-        status : 'Deactivated',
+        image: '',
+        name: 'eid fathy',
+        email: 'other',
+        phoneNumber: '+201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Deactivated',
     },
 ];
 // Example for manage sub admins table data
@@ -457,7 +460,7 @@ export const dummyUserWallets: any[] = [
 //drop down with multi selections and options
 
 export const menus: MenuType[] = [
-     {
+    {
         Key: 1,
         title: "Dashboard",
         options: ["Dashboard"],
@@ -551,3 +554,75 @@ export const dummyMonths = [
     "July", "August", "September", "October", "November", "December"
 ];
 
+export const financeRows = [
+    { label: "Coupon Applied", value: "% 0" },
+    { label: "Coupon Code", value: "NA" },
+    { label: "Coupon Amount", value: "NA" },
+    { label: "Sub Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" },
+    { isDivider: true },
+    { label: "Wallet Amount", value: "EGP 0.00" },
+    { isDivider: true },
+    { label: "Grand Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" },
+];
+
+export const mainDetails: DetailRowProps[] = [
+    { label: "ID", value: "9388546579" },
+    {
+        label: "Customer Name",
+        value: "Eid Fathy",
+        actionButton: {
+            text: "View",
+            icon: Eye,
+            onClick: () => console.log("View customer")
+        }
+    },
+    { label: "Type", value: "Normal", type: "badge", badgeColor: "yellow" },
+    { label: "Booking Date", value: "2025-10-18" },
+    { label: "Booking Time", value: "05:30 PM" },
+    { label: "Address Type", value: "Home", type: "badge", badgeColor: "blue" },
+    {
+        label: "Address",
+        value: "cairo,",
+        actionButton: {
+            text: "View",
+            icon: Eye,
+            onClick: () => console.log("View address")
+        }
+    },
+];
+
+export const statusDetails: DetailRowProps[] = [
+    { label: "Status", value: "Pending", type: "badge", badgeColor: "yellow" },
+    { label: "Note", value: "NA", type: "badge", badgeColor: "red" },
+    { label: "Payment Option", value: "Cash", type: "badge", badgeColor: "blue" },
+    { label: "Collect Money Status", value: "Not Collected", type: "badge", badgeColor: "yellow" },
+    { label: "Grand Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" }
+];
+
+
+export const dummyVehicles: any[] = [
+    {
+        id: "1",
+        image: carImage,
+        make: "Audi",
+        model: "Q5 2025",
+        plateNumber: "ي م ك - 128",
+        color: "Red",
+        colorHex: "#DC2626",
+    },
+    {
+        id: "2",
+        image: carImage,
+        make: "Audi",
+        model: "Q5 2025",
+        plateNumber: "ي م ك - 128",
+        color: "Red",
+        colorHex: "#DC2626",
+    },
+];
+
+
+export const manageSlotsTabs = [
+    { id: 'manageDailySlot', label: 'Manage Daily Slot' },
+    { id: 'manageFreeBooking', label: 'Manage Free Booking' },
+];

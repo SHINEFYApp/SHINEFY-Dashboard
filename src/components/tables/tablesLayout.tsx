@@ -1,13 +1,13 @@
-import { ArrowUpToLine, Calendar, Eye, Search, Shield, SlidersHorizontal, Trash2 } from "lucide-react"
-import { FormDropdown } from "../../common/FormDropdown"
-import { FormInput } from "../../common/FormInput"
-import { FormDatePicker } from "../../common/FormDatePicker"
-import { useNavigate } from "react-router"
+import { ArrowUpToLine, Calendar, Eye, Search, Shield, SlidersHorizontal, Trash2 } from "lucide-react";
+import { FormDropdown } from "../../common/FormDropdown";
+import { FormInput } from "../../common/FormInput";
+import { FormDatePicker } from "../../common/FormDatePicker";
+import { Link, useNavigate } from "react-router";
 
-const types = ['type one', 'type two', 'type three']
-const status = ['Open', 'Closed']
-export const exportTypes = ['CSV', 'Excel', 'PDF']
-const Franchise = ['Franchise one', 'Franchise two', 'Franchise three']
+const types = ['type one', 'type two', 'type three'];
+const status = ['Open', 'Closed'];
+export const exportTypes = ['CSV', 'Excel', 'PDF'];
+const Franchise = ['Franchise one', 'Franchise two', 'Franchise three'];
 
 export const Tables = {
     manageBookings: {
@@ -89,7 +89,7 @@ export const Tables = {
                     <button
                         className="text-primary hover:text-primary-700 font-semibold transition-colors"
                         onClick={() => {
-                            const navigate = useNavigate(); 
+                            const navigate = useNavigate();
                             navigate('/bookings/manage/id');
                         }}
                     >
@@ -102,7 +102,7 @@ export const Tables = {
     manageSlots: {
         InitialValues: {
             type: "",
-            status : "" ,
+            status: "",
             date: "",
         },
         head: {
@@ -140,12 +140,12 @@ export const Tables = {
                         <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2" />
                     </div>
                     <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
-                    <button
-                        type="button"
-                        className="w-full lg:w-[94px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
+                    <Link
+                        to={"/bookings/slot/create"}
+                        className="w-full lg:w-[94px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
                     >
                         Add Slot
-                    </button>
+                    </Link>
                 </div>
             ]
         },
@@ -198,8 +198,8 @@ export const Tables = {
     },
     manageSubAdmin: {
         InitialValues: {
-            search : '',
-            franchise : ''
+            search: '',
+            franchise: ''
         },
         head: {
             headTitle: {
@@ -303,7 +303,7 @@ export const Tables = {
     },
     userWallets: {
         InitialValues: {
-            search : ''
+            search: ''
         },
         head: {
             headTitle: {
@@ -329,7 +329,7 @@ export const Tables = {
                 </button>
             ],
             rightSide: [
-                
+
             ]
         },
         columns: [

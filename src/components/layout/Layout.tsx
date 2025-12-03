@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 import { cn } from '../../utils/utils';
@@ -7,7 +8,8 @@ import type { LayoutProps } from '../../types/layout';
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-    const [currentPath, setCurrentPath] = useState(window.location.pathname);
+    const location = useLocation();
+    const currentPath = location.pathname;
 
     useEffect(() => {
         const handleResize = () => {
@@ -21,15 +23,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    useEffect(() => {
-        const handleLocationChange = () => {
-            setCurrentPath(window.location.pathname);
-        };
-
-        window.addEventListener('popstate', handleLocationChange);
-        return () => window.removeEventListener('popstate', handleLocationChange);
     }, []);
 
     const toggleSidebar = () => {

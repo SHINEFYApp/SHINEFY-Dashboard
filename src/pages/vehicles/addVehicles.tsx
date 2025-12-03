@@ -1,46 +1,42 @@
-import { Formik , Form } from 'formik';
-import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
+import { addVehicleSchema } from '../../constants/validationSchema';
+import { addVehicleInitialValues } from '../../constants/initialValues';
 import { FormDropdown } from '../../common/FormDropdown';
 import { CarFront, LayoutGrid, ScrollText, SprayCan, UserRound } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { useState } from 'react';
 import type { addVehiclesFormData } from '../../types/vehicles';
 
-export default function AddVehicles(){
-    const [formData , setFormData] = useState<addVehiclesFormData>({
+export default function AddVehicles() {
+    const [formData, setFormData] = useState<addVehiclesFormData>({
         user: '',
         category: '',
         make: '',
         model: '',
         color: '',
-    })
+    });
 
     console.log(formData);
 
 
-    const validationSchema = Yup.object({
-        user: Yup.string().required('the user is required'),
-        category: Yup.string().required('the category is required'),
-        make: Yup.string().required('the make is required'),
-        model: Yup.string().required('the model is required'),
-        color: Yup.string().required('the color is required'),
-    });
 
-    return(
+
+    return (
         <main>
             <div className="w-full bg-white shadow-md p-4 h-screen md:p-6 rounded-2xl">
                 <h1 className="text-[20px] font-bold mb-8">Enter vehicle information</h1>
                 <Formik
-                    initialValues={{ 
-                        user : formData.user,
-                        category : formData.category,
-                        make : formData.make,
-                        model : formData.model,
-                        color : formData.color,
+                    initialValues={{
+                        ...addVehicleInitialValues,
+                        user: formData.user || addVehicleInitialValues.user,
+                        category: formData.category || addVehicleInitialValues.category,
+                        make: formData.make || addVehicleInitialValues.make,
+                        model: formData.model || addVehicleInitialValues.model,
+                        color: formData.color || addVehicleInitialValues.color,
                     }}
-                    validationSchema={validationSchema} 
+                    validationSchema={addVehicleSchema}
                     onSubmit={(values) => {
-                        setFormData({...formData , ...values})
+                        setFormData({ ...formData, ...values });
                     }}
                 >
                     {({ isValid }) => (
@@ -120,5 +116,5 @@ export default function AddVehicles(){
                 </Formik>
             </div>
         </main>
-    )
+    );
 }

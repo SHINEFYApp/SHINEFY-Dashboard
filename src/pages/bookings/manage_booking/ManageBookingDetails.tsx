@@ -1,55 +1,17 @@
-import { ArrowUpFromLine, Trash2, History, Eye } from "lucide-react";
+import { ArrowUpFromLine, Trash2, History } from "lucide-react";
 import { CustomTable } from "../../../common/CustomTable";
 import { DetailRow } from "../../../components/booking/DetailRow";
-import carImage from "../../../assets/car.svg";
+import { dummyVehicles, financeRows, mainDetails, statusDetails } from "../../../constants/data";
 
-interface Vehicle {
-    id: string;
-    image: string;
-    make: string;
-    model: string;
-    plateNumber: string;
-    color: string;
-    colorHex: string;
-}
 
 const ManageBookingDetails = () => {
-    const handleViewCustomer = () => {
-        console.log("View customer");
-    };
-
-    const handleViewAddress = () => {
-        console.log("View address details");
-    };
-
-    // Mock vehicle data
-    const vehicles: Vehicle[] = [
-        {
-            id: "1",
-            image: carImage,
-            make: "Audi",
-            model: "Q5 2025",
-            plateNumber: "ي م ك - 128",
-            color: "Red",
-            colorHex: "#DC2626",
-        },
-        {
-            id: "2",
-            image: carImage,
-            make: "Audi",
-            model: "Q5 2025",
-            plateNumber: "ي م ك - 128",
-            color: "Red",
-            colorHex: "#DC2626",
-        },
-    ];
 
     // Handle vehicle actions
-    const handleUpdateVehicle = (vehicle: Vehicle) => {
+    const handleUpdateVehicle = (vehicle: any) => {
         console.log("Update vehicle:", vehicle);
     };
 
-    const handleDeleteVehicle = (vehicle: Vehicle) => {
+    const handleDeleteVehicle = (vehicle: any) => {
         console.log("Delete vehicle:", vehicle);
     };
 
@@ -164,85 +126,15 @@ const ManageBookingDetails = () => {
 
                 {/* Booking Details Grid */}
                 <div className="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-x-[10%] gap-y-4">
-                    {/* Left Column */}
                     <div className="space-y-4">
-                        <DetailRow label="ID" value="9388546579" />
-
-                        <DetailRow
-                            label="Customer Name"
-                            value="Eid Fathy"
-                            actionButton={{
-                                text: "View",
-                                icon: <Eye className="w-4 h-4" />,
-                                onClick: handleViewCustomer,
-                            }}
-                        />
-
-                        <DetailRow
-                            label="Type"
-                            value="Normal"
-                            type="badge"
-                            badgeColor="yellow"
-                        />
-
-                        <DetailRow label="Booking Date" value="2025-10-18" />
-
-                        <DetailRow label="Booking Time" value="05:30 PM" />
-
-                        <DetailRow
-                            label="Address Type"
-                            value="Home"
-                            type="badge"
-                            badgeColor="blue"
-                        />
-
-                        <DetailRow
-                            label="Address"
-                            value="cairo,"
-                            actionButton={{
-                                text: "View",
-                                icon: <Eye className="w-4 h-4" />,
-                                onClick: handleViewAddress,
-                            }}
-                        />
+                        {mainDetails.map((prop, i) => (
+                            <DetailRow key={prop.label} {...prop} />
+                        ))}
                     </div>
-
-                    {/* Right Column */}
                     <div className="space-y-4">
-                        <DetailRow
-                            label="Status"
-                            value="Pending"
-                            type="badge"
-                            badgeColor="yellow"
-                        />
-
-                        <DetailRow
-                            label="Note"
-                            value="NA"
-                            type="badge"
-                            badgeColor="red"
-                        />
-
-                        <DetailRow
-                            label="Payment Option"
-                            value="Cash"
-                            type="badge"
-                            badgeColor="blue"
-                        />
-
-                        <DetailRow
-                            label="Collect Money Status"
-                            value="Not Collected"
-                            type="badge"
-                            badgeColor="yellow"
-                        />
-
-                        <DetailRow
-                            label="Grand Total"
-                            value="EGP 1500.00"
-                            type="badge"
-                            badgeColor="green"
-                        />
+                        {statusDetails.map((prop, i) => (
+                            <DetailRow key={prop.label} {...prop} />
+                        ))}
                     </div>
                 </div>
 
@@ -260,10 +152,10 @@ const ManageBookingDetails = () => {
                 <div className="w-full mt-4">
                     <CustomTable
                         columns={vehicleColumns}
-                        data={vehicles}
+                        data={dummyVehicles}
                         currentPage={1}
                         totalPages={1}
-                        totalEntries={vehicles.length}
+                        totalEntries={dummyVehicles.length}
                         pageSize={10}
                         onPageChange={(page) => console.log("Page changed:", page)}
                         isLoading={false}
@@ -278,53 +170,29 @@ const ManageBookingDetails = () => {
                 <div className="w-full mt-4">
                     <CustomTable
                         columns={vehicleColumns}
-                        data={vehicles}
+                        data={dummyVehicles}
                         currentPage={1}
                         totalPages={1}
-                        totalEntries={vehicles.length}
+                        totalEntries={dummyVehicles.length}
                         pageSize={10}
                         onPageChange={(page) => console.log("Page changed:", page)}
                         isLoading={false}
                     />
                 </div>
                 <div className="w-1/2 mt-5">
-                    <DetailRow
-                        label="Coupon Applied"
-                        value="% 0"
-                    />
-
-                    <DetailRow
-                        label="Coupon Code"
-                        value="NA"
-                    />
-
-                    <DetailRow
-                        label="Coupon Amount"
-                        value="NA"
-                    />
-
-                    <DetailRow
-                        label="Sub Total"
-                        value="EGP 1500.00"
-                        type="badge"
-                        badgeColor="green"
-                    />
-
-                    <div className="pt-4 border-t border-gray-200">
-                        <DetailRow
-                            label="Wallet Amount"
-                            value="EGP 0.00"
-                        />
-                    </div>
-
-                    <div className="pt-4 border-t border-gray-200">
-                        <DetailRow
-                            label="Grand Total"
-                            value="EGP 1500.00"
-                            type="badge"
-                            badgeColor="green"
-                        />
-                    </div>
+                    {financeRows.map((row, idx) =>
+                        row.isDivider ? (
+                            <div key={idx} className="pt-4 border-t border-gray-200" />
+                        ) : (
+                            <DetailRow
+                                key={row.label}
+                                label={row.label}
+                                value={row.value}
+                                type={row.type}
+                                badgeColor={row.badgeColor}
+                            />
+                        )
+                    )}
                 </div>
 
             </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { Formik, Form, useFormikContext } from 'formik';
+import { servicesStep1Schema } from '../../../../../constants/validationSchema';
+import { servicesStep1InitialValues } from '../../../../../constants/initialValues';
 import { IoCallOutline, IoLocationOutline } from 'react-icons/io5';
 import { FormInput } from '../../../../../common/FormInput';
 import { FormDropdown } from '../../../../../common/FormDropdown';
@@ -12,29 +13,128 @@ import { VehicleSelectionModal } from '../VehicleSelectionModal';
 import type { ServicesStep1Props, Vehicle } from '../../../../../types/bookings';
 import { Calendar, Clock } from 'lucide-react';
 
-const ServicesStep1 = ({
-    onNext,
+const ServicesStep1Content = ({
     formData,
     onDataChange,
     onRemoveVehicle,
     registerValidation,
     onValidationChange
 }: ServicesStep1Props) => {
+    const { values, isValid, validateForm, setTouched } = useFormikContext<any>();
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const validationSchema = Yup.object({
-        phoneNumber: Yup.string()
-            .matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits')
-            .required('Phone number is required'),
-        address: Yup.string().required('Address is required'),
-        vehicles: Yup.array().min(1, 'Please select at least one vehicle'),
-        bookingDate: Yup.string().required('Booking date is required'),
-        bookingTime: Yup.string().required('Booking time is required'),
-    });
 
     const handleVehicleSelect = (vehicles: Vehicle[]) => {
         onDataChange({ vehicles });
     };
+
+    // Register validation with parent
+    useEffect(() => {
+        registerValidation(async () => {
+            setTouched({
+                phoneNumber: true,
+                address: true,
+                vehicles: [] as any, // Type assertion to match original behavior/types
+                bookingDate: true,
+                bookingTime: true,
+            });
+
+            const errors = await validateForm();
+            const isValidForm = Object.keys(errors).length === 0;
+
+            if (isValidForm) {
+                onDataChange(values);
+            }
+
+            return isValidForm;
+        });
+    }, [values, validateForm, setTouched, registerValidation, onDataChange]);
+
+    // Auto-save on value change
+    useEffect(() => {
+        onDataChange(values);
+    }, [values, onDataChange]);
+
+    // Notify parent about validation status
+    useEffect(() => {
+        onValidationChange(isValid);
+    }, [isValid, onValidationChange]);
+
+    return (
+        <>
+            <Form>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <FormInput
+                        name="phoneNumber"
+                        label="User phone number"
+                        placeholder="User phone number"
+                        type="tel"
+                        icon={<IoCallOutline className="w-5 h-5" />}
+                    />
+
+                    <FormDropdown
+                        name="address"
+                        label="Address"
+                        placeholder="Select Address"
+                        icon={<IoLocationOutline className="w-5 h-5" />}
+                        options={[
+                            'Cairo',
+                            'Alexandria',
+                            'Giza',
+                            'New Cairo',
+                            'Maadi',
+                            'Al Shorouk City',
+                        ]}
+                    />
+                </div>
+
+                <div className="mb-8">
+                    <SelectedVehicles
+                        vehicles={formData.vehicles || []}
+                        onAddClick={() => setIsModalOpen(true)}
+                        onRemoveVehicle={onRemoveVehicle}
+                    />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <FormDatePicker
+                        name="bookingDate"
+                        label="Select Booking Date"
+                        icon={<Calendar className="size-5" />} checkmark={false} />
+
+                    <FormTimePicker
+                        name="bookingTime"
+                        label="Select Booking Time"
+                        icon={<Clock className="size-5" />}
+                    />
+                </div>
+
+                <div className="flex justify-start">
+                    <Button
+                        type="submit"
+                        disabled={!isValid}
+                        className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-2 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    >
+                        Next
+                    </Button>
+                </div>
+            </Form>
+
+            <VehicleSelectionModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSelect={handleVehicleSelect}
+                selectedVehicles={formData.vehicles || []}
+            />
+        </>
+    );
+};
+
+const ServicesStep1 = (props: ServicesStep1Props) => {
+    const {
+        onNext,
+        formData,
+        onDataChange,
+    } = props;
 
     return (
         <>
@@ -43,13 +143,14 @@ const ServicesStep1 = ({
             </h2>
             <Formik
                 initialValues={{
-                    phoneNumber: formData.phoneNumber,
-                    address: formData.address,
-                    vehicles: formData.vehicles || [],
-                    bookingDate: formData.bookingDate,
-                    bookingTime: formData.bookingTime,
+                    ...servicesStep1InitialValues,
+                    phoneNumber: formData.phoneNumber || servicesStep1InitialValues.phoneNumber,
+                    address: formData.address || servicesStep1InitialValues.address,
+                    vehicles: formData.vehicles || servicesStep1InitialValues.vehicles,
+                    bookingDate: formData.bookingDate || servicesStep1InitialValues.bookingDate,
+                    bookingTime: formData.bookingTime || servicesStep1InitialValues.bookingTime,
                 }}
-                validationSchema={validationSchema}
+                validationSchema={servicesStep1Schema}
                 enableReinitialize
                 onSubmit={(values) => {
                     console.log('Services Step 1 values:', values);
@@ -57,107 +158,8 @@ const ServicesStep1 = ({
                     onNext();
                 }}
             >
-                {({ isValid, values, validateForm, setTouched }) => {
-                    // Register validation with parent
-                    useEffect(() => {
-                        registerValidation(async () => {
-                            setTouched({
-                                phoneNumber: true,
-                                address: true,
-                                vehicles: [],
-                                bookingDate: true,
-                                bookingTime: true,
-                            });
-
-                            const errors = await validateForm();
-                            const isValidForm = Object.keys(errors).length === 0;
-
-                            if (isValidForm) {
-                                onDataChange(values);
-                            }
-
-                            return isValidForm;
-                        });
-                    }, [values, validateForm, setTouched]);
-
-                    // Auto-save on value change
-                    useEffect(() => {
-                        onDataChange(values);
-                    }, [values]);
-
-                    // Notify parent about validation status
-                    useEffect(() => {
-                        onValidationChange(isValid);
-                    }, [isValid]);
-
-                    return (
-                        <Form>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                <FormInput
-                                    name="phoneNumber"
-                                    label="User phone number"
-                                    placeholder="User phone number"
-                                    type="tel"
-                                    icon={<IoCallOutline className="w-5 h-5" />}
-                                />
-
-                                <FormDropdown
-                                    name="address"
-                                    label="Address"
-                                    placeholder="Select Address"
-                                    icon={<IoLocationOutline className="w-5 h-5" />}
-                                    options={[
-                                        'Cairo',
-                                        'Alexandria',
-                                        'Giza',
-                                        'New Cairo',
-                                        'Maadi',
-                                        'Al Shorouk City',
-                                    ]}
-                                />
-                            </div>
-
-                            <div className="mb-8">
-                                <SelectedVehicles
-                                    vehicles={formData.vehicles || []}
-                                    onAddClick={() => setIsModalOpen(true)}
-                                    onRemoveVehicle={onRemoveVehicle}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                <FormDatePicker
-                                    name="bookingDate"
-                                    label="Select Booking Date"
-                                    icon={<Calendar className="size-5" />} checkmark={false}                                />
-
-                                <FormTimePicker
-                                    name="bookingTime"
-                                    label="Select Booking Time"
-                                    icon={<Clock className="size-5" />}
-                                />
-                            </div>
-
-                            <div className="flex justify-start">
-                                <Button
-                                    type="submit"
-                                    disabled={!isValid}
-                                    className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-2 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                                >
-                                    Next
-                                </Button>
-                            </div>
-                        </Form>
-                    );
-                }}
+                <ServicesStep1Content {...props} />
             </Formik>
-
-            <VehicleSelectionModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSelect={handleVehicleSelect}
-                selectedVehicles={formData.vehicles || []}
-            />
         </>
     );
 };
