@@ -52,12 +52,12 @@ const ServicesStep1Content = ({
     // Auto-save on value change
     useEffect(() => {
         onDataChange(values);
-    }, [values, onDataChange]);
+    }, [values]);
 
     // Notify parent about validation status
     useEffect(() => {
         onValidationChange(isValid);
-    }, [isValid, onValidationChange]);
+    }, [isValid]);
 
     return (
         <>
