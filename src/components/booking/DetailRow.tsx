@@ -1,17 +1,5 @@
-import type { ReactNode } from "react";
+import type { DetailRowProps } from "../../types/bookings";
 import { cn } from "../../utils/utils";
-
-interface DetailRowProps {
-    label: string;
-    value: string | number;
-    type?: "text" | "badge";
-    badgeColor?: "yellow" | "green" | "blue" | "red" | "purple";
-    actionButton?: {
-        text: string;
-        icon?: ReactNode;
-        onClick: () => void;
-    };
-}
 
 export const DetailRow = ({
     label,
@@ -52,15 +40,18 @@ export const DetailRow = ({
                     </div>
                 )}
 
-                {/* Optional Action Button */}
+                {/* Optional Action Button (icon is a component type) */}
                 {actionButton && (
                     <button
                         onClick={actionButton.onClick}
-                        className={cn("flex items-center gap-2 px-6 py-2.5 transition-all whitespace-nowrap border-2 rounded-sm shrink-0 text-sm!",
-                            badgeColors[badgeColor])
-                        }
+                        className={cn(
+                            "flex items-center gap-2 px-6 py-2.5 transition-all whitespace-nowrap border-2 rounded-sm shrink-0 text-sm!",
+                            badgeColors[badgeColor]
+                        )}
                     >
-                        {actionButton.icon}
+                        {actionButton.icon && (
+                            <actionButton.icon className="w-4 h-4" />
+                        )}
                         {actionButton.text}
                     </button>
                 )}

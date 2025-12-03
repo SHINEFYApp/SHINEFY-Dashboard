@@ -1,5 +1,6 @@
-import { Formik , Form } from 'formik';
-import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
+import { addSubAdminSchema } from '../../constants/validationSchema';
+import { addSubAdminInitialValues } from '../../constants/initialValues';
 import { Button } from '../../components/ui/button';
 import { FormInput } from '../../common/FormInput';
 import { useEffect, useState } from 'react';
@@ -7,68 +8,46 @@ import type { smsStatus } from '../../types/common';
 import type { manageSubadmin } from '../../types/users&staff';
 import DropDownAndSelect from '../../common/dropDownAndSelect';
 
-export default function AddSubAdmin(){
+export default function AddSubAdmin() {
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({});
-    
-    const [receiveSmsStatus , setReceiveSmsStatus] = useState<smsStatus>({
-        status: true ,
-        isSms : false
-    })
 
-    const [formData , setFormData] = useState<manageSubadmin>({
+    const [receiveSmsStatus, setReceiveSmsStatus] = useState<smsStatus>({
+        status: true,
+        isSms: false
+    });
+
+    const [formData, setFormData] = useState<manageSubadmin>({
         name: '',
         phoneNumber: '',
-        isSms: false ,
+        isSms: false,
         email: '',
         password: '',
         confirmPassword: '',
-        privileges : []
-    })
-
-    useEffect(() => {
-        setFormData({...formData , isSms : receiveSmsStatus.isSms})
-    } , [receiveSmsStatus.isSms])
-
-    useEffect(() => {
-        setFormData({...formData , privileges : selectedOptions})
-    } , [selectedOptions])
-
-    console.log(formData);
-    
-
-    const validationSchema = Yup.object({
-        name: Yup.string().required('the name is required'),
-        phoneNumber: Yup.string().matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits').required('Phone number is required'),
-        email: Yup.string()
-            .required('Email is required')
-            .email('Invalid email address'),
-        password: Yup.string()
-            .required('Password is required')
-            .min(8, 'Password must be at least 8 characters')
-            .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-            .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-            .matches(/[0-9]/, 'Password must contain at least one number')
-            .matches(/[@$!%*?&]/, 'Password must contain at least one special character'),
-        confirmPassword: Yup.string()
-            .required('Confirm Password is required')
-            .oneOf([Yup.ref('password')], 'Passwords must match')
+        privileges: []
     });
 
-    return(
+    useEffect(() => {
+        setFormData(prev => ({ ...prev, isSms: receiveSmsStatus.isSms }));
+    }, [receiveSmsStatus.isSms]);
+
+    useEffect(() => {
+        setFormData(prev => ({ ...prev, privileges: selectedOptions }));
+    }, [selectedOptions]);
+
+    console.log(formData);
+
+
+
+
+    return (
         <main>
             <div className="w-full bg-white shadow-md p-4 md:p-6 rounded-2xl">
                 <h1 className="text-[20px] font-bold mb-8">Enter Sub Admin information</h1>
                 <Formik
-                    initialValues={{ 
-                        name: '',
-                        phoneNumber: '',
-                        email: '',
-                        password: '',
-                        confirmPassword: '',
-                    }}
-                    validationSchema={validationSchema} 
+                    initialValues={addSubAdminInitialValues}
+                    validationSchema={addSubAdminSchema}
                     onSubmit={(values) => {
-                        setFormData({...formData , ...values})
+                        setFormData({ ...formData, ...values });
                     }}
                 >
                     {({ isValid }) => (
@@ -139,5 +118,5 @@ export default function AddSubAdmin(){
                 </Formik>
             </div>
         </main>
-    )
+    );
 }

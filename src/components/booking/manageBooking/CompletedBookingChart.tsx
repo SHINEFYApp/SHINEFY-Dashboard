@@ -15,12 +15,7 @@ import { FormDatePicker } from "../../../common/FormDatePicker";
 import { FormDropdown } from "../../../common/FormDropdown";
 import { dummyDays, dummyMonths, dummyYears } from "../../../constants/data";
 import { generateChartData } from "../../../utils/utils";
-
-interface ReportFilters {
-    status: string;
-    startDate: string;
-    endDate: string;
-}
+import type { ReportFilters } from "../../../types/bookings";
 
 const CompletedBookingChart = () => {
     const [selectedYear, setSelectedYear] = useState("2025");

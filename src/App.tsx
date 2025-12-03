@@ -7,11 +7,12 @@ import CreateBookings from './pages/bookings/CreateBookings';
 import { Layout } from './components/layout/Layout';
 import ManageBooking from './pages/bookings/manage_booking/ManageBooking';
 import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingDetails';
-import ManageSlot from './pages/bookings/manage_slot/manageSlot';
+import ManageSlot from './pages/bookings/bookings_slot/ManageSlots';
 import AddVehicles from './pages/vehicles/addVehicles';
 import ManageSubAdmin from './pages/users&staff/manageSubAdmin';
 import AddSubAdmin from './pages/users&staff/addSubAdmin';
 import UsersWallets from './pages/users&staff/userWallets';
+import CreateBookingsSlot from './pages/bookings/bookings_slot/CreateBookingsSlot';
 
 function App() {
   const location = useLocation();
@@ -43,6 +44,7 @@ function App() {
             <Route path="/users&staff/manage/subAdmin" element={<ManageSubAdmin />} />
             <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
             <Route path="/users&staff/manage/usersWallet" element={<UsersWallets />} />
+            <Route path="/bookings/slot/create" element={<CreateBookingsSlot />} />
           </Routes>
         </Layout>
       )}

@@ -1,10 +1,11 @@
-import type { Dispatch, SetStateAction } from "react";
+import type { ComponentType, Dispatch, SetStateAction } from "react";
 
 // CREATE BOOKING
 export interface ServicesFormData {
     phoneNumber: string;
     address: string;
     vehicle: string;
+    vehicles: Vehicle[];
     bookingDate: string;
     bookingTime: string;
     mainService: string;
@@ -34,22 +35,12 @@ export interface PackageFormData {
 
 export interface ServicesStep1Props {
     onNext: () => void;
-    formData: ServicesFormData | PackageFormData;
-    onDataChange: (data: Partial<ServicesFormData>) => void;
+    formData: Partial<ServicesFormData> | Partial<PackageFormData>;
+    onDataChange: (data: Partial<ServicesFormData> | Partial<PackageFormData>) => void;
     onRemoveVehicle: (vehicleId: string) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
     onValidationChange: (isValid: boolean) => void;
 }
-
-export interface ServicesFormData {
-    phoneNumber: string;
-    address: string;
-    vehicle: string;
-    vehicles: Vehicle[];
-    bookingDate: string;
-    bookingTime: string;
-}
-
 
 export interface FormData {
     services: ServicesFormData;
@@ -93,8 +84,8 @@ export interface ServicesStep2Props {
     onNext: () => void;
     onBack: () => void;
     userPackageInput?: boolean; //user package input in package tap
-    formData: ServicesStep2Data;
-    onDataChange: (data: Partial<ServicesStep2Data>) => void;
+    formData: Partial<ServicesFormData> | Partial<PackageFormData>;
+    onDataChange: (data: Partial<ServicesFormData> | Partial<PackageFormData>) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
     onValidationChange: (isValid: boolean) => void;
 }
@@ -108,8 +99,8 @@ export interface ServicesStep3Data {
 export interface ServicesStep3Props {
     onNext: () => void;
     onBack: () => void;
-    formData: ServicesStep2Data;
-    onDataChange: (data: Partial<ServicesStep2Data>) => void;
+    formData: Partial<ServicesFormData>;
+    onDataChange: (data: Partial<ServicesFormData>) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
     onValidationChange: (isValid: boolean) => void;
 }
@@ -121,8 +112,8 @@ export interface ServicesStep4Data {
 
 export interface ServicesStep4Props {
     onBack: () => void;
-    formData: ServicesStep2Data;
-    onDataChange: (data: Partial<ServicesStep2Data>) => void;
+    formData: Partial<ServicesFormData> | Partial<PackageFormData>;
+    onDataChange: (data: Partial<ServicesFormData> | Partial<PackageFormData>) => void;
     registerValidation: (validationFn: () => Promise<boolean>) => void;
     onValidationChange: (isValid: boolean) => void;
     onSubmit: () => void;
@@ -136,27 +127,60 @@ export interface FilterFormValues {
 
 // MANAGE SLOTS
 export interface FilterFormValuesManageSlots {
-    type: String ;
-    status :String ;
-    date: String ;
+    type: string;
+    status: string;
+    date: string;
 }
 
 // MANAGE MANGE SUB ADMIN
 export interface FilterFormValuesManageSubAdmin {
-    search : string,
-    franchise : string
+    search: string,
+    franchise: string;
 }
 
 // USER WALLETS
-export interface FilterFormValuesUserWallets{
-    search : string,
+export interface FilterFormValuesUserWallets {
+    search: string,
 }
 
 // Table props
 export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets';
 
 export interface ManageBookingsAndSlotsProps {
-    manageSectionFromComponant : ManageSectionKey
-    openWindowAddAmount? : boolean
-    setOpenWindowAddAmount? : Dispatch<SetStateAction<boolean | undefined>>
+    manageSectionFromComponant: ManageSectionKey;
+    openWindowAddAmount?: boolean;
+    setOpenWindowAddAmount?: Dispatch<SetStateAction<boolean | undefined>>;
+}
+
+export interface DetailRowProps {
+    label: string;
+    value: string | number;
+    type?: "text" | "badge";
+    badgeColor?: "yellow" | "green" | "blue" | "red" | "purple";
+    actionButton?: {
+        text: string;
+        icon?: ComponentType<{ className?: string; }>;
+        onClick: () => void;
+    };
+}
+
+export interface ProgressStepsProps {
+    steps: { title: string; description: string; }[];
+    currentStep: number;
+    completedSteps?: number[];
+    validatedSteps?: number[]; // Steps that have valid data
+    onStepClick?: (stepNumber: number) => void;
+    className?: string;
+}
+
+export interface ReportFilters {
+    status: string;
+    startDate: string;
+    endDate: string;
+}
+
+export interface ReportFilters {
+    status: string;
+    startDate: string;
+    endDate: string;
 }

@@ -1,16 +1,6 @@
-
-
 export interface Step {
     title: string;
     description: string;
-}
-
-export interface ProgressStepsProps {
-    steps: Step[];
-    currentStep: number;
-    className?: string;
-    completedSteps?: number[];
-    onStepClick?: (stepNumber: number) => void;
 }
 
 export interface Tab {
@@ -35,8 +25,8 @@ export interface FormTimePickerProps {
 }
 
 export interface smsStatus {
-    status : boolean ,
-    isSms : boolean
+    status: boolean,
+    isSms: boolean;
 }
 
 export interface FormInputProps {
@@ -49,7 +39,7 @@ export interface FormInputProps {
     checkmark?: boolean;
     className?: string;
     receiveSms?: smsStatus;
-    setReceiveSms?: React.Dispatch<React.SetStateAction<smsStatus>> ;
+    setReceiveSms?: React.Dispatch<React.SetStateAction<smsStatus>>;
 }
 
 export interface FormDropdownProps {
@@ -98,23 +88,11 @@ export interface PaginationProps {
     onPageChange: (page: number) => void;
 }
 
-export interface DetailRowProps {
-    label: string;
-    value: string | number;
-    type?: "text" | "badge";
-    badgeColor?: "yellow" | "green" | "blue" | "red" | "purple";
-    actionButton?: {
-        text: string;
-        icon?: React.ReactNode;
-        onClick: () => void;
-    };
-}
-
 //drop down with multi select
 export type MenuType = {
-  Key: number;
-  title: string;
-  options: string[];
+    Key: number;
+    title: string;
+    options: string[];
 };
 
 //drop down with multi select props

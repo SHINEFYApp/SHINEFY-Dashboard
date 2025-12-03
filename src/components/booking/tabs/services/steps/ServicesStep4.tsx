@@ -1,14 +1,12 @@
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { servicesStep4Schema } from '../../../../../constants/validationSchema';
+import { servicesStep4InitialValues } from '../../../../../constants/initialValues';
 import { Button } from '../../../../ui/button';
 import type { ServicesStep4Props } from '../../../../../types/bookings';
 
 const ServicesStep4 = ({ onBack, onSubmit, formData, onDataChange }: ServicesStep4Props) => {
 
-    const validationSchema = Yup.object({
-        userNote: Yup.string(),
-        adminNotes: Yup.string(),
-    });
+
 
     return (
         <>
@@ -18,10 +16,11 @@ const ServicesStep4 = ({ onBack, onSubmit, formData, onDataChange }: ServicesSte
 
             <Formik
                 initialValues={{
-                    userNote: formData.userNote || '',
-                    adminNotes: formData.adminNotes || '',
+                    ...servicesStep4InitialValues,
+                    userNote: formData.userNote || servicesStep4InitialValues.userNote,
+                    adminNotes: formData.adminNotes || servicesStep4InitialValues.adminNotes,
                 }}
-                validationSchema={validationSchema}
+                validationSchema={servicesStep4Schema}
                 enableReinitialize
                 onSubmit={(values) => {
                     onDataChange(values);

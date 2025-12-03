@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { servicesStep3Schema } from '../../../../../constants/validationSchema';
+import { servicesStep3InitialValues } from '../../../../../constants/initialValues';
 import { FormDropdown } from '../../../../../common/FormDropdown';
 import { Button } from '../../../../ui/button';
 import { IoTicketOutline, IoWalletOutline } from 'react-icons/io5';
@@ -11,9 +12,7 @@ import { paymentMethods } from '../../../../../constants/data';
 const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3Props) => {
     const [selectedPayment, setSelectedPayment] = useState<string>(formData.paymentMethod || '');
 
-    const validationSchema = Yup.object({
-        paymentMethod: Yup.string().required('Please select a payment method'),
-    });
+
 
 
     const handlePaymentSelect = (method: string, setFieldValue: any) => {
@@ -30,11 +29,12 @@ const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3
 
             <Formik
                 initialValues={{
-                    coupon: formData.coupon || '',
-                    paymentMethod: formData.paymentMethod || '',
-                    walletAmount: formData.walletAmount || '',
+                    ...servicesStep3InitialValues,
+                    coupon: formData.coupon || servicesStep3InitialValues.coupon,
+                    paymentMethod: formData.paymentMethod || servicesStep3InitialValues.paymentMethod,
+                    walletAmount: formData.walletAmount || servicesStep3InitialValues.walletAmount,
                 }}
-                validationSchema={validationSchema}
+                validationSchema={servicesStep3Schema}
                 enableReinitialize
                 onSubmit={(values) => {
                     onDataChange(values as any);

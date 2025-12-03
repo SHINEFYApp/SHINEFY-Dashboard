@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
-import type { FilterFormValues, FilterFormValuesManageSlots , FilterFormValuesManageSubAdmin, FilterFormValuesUserWallets, ManageBookingsAndSlotsProps } from "../../types/bookings";
+import type { FilterFormValues, FilterFormValuesManageSlots, FilterFormValuesManageSubAdmin, FilterFormValuesUserWallets, ManageBookingsAndSlotsProps } from "../../types/bookings";
 import { CustomTable } from "../../common/CustomTable";
-import { dummyManageSubAdmins, dummyTableData , dummySlotTableData , dummyUserWallets } from "../../constants/data";
+import { dummyManageSubAdmins, dummyTableData, dummySlotTableData, dummyUserWallets } from "../../constants/data";
 import { exportTypes, Tables } from "./tablesLayout";
 import { FormDropdown } from "../../common/FormDropdown";
 
 
-const Table = ({ manageSectionFromComponant , openWindowAddAmount , setOpenWindowAddAmount} : ManageBookingsAndSlotsProps) => {
+const Table = ({ manageSectionFromComponant, setOpenWindowAddAmount }: ManageBookingsAndSlotsProps) => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
 
@@ -32,7 +32,7 @@ const Table = ({ manageSectionFromComponant , openWindowAddAmount , setOpenWindo
                     FilterFormValuesManageSlots |
                     FilterFormValuesManageSubAdmin |
                     FilterFormValuesUserWallets
-                    >initialValues={Tables[manageSectionFromComponant].InitialValues} onSubmit={handleSubmit}>
+                > initialValues={Tables[manageSectionFromComponant].InitialValues} onSubmit={handleSubmit}>
                     {() => (
                         <Form>
                             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
@@ -40,32 +40,32 @@ const Table = ({ manageSectionFromComponant , openWindowAddAmount , setOpenWindo
                                 <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
                                     {/* Title */}
                                     {(Tables[manageSectionFromComponant].head.headTitle.one !== '' && Tables[manageSectionFromComponant].head.headTitle.two !== '') && (
-                                        <div className={`flex flex-col min-w-[140px] ${manageSectionFromComponant === 'manageSlots' ? 'min-w-[101px]' : 'min-w-[140px]' }`}>
+                                        <div className={`flex flex-col min-w-[140px] ${manageSectionFromComponant === 'manageSlots' ? 'min-w-[101px]' : 'min-w-[140px]'}`}>
                                             <h1 className="text-xl md:text-2xl font-bold text-secondary-900">
                                                 {Tables[manageSectionFromComponant].head.headTitle.one}
                                             </h1>
                                             <p className="text-xs md:text-sm text-secondary-500">
                                                 {Tables[manageSectionFromComponant].head.headTitle.two}
                                             </p>
-                                        </div> )
+                                        </div>)
                                     }
 
                                     {/* left side */}
-                                    {Tables[manageSectionFromComponant].head.leftSide.map((el , index) => {
-                                        return React.cloneElement(el, { key: index })
+                                    {Tables[manageSectionFromComponant].head.leftSide.map((el, index) => {
+                                        return React.cloneElement(el, { key: index });
                                     })}
 
                                 </div>
 
                                 {/* right side */}
-                                
+
                                 {manageSectionFromComponant !== 'userWallets' &&
-                                 Tables[manageSectionFromComponant].head.rightSide.map((el , index) => {
-                                     return React.cloneElement(el, {
-                                         key: index
-                                        })
+                                    Tables[manageSectionFromComponant].head.rightSide.map((el, index) => {
+                                        return React.cloneElement(el, {
+                                            key: index
+                                        });
                                     })}
-                                {manageSectionFromComponant === 'userWallets' && 
+                                {manageSectionFromComponant === 'userWallets' &&
                                     <div className="flex flex-col lg:flex-row items-center gap-5">
                                         <button
                                             type="button"
@@ -79,7 +79,7 @@ const Table = ({ manageSectionFromComponant , openWindowAddAmount , setOpenWindo
                                         </div>
                                     </div>
                                 }
-                                
+
                             </div>
                         </Form>
                     )}

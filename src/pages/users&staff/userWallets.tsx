@@ -3,39 +3,37 @@ import Table from "../../components/tables/table";
 import { FormDropdown } from "../../common/FormDropdown";
 import { Form, Formik } from "formik";
 import { Button } from "../../components/ui/button";
-import * as Yup from 'yup';
+import { userWalletSchema } from "../../constants/validationSchema";
+import { userWalletInitialValues } from "../../constants/initialValues";
 import { FormInput } from "../../common/FormInput";
 
-export default function UsersWallets(){
-    const [openWindowAddAmount , setOpenWindowAddAmount] = useState<boolean>()
-    const [currentBayMethod , setCurrentBayMethod] = useState<string>('Credit')
-    interface userWalletFormData{
-        user : string ,
-        amount : string , 
-        payMethod : string
+export default function UsersWallets() {
+    const [openWindowAddAmount, setOpenWindowAddAmount] = useState<boolean>();
+    const [currentBayMethod, setCurrentBayMethod] = useState<string>('Credit');
+    interface userWalletFormData {
+        user: string,
+        amount: string,
+        payMethod: string;
     }
-    const [formData , setFormData] = useState<userWalletFormData>({
-        user : '' ,
-        amount : '' , 
-        payMethod : '' ,
-    })
-    const payMethods = [
-        'Credit' ,
-        'Debit'
-    ]
-    
-    const validationSchema = Yup.object({
-        user : Yup.string().required('the user is required') ,
-        amount : Yup.string().required('the amount is required')
+    const [formData, setFormData] = useState<userWalletFormData>({
+        user: '',
+        amount: '',
+        payMethod: '',
     });
-    
-    useEffect(() => {
-        setFormData({...formData , payMethod: currentBayMethod })
-    },[currentBayMethod])
+    const payMethods = [
+        'Credit',
+        'Debit'
+    ];
 
-    console.log(formData)
-    
-    return(
+
+
+    useEffect(() => {
+        setFormData(prev => ({ ...prev, payMethod: currentBayMethod }));
+    }, [currentBayMethod]);
+
+    console.log(formData);
+
+    return (
         <>
             <main>
                 <Table openWindowAddAmount={openWindowAddAmount} setOpenWindowAddAmount={setOpenWindowAddAmount} manageSectionFromComponant={'userWallets'} />
@@ -53,13 +51,10 @@ export default function UsersWallets(){
                     <h1 className=" text-[#242731] text-[20px] font-bold">Add Wallet Amount</h1>
                     <div className="flex flex-col mt-10 justify-center items-center">
                         <Formik
-                            initialValues={{ 
-                                user: '' ,
-                                amount: '' ,
-                            }}
-                            validationSchema={validationSchema} 
+                            initialValues={userWalletInitialValues}
+                            validationSchema={userWalletSchema}
                             onSubmit={(values) => {
-                                setFormData({...formData , ...values})
+                                setFormData({ ...formData, ...values });
                             }}
                         >
                             {({ isValid }) => (
@@ -77,14 +72,14 @@ export default function UsersWallets(){
                                         />
                                     </div>
                                     <div className="w-[376px] flex items-center justify-center gap-5 py-10">
-                                        {payMethods.map((btn , idx) => {
-                                            return(
+                                        {payMethods.map((btn, idx) => {
+                                            return (
                                                 <button onClick={() => {
-                                                    setCurrentBayMethod(btn)
+                                                    setCurrentBayMethod(btn);
                                                 }} className={`rounded-lg w-[139px] h-12 ${currentBayMethod === btn ? ' border bg-[#C3FFC5] border-[#4CAF50] text-[#4CAF50]' : 'bg-[#F4F5FA]'}`} key={idx} type="button">
                                                     {btn}
                                                 </button>
-                                            )
+                                            );
                                         })}
                                     </div>
                                     <div className="w-[376px]">
@@ -118,6 +113,6 @@ export default function UsersWallets(){
                 </div>
             </section>
         </>
-    )
+    );
 }
 
