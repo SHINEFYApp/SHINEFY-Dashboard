@@ -46,6 +46,52 @@ export const userWalletSchema = Yup.object({
     amount: Yup.string().required('the amount is required'),
 });
 
+export const addCountrySchema = Yup.object({
+    flag: Yup.mixed()
+        .required("Flag is required")
+        .test(
+            "fileType",
+            "Only .jpg, .png, .svg, .zip files are allowed",
+            (value: any) => {
+                if (!value) return false;
+
+                const allowedTypes = [
+                    "image/jpeg",
+                    "image/png",
+                    "image/svg+xml",
+                    "application/zip",
+                ];
+
+                return allowedTypes.includes(value.type);
+            }
+        )
+        .test(
+            "fileSize",
+            "File size must be less than 10MB",
+            (value: any) => {
+                if (!value) return false;
+                return value.size <= 10 * 1024 * 1024;
+            }
+        ),
+
+    name: Yup.string().required("The name is required"),
+});
+
+export const addRegionsSchema = Yup.object().shape({
+  country: Yup.string()
+    .required('Country is required')
+    .min(2, 'Country must be at least 2 characters'),
+  
+  name: Yup.string()
+    .required('Name is required')
+    .min(2, 'Name must be at least 2 characters'),
+  
+  description: Yup.string()
+    .required('Description is required')
+    .min(5, 'Description must be at least 5 characters')
+});
+
+
 export const addSubAdminSchema = Yup.object({
     name: Yup.string().required('the name is required'),
     phoneNumber: Yup.string().matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits').required('Phone number is required'),

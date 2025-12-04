@@ -2,6 +2,7 @@ import { ArrowUpFromLine, Trash2, History } from "lucide-react";
 import { CustomTable } from "../../../common/CustomTable";
 import { DetailRow } from "../../../components/booking/DetailRow";
 import { dummyVehicles, financeRows, mainDetails, statusDetails } from "../../../constants/data";
+import type { Vehicle } from "../../../types/bookings";
 
 
 const ManageBookingDetails = () => {
@@ -127,12 +128,12 @@ const ManageBookingDetails = () => {
                 {/* Booking Details Grid */}
                 <div className="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-x-[10%] gap-y-4">
                     <div className="space-y-4">
-                        {mainDetails.map((prop, i) => (
+                        {mainDetails.map((prop) => (
                             <DetailRow key={prop.label} {...prop} />
                         ))}
                     </div>
                     <div className="space-y-4">
-                        {statusDetails.map((prop, i) => (
+                        {statusDetails.map((prop) => (
                             <DetailRow key={prop.label} {...prop} />
                         ))}
                     </div>
@@ -188,8 +189,8 @@ const ManageBookingDetails = () => {
                                 key={row.label}
                                 label={row.label}
                                 value={row.value}
-                                type={row.type}
-                                badgeColor={row.badgeColor}
+                                type={row.type as "text" | "badge"}
+                                badgeColor={row.badgeColor as "yellow" | "green" | "blue" | "red" | "purple"}
                             />
                         )
                     )}

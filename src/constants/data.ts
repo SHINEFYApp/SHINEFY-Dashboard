@@ -1,12 +1,15 @@
-import type { Vehicle } from "../types/bookings";
+import type { DetailRowProps, Vehicle } from "../types/bookings";
 import car from '../assets/car.svg';
 import cash from '../assets/icons/cash.svg';
 import credit from '../assets/icons/credit.svg';
 import free from '../assets/icons/free.svg';
 import type { MenuType } from "../types/common";
 import { Eye } from "lucide-react";
-import type { DetailRowProps } from "../types/common";
 import carImage from "../assets/car.svg";
+import EGYPT from "@/assets/images/flags/EGYPT.png";
+import KSA from "@/assets/images/flags/KSA.png";
+import KWU from "@/assets/images/flags/KWU.png";
+import UAE from "@/assets/images/flags/UAE.png";
 
 export const routeConfig: Record<string, { title: string; breadcrumbs: string[]; }> = {
     '/dashboard': {
@@ -52,6 +55,18 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/users&staff/manage/subAdmin/addSubAdmin': {
         title: 'Users & Stuff',
         breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin', 'Add']
+    }, 
+    '/geography&regions/manage/countries': {
+        title: 'Geography & Regions',
+        breadcrumbs: ['Geography & Regions', 'Manage Countries']
+    },
+    '/geography&regions/manage/regions': {
+        title: 'Geography & Regions',
+        breadcrumbs: ['Geography & Regions', 'Manage Regions']
+    },
+    '/geography&regions/manage/area': {
+        title: 'Geography & Regions',
+        breadcrumbs: ['Geography & Regions', 'Manage Area']
     },
 };
 
@@ -100,42 +115,63 @@ export const dummyDataVehicles: Vehicle[] = [
         name: 'Porsche 718 Cayman S',
         type: 'Coupe',
         image: car,
+        make: undefined,
+        model: undefined,
+        colorHex: undefined
     },
     {
         id: '2',
         name: 'Porsche 718 Cayman S',
         type: 'Coupe',
         image: car,
+        make: undefined,
+        model: undefined,
+        colorHex: undefined
     },
     {
         id: '3',
         name: 'Porsche 718 Cayman S',
         type: 'Coupe',
         image: car,
+        make: undefined,
+        model: undefined,
+        colorHex: undefined
     },
     {
         id: '4',
         name: 'Porsche 718 Cayman S',
         type: 'Coupe',
         image: car,
+        make: undefined,
+        model: undefined,
+        colorHex: undefined
     },
     {
         id: '5',
         name: 'Porsche 718 Cayman S',
         type: 'Coupe',
         image: car,
+        make: undefined,
+        model: undefined,
+        colorHex: undefined
     },
     {
         id: '6',
         name: 'Porsche 718 Cayman S',
         type: 'Coupe',
         image: car,
+        make: undefined,
+        model: undefined,
+        colorHex: undefined
     },
     {
         id: '7',
         name: 'Porsche 718 Cayman S',
         type: 'Coupe',
         image: car,
+        make: undefined,
+        model: undefined,
+        colorHex: undefined
     },
 ];
 
@@ -457,6 +493,59 @@ export const dummyUserWallets: any[] = [
     },
 ];
 
+// Example for manage countries
+
+export const dummyCountries: any[] = [
+    {
+        flag: EGYPT ,
+        name: 'Egypt',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        flag: UAE ,
+        name: 'United Arab Emirates',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        flag: KWU ,
+        name: 'Kuwait',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        flag: KSA ,
+        name: 'Saudi Arabia',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+// Example for manage regions
+export const dummyRegions: any[] = [
+    {
+        countries: {
+            flag : EGYPT ,
+            title : 'Egypt'
+        } ,
+        regions: 'Cairo',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        countries: {
+            flag : EGYPT ,
+            title : 'Egypt'
+        } ,
+        regions: 'New Cairo',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        countries: {
+            flag : KSA ,
+            title : 'Saudi Arabia'
+        } ,
+        regions: 'Riyadh',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
 //drop down with multi selections and options
 
 export const menus: MenuType[] = [
@@ -566,7 +655,10 @@ export const financeRows = [
 ];
 
 export const mainDetails: DetailRowProps[] = [
-    { label: "ID", value: "9388546579" },
+    {
+        label: "ID", value: "9388546579",
+        type: "badge"
+    },
     {
         label: "Customer Name",
         value: "Eid Fathy",
@@ -574,11 +666,18 @@ export const mainDetails: DetailRowProps[] = [
             text: "View",
             icon: Eye,
             onClick: () => console.log("View customer")
-        }
+        },
+        type: "badge"
     },
     { label: "Type", value: "Normal", type: "badge", badgeColor: "yellow" },
-    { label: "Booking Date", value: "2025-10-18" },
-    { label: "Booking Time", value: "05:30 PM" },
+    {
+        label: "Booking Date", value: "2025-10-18",
+        type: "badge"
+    },
+    {
+        label: "Booking Time", value: "05:30 PM",
+        type: "badge"
+    },
     { label: "Address Type", value: "Home", type: "badge", badgeColor: "blue" },
     {
         label: "Address",
@@ -587,7 +686,8 @@ export const mainDetails: DetailRowProps[] = [
             text: "View",
             icon: Eye,
             onClick: () => console.log("View address")
-        }
+        },
+        type: "badge"
     },
 ];
 

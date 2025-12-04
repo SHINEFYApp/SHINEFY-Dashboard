@@ -7,7 +7,7 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { CarFront, Users } from 'lucide-react';
+import { CarFront, Map, Users } from 'lucide-react';
 import { Link } from 'react-router';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
@@ -20,6 +20,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Bookings');
         } else if (currentPath.startsWith('/users&staff/manage')) {
             setExpandedMenu('Users & Staff');
+        } else if (currentPath.startsWith('/geography&regions/manage')) {
+            setExpandedMenu('Geography & Regions');
         }
     }, [currentPath]);
 
@@ -92,6 +94,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     icon: null,
                     label: 'Manage Users Wallet',
                     path: '/users&staff/manage/usersWallet'
+                }
+            ],
+        }, {
+            icon: <Map className="w-5 h-5" />,
+            label: 'Geography & Regions',
+            isActive: currentPath?.startsWith('/geography&regions/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Countries',
+                    path: '/geography&regions/manage/countries'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Regions',
+                    path: '/geography&regions/manage/regions'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Area',
+                    path: '/geography&regions/manage/area'
                 }
             ],
         },

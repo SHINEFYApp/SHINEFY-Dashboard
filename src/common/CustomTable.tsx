@@ -1,8 +1,10 @@
+import { dummyCountries } from "../constants/data";
 import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
 
 export function CustomTable<T extends Record<string, any>>({
+    page ,
     columns,
     data,
     currentPage,
@@ -74,8 +76,17 @@ export function CustomTable<T extends Record<string, any>>({
                                             {/* {column.render ? column.render( row[column.key], row, rowIndex) : row[column.key]} */}
                                             {column.render 
                                                 ? column.render(row[column.key], row, rowIndex) 
-                                                : column.key.toLowerCase() === "image" ? 
-                                                    <div className="w-10 h-10 bg-black/30 rounded-xl"></div>
+                                                : column.key.toLowerCase() === "image" || column.key.toLowerCase() === "flag" || column.key.toLowerCase() === "countries" ? 
+                                                    <div className="flex items-center gap-5">
+                                                        <div className="w-[36.4px] h-[26px] bg-black/30 rounded-[5.2px] overflow-hidden">
+                                                            {row[column.key] &&
+                                                                <img src={column.key.toLowerCase() === "flag" ? row[column.key] : row[column.key]?.flag} alt="flag" />
+                                                            }
+                                                        </div>
+                                                        {row[column.key]?.title &&
+                                                            <p>{row[column.key].title}</p>
+                                                        }
+                                                    </div>
                                                     :
                                                     row[column.key]
                                             }
@@ -89,7 +100,7 @@ export function CustomTable<T extends Record<string, any>>({
             </div>
 
             {/* Pagination */}
-            {!isLoading && data.length > 0 && (
+            {!isLoading && data.length > 0 && page !== 'countries' && page !== 'regions' && page !== 'area' && (
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

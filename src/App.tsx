@@ -13,6 +13,8 @@ import ManageSubAdmin from './pages/users&staff/manageSubAdmin';
 import AddSubAdmin from './pages/users&staff/addSubAdmin';
 import UsersWallets from './pages/users&staff/userWallets';
 import CreateBookingsSlot from './pages/bookings/bookings_slot/CreateBookingsSlot';
+import ManageCountries from './pages/Geography&Regions/manageCountries';
+import ManageRegions from './pages/Geography&Regions/manageRegions';
 
 function App() {
   const location = useLocation();
@@ -45,6 +47,8 @@ function App() {
             <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
             <Route path="/users&staff/manage/usersWallet" element={<UsersWallets />} />
             <Route path="/bookings/slot/create" element={<CreateBookingsSlot />} />
+            <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
+            <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
           </Routes>
         </Layout>
       )}
