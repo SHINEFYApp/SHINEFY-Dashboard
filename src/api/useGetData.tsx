@@ -86,7 +86,7 @@ export const useGetData = ({
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     // Pagination helpers
     const updatePage = useCallback((page: number) => {
