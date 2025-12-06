@@ -75,6 +75,11 @@ export const createBookingTabs = [
     { id: 'package', label: 'Package Booking' },
 ];
 
+export const manageAreaTabs = [
+    { id: 'mainArea', label: 'Manage Main Area' },
+    { id: 'subArea', label: 'Manage Sub Area' },
+];
+
 export const createBookingSteps = [
     {
         title: 'Step One',
@@ -542,6 +547,63 @@ export const dummyRegions: any[] = [
             title : 'Saudi Arabia'
         } ,
         regions: 'Riyadh',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+
+// Example for manage Main Area
+export const dummyMainArea: any[] = [
+    {
+        countries: {
+            flag : EGYPT ,
+            title : 'Egypt'
+        } ,
+        regions: 'Cairo',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        countries: {
+            flag : EGYPT ,
+            title : 'Egypt'
+        } ,
+        regions: 'El Shrouk',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        countries: {
+            flag : EGYPT ,
+            title : 'Egypt'
+        } ,
+        regions: 'New Cairo',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        countries: {
+            flag : KSA ,
+            title : 'Saudi Arabia'
+        } ,
+        regions: 'Riyadh',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+// Example for manage Sub Area
+export const dummySubArea: any[] = [
+    {
+        mainAreaName: {
+            flag : EGYPT ,
+            title : 'El Shrouk'
+        } ,
+        areaName: 'Future City',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        mainAreaName: {
+            flag : EGYPT ,
+            title : 'El Shekh Zayed'
+        } ,
+        areaName: 'El Shekh Zayed',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
 ];

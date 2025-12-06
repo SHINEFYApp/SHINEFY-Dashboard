@@ -77,6 +77,27 @@ export const addCountrySchema = Yup.object({
     name: Yup.string().required("The name is required"),
 });
 
+export const areaValidationSchema = (whoTap: string | undefined) =>
+    Yup.object({
+        country: Yup.string()
+        .required("Country is required"),
+
+        regions: Yup.string()
+        .required("Regions is required"),
+
+        area: Yup.array()
+        .min(1, "Please draw an area on the map")
+        .required("Area is required"),
+
+        areaName: Yup.string()
+        .required("Area name is required"),
+
+        subAreaName: whoTap === "subArea"
+        ? Yup.string().required("Sub area name is required")
+        : Yup.string().notRequired(),
+    }
+);
+
 export const addRegionsSchema = Yup.object().shape({
   country: Yup.string()
     .required('Country is required')

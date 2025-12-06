@@ -147,13 +147,17 @@ export interface FilterFormValuesUserWallets {
 }
 
 // Table props
-export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions';
+export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions' | 'area';
 
 export interface ManageBookingsAndSlotsProps {
     manageSectionFromComponant: ManageSectionKey;
     openWindow?: boolean;
     setOpenWindow?: Dispatch<SetStateAction<boolean | undefined>>;
+    setWhoTap? : Dispatch<SetStateAction<string | undefined>>;
 }
+
+export type AreaTabs = "mainArea" | "subArea";
+
 
 export interface DetailRowProps {
     label?: string;

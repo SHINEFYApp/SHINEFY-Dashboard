@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import Arrow from "@/assets/images/fileUploader/Vector.png";
 import { useField } from "formik";
+import { X } from "lucide-react";
 
 export default function FileUploader({ name , title }: { name: string , title: string }) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -33,7 +34,14 @@ export default function FileUploader({ name , title }: { name: string , title: s
   return (
     <>
       <div className={`w-full flex flex-col gap-[10.94px] h-[185.46px] bg-gray-50 p-[16.46px] rounded-xl shadow border ${meta.error && meta.touched ? 'border-red-500' : 'border-gray-200'}`}>
-        <h1 className="font-bold text-[12.31px] text-gray-900">{title}</h1>
+        <div className="flex items-center justify-between w-full">
+          <h1 className="font-bold text-[12.31px] text-gray-900">{title}</h1>
+          <button type="button" onClick={() => {
+            setFileName('')
+          }}>
+            <X size={15} />
+          </button>
+        </div>
 
         <div
           onClick={openFileDialog}

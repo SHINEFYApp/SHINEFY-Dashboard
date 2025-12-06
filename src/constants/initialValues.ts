@@ -44,6 +44,14 @@ export const addCountry = {
     name: '',
 };
 
+export const araeForms = {
+    country : '',
+    area: [] ,
+    regions : '',
+    areaName : '',
+    subAreaName : '',
+}
+
 export const addRegions = {
     country : '' ,
     name : '' ,
