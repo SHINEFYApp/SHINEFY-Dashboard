@@ -16,6 +16,8 @@ import CreateBookingsSlot from './pages/bookings/bookings_slot/CreateBookingsSlo
 import ManageCountries from './pages/Geography&Regions/manageCountries';
 import ManageRegions from './pages/Geography&Regions/manageRegions';
 import ManageAreas from './pages/Geography&Regions/manageAreas';
+import ManageService from './pages/services&extra/manageService/manageService';
+import AddService from './pages/services&extra/manageService/addService';
 
 function App() {
   const location = useLocation();
@@ -51,6 +53,8 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
+            <Route path="/services&extras/manage/Service" element={<ManageService />} />
+            <Route path="/services&extras/manage/Service/addService" element={<AddService />} />
           </Routes>
         </Layout>
       )}

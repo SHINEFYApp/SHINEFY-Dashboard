@@ -58,6 +58,21 @@ export const addRegions = {
     description : ''
 };
 
+export const mangeServiceInitialValues = {
+    serviceNameEnglish: "",
+    serviceLabelEnglish: "",
+    serviceNameArabic: "",
+    serviceLabelArabic: "",
+    servicePrice: "",
+    serviceTime: "",
+    serviceDiscount: "",
+    engishServiceDescription: "",
+    arabicServiceDescription: "",
+    Date: null,
+    Time: null,
+};
+
+
 export const addSubAdminInitialValues = {
     name: '',
     phoneNumber: '',

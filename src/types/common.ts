@@ -40,6 +40,7 @@ export interface FormInputProps {
     className?: string;
     receiveSms?: smsStatus;
     setReceiveSms?: React.Dispatch<React.SetStateAction<smsStatus>>;
+    moreOptions?: string
 }
 
 export interface FormTextArea {
@@ -78,6 +79,7 @@ export interface FormDatePickerProps {
 }
 
 export interface Column<T> {
+    [x: string]: any;
     key: string;
     title: string;
     render?: (value: any, row: T, index: number) => React.ReactNode;

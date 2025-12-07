@@ -16,7 +16,7 @@ export const FormTimePicker = ({
 
     return (
         <div className={cn('space-y-2', className)}>
-            <label htmlFor={name} className="text-sm font-medium text-gray-700">
+            <label htmlFor={name} className="text-sm  font-medium text-gray-700">
                 {label}
             </label>
 

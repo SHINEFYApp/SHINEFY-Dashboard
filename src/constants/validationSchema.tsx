@@ -113,6 +113,51 @@ export const addRegionsSchema = Yup.object().shape({
 });
 
 
+export const manageServiceValidationSchema = Yup.object({
+    serviceNameEnglish: Yup.string()
+        .required("Service Name (English) is required")
+        .min(3, "Must be at least 3 characters"),
+
+    serviceLabelEnglish: Yup.string()
+        .required("Service Label (English) is required"),
+
+    serviceNameArabic: Yup.string()
+        .required("Service Name (Arabic) is required"),
+
+    serviceLabelArabic: Yup.string()
+        .required("Service Label (Arabic) is required"),
+
+    servicePrice: Yup.number()
+        .typeError("Price must be a number")
+        .required("Service price is required")
+        .min(1, "Price must be greater than 0"),
+
+    serviceTime: Yup.number()
+        .typeError("Time must be a number")
+        .required("Service time is required")
+        .min(1, "Time must be greater than 0"),
+
+    serviceDiscount: Yup.number()
+        .typeError("Discount must be a number")
+        .min(0, "Minimum discount is 0")
+        .max(100, "Maximum discount is 100")
+        .required("Service discount is required"),
+
+    engishServiceDescription: Yup.string()
+        .required("English description is required")
+        .min(10, "Description must be at least 10 characters"),
+
+    arabicServiceDescription: Yup.string()
+        .required("Arabic description is required")
+        .min(10, "Description must be at least 10 characters"),
+
+    Date: Yup.date()
+        .required("Date is required"),
+
+    Time: Yup.string()
+        .required("Time is required"),
+});
+
 export const addSubAdminSchema = Yup.object({
     name: Yup.string().required('the name is required'),
     phoneNumber: Yup.string().matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits').required('Phone number is required'),

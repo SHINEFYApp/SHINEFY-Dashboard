@@ -15,7 +15,8 @@ export const FormInput: FC<FormInputProps> = ({
     checkmark = true,
     className,
     receiveSms,
-    setReceiveSms
+    setReceiveSms ,
+    moreOptions
 }) => {
     const [field, meta] = useField(name);
     const hasError = meta.touched && meta.error;
@@ -32,11 +33,17 @@ export const FormInput: FC<FormInputProps> = ({
                 {label}
             </label>
 
-            <div className="relative">
+            <div className="relative mt-2">
                 {/* Icon on the left */}
                 {icon && (
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 mt-1">
+                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 mt-1`}>
                         {icon}
+                    </div>
+                )}
+
+                {moreOptions && (
+                    <div className="absolute rounded-br-xl uppercase flex justify-center items-center rounded-tr-xl right-0 w-20 h-full bg-black top-0 text-primary">
+                        {moreOptions}
                     </div>
                 )}
 
@@ -48,14 +55,14 @@ export const FormInput: FC<FormInputProps> = ({
                     placeholder={placeholder}
                     disabled={disabled}
                     className={cn(
-                        'w-full rounded-xl mt-2 border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200',
+                        'w-full rounded-xl border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200',
                         icon && 'pl-12',
                         isValid && checkmark && 'pr-12',
                         hasError
-                            ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200'
-                            : isValid && checkmark
-                                ? 'border-green-500 bg-green-50 focus:border-green-500 focus:ring-2 focus:ring-green-200'
-                                : 'border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20',
+                        ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200'
+                        : isValid && checkmark
+                        ? 'border-green-500 bg-green-50 focus:border-green-500 focus:ring-2 focus:ring-green-200'
+                        : 'border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20',
                         disabled && 'cursor-not-allowed opacity-60'
                     )}
                 />
@@ -63,7 +70,7 @@ export const FormInput: FC<FormInputProps> = ({
 
                 {/* Success checkmark */}
                 {isValid && checkmark && (
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 animate-scale-up">
+                    <div className={`absolute ${moreOptions ? 'right-25' : 'right-4'} top-1/2 -translate-y-1/2 animate-scale-up`}>
                         <IoCheckmarkCircle className="w-5 h-5 text-green-500" />
                     </div>
                 )}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import type { FilterFormValues, FilterFormValuesManageSlots, FilterFormValuesManageSubAdmin, FilterFormValuesUserWallets, ManageBookingsAndSlotsProps } from "../../types/bookings";
 import { CustomTable } from "../../common/CustomTable";
-import { dummyManageSubAdmins, dummyTableData, dummySlotTableData, dummyUserWallets, dummyCountries, dummyRegions, manageAreaTabs, dummyMainArea, dummySubArea } from "../../constants/data";
+import { dummyManageSubAdmins, dummyTableData, dummySlotTableData, dummyUserWallets, dummyCountries, dummyRegions, manageAreaTabs, dummyMainArea, dummySubArea, dummyService } from "../../constants/data";
 import { exportTypes, Tables } from "./tablesLayout";
 import { FormDropdown } from "../../common/FormDropdown";
 import { AnimatedTabs } from "../booking/AnimatedTabs";
@@ -26,32 +26,43 @@ const Table = ({ manageSectionFromComponant, setOpenWindow , setWhoTap }: Manage
     };
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const validTabs = ['mainArea', 'subArea'];
-    const getValidTab = (): string => {
-        const tabParam = searchParams.get('tab');
-        return tabParam && validTabs.includes(tabParam) ? tabParam : 'mainArea';
-    };
-    const [activeTab, setActiveTab] = useState<string>(getValidTab());
-    
+    let initialTab = "mainArea";
+
+    if (manageSectionFromComponant === "area") {
+        const validTabs = ["mainArea", "subArea"];
+        const tabParam = searchParams.get("tab");
+
+        initialTab = tabParam && validTabs.includes(tabParam) ? tabParam : "mainArea";
+    }
+
+    const [activeTab, setActiveTab] = useState<string>(initialTab);
+
     useEffect(() => {
-        const tab = getValidTab();
+        if (manageSectionFromComponant !== "area") return;
+
+        const validTabs = ["mainArea", "subArea"];
+        const tabParam = searchParams.get("tab");
+        const tab = tabParam && validTabs.includes(tabParam) ? tabParam : "mainArea";
+
         setActiveTab(tab);
 
-        if (searchParams.get('tab') !== tab) {
-            updateURL(tab);
+        if (tabParam !== tab) {
+            const params = new URLSearchParams();
+            params.set("tab", tab);
+            setSearchParams(params, { replace: true });
         }
-    }, [searchParams]);
-
-    const updateURL = (tab: string) => {
-        const params = new URLSearchParams();
-        params.set('tab', tab);
-        setSearchParams(params, { replace: true });
-    };
+    }, [searchParams, manageSectionFromComponant]);
 
     const handleTabChange = (tabId: string) => {
         setActiveTab(tabId);
-        updateURL(tabId);
+
+        if (manageSectionFromComponant === "area") {
+            const params = new URLSearchParams();
+            params.set("tab", tabId);
+            setSearchParams(params, { replace: true });
+        }
     };
+
 
     return (
         <div className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl ${(manageSectionFromComponant === 'countries' || manageSectionFromComponant === 'regions' || manageSectionFromComponant === 'area') && 'min-h-screen' }`}>
@@ -157,7 +168,7 @@ const Table = ({ manageSectionFromComponant, setOpenWindow , setWhoTap }: Manage
                                         tabs={manageAreaTabs}
                                         activeTab={activeTab}
                                         onTabChange={handleTabChange}
-                                        />
+                                    />
                                 </div>
                             }
                         </Form>
@@ -175,7 +186,8 @@ const Table = ({ manageSectionFromComponant, setOpenWindow , setWhoTap }: Manage
                     manageSectionFromComponant === 'userWallets' ? dummyUserWallets :
                     manageSectionFromComponant === 'countries' ? dummyCountries :
                     manageSectionFromComponant === 'regions' ? dummyRegions :
-                    manageSectionFromComponant === 'area' ? activeTab === 'mainArea' ? dummyMainArea : dummySubArea : dummyManageSubAdmins}
+                    manageSectionFromComponant === 'area' ? activeTab === 'mainArea' ? dummyMainArea : dummySubArea :
+                    manageSectionFromComponant === 'service' ? dummyService : dummyManageSubAdmins}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}
