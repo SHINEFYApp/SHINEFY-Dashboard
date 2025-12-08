@@ -1,3 +1,5 @@
+import type { ReportFilters } from "../types/bookings";
+
 export const manageSlotInitialValues = {
     startDate: '',
     startTime: '',
@@ -21,6 +23,7 @@ export const servicesStep2InitialValues = {
     mainService: '',
     mainPackage: '',
     serviceBoy: '',
+    extraServices: [],
 };
 
 export const servicesStep3InitialValues = {
@@ -54,3 +57,21 @@ export const addVehicleInitialValues = {
     model: '',
     color: '',
 };
+
+export const CompletedBookingChartInitialValues: ReportFilters = {
+    status: "",
+    startDate: "",
+    endDate: "",
+};
+
+export const RatedReportsChartInitialValues: ReportFilters = {
+    status: "",
+    startDate: "",
+    endDate: "",
+};
+
+export const manageSlotsSearchInitialValues = { type: "", status: "", date: "" };
+
+export const manageBookingSearchInitialValues = { search: "", date: "" };
+
+export const manageSubAdminSearchInitialValues = { search: '', franchise: '' };

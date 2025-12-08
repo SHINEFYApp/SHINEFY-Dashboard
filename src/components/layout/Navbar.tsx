@@ -6,8 +6,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { IoChevronDown } from 'react-icons/io5';
-import { BsGrid } from 'react-icons/bs';
+import { Grid } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '../../utils/utils';
 import type { BreadcrumbItem, NavbarProps } from '../../types/layout';
 import { routeConfig } from '../../constants/data';
@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/das
                                 className="hidden md:flex items-center gap-2 bg-transparent border-gray-300 hover:border-primary hover:bg-white/50 transition-all"
                             >
                                 <span className="text-sm font-medium">Egypt</span>
-                                <IoChevronDown className="w-4 h-4 text-gray-500" />
+                                <ChevronDown className="w-4 h-4 text-gray-500" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-40 bg-white/95 backdrop-blur-md">
@@ -75,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/das
                                 className="hidden md:flex items-center gap-2 bg-transparent border-gray-300 hover:border-primary hover:bg-white/50 transition-all"
                             >
                                 <span className="text-sm font-medium">Al Shorouk City</span>
-                                <IoChevronDown className="w-4 h-4 text-gray-500" />
+                                <ChevronDown className="w-4 h-4 text-gray-500" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48 bg-white/95 backdrop-blur-md">
@@ -96,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/das
 
             {/* Breadcrumb */}
             <div className="hidden sm:flex absolute bottom-0 left-6 items-center gap-2 text-sm text-gray-500 pb-2">
-                <BsGrid className="w-4 h-4 text-primary" />
+                <Grid className="w-4 h-4 text-primary" />
                 {breadcrumbs.map((crumb, index) => (
                     <div key={index} className="flex items-center gap-2">
                         <span

@@ -39,6 +39,8 @@ export const useGetData = ({
         router.push('/login');
     }, [dispatch, router]);
 
+    const paramsString = JSON.stringify(params);
+
     const fetchData = useCallback(async () => {
         if (!enabled || !isAuthenticated) {
             setLoading(false);
@@ -50,9 +52,10 @@ export const useGetData = ({
             setError(null);
 
             // Merge pagination params if enabled
+            const currentParams = JSON.parse(paramsString);
             const finalParams = paginationEnabled
-                ? { ...params, page: currentPage, per_page: perPage }
-                : params;
+                ? { ...currentParams, page: currentPage, per_page: perPage }
+                : currentParams;
 
             const res: AxiosResponse = await getService(route, finalParams);
             setData(res.data);
@@ -74,7 +77,7 @@ export const useGetData = ({
     }, [
         route,
         enabled,
-        JSON.stringify(params),
+        paramsString,
         paginationEnabled,
         currentPage,
         perPage,

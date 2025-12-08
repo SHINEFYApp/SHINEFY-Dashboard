@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
-import { MdDashboard } from 'react-icons/md';
-import { BsCalendarEvent } from 'react-icons/bs';
-import { IoChevronDown, IoChevronForward } from 'react-icons/io5';
 import { cn } from '../../utils/utils';
 import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { CarFront, Users } from 'lucide-react';
+import { Calendar, CarFront, LayoutDashboard, Users, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link } from 'react-router';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
@@ -25,12 +22,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
 
     const menuItems: MenuItem[] = [
         {
-            icon: <MdDashboard className="w-5 h-5" />,
+            icon: <LayoutDashboard className="w-5 h-5" />,
             label: 'Dashboard',
             path: '/',
         },
         {
-            icon: <BsCalendarEvent className="w-5 h-5" />,
+            icon: <Calendar className="w-5 h-5" />,
             label: 'Bookings',
             isActive: currentPath?.startsWith('/bookings'),
             subItems: [
@@ -177,7 +174,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                             )}
                                         </div>
                                         {!isCollapsed && item.subItems && (
-                                            <IoChevronDown
+                                            <ChevronDown
                                                 className={cn(
                                                     "w-5 h-5 transition-transform duration-300",
                                                     expandedMenu === item.label && "rotate-180"
@@ -255,7 +252,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     className="absolute -right-3 top-14 bg-primary text-[#1a1a1a] rounded-full p-2 shadow-xl hover:scale-110 transition-all duration-200 hover:shadow-2xl z-50"
                     aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
-                    <IoChevronForward
+                    <ChevronUp
                         className={cn(
                             "w-4 h-4 transition-transform duration-300 font-bold",
                             !isCollapsed && "rotate-180"
