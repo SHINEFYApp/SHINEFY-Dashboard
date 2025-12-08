@@ -6,15 +6,12 @@ import { Button } from "../../components/ui/button";
 import { userWalletSchema } from "../../constants/validationSchema";
 import { userWalletInitialValues } from "../../constants/initialValues";
 import { FormInput } from "../../common/FormInput";
+import type { userWalletFormData } from "../../types/forms";
 
 export default function UsersWallets() {
     const [openWindowAddAmount, setOpenWindowAddAmount] = useState<boolean>();
     const [currentBayMethod, setCurrentBayMethod] = useState<string>('Credit');
-    interface userWalletFormData {
-        user: string,
-        amount: string,
-        payMethod: string;
-    }
+    
     const [formData, setFormData] = useState<userWalletFormData>({
         user: '',
         amount: '',
@@ -25,8 +22,6 @@ export default function UsersWallets() {
         'Debit'
     ];
 
-
-
     useEffect(() => {
         setFormData(prev => ({ ...prev, payMethod: currentBayMethod }));
     }, [currentBayMethod]);
@@ -36,7 +31,7 @@ export default function UsersWallets() {
     return (
         <>
             <main>
-                <Table openWindowAddAmount={openWindowAddAmount} setOpenWindowAddAmount={setOpenWindowAddAmount} manageSectionFromComponant={'userWallets'} />
+                <Table openWindow={openWindowAddAmount} setOpenWindow={setOpenWindowAddAmount} manageSectionFromComponant={'userWallets'} />
             </main>
             <section
                 className={`

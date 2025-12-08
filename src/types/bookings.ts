@@ -48,6 +48,9 @@ export interface FormData {
 }
 
 export interface Vehicle {
+    make: any;
+    model: any;
+    colorHex: BackgroundColor | undefined;
     id: string;
     name: string;
     type: string;
@@ -144,18 +147,22 @@ export interface FilterFormValuesUserWallets {
 }
 
 // Table props
-export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets';
+export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions' | 'area';
 
 export interface ManageBookingsAndSlotsProps {
     manageSectionFromComponant: ManageSectionKey;
-    openWindowAddAmount?: boolean;
-    setOpenWindowAddAmount?: Dispatch<SetStateAction<boolean | undefined>>;
+    openWindow?: boolean;
+    setOpenWindow?: Dispatch<SetStateAction<boolean | undefined>>;
+    setWhoTap? : Dispatch<SetStateAction<string | undefined>>;
 }
 
+export type AreaTabs = "mainArea" | "subArea";
+
+
 export interface DetailRowProps {
-    label: string;
-    value: string | number;
-    type?: "text" | "badge";
+    label?: string;
+    value?: string | number;
+    type: "text" | "badge" ;
     badgeColor?: "yellow" | "green" | "blue" | "red" | "purple";
     actionButton?: {
         text: string;

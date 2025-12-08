@@ -39,6 +39,25 @@ export const userWalletInitialValues = {
     amount: '',
 };
 
+export const addCountry = {
+    flag: null,
+    name: '',
+};
+
+export const araeForms = {
+    country : '',
+    area: [] ,
+    regions : '',
+    areaName : '',
+    subAreaName : '',
+}
+
+export const addRegions = {
+    country : '' ,
+    name : '' ,
+    description : ''
+};
+
 export const addSubAdminInitialValues = {
     name: '',
     phoneNumber: '',

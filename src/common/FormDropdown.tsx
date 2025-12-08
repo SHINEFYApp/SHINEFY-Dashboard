@@ -3,6 +3,7 @@ import { useField } from 'formik';
 import { cn } from '../utils/utils';
 import { IoCheckmarkCircle, IoChevronDown } from 'react-icons/io5';
 import type { FormDropdownProps } from '../types/common';
+import { dummyCountries } from '../constants/data';
 
 export const FormDropdown: FC<FormDropdownProps> = ({
     name,
@@ -52,9 +53,14 @@ export const FormDropdown: FC<FormDropdownProps> = ({
                         {placeholder || 'Select an option'}
                     </option>
                     {options.map((option) => (
-                        <option key={option} value={option}>
-                            {option}
-                        </option>
+                        typeof option === "object" ? 
+                            <option key={option.name} value={option.name }>
+                                {option.name}
+                            </option>
+                        : 
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
                     ))}
                 </select>
 
