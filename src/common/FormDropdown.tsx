@@ -52,9 +52,14 @@ export const FormDropdown: FC<FormDropdownProps> = ({
                         {placeholder || 'Select an option'}
                     </option>
                     {options.map((option) => (
-                        <option key={option} value={option}>
-                            {option}
-                        </option>
+                        typeof option === "object" ?
+                            <option key={option.name} value={option.name}>
+                                {option.name}
+                            </option>
+                            :
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
                     ))}
                 </select>
 

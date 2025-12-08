@@ -16,11 +16,6 @@ export default function AddVehicles() {
         color: '',
     });
 
-    console.log(formData);
-
-
-
-
     return (
         <main>
             <div className="w-full bg-white shadow-md p-4 h-screen md:p-6 rounded-2xl">

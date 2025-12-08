@@ -11,9 +11,11 @@ import { dummyUserWallets } from "../../constants/data";
 import { userWalletsColumns } from "../../columns/userWalletsColumns";
 import type { userWalletFormData } from "../../types/users&staff";
 
+
 export default function UsersWallets() {
     const [openWindowAddAmount, setOpenWindowAddAmount] = useState<boolean>(false);
     const [currentBayMethod, setCurrentBayMethod] = useState<string>('Credit');
+
 
     const [formData, setFormData] = useState<userWalletFormData>({
         user: '',

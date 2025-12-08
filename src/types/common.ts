@@ -42,12 +42,27 @@ export interface FormInputProps {
     setReceiveSms?: React.Dispatch<React.SetStateAction<smsStatus>>;
 }
 
+export interface FormTextArea {
+    name: string;
+    label: string;
+    placeholder?: string;
+    icon?: React.ReactNode;
+    disabled?: boolean;
+    checkmark?: boolean;
+    className?: string;
+}
+
+export type CountryOption = {
+  name: string;
+  flag?: string;
+};
+
 export interface FormDropdownProps {
     name: string;
     label: string;
     placeholder?: string;
     icon?: React.ReactNode;
-    options?: string[];
+    options?: (string | CountryOption)[];
     disabled?: boolean;
     className?: string;
 }
@@ -70,6 +85,7 @@ export interface Column<T> {
 }
 
 export interface TableProps<T> {
+    page?: string ;
     columns: Column<T>[];
     data: T[];
     currentPage: number;

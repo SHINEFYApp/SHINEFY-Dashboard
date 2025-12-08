@@ -13,6 +13,9 @@ import ManageSubAdmin from './pages/users&staff/manageSubAdmin';
 import AddSubAdmin from './pages/users&staff/addSubAdmin';
 import UsersWallets from './pages/users&staff/userWallets';
 import CreateBookingsSlot from './pages/bookings/bookings_slot/CreateBookingsSlot';
+import ManageCountries from './pages/Geography&Regions/manageCountries';
+import ManageRegions from './pages/Geography&Regions/manageRegions';
+import ManageAreas from './pages/Geography&Regions/manageAreas';
 
 function App() {
   const location = useLocation();
@@ -40,11 +43,14 @@ function App() {
             <Route path="/bookings/manage" element={<ManageBooking />} />
             <Route path="/bookings/slot" element={<ManageSlot />} />
             <Route path="/bookings/manage/:id" element={<ManageBookingDetails />} />
+            <Route path="/bookings/slot/create" element={<CreateBookingsSlot />} />
             <Route path="/vehicles/add" element={<AddVehicles />} />
             <Route path="/users&staff/manage/subAdmin" element={<ManageSubAdmin />} />
             <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
             <Route path="/users&staff/manage/usersWallet" element={<UsersWallets />} />
-            <Route path="/bookings/slot/create" element={<CreateBookingsSlot />} />
+            <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
+            <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
+            <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
           </Routes>
         </Layout>
       )}
