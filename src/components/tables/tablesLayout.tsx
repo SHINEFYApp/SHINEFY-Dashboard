@@ -2,7 +2,7 @@ import { ArrowUpToLine, Calendar, Eye, Search, Shield, SlidersHorizontal, Trash2
 import { FormDropdown } from "../../common/FormDropdown";
 import { FormInput } from "../../common/FormInput";
 import { FormDatePicker } from "../../common/FormDatePicker";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const types = ['type one', 'type two', 'type three'];
 const status = ['Open', 'Closed'];
