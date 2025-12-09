@@ -4,17 +4,18 @@ import { useNavigate } from "react-router";
 import { Search, Calendar, SlidersHorizontal } from "lucide-react";
 import CompletedBookingChart from "../../../components/booking/manageBooking/CompletedBookingChart";
 import RatedReportsChart from "../../../components/booking/manageBooking/RatedReportsChart";
+import { BookingFilterModal } from "../../../components/booking/manageBooking/BookingFilterModal";
 import { CustomTable } from "../../../common/CustomTable";
 import { FormInput } from "../../../common/FormInput";
 import { FormDatePicker } from "../../../common/FormDatePicker";
 import { dummyTableData } from "../../../constants/data";
-
 import { getManageBookingColumns } from "../../../columns/manageBookingColumns";
 import { manageBookingSearchInitialValues } from "../../../constants/initialValues";
 
 const ManageBooking = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
+    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
     const pageSize = 10;
     const totalEntries = 205;
     const totalPages = Math.ceil(totalEntries / pageSize);
@@ -25,6 +26,10 @@ const ManageBooking = () => {
 
     const handleSubmit = (values: any) => {
         console.log("Search values:", values);
+    };
+
+    const handleFilterSubmit = (values: any) => {
+        console.log("Filter values:", values);
     };
 
     const columns = getManageBookingColumns(navigate);
@@ -83,6 +88,7 @@ const ManageBooking = () => {
                                     {/* Right Side */}
                                     <button
                                         type="button"
+                                        onClick={() => setIsFilterModalOpen(true)}
                                         className="py-3 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0 self-end lg:self-auto"
                                     >
                                         <SlidersHorizontal className="w-5 h-5 text-secondary-700" />
@@ -106,6 +112,13 @@ const ManageBooking = () => {
             </div>
             <CompletedBookingChart />
             <RatedReportsChart />
+
+            {/* Filter Modal */}
+            <BookingFilterModal
+                isOpen={isFilterModalOpen}
+                onClose={() => setIsFilterModalOpen(false)}
+                onSubmit={handleFilterSubmit}
+            />
         </main>
     );
 };

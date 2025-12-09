@@ -48,17 +48,17 @@ export const addCountry = {
 };
 
 export const araeForms = {
-    country : '',
-    area: [] ,
-    regions : '',
-    areaName : '',
-    subAreaName : '',
-}
+    country: '',
+    area: [],
+    regions: '',
+    areaName: '',
+    subAreaName: '',
+};
 
 export const addRegions = {
-    country : '' ,
-    name : '' ,
-    description : ''
+    country: '',
+    name: '',
+    description: ''
 };
 
 export const addSubAdminInitialValues = {
@@ -94,3 +94,19 @@ export const manageSlotsSearchInitialValues = { type: "", status: "", date: "" }
 export const manageBookingSearchInitialValues = { search: "", date: "" };
 
 export const manageSubAdminSearchInitialValues = { search: '', franchise: '' };
+
+export const bookingFilterInitialValues = {
+    status: '',
+    service_boy: '',
+    address: '',
+    bookingNumber: '',
+    customerName: '',
+    serviceBoyName: '',
+    paymentMethod: '',
+    date: '',
+    time: '',
+    dateFrom: '',
+    dateTo: '',
+};
+
+
