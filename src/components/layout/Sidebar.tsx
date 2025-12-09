@@ -4,8 +4,18 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { Calendar, CarFront, LayoutDashboard, Users, ChevronDown, ChevronUp, Map } from 'lucide-react';
+import { Calendar, CarFront, LayoutDashboard, Users, ChevronDown, Map, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
+import { sidebarMenuItems } from '../../constants/data';
+
+// Icon mapping
+const iconMap: Record<string, React.ReactNode> = {
+    LayoutDashboard: <LayoutDashboard className="w-5 h-5" />,
+    Calendar: <Calendar className="w-5 h-5" />,
+    CarFront: <CarFront className="w-5 h-5" />,
+    Users: <Users className="w-5 h-5" />,
+    Map: <Map className="w-5 h-5" />,
+};
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
@@ -15,107 +25,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Vehicles');
         } else if (currentPath.startsWith('/bookings')) {
             setExpandedMenu('Bookings');
-        } else if (currentPath.startsWith('/users&staff/manage')) {
+        } else if (currentPath.startsWith('/users&staff')) {
             setExpandedMenu('Users & Staff');
-        } else if (currentPath.startsWith('/geography&regions/manage')) {
+        } else if (currentPath.startsWith('/geography&regions')) {
             setExpandedMenu('Geography & Regions');
         }
     }, [currentPath]);
 
-    const menuItems: MenuItem[] = [
-        {
-            icon: <LayoutDashboard className="w-5 h-5" />,
-            label: 'Dashboard',
-            path: '/',
-        },
-        {
-            icon: <Calendar className="w-5 h-5" />,
-            label: 'Bookings',
-            isActive: currentPath?.startsWith('/bookings'),
-            subItems: [
-                {
-                    icon: null,
-                    label: 'Create Booking',
-                    path: '/bookings/create'
-                },
-                {
-                    icon: null,
-                    label: 'Manage Bookings',
-                    path: '/bookings/manage'
-                },
-                {
-                    icon: null,
-                    label: 'Manage Slot',
-                    path: '/bookings/slot'
-                },
-            ],
-        },
-        {
-            icon: <CarFront className="w-5 h-5" />,
-            label: 'Vehicles',
-            isActive: currentPath?.startsWith('/vehicles'),
-            subItems: [
-                {
-                    icon: null,
-                    label: 'Add Vehicle',
-                    path: '/vehicles/add'
-                },
-                {
-                    icon: null,
-                    label: 'Manage Vehicle',
-                    path: '/vehicles/manage'
-                }
-            ],
-        },
-        {
-            icon: <Users className="w-5 h-5" />,
-            label: 'Users & Staff',
-            isActive: currentPath?.startsWith('/users&staff/manage'),
-            subItems: [
-                {
-                    icon: null,
-                    label: 'Manage Users',
-                    path: '/users&staff/manage/users'
-                },
-                {
-                    icon: null,
-                    label: 'Manage Sub Admin',
-                    path: '/users&staff/manage/subAdmin'
-                },
-                {
-                    icon: null,
-                    label: 'Manage Service Boy',
-                    path: '/users&staff/manage/serviceBoy'
-                },
-                {
-                    icon: null,
-                    label: 'Manage Users Wallet',
-                    path: '/users&staff/manage/usersWallet'
-                }
-            ],
-        }, {
-            icon: <Map className="w-5 h-5" />,
-            label: 'Geography & Regions',
-            isActive: currentPath?.startsWith('/geography&regions/manage'),
-            subItems: [
-                {
-                    icon: null,
-                    label: 'Manage Countries',
-                    path: '/geography&regions/manage/countries'
-                },
-                {
-                    icon: null,
-                    label: 'Manage Regions',
-                    path: '/geography&regions/manage/regions'
-                },
-                {
-                    icon: null,
-                    label: 'Manage Area',
-                    path: '/geography&regions/manage/area'
-                }
-            ],
-        },
-    ];
+    // Convert sidebarMenuItems to MenuItem format
+    const menuItems: MenuItem[] = sidebarMenuItems.map(item => ({
+        icon: iconMap[item.iconName],
+        label: item.label,
+        path: item.path,
+        isActive: item.pathPrefix ? currentPath?.startsWith(item.pathPrefix) : false,
+        subItems: item.subItems?.map(subItem => ({
+            icon: null,
+            label: subItem.label,
+            path: subItem.path
+        }))
+    }));
 
     const toggleSubmenu = (label: string) => {
         if (isCollapsed) return;
@@ -275,7 +203,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     className="absolute -right-3 top-14 bg-primary text-[#1a1a1a] rounded-full p-2 shadow-xl hover:scale-110 transition-all duration-200 hover:shadow-2xl z-50"
                     aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
-                    <ChevronUp
+                    <ChevronRight
                         className={cn(
                             "w-4 h-4 transition-transform duration-300 font-bold",
                             !isCollapsed && "rotate-180"

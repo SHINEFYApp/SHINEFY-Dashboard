@@ -3,7 +3,7 @@ import { Form, Formik } from "formik";
 import { FormInput } from "../../common/FormInput";
 import { Button } from "../../components/ui/button";
 import { FormDropdown } from "../../common/FormDropdown";
-import { dummyCountries, dummyMainArea, dummySubArea, manageAreaTabs } from "../../constants/data";
+import { dummyCountries, dummyMainArea, dummySubArea, exportTypes, manageAreaTabs } from "../../constants/data";
 import DrawMap from "../../common/map";
 import { araeForms } from "../../constants/initialValues";
 import { areaValidationSchema } from "../../constants/validationSchema";
@@ -12,7 +12,6 @@ import { Search } from "lucide-react";
 import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
 import { useSearchParams } from "react-router";
 import { mainAreaColumns, subAreaColumns } from "../../columns/areaColumns";
-import { exportTypes } from "../../constants/exportTypes";
 
 const validTabs = ['mainArea', 'subArea'];
 
@@ -60,50 +59,68 @@ export default function ManageAreas() {
                     >
                         {() => (
                             <Form>
-                                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
-                                    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
-                                        <div className="w-full md:w-52 lg:w-[446px] mb-2 -space-y-2">
-                                            <FormInput
-                                                name="search"
-                                                label=""
-                                                placeholder="Search"
-                                                icon={<Search className="w-5 h-5" />}
-                                                className="mb-0"
-                                                checkmark={false}
-                                            />
-                                        </div>
-                                        <button
-                                            type="submit"
-                                            className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
-                                        >
-                                            Search
-                                        </button>
-                                    </div>
+                                <div className="flex flex-col gap-4">
+                                    {/* Filters and Actions Row */}
+                                    <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                                        {/* Left Side - Header + Search Filters */}
+                                        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
+                                            {/* Header */}
+                                            <div className="flex flex-col min-w-[100px] lg:min-w-[140px]">
+                                                <h1 className="text-lg md:text-xl font-bold text-secondary-900">
+                                                    Filter
+                                                </h1>
+                                                <p className="text-xs text-secondary-500">
+                                                    Manage Areas
+                                                </p>
+                                            </div>
 
-                                    <div className="flex flex-col lg:flex-row items-center gap-5">
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setOpenWindowArea(true);
-                                                setWhoTap('mainArea');
-                                            }}
-                                            className="w-full lg:w-[164px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
-                                        >
-                                            Add Main Area
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setOpenWindowArea(true);
-                                                setWhoTap('subArea');
-                                            }}
-                                            className="w-full lg:w-[164px] py-3 bg-[#191919] rounded-lg text-[#FFC107] font-semibold transition-all hover:bg-[#191919d6] shadow-sm hover:shadow-md whitespace-nowrap text-center"
-                                        >
-                                            Add Sub Area
-                                        </button>
-                                        <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
-                                        <div className="w-full lg:w-[135px]">
-                                            <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2" />
+                                            {/* Search Filters */}
+                                            <div className="flex flex-col sm:flex-row sm:flex-wrap md:flex-nowrap gap-3 flex-1">
+                                                <div className="w-full sm:flex-1 -space-y-2">
+                                                    <FormInput
+                                                        name="search"
+                                                        label=""
+                                                        placeholder="Search"
+                                                        icon={<Search className="w-5 h-5" />}
+                                                        className="mb-0"
+                                                        checkmark={false}
+                                                    />
+                                                </div>
+                                                <button
+                                                    type="submit"
+                                                    className="w-full sm:w-auto sm:px-8 md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
+                                                >
+                                                    Search
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Right Side - Action Buttons */}
+                                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 xl:gap-4 xl:shrink-0">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setOpenWindowArea(true);
+                                                    setWhoTap('mainArea');
+                                                }}
+                                                className="w-full sm:w-auto px-6 py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
+                                            >
+                                                Add Main Area
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setOpenWindowArea(true);
+                                                    setWhoTap('subArea');
+                                                }}
+                                                className="w-full sm:w-auto px-6 py-3 bg-[#191919] rounded-lg text-[#FFC107] font-semibold transition-all hover:bg-[#191919d6] shadow-sm hover:shadow-md whitespace-nowrap text-center"
+                                            >
+                                                Add Sub Area
+                                            </button>
+                                            <span className="hidden xl:block w-px h-10 bg-[#D2D2D2]"></span>
+                                            <div className="w-full sm:w-auto sm:min-w-[135px] xl:w-[135px]">
+                                                <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -45,54 +45,61 @@ const ManageBooking = () => {
                     >
                         {() => (
                             <Form>
-                                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
-                                    {/* Left Side */}
-                                    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
-                                        <div className="flex flex-col min-w-[140px]">
-                                            <h1 className="text-xl md:text-2xl font-bold text-secondary-900">
-                                                Filter
-                                            </h1>
-                                            <p className="text-xs md:text-sm text-secondary-500">
-                                                Manage Bookings
-                                            </p>
+                                <div className="flex flex-col gap-4">
+                                    {/* Filters and Actions Row */}
+                                    <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                                        {/* Left Side - Header + Search Filters */}
+                                        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1 min-w-0">
+                                            {/* Header */}
+                                            <div className="flex flex-col shrink-0">
+                                                <h1 className="text-lg md:text-xl font-bold text-secondary-900">
+                                                    Filter
+                                                </h1>
+                                                <p className="text-xs text-secondary-500 whitespace-nowrap">
+                                                    Manage Bookings
+                                                </p>
+                                            </div>
+
+                                            {/* Search Filters */}
+                                            <div className="flex flex-col sm:flex-row gap-3 flex-1 min-w-0">
+                                                <div className="flex-1 min-w-0 -space-y-2">
+                                                    <FormInput
+                                                        name="search"
+                                                        label=""
+                                                        placeholder="Search"
+                                                        icon={<Search className="w-5 h-5" />}
+                                                        className="mb-0"
+                                                        checkmark={false}
+                                                    />
+                                                </div>
+                                                <div className="w-full sm:w-auto sm:min-w-[160px] sm:max-w-[200px] -space-y-2">
+                                                    <FormDatePicker
+                                                        name="date"
+                                                        label=""
+                                                        placeholder="Date"
+                                                        icon={<Calendar className="w-5 h-5" />}
+                                                        className="mb-0"
+                                                        checkmark={false}
+                                                    />
+                                                </div>
+                                                <button
+                                                    type="submit"
+                                                    className="w-full sm:w-auto px-6 py-3 bg-primary rounded-lg text-secondary-900 text-sm font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap shrink-0"
+                                                >
+                                                    Search
+                                                </button>
+                                            </div>
                                         </div>
 
-                                        <div className="w-full md:w-52 lg:w-60 -space-y-2">
-                                            <FormInput
-                                                name="search"
-                                                label=""
-                                                placeholder="Search"
-                                                icon={<Search className="w-5 h-5" />}
-                                                className="mb-0"
-                                                checkmark={false}
-                                            />
-                                        </div>
-                                        <div className={`w-full md:w-48 lg:w-56 -space-y-2`}>
-                                            <FormDatePicker
-                                                name="date"
-                                                label=""
-                                                placeholder="Date"
-                                                icon={<Calendar className="w-5 h-5" />}
-                                                className="mb-0"
-                                                checkmark={false}
-                                            />
-                                        </div>
+                                        {/* Right Side - Filter Button */}
                                         <button
-                                            type="submit"
-                                            className="px-6 lg:px-8 py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
+                                            type="button"
+                                            onClick={() => setIsFilterModalOpen(true)}
+                                            className="w-full sm:w-auto py-3 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0"
                                         >
-                                            Search
+                                            <SlidersHorizontal className="w-5 h-5 text-secondary-700 mx-auto sm:mx-0" />
                                         </button>
                                     </div>
-
-                                    {/* Right Side */}
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsFilterModalOpen(true)}
-                                        className="py-3 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0 self-end lg:self-auto"
-                                    >
-                                        <SlidersHorizontal className="w-5 h-5 text-secondary-700" />
-                                    </button>
                                 </div>
                             </Form>
                         )}

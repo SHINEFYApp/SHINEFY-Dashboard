@@ -1,5 +1,5 @@
 import { Formik, Form } from "formik";
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { FormDatePicker } from "../../../common/FormDatePicker";
 import { FormTimePicker } from "../../../common/FormTimePicker";
 import { FormDropdown } from "../../../common/FormDropdown";

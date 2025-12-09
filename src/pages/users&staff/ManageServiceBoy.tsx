@@ -1,36 +1,21 @@
-import { useState } from "react";
-import { Formik, Form } from "formik";
-import { Search } from "lucide-react";
-import { CustomTable } from "../../common/CustomTable";
+import { Form, Formik } from "formik";
 import { FormInput } from "../../common/FormInput";
+import { Search } from "lucide-react";
 import { FormDropdown } from "../../common/FormDropdown";
-import { dummyManageSubAdmins, exportTypes, franchise } from "../../constants/data";
-import { manageSubAdminColumns } from "../../columns/manageSubAdminColumns";
-import { manageSubAdminSearchInitialValues } from "../../constants/initialValues";
+import { exportTypes, franchise } from "../../constants/data";
+import { manageServiceBoySearchInitialValues } from "../../constants/initialValues";
 
-const ManageSubAdmin = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10;
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
+const ManageServiceBoy = () => {
     const handleSubmit = (values: any) => {
         console.log("Search values:", values);
     };
-
-    const columns = manageSubAdminColumns;
-
     return (
         <main>
             <div className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl">
                 {/* Filter Section */}
                 <div className="mb-6 px-4">
                     <Formik
-                        initialValues={manageSubAdminSearchInitialValues}
+                        initialValues={manageServiceBoySearchInitialValues}
                         onSubmit={handleSubmit}
                     >
                         {() => (
@@ -46,7 +31,7 @@ const ManageSubAdmin = () => {
                                                     Filter
                                                 </h1>
                                                 <p className="text-xs text-secondary-500 whitespace-nowrap">
-                                                    Manage Sub Admin
+                                                    Manage Service Boy
                                                 </p>
                                             </div>
 
@@ -61,6 +46,9 @@ const ManageSubAdmin = () => {
                                                         className="mb-0"
                                                         checkmark={false}
                                                     />
+                                                </div>
+                                                <div className="w-full sm:w-auto sm:min-w-[160px] sm:max-w-[200px] -space-y-2">
+                                                    <FormDropdown name="status" label="" placeholder="Status" options={['Pending', 'Confirmed', 'Completed', 'Cancelled']} className="mb-2" />
                                                 </div>
                                                 <div className="w-full sm:w-auto sm:min-w-[160px] sm:max-w-[200px] -space-y-2">
                                                     <FormDropdown name="franchise" label="" placeholder="Franchise" options={franchise} className="mb-2" />
@@ -80,7 +68,7 @@ const ManageSubAdmin = () => {
                                                 type="button"
                                                 className="w-full sm:w-auto px-4 py-3 flex justify-center items-center bg-primary rounded-lg text-secondary-900 text-sm font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
                                             >
-                                                Add Sub Admin
+                                                Add Service Boy
                                             </a>
                                             <span className="hidden xl:block w-px h-10 bg-[#D2D2D2]"></span>
                                             <div className="w-full sm:w-auto sm:min-w-[120px] sm:max-w-[140px]">
@@ -93,20 +81,9 @@ const ManageSubAdmin = () => {
                         )}
                     </Formik>
                 </div>
-
-                {/* Table Section */}
-                <CustomTable
-                    columns={columns}
-                    data={dummyManageSubAdmins}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    totalEntries={totalEntries}
-                    pageSize={pageSize}
-                    onPageChange={handlePageChange}
-                />
             </div>
         </main>
     );
 };
 
-export default ManageSubAdmin;
+export default ManageServiceBoy;
