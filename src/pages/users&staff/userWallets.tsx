@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Form, Formik } from "formik";
-import { Search } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { userWalletSchema } from "../../constants/validationSchema";
 import { userWalletInitialValues } from "../../constants/initialValues";
@@ -10,6 +9,7 @@ import { CustomTable } from "../../common/CustomTable";
 import { dummyUserWallets } from "../../constants/data";
 import { userWalletsColumns } from "../../columns/userWalletsColumns";
 import type { userWalletFormData } from "../../types/users&staff";
+import { FilterHeader } from "../../components/common/FilterHeader";
 
 
 export default function UsersWallets() {
@@ -36,7 +36,7 @@ export default function UsersWallets() {
         setCurrentPage(page);
     };
 
-    const handleSubmit = (values: any) => {
+    const handleSearchSubmit = (values: any) => {
         console.log("Search values:", values);
     };
 
@@ -53,52 +53,22 @@ export default function UsersWallets() {
             <main>
                 <div className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl">
                     {/* Filter Section */}
-                    <div className="mb-6 px-4">
-                        <Formik
-                            initialValues={{ search: '' }}
-                            onSubmit={handleSubmit}
-                        >
-                            {() => (
-                                <Form>
-                                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
-                                        {/* Left Side */}
-                                        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
-                                            <div className="w-full md:w-52 lg:w-[446px] mb-2 -space-y-2">
-                                                <FormInput
-                                                    name="search"
-                                                    label=""
-                                                    placeholder="Search"
-                                                    icon={<Search className="w-5 h-5" />}
-                                                    className="mb-0"
-                                                    checkmark={false}
-                                                />
-                                            </div>
-                                            <button
-                                                type="submit"
-                                                className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
-                                            >
-                                                Search
-                                            </button>
-                                        </div>
-
-                                        {/* Right Side */}
-                                        <div className="flex flex-col lg:flex-row items-center gap-5">
-                                            <button
-                                                type="button"
-                                                onClick={() => setOpenWindowAddAmount(true)}
-                                                className="w-full lg:w-[179px] py-3 flex justify-center items-center bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
-                                            >
-                                                Add Wallet Amount
-                                            </button>
-                                            <div className="w-full lg:w-[135px]">
-                                                <FormDropdown name="export" label="" placeholder={'Export'} options={['CSV', 'Excel', 'PDF']} className="mb-2 w-full" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Form>
-                            )}
-                        </Formik>
-                    </div>
+                    <FilterHeader
+                        subtitle="User Wallets"
+                        searchInitialValues={{ search: '', export: '' }}
+                        onSearchSubmit={handleSearchSubmit}
+                        filterInitialValues={{ search: '' }}
+                        onFilterSubmit={(values) => console.log(values)}
+                        actionButtons={[
+                            {
+                                label: "Add Wallet Amount",
+                                onClick: () => setOpenWindowAddAmount(true),
+                                variant: "primary"
+                            }
+                        ]}
+                        showExport={true}
+                        exportOptions={['CSV', 'Excel', 'PDF']}
+                    />
 
                     {/* Table Section */}
                     <CustomTable
