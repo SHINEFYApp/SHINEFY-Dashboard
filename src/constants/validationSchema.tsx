@@ -193,8 +193,7 @@ export const addExtraServiceValidationSchema = Yup.object({
     .min(10, "Minimum 10 characters"),
 
   Date: Yup.date()
-    .required("Date is required")
-    .typeError("Invalid date"),
+    .required("Date is required"),
 
   Time: Yup.string()
     .required("Time is required"),

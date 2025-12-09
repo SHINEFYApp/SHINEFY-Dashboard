@@ -61,7 +61,7 @@ export default function AddExtraService(){
                             <div className="grid grid-cols-1 ps-20 gap-2">
                                 <h2>Service Image</h2>
                                 <div className="w-[117px] h-[117px] bg-black/20 rounded-[5px]">
-                                    <img src={''} alt="" />
+                                    {/* <img src={''} alt="" /> */}
                                 </div>
                                 <div className=" flex gap-5">
                                     <button type="button" className="text-[#B0B0B0] text-[14px]">Delete</button>
