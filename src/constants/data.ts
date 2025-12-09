@@ -88,6 +88,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Services & Extras',
         breadcrumbs: ['Services & Extras', 'Manage Service' , 'Add Service']
     },
+    '/services&extras/manage/Service/addExtraService': {
+        title: 'Services & Extras',
+        breadcrumbs: ['Services & Extras', 'Manage Service' , 'Add Extra Service']
+    },
 };
 
 export const createBookingTabs = [
@@ -99,6 +103,9 @@ export const manageAreaTabs = [
     { id: 'mainArea', label: 'Manage Main Area' },
     { id: 'subArea', label: 'Manage Sub Area' },
 ];
+
+export const exportTypes = ['CSV', 'Excel', 'PDF'];
+
 
 export const createBookingSteps = [
     {
@@ -540,6 +547,74 @@ export const dummyCountries: any[] = [
         flag: KSA ,
         name: 'Saudi Arabia',
         createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+// Example for manage countries
+
+export const dummyExtraService: any[] = [
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '' ,
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
     },
 ];
 

@@ -18,6 +18,8 @@ import ManageRegions from './pages/Geography&Regions/manageRegions';
 import ManageAreas from './pages/Geography&Regions/manageAreas';
 import ManageService from './pages/services&extra/manageService/manageService';
 import AddService from './pages/services&extra/manageService/addService';
+import ManageExtraService from './pages/services&extra/manageExtraService/manageExtraService';
+import AddExtraService from './pages/services&extra/manageExtraService/addExtraService';
 
 function App() {
   const location = useLocation();
@@ -55,6 +57,8 @@ function App() {
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
             <Route path="/services&extras/manage/Service" element={<ManageService />} />
             <Route path="/services&extras/manage/Service/addService" element={<AddService />} />
+            <Route path="/services&extras/manage/ExtreService" element={<ManageExtraService />} />
+            <Route path="/services&extras/manage/Service/addExtraService" element={<AddExtraService />} />
           </Routes>
         </Layout>
       )}
