@@ -20,6 +20,7 @@ import ManageService from './pages/services&extra/manageService/manageService';
 import AddService from './pages/services&extra/manageService/addService';
 import ManageExtraService from './pages/services&extra/manageExtraService/manageExtraService';
 import AddExtraService from './pages/services&extra/manageExtraService/addExtraService';
+import ManageCoupon from './pages/services&extra/manageCoupon/manageCoupon';
 
 function App() {
   const location = useLocation();
@@ -59,6 +60,7 @@ function App() {
             <Route path="/services&extras/manage/Service/addService" element={<AddService />} />
             <Route path="/services&extras/manage/ExtreService" element={<ManageExtraService />} />
             <Route path="/services&extras/manage/Service/addExtraService" element={<AddExtraService />} />
+            <Route path="/services&extras/manage/coupon" element={<ManageCoupon />} />
           </Routes>
         </Layout>
       )}
