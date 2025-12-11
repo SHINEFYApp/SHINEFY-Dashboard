@@ -1,21 +1,49 @@
 import { useState } from "react";
-import Table from "../../components/tables/table";
 import { Button } from "../../components/ui/button";
 import { FormInput } from "../../common/FormInput";
 import { Form, Formik } from "formik";
 import { addRegions } from "../../constants/initialValues";
 import { addRegionsSchema } from "../../constants/validationSchema";
 import { FormDropdown } from "../../common/FormDropdown";
-import { dummyCountries } from "../../constants/data";
+import { dummyCountries, dummyRegions, exportTypes } from "../../constants/data";
 import { TextArea } from "../../common/textArea";
+import { CustomTable } from "../../common/CustomTable";
+import { regionsColumns } from "../../columns/regionsColumns";
+import { FilterHeader } from "../../components/common/FilterHeader";
 
-export default function ManageRegions(){
+export default function ManageRegions() {
     const [openWindowAddNewRegions, setOpenWindowAddNewRegions] = useState<boolean>();
-    
-    return(
+
+    return (
         <>
-            <main>
-                <Table openWindow={openWindowAddNewRegions} setOpenWindow={setOpenWindowAddNewRegions} manageSectionFromComponant={'regions'} />
+            <main className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen">
+                <FilterHeader
+                    subtitle="Manage Regions"
+                    searchInitialValues={{ search: '', export: '' }}
+                    onSearchSubmit={(values) => console.log(values)}
+                    filterInitialValues={{ search: '' }}
+                    onFilterSubmit={(values) => console.log(values)}
+                    actionButtons={[
+                        {
+                            label: "Add a new Region",
+                            onClick: () => setOpenWindowAddNewRegions(true),
+                            variant: "primary"
+                        }
+                    ]}
+                    showExport={true}
+                    exportOptions={exportTypes}
+                />
+
+                <CustomTable
+                    page={'regions'}
+                    columns={regionsColumns}
+                    data={dummyRegions}
+                    currentPage={1}
+                    totalPages={Math.ceil(dummyRegions.length / 10)}
+                    totalEntries={dummyRegions.length}
+                    pageSize={10}
+                    onPageChange={() => { }}
+                />
             </main>
             <section
                 className={`
@@ -33,7 +61,7 @@ export default function ManageRegions(){
                             initialValues={addRegions}
                             validationSchema={addRegionsSchema}
                             onSubmit={(values) => {
-                                console.log(values)
+                                console.log(values);
                             }}
                         >
                             {({ isValid }) => (
@@ -85,5 +113,5 @@ export default function ManageRegions(){
                 </div>
             </section>
         </>
-    )
+    );
 }

@@ -15,18 +15,14 @@ import { FormDatePicker } from "../../../common/FormDatePicker";
 import { FormDropdown } from "../../../common/FormDropdown";
 import { dummyDays, dummyMonths, dummyYears } from "../../../constants/data";
 import { generateChartData } from "../../../utils/utils";
-import type { ReportFilters } from "../../../types/bookings";
+import { RatedReportsChartInitialValues } from "../../../constants/initialValues";
 
 const RatedReportsChart = () => {
     const [selectedYear, setSelectedYear] = useState("2025");
     const [selectedMonth, setSelectedMonth] = useState("January");
     const [chartData] = useState(generateChartData(dummyDays));
 
-    const initialValues: ReportFilters = {
-        status: "",
-        startDate: "",
-        endDate: "",
-    };
+
 
     const statuses = ["All", "Completed", "Pending", "Cancelled"];
 
@@ -47,7 +43,7 @@ const RatedReportsChart = () => {
         <div className="w-full bg-white shadow-md p-4 md:p-6 rounded-2xl mt-6">
             {/* Header with Filters */}
             <div className="mb-6">
-                <Formik initialValues={initialValues} onSubmit={(values) => console.log(values)}>
+                <Formik initialValues={RatedReportsChartInitialValues} onSubmit={(values) => console.log(values)}>
                     <Form>
                         <div className="flex flex-wrap items-center gap-3">
                             {/* Title */}

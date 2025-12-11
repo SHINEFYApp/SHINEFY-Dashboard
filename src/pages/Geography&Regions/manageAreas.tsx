@@ -1,23 +1,99 @@
-import { useState } from "react";
-import Table from "../../components/tables/table";
+import { useCallback, useEffect, useState } from "react";
 import { Form, Formik } from "formik";
 import { FormInput } from "../../common/FormInput";
 import { Button } from "../../components/ui/button";
 import { FormDropdown } from "../../common/FormDropdown";
-import { dummyCountries } from "../../constants/data";
+import { dummyCountries, dummyMainArea, dummySubArea, exportTypes, manageAreaTabs } from "../../constants/data";
 import DrawMap from "../../common/map";
 import { araeForms } from "../../constants/initialValues";
 import { areaValidationSchema } from "../../constants/validationSchema";
+import { CustomTable } from "../../common/CustomTable";
+import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
+import { useSearchParams } from "react-router";
+import { mainAreaColumns, subAreaColumns } from "../../columns/areaColumns";
+import { FilterHeader } from "../../components/common/FilterHeader";
 
-export default function ManageAreas(){
+const validTabs = ['mainArea', 'subArea'];
+
+export default function ManageAreas() {
     const [openWindowArea, setOpenWindowArea] = useState<boolean>();
-    const [whoTap , setWhoTap] = useState<string | undefined>('mainArea') 
+    const [whoTap, setWhoTap] = useState<string | undefined>('mainArea');
 
-    return(
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const getValidTab = useCallback((): string => {
+        const tabParam = searchParams.get('tab');
+        return tabParam && validTabs.includes(tabParam) ? tabParam : 'mainArea';
+    }, [searchParams]);
+
+    const [activeTab, setActiveTab] = useState<string>(getValidTab());
+
+    const updateURL = useCallback((tab: string) => {
+        const params = new URLSearchParams();
+        params.set('tab', tab);
+        setSearchParams(params, { replace: true });
+    }, [setSearchParams]);
+
+    useEffect(() => {
+        const tab = getValidTab();
+        setActiveTab(tab);
+
+        if (searchParams.get('tab') !== tab) {
+            updateURL(tab);
+        }
+    }, [searchParams, getValidTab, updateURL]);
+
+    const handleTabChange = (tabId: string) => {
+        setActiveTab(tabId);
+        updateURL(tabId);
+    };
+
+    return (
         <>
-            <main>
-                <Table openWindow={openWindowArea} setOpenWindow={setOpenWindowArea} manageSectionFromComponant={'area'} setWhoTap={setWhoTap} />
-            </main>
+            <main className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen">
+                <FilterHeader
+                    subtitle="Manage Areas"
+                    searchInitialValues={{ search: '', export: '' }}
+                    onSearchSubmit={(values) => console.log(values)}
+                    filterInitialValues={{ search: '' }}
+                    onFilterSubmit={(values) => console.log(values)}
+                    actionButtons={[
+                        {
+                            label: "Add Main Area",
+                            onClick: () => { setOpenWindowArea(true); setWhoTap('mainArea'); },
+                            variant: "primary"
+                        },
+                        {
+                            label: "Add Sub Area",
+                            onClick: () => { setOpenWindowArea(true); setWhoTap('subArea'); },
+                            className: "w-full sm:w-auto px-6 py-3 bg-[#191919] rounded-lg text-[#FFC107] font-semibold transition-all hover:bg-[#191919d6] shadow-sm hover:shadow-md whitespace-nowrap text-center"
+                        }
+                    ]}
+                    showExport={true}
+                    exportOptions={exportTypes}
+                />
+
+                <div className="mt-5">
+                    <AnimatedTabs
+                        tabs={manageAreaTabs}
+                        activeTab={activeTab}
+                        onTabChange={handleTabChange}
+                    />
+                </div>
+
+
+                <CustomTable
+                    page={'area'}
+                    columns={activeTab === 'mainArea' ? mainAreaColumns : subAreaColumns}
+                    data={activeTab === 'mainArea' ? dummyMainArea : dummySubArea}
+                    currentPage={1}
+                    totalPages={Math.ceil((activeTab === 'mainArea' ? dummyMainArea : dummySubArea).length / 10)}
+                    totalEntries={(activeTab === 'mainArea' ? dummyMainArea : dummySubArea).length}
+                    pageSize={10}
+                    onPageChange={() => { }}
+                />
+            </main >
             <section
                 className={`
                     fixed top-0 left-0 w-screen h-screen flex justify-center items-center
@@ -25,7 +101,7 @@ export default function ManageAreas(){
                     ${openWindowArea ? "opacity-100 visible z-50" : "opacity-0 invisible z-[-1]"}
                 `}
             >
-                <div className={`w-[678px] ${whoTap === 'subArea'? 'h-[855px]' : 'h-[750px]' } relative px-10 bg-white rounded-xl transition-transform duration-300 
+                <div className={`w-[678px] ${whoTap === 'subArea' ? 'h-[855px]' : 'h-[750px]'} relative px-10 bg-white rounded-xl transition-transform duration-300 
                     ${openWindowArea ? "scale-100" : "scale-95"}
                 `}>
                     <h1 className=" text-[#242731] text-[20px] py-5 font-bold">{whoTap === 'mainArea' ? 'Main Areas Name' : 'Add Sub Area'}</h1>
@@ -34,7 +110,7 @@ export default function ManageAreas(){
                             initialValues={araeForms}
                             validationSchema={areaValidationSchema(whoTap)}
                             onSubmit={(values) => {
-                                console.log(values)
+                                console.log(values);
                             }}
                         >
                             {({ isValid }) => (
@@ -94,5 +170,5 @@ export default function ManageAreas(){
                 </div>
             </section>
         </>
-    )
+    );
 }

@@ -4,16 +4,13 @@ import { servicesStep3Schema } from '../../../../../constants/validationSchema';
 import { servicesStep3InitialValues } from '../../../../../constants/initialValues';
 import { FormDropdown } from '../../../../../common/FormDropdown';
 import { Button } from '../../../../ui/button';
-import { IoTicketOutline, IoWalletOutline } from 'react-icons/io5';
+import { Ticket, Wallet } from 'lucide-react';
 import { cn } from '../../../../../utils/utils';
 import type { ServicesStep3Props } from '../../../../../types/bookings';
 import { paymentMethods } from '../../../../../constants/data';
 
 const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3Props) => {
     const [selectedPayment, setSelectedPayment] = useState<string>(formData.paymentMethod || '');
-
-
-
 
     const handlePaymentSelect = (method: string, setFieldValue: any) => {
         setSelectedPayment(method);
@@ -49,7 +46,7 @@ const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3
                                 name="coupon"
                                 label="Coupon"
                                 placeholder="Select Coupon"
-                                icon={<IoTicketOutline className="w-5 h-5" />}
+                                icon={<Ticket className="w-5 h-5" />}
                                 options={[
                                     'SAVE10',
                                     'SAVE20',
@@ -92,7 +89,7 @@ const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3
                             </label>
                             <div className="relative">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <IoWalletOutline className="w-5 h-5" />
+                                    <Wallet className="w-5 h-5" />
                                 </div>
                                 <input
                                     type="text"

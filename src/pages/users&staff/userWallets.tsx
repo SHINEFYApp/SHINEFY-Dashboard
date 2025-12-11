@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
-import Table from "../../components/tables/table";
-import { FormDropdown } from "../../common/FormDropdown";
 import { Form, Formik } from "formik";
 import { Button } from "../../components/ui/button";
 import { userWalletSchema } from "../../constants/validationSchema";
 import { userWalletInitialValues } from "../../constants/initialValues";
 import { FormInput } from "../../common/FormInput";
-import type { userWalletFormData } from "../../types/forms";
+import { FormDropdown } from "../../common/FormDropdown";
+import { CustomTable } from "../../common/CustomTable";
+import { dummyUserWallets } from "../../constants/data";
+import { userWalletsColumns } from "../../columns/userWalletsColumns";
+import type { userWalletFormData } from "../../types/users&staff";
+import { FilterHeader } from "../../components/common/FilterHeader";
+
 
 export default function UsersWallets() {
-    const [openWindowAddAmount, setOpenWindowAddAmount] = useState<boolean>();
+    const [openWindowAddAmount, setOpenWindowAddAmount] = useState<boolean>(false);
     const [currentBayMethod, setCurrentBayMethod] = useState<string>('Credit');
-    
+
+
     const [formData, setFormData] = useState<userWalletFormData>({
         user: '',
         amount: '',
@@ -22,6 +27,21 @@ export default function UsersWallets() {
         'Debit'
     ];
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+    const totalEntries = 205;
+    const totalPages = Math.ceil(totalEntries / pageSize);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const handleSearchSubmit = (values: any) => {
+        console.log("Search values:", values);
+    };
+
+    const columns = userWalletsColumns;
+
     useEffect(() => {
         setFormData(prev => ({ ...prev, payMethod: currentBayMethod }));
     }, [currentBayMethod]);
@@ -31,7 +51,36 @@ export default function UsersWallets() {
     return (
         <>
             <main>
-                <Table openWindow={openWindowAddAmount} setOpenWindow={setOpenWindowAddAmount} manageSectionFromComponant={'userWallets'} />
+                <div className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl">
+                    {/* Filter Section */}
+                    <FilterHeader
+                        subtitle="User Wallets"
+                        searchInitialValues={{ search: '', export: '' }}
+                        onSearchSubmit={handleSearchSubmit}
+                        filterInitialValues={{ search: '' }}
+                        onFilterSubmit={(values) => console.log(values)}
+                        actionButtons={[
+                            {
+                                label: "Add Wallet Amount",
+                                onClick: () => setOpenWindowAddAmount(true),
+                                variant: "primary"
+                            }
+                        ]}
+                        showExport={true}
+                        exportOptions={['CSV', 'Excel', 'PDF']}
+                    />
+
+                    {/* Table Section */}
+                    <CustomTable
+                        columns={columns}
+                        data={dummyUserWallets}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        totalEntries={totalEntries}
+                        pageSize={pageSize}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
             </main>
             <section
                 className={`

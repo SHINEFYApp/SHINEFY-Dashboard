@@ -1,20 +1,48 @@
 import { useState } from "react";
-import Table from "../../components/tables/table";
 import { Button } from "../../components/ui/button";
 import { FormInput } from "../../common/FormInput";
 import { Form, Formik } from "formik";
 import { addCountry } from "../../constants/initialValues";
 import { addCountrySchema } from "../../constants/validationSchema";
 import FileUploader from "../../common/fileUploader";
+import { CustomTable } from "../../common/CustomTable";
+import { dummyCountries, exportTypes } from "../../constants/data";
+import { countriesColumns } from "../../columns/countriesColumns";
+import { FilterHeader } from "../../components/common/FilterHeader";
 
-export default function ManageCountries(){
+export default function ManageCountries() {
     const [openWindowAddNewCountry, setOpenWindowAddNewCountry] = useState<boolean>();
-    
 
-    return(
+    return (
         <>
-            <main>
-                <Table openWindow={openWindowAddNewCountry} setOpenWindow={setOpenWindowAddNewCountry} manageSectionFromComponant={'countries'} />
+            <main className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen">
+                <FilterHeader
+                    subtitle="Manage Countries"
+                    searchInitialValues={{ search: '', export: '' }}
+                    onSearchSubmit={(values) => console.log(values)}
+                    filterInitialValues={{ search: '' }}
+                    onFilterSubmit={(values) => console.log(values)}
+                    actionButtons={[
+                        {
+                            label: "Add a new Country",
+                            onClick: () => setOpenWindowAddNewCountry(true),
+                            variant: "primary"
+                        }
+                    ]}
+                    showExport={true}
+                    exportOptions={exportTypes}
+                />
+
+                <CustomTable
+                    page={'countries'}
+                    columns={countriesColumns}
+                    data={dummyCountries}
+                    currentPage={1}
+                    totalPages={Math.ceil(dummyCountries.length / 10)}
+                    totalEntries={dummyCountries.length}
+                    pageSize={10}
+                    onPageChange={() => { }}
+                />
             </main>
             <section
                 className={`
@@ -32,7 +60,7 @@ export default function ManageCountries(){
                             initialValues={addCountry}
                             validationSchema={addCountrySchema}
                             onSubmit={(values) => {
-                                console.log(values)
+                                console.log(values);
                             }}
                         >
                             {({ isValid }) => (
@@ -72,5 +100,5 @@ export default function ManageCountries(){
                 </div>
             </section>
         </>
-    )
+    );
 }

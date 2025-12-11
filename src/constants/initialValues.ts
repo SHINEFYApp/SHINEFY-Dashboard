@@ -1,3 +1,5 @@
+import type { ReportFilters } from "../types/bookings";
+
 export const manageSlotInitialValues = {
     startDate: '',
     startTime: '',
@@ -21,6 +23,7 @@ export const servicesStep2InitialValues = {
     mainService: '',
     mainPackage: '',
     serviceBoy: '',
+    extraServices: [],
 };
 
 export const servicesStep3InitialValues = {
@@ -45,17 +48,17 @@ export const addCountry = {
 };
 
 export const araeForms = {
-    country : '',
-    area: [] ,
-    regions : '',
-    areaName : '',
-    subAreaName : '',
-}
+    country: '',
+    area: [],
+    regions: '',
+    areaName: '',
+    subAreaName: '',
+};
 
 export const addRegions = {
-    country : '' ,
-    name : '' ,
-    description : ''
+    country: '',
+    name: '',
+    description: ''
 };
 
 export const addSubAdminInitialValues = {
@@ -73,3 +76,39 @@ export const addVehicleInitialValues = {
     model: '',
     color: '',
 };
+
+export const CompletedBookingChartInitialValues: ReportFilters = {
+    status: "",
+    startDate: "",
+    endDate: "",
+};
+
+export const RatedReportsChartInitialValues: ReportFilters = {
+    status: "",
+    startDate: "",
+    endDate: "",
+};
+
+export const manageSlotsSearchInitialValues = { type: "", status: "", date: "" };
+
+export const manageBookingSearchInitialValues = { search: "", date: "" };
+
+export const manageSubAdminSearchInitialValues = { search: '', franchise: '' };
+
+export const manageServiceBoySearchInitialValues = { search: '', franchise: '', status: '', export: '' };
+
+export const bookingFilterInitialValues = {
+    status: '',
+    service_boy: '',
+    address: '',
+    bookingNumber: '',
+    customerName: '',
+    serviceBoyName: '',
+    paymentMethod: '',
+    date: '',
+    time: '',
+    dateFrom: '',
+    dateTo: '',
+};
+
+
