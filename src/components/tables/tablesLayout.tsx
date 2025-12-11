@@ -608,7 +608,7 @@ export const Tables = {
             rightSide: [
                 <div className="flex flex-col lg:flex-row items-center gap-5">
                     <Link
-                        to={"/services&extras/manage/Service/addService"}
+                        to={"/services&extra/manage/Service/addService"}
                         className="w-full lg:w-[164px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
                     >
                         Add Services

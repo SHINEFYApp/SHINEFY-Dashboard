@@ -21,6 +21,11 @@ import AddService from './pages/services&extra/manageService/addService';
 import ManageExtraService from './pages/services&extra/manageExtraService/manageExtraService';
 import AddExtraService from './pages/services&extra/manageExtraService/addExtraService';
 import ManageCoupon from './pages/services&extra/manageCoupon/manageCoupon';
+import AddCoupon from './pages/services&extra/manageCoupon/addCoupon';
+import ManageProducts from './pages/productsAndOrders/manageProducts';
+import AddProduct from './pages/productsAndOrders/subPages/addProducts';
+import AddCategory from './pages/productsAndOrders/subPages/addCategory';
+import ManageOrders from './pages/productsAndOrders/manageOrders';
 
 function App() {
   const location = useLocation();
@@ -56,11 +61,16 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
-            <Route path="/services&extras/manage/Service" element={<ManageService />} />
-            <Route path="/services&extras/manage/Service/addService" element={<AddService />} />
-            <Route path="/services&extras/manage/ExtreService" element={<ManageExtraService />} />
-            <Route path="/services&extras/manage/Service/addExtraService" element={<AddExtraService />} />
-            <Route path="/services&extras/manage/coupon" element={<ManageCoupon />} />
+            <Route path="/services&extra/manage/Service" element={<ManageService />} />
+            <Route path="/services&extra/manage/Service/addService" element={<AddService />} />
+            <Route path="/services&extra/manage/ExtreService" element={<ManageExtraService />} />
+            <Route path="/services&extra/manage/extreService/addExtraService" element={<AddExtraService />} />
+            <Route path="/services&extra/manage/coupon" element={<ManageCoupon />} />
+            <Route path="/services&extra/manage/coupon/addCoupon" element={<AddCoupon />} />
+            <Route path="/products&orders/manage/Products" element={<ManageProducts />} />
+            <Route path="/products&orders/manage/Products/addProduct" element={<AddProduct />} />
+            <Route path="/products&orders/manage/Products/addGategory" element={<AddCategory />} />
+            <Route path="/products&orders/manage/Orders" element={<ManageOrders />} />
           </Routes>
         </Layout>
       )}
