@@ -855,6 +855,27 @@ export const dummyModelData: any[] = [
     },
 ];
 
+export const dummyColorData: any[] = [
+    {
+        colorCode: '#FF0000',
+        englishColorName: 'Red',
+        arabicColorName: 'Red',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        colorCode: '#0000FF',
+        englishColorName: 'Blue',
+        arabicColorName: 'Blue',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        colorCode: '#00FF00',
+        englishColorName: 'Green',
+        arabicColorName: 'Green',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
 export const mainDetails: DetailRowProps[] = [
     {
         label: "ID", value: "9388546579",

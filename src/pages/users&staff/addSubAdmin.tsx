@@ -6,10 +6,9 @@ import { FormInput } from '../../common/FormInput';
 import { useEffect, useState } from 'react';
 import type { smsStatus } from '../../types/common';
 import type { manageSubadmin } from '../../types/users&staff';
-import DropDownAndSelect from '../../common/dropDownAndSelect';
+import { FormDropdown } from '../../common/FormDropdown';
 
 export default function AddSubAdmin() {
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({});
 
     const [receiveSmsStatus, setReceiveSmsStatus] = useState<smsStatus>({
         status: true,
@@ -30,9 +29,6 @@ export default function AddSubAdmin() {
         setFormData(prev => ({ ...prev, isSms: receiveSmsStatus.isSms }));
     }, [receiveSmsStatus.isSms]);
 
-    useEffect(() => {
-        setFormData(prev => ({ ...prev, privileges: selectedOptions }));
-    }, [selectedOptions]);
 
     console.log(formData);
 
@@ -103,7 +99,12 @@ export default function AddSubAdmin() {
                                     </div>
                                 </div>
                             </div>
-                            <DropDownAndSelect selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions} />
+                            <FormDropdown
+                                name="privileges"
+                                label="Privileges"
+                                placeholder="Select Privileges"
+                                options={['Admin', 'Editor', 'Viewer']}
+                            />
                             <div className="grid grid-cols-1 md:grid-cols-2">
                                 <Button
                                     type="submit"
