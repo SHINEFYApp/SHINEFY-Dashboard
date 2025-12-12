@@ -800,7 +800,6 @@ export const financeRows = [
     { label: "Grand Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" },
 ];
 
-// Example for manage make
 export const dummyMakeData: any[] = [
     {
         logo: carImage,
@@ -824,6 +823,34 @@ export const dummyMakeData: any[] = [
         logo: carImage,
         englishName: 'Audi',
         arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+export const dummyMakeOptions = [
+    "Porsche",
+    "BMW",
+    "Mercedes",
+    "Audi"
+];
+
+export const dummyModelData: any[] = [
+    {
+        makeName: 'Audi',
+        englishModelName: 'Audi',
+        arabicModelName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        makeName: 'Audi',
+        englishModelName: 'Audi',
+        arabicModelName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        makeName: 'Audi',
+        englishModelName: 'Audi',
+        arabicModelName: 'بورش',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
 ];

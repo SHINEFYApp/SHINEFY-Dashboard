@@ -1,7 +1,9 @@
 import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
 import ManageMake from "../../components/vehicles/ManageMake";
+import ManageModel from "../../components/vehicles/ManageModel";
 import { manageVehiclesTabs } from "../../constants/data";
 import { useState } from "react";
+
 const ManageVehicles = () => {
     const [activeTab, setActiveTab] = useState('manageMake');
 
@@ -18,6 +20,7 @@ const ManageVehicles = () => {
             />
 
             {activeTab === 'manageMake' && <ManageMake />}
+            {activeTab === 'manageModel' && <ManageModel />}
         </main>
     );
 };
