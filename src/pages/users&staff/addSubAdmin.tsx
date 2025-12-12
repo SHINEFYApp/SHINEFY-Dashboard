@@ -29,11 +29,7 @@ export default function AddSubAdmin() {
         setFormData(prev => ({ ...prev, isSms: receiveSmsStatus.isSms }));
     }, [receiveSmsStatus.isSms]);
 
-
     console.log(formData);
-
-
-
 
     return (
         <main>

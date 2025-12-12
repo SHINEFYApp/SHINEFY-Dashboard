@@ -63,7 +63,7 @@ const ManageServiceBoy = () => {
                     actionButtons={[
                         {
                             label: "Add Service Boy",
-                            href: "/users&staff/subAdmin/addSubAdmin",
+                            href: "/users&staff/manageServiceBoy/addServiceBoy",
                             variant: "primary"
                         }
                     ]}

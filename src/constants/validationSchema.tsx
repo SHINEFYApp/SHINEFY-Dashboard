@@ -80,36 +80,36 @@ export const addCountrySchema = Yup.object({
 export const areaValidationSchema = (whoTap: string | undefined) =>
     Yup.object({
         country: Yup.string()
-        .required("Country is required"),
+            .required("Country is required"),
 
         regions: Yup.string()
-        .required("Regions is required"),
+            .required("Regions is required"),
 
         area: Yup.array()
-        .min(1, "Please draw an area on the map")
-        .required("Area is required"),
+            .min(1, "Please draw an area on the map")
+            .required("Area is required"),
 
         areaName: Yup.string()
-        .required("Area name is required"),
+            .required("Area name is required"),
 
         subAreaName: whoTap === "subArea"
-        ? Yup.string().required("Sub area name is required")
-        : Yup.string().notRequired(),
+            ? Yup.string().required("Sub area name is required")
+            : Yup.string().notRequired(),
     }
-);
+    );
 
 export const addRegionsSchema = Yup.object().shape({
-  country: Yup.string()
-    .required('Country is required')
-    .min(2, 'Country must be at least 2 characters'),
-  
-  name: Yup.string()
-    .required('Name is required')
-    .min(2, 'Name must be at least 2 characters'),
-  
-  description: Yup.string()
-    .required('Description is required')
-    .min(5, 'Description must be at least 5 characters')
+    country: Yup.string()
+        .required('Country is required')
+        .min(2, 'Country must be at least 2 characters'),
+
+    name: Yup.string()
+        .required('Name is required')
+        .min(2, 'Name must be at least 2 characters'),
+
+    description: Yup.string()
+        .required('Description is required')
+        .min(5, 'Description must be at least 5 characters')
 });
 
 
@@ -137,4 +137,21 @@ export const addVehicleSchema = Yup.object({
     make: Yup.string().required('the make is required'),
     model: Yup.string().required('the model is required'),
     color: Yup.string().required('the color is required'),
+});
+
+export const addServiceBoySchema = Yup.object({
+    name: Yup.string().required('Name is required'),
+    phoneNumber: Yup.string().matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits').required('Phone number is required'),
+    password: Yup.string()
+        .required('Password is required')
+        .min(8, 'Password must be at least 8 characters'),
+    confirmPassword: Yup.string()
+        .required('Confirm Password is required')
+        .oneOf([Yup.ref('password')], 'Passwords must match'),
+    availableDays: Yup.array().min(1, 'Select at least one day').required('Available days are required'),
+    startHour: Yup.string().required('Start hour is required'),
+    endHour: Yup.string().required('End hour is required'),
+    drivingLicense: Yup.mixed().required('Driving license is required'),
+    licenseExpiredDate: Yup.string().required('License expired date is required'),
+    idCardImage: Yup.mixed().nullable(),
 });

@@ -18,6 +18,7 @@ import ManageRegions from './pages/Geography&Regions/manageRegions';
 import ManageAreas from './pages/Geography&Regions/manageAreas';
 import ManageVehicles from './pages/vehicles/ManageVehicles';
 import ManageServiceBoy from './pages/users&staff/ManageServiceBoy';
+import AddServiceBoy from './pages/users&staff/AddServiceBoy';
 
 function App() {
   const location = useLocation();
@@ -50,6 +51,7 @@ function App() {
             <Route path="/vehicles/manageVehicles" element={<ManageVehicles />} />
             <Route path="/users&staff/manageSubAdmin" element={<ManageSubAdmin />} />
             <Route path="/users&staff/manageServiceBoy" element={<ManageServiceBoy />} />
+            <Route path="/users&staff/manageServiceBoy/addServiceBoy" element={<AddServiceBoy />} />
             <Route path="/users&staff/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
             <Route path="/users&staff/manageUsersWallet" element={<UsersWallets />} />
             <Route path="/geography&regions/manageCountries" element={<ManageCountries />} />

@@ -50,7 +50,7 @@ const ManageSubAdmin = () => {
                     actionButtons={[
                         {
                             label: "Add Sub Admin",
-                            href: "/users&staff/manage/subAdmin/addSubAdmin",
+                            href: "/users&staff/subAdmin/addSubAdmin",
                             variant: "primary"
                         }
                     ]}
