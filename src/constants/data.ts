@@ -876,6 +876,27 @@ export const dummyColorData: any[] = [
     },
 ];
 
+export const dummyCarCategoryData: any[] = [
+    {
+        carCategoryImage: carImage,
+        englishCarCategoryName: 'SUV',
+        arabicCarCategoryName: 'SUV',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        carCategoryImage: carImage,
+        englishCarCategoryName: 'Sedan',
+        arabicCarCategoryName: 'Sedan',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        carCategoryImage: carImage,
+        englishCarCategoryName: 'Coupe',
+        arabicCarCategoryName: 'Coupe',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
 export const mainDetails: DetailRowProps[] = [
     {
         label: "ID", value: "9388546579",

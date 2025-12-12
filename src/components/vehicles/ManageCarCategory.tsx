@@ -1,14 +1,15 @@
-import { useState } from "react";
-import { FilterHeader } from "../../common/FilterHeader";
-import { CustomTable } from "../../common/CustomTable";
-import { GenericModal } from "../../common/GenericModal";
-import { Form, Formik } from "formik";
-import { Button } from "../ui/button";
-import { manageColorColumns } from "../../columns/manageColorColumns";
-import { dummyColorData } from "../../constants/data";
-import { FormInput } from "../../common/FormInput";
+import { useState } from 'react';
+import { FilterHeader } from '../../common/FilterHeader';
+import { CustomTable } from '../../common/CustomTable';
+import { GenericModal } from '../../common/GenericModal';
+import { Form, Formik } from 'formik';
+import { Button } from '../ui/button';
+import { FormInput } from '../../common/FormInput';
+import { dummyCarCategoryData } from '../../constants/data';
+import { manageCarCategoryColumns } from '../../columns/manageCarCategoryColumns';
+import FileUploader from '../../common/fileUploader';
 
-const ManageColor = () => {
+const ManageCarCategory = () => {
     const [openWindowAddAmount, setOpenWindowAddAmount] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
@@ -21,7 +22,7 @@ const ManageColor = () => {
         setCurrentPage(page);
     };
 
-    const totalEntries = dummyColorData.length;
+    const totalEntries = dummyCarCategoryData.length;
     const totalPages = Math.ceil(totalEntries / pageSize);
 
     return (
@@ -29,14 +30,14 @@ const ManageColor = () => {
 
             {/* Filter Section */}
             <FilterHeader
-                subtitle="Manage Color"
+                subtitle="Manage Car Category"
                 searchInitialValues={{ search: '' }}
                 onSearchSubmit={handleSearchSubmit}
                 filterInitialValues={{ search: '' }}
                 onFilterSubmit={(values) => console.log(values)}
                 actionButtons={[
                     {
-                        label: "Add Color",
+                        label: "Add Car Category",
                         onClick: () => setOpenWindowAddAmount(true),
                         variant: "primary"
                     }
@@ -46,8 +47,8 @@ const ManageColor = () => {
 
             {/* Table Section */}
             <CustomTable
-                columns={manageColorColumns}
-                data={dummyColorData}
+                columns={manageCarCategoryColumns}
+                data={dummyCarCategoryData}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}
@@ -58,12 +59,12 @@ const ManageColor = () => {
             <GenericModal
                 isOpen={openWindowAddAmount}
                 onClose={() => setOpenWindowAddAmount(false)}
-                title="Add Color"
+                title="Add Car Category"
             >
                 <Formik
                     initialValues={{
-                        colorCode: '',
-                        englishColorName: '',
+                        carCategoryImage: '',
+                        englishCarCategoryName: '',
                         arabicName: '',
                         image: null
                     }}
@@ -75,12 +76,6 @@ const ManageColor = () => {
                     {({ isSubmitting }) => (
                         <Form className="space-y-5">
                             <div className="grid grid-cols-1 gap-5">
-
-                                <FormInput
-                                    name="colorCode"
-                                    label="Color Code"
-                                    placeholder="Enter color code"
-                                />
                                 <FormInput
                                     name="englishName"
                                     label="Model Name (English)"
@@ -90,6 +85,10 @@ const ManageColor = () => {
                                     name="arabicName"
                                     label="Model Name (Arabic)"
                                     placeholder="Enter model name in Arabic"
+                                />
+                                <FileUploader
+                                    name="image"
+                                    title="Image Upload"
                                 />
                             </div>
 
@@ -118,4 +117,4 @@ const ManageColor = () => {
     );
 };
 
-export default ManageColor;
+export default ManageCarCategory;

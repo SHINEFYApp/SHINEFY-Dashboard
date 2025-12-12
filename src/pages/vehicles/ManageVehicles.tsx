@@ -1,4 +1,5 @@
 import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
+import ManageCarCategory from "../../components/vehicles/ManageCarCategory";
 import ManageColor from "../../components/vehicles/ManageColor";
 import ManageMake from "../../components/vehicles/ManageMake";
 import ManageModel from "../../components/vehicles/ManageModel";
@@ -23,6 +24,7 @@ const ManageVehicles = () => {
             {activeTab === 'manageMake' && <ManageMake />}
             {activeTab === 'manageModel' && <ManageModel />}
             {activeTab === 'manageColor' && <ManageColor />}
+            {activeTab === 'manageCarCategory' && <ManageCarCategory />}
         </main>
     );
 };
