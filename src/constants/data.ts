@@ -800,6 +800,44 @@ export const financeRows = [
     { label: "Grand Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" },
 ];
 
+export const dummyServiceBoyData: any[] = [
+    {
+        image: carImage,
+        name: 'Ahmed Ali',
+        phoneNumber: '+201001234567',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+    },
+    {
+        image: carImage,
+        name: 'Mohamed Hassan',
+        phoneNumber: '+201109876543',
+        registrationOn: '15-Oct-22 09:30 AM',
+        status: 'Deactivated',
+    },
+    {
+        image: carImage,
+        name: 'Youssef Ibrahim',
+        phoneNumber: '+201205555555',
+        registrationOn: '01-Jan-23 03:45 PM',
+        status: 'Activated',
+    },
+    {
+        image: carImage,
+        name: 'Omar Khaled',
+        phoneNumber: '+201501112222',
+        registrationOn: '10-Dec-22 11:20 AM',
+        status: 'Activated',
+    },
+    {
+        image: carImage,
+        name: 'Khaled Said',
+        phoneNumber: '+201004443333',
+        registrationOn: '05-Sep-22 08:15 AM',
+        status: 'Deactivated',
+    },
+];
+
 export const dummyMakeData: any[] = [
     {
         logo: carImage,

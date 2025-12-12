@@ -1,10 +1,16 @@
+import { useState } from "react";
 import { FormDropdown } from "../../common/FormDropdown";
-import { exportTypes, franchise } from "../../constants/data";
+import { exportTypes, franchise, dummyServiceBoyData } from "../../constants/data";
 import { manageServiceBoySearchInitialValues } from "../../constants/initialValues";
 import { FilterHeader } from "../../common/FilterHeader";
 import { FormDatePicker } from "../../common/FormDatePicker";
+import { CustomTable } from "../../common/CustomTable";
+import { manageServiceBoyColumns } from "../../columns/manageServiceBoyColumns";
 
 const ManageServiceBoy = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+
     const handleSearchSubmit = (values: any) => {
         console.log("Search values:", values);
     };
@@ -12,6 +18,13 @@ const ManageServiceBoy = () => {
     const handleFilterSubmit = (values: any) => {
         console.log("Filter values:", values);
     };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const totalEntries = dummyServiceBoyData.length;
+    const totalPages = Math.ceil(totalEntries / pageSize);
 
     return (
         <main>
@@ -50,13 +63,26 @@ const ManageServiceBoy = () => {
                     actionButtons={[
                         {
                             label: "Add Service Boy",
-                            href: "/users&staff/manage/subAdmin/addSubAdmin",
+                            href: "/users&staff/subAdmin/addSubAdmin",
                             variant: "primary"
                         }
                     ]}
                     showExport={true}
                     exportOptions={exportTypes}
                 />
+
+                {/* Table Section */}
+                <div className="mt-6">
+                    <CustomTable
+                        columns={manageServiceBoyColumns}
+                        data={dummyServiceBoyData}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        totalEntries={totalEntries}
+                        pageSize={pageSize}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
             </div>
         </main>
     );
