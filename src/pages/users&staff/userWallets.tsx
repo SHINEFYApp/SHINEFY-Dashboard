@@ -9,7 +9,7 @@ import { CustomTable } from "../../common/CustomTable";
 import { dummyUserWallets } from "../../constants/data";
 import { userWalletsColumns } from "../../columns/userWalletsColumns";
 import type { userWalletFormData } from "../../types/users&staff";
-import { FilterHeader } from "../../components/common/FilterHeader";
+import { FilterHeader } from "../../common/FilterHeader";
 
 
 export default function UsersWallets() {

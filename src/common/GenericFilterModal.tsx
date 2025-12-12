@@ -1,6 +1,6 @@
 import { Formik, Form } from "formik";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../components/ui/button";
 import type { ReactNode } from "react";
 
 interface GenericFilterModalProps {

@@ -6,7 +6,7 @@ import { CustomTable } from "../../../common/CustomTable";
 import { dummyTableData } from "../../../constants/data";
 import { getManageBookingColumns } from "../../../columns/manageBookingColumns";
 import { manageBookingSearchInitialValues, bookingFilterInitialValues } from "../../../constants/initialValues";
-import { FilterHeader } from "../../../components/common/FilterHeader";
+import { FilterHeader } from "../../../common/FilterHeader";
 import { FormDropdown } from "../../../common/FormDropdown";
 import { FormDatePicker } from "../../../common/FormDatePicker";
 import { FormTimePicker } from "../../../common/FormTimePicker";

@@ -11,7 +11,7 @@ import { CustomTable } from "../../common/CustomTable";
 import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
 import { useSearchParams } from "react-router";
 import { mainAreaColumns, subAreaColumns } from "../../columns/areaColumns";
-import { FilterHeader } from "../../components/common/FilterHeader";
+import { FilterHeader } from "../../common/FilterHeader";
 
 const validTabs = ['mainArea', 'subArea'];
 

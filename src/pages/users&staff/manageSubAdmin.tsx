@@ -3,7 +3,7 @@ import { FormDropdown } from "../../common/FormDropdown";
 import { exportTypes } from "../../constants/data";
 import { manageSubAdminColumns } from "../../columns/manageSubAdminColumns";
 import { manageSubAdminSearchInitialValues } from "../../constants/initialValues";
-import { FilterHeader } from "../../components/common/FilterHeader";
+import { FilterHeader } from "../../common/FilterHeader";
 import { CustomTable } from "../../common/CustomTable";
 import { dummyManageSubAdmins } from "../../constants/data";
 

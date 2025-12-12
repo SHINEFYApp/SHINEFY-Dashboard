@@ -32,9 +32,9 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Vehicles',
         breadcrumbs: ['Vehicles', 'Add']
     },
-    '/vehicles/manage': {
+    '/vehicles/manageVehicles': {
         title: 'Vehicles',
-        breadcrumbs: ['Vehicles', 'Manage']
+        breadcrumbs: ['Vehicles', 'Manage Vehicles']
     },
     '/users&staff/manageUsers': {
         title: 'Users & Stuff',
@@ -107,7 +107,7 @@ export const sidebarMenuItems = [
             },
             {
                 label: 'Manage Vehicle',
-                path: '/vehicles/manage'
+                path: '/vehicles/manageVehicles'
             }
         ],
     },
@@ -800,6 +800,34 @@ export const financeRows = [
     { label: "Grand Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" },
 ];
 
+// Example for manage make
+export const dummyMakeData: any[] = [
+    {
+        logo: carImage,
+        englishName: 'Porsche',
+        arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        logo: carImage,
+        englishName: 'BMW',
+        arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        logo: carImage,
+        englishName: 'Mercedes',
+        arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        logo: carImage,
+        englishName: 'Audi',
+        arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
 export const mainDetails: DetailRowProps[] = [
     {
         label: "ID", value: "9388546579",
@@ -875,3 +903,10 @@ export const manageSlotsTabs = [
 
 export const franchise = ['Franchise one', 'Franchise two', 'Franchise three'];
 export const exportTypes = ['CSV', 'Excel', 'PDF'];
+
+export const manageVehiclesTabs = [
+    { id: 'manageMake', label: 'Manage Make' },
+    { id: 'manageModel', label: 'Manage Model' },
+    { id: 'manageColor', label: 'Manage Color' },
+    { id: 'manageCarCategory', label: 'Manage Car Category' },
+];

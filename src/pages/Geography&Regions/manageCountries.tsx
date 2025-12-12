@@ -8,7 +8,7 @@ import FileUploader from "../../common/fileUploader";
 import { CustomTable } from "../../common/CustomTable";
 import { dummyCountries, exportTypes } from "../../constants/data";
 import { countriesColumns } from "../../columns/countriesColumns";
-import { FilterHeader } from "../../components/common/FilterHeader";
+import { FilterHeader } from "../../common/FilterHeader";
 
 export default function ManageCountries() {
     const [openWindowAddNewCountry, setOpenWindowAddNewCountry] = useState<boolean>();

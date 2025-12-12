@@ -9,7 +9,7 @@ import { dummyCountries, dummyRegions, exportTypes } from "../../constants/data"
 import { TextArea } from "../../common/textArea";
 import { CustomTable } from "../../common/CustomTable";
 import { regionsColumns } from "../../columns/regionsColumns";
-import { FilterHeader } from "../../components/common/FilterHeader";
+import { FilterHeader } from "../../common/FilterHeader";
 
 export default function ManageRegions() {
     const [openWindowAddNewRegions, setOpenWindowAddNewRegions] = useState<boolean>();

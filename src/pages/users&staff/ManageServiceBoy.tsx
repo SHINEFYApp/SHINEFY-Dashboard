@@ -1,7 +1,7 @@
 import { FormDropdown } from "../../common/FormDropdown";
 import { exportTypes, franchise } from "../../constants/data";
 import { manageServiceBoySearchInitialValues } from "../../constants/initialValues";
-import { FilterHeader } from "../../components/common/FilterHeader";
+import { FilterHeader } from "../../common/FilterHeader";
 import { FormDatePicker } from "../../common/FormDatePicker";
 
 const ManageServiceBoy = () => {

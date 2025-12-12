@@ -1,0 +1,25 @@
+import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
+import ManageMake from "../../components/vehicles/ManageMake";
+import { manageVehiclesTabs } from "../../constants/data";
+import { useState } from "react";
+const ManageVehicles = () => {
+    const [activeTab, setActiveTab] = useState('manageMake');
+
+    const handleTabChange = (tab: string) => {
+        setActiveTab(tab);
+    };
+
+    return (
+        <main className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl space-y-6">
+            <AnimatedTabs
+                tabs={manageVehiclesTabs}
+                activeTab={activeTab}
+                onTabChange={handleTabChange}
+            />
+
+            {activeTab === 'manageMake' && <ManageMake />}
+        </main>
+    );
+};
+
+export default ManageVehicles;

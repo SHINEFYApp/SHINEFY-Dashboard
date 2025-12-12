@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { FormInput } from "../../common/FormInput";
-import { FormDropdown } from "../../common/FormDropdown";
+import { FormInput } from "./FormInput";
+import { FormDropdown } from "./FormDropdown";
 import { GenericFilterModal } from "./GenericFilterModal";
 import type { ReactNode } from "react";
 

@@ -5,7 +5,7 @@ import { FormDatePicker } from "../../../common/FormDatePicker";
 import { dummySlotTableData } from "../../../constants/data";
 import { manageSlotsColumns } from "../../../columns/manageSlotsColumns";
 import { manageSlotsSearchInitialValues } from "../../../constants/initialValues";
-import { FilterHeader } from "../../../components/common/FilterHeader";
+import { FilterHeader } from "../../../common/FilterHeader";
 
 const types = ['type one', 'type two', 'type three'];
 const status = ['Open', 'Closed'];
