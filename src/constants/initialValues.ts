@@ -1,3 +1,5 @@
+import type { ReportFilters } from "../types/bookings";
+
 export const manageSlotInitialValues = {
     startDate: '',
     startTime: '',
@@ -21,6 +23,7 @@ export const servicesStep2InitialValues = {
     mainService: '',
     mainPackage: '',
     serviceBoy: '',
+    extraServices: [],
 };
 
 export const servicesStep3InitialValues = {
@@ -45,17 +48,17 @@ export const addCountry = {
 };
 
 export const araeForms = {
-    country : '',
-    area: [] ,
-    regions : '',
-    areaName : '',
-    subAreaName : '',
-}
+    country: '',
+    area: [],
+    regions: '',
+    areaName: '',
+    subAreaName: '',
+};
 
 export const addRegions = {
-    country : '' ,
-    name : '' ,
-    description : ''
+    country: '',
+    name: '',
+    description: ''
 };
 
 export const mangeServiceInitialValues = {
@@ -87,43 +90,4 @@ export const addVehicleInitialValues = {
     make: '',
     model: '',
     color: '',
-};
-
-export const addExtraServiceInitialValues = {
-    extraServiceNameEnglish: "",
-    extarServicePrice: "",
-    serviceNameArabic: "",
-    extraServiceDiscount: "",
-    extarServiceTime: "",
-    englishServiceDescription: "",
-    extraArabicServiceDescription: "",
-    Date: "",
-    Time: "",
-} 
-
-export const addCouponInitialValues = {
-    user: "",
-    couponAnount: "",
-    couponCode: "",
-    discount: "",
-    services: "",
-    startDate: "",
-    startTime: "",
-    useCount: "",
-    endDate: "",
-    endTime: ""
-};
-
-export const addProductInitialValues = {
-    category: "",
-    englishName: "",
-    arabicName: "",
-    englishDescription: "",
-    arabicDescription: "",
-    price: "",
-};
-export const addCategoryInitialValues = {
-    englishName: "",
-    arabicName: "",
-    price: "",
 };

@@ -36,37 +36,37 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Vehicles',
         breadcrumbs: ['Vehicles', 'Manage']
     },
-    '/users&staff/manage/users': {
+    '/users&staff/manageUsers': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Users']
+        breadcrumbs: ['Users & Stuff', 'Manage Users']
     },
-    '/users&staff/manage/subAdmin': {
+    '/users&staff/manageSubAdmin': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin']
+        breadcrumbs: ['Users & Stuff', 'Manage Sub Admin']
     },
-    '/users&staff/manage/serviceBoy': {
+    '/users&staff/manageServiceBoy': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Service Boy']
+        breadcrumbs: ['Users & Stuff', 'Manage Service Boy']
     },
-    '/users&staff/manage/usersWallet': {
+    '/users&staff/manageUsersWallet': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Users Wallet']
+        breadcrumbs: ['Users & Stuff', 'Manage Users Wallet']
     },
-    '/users&staff/manage/subAdmin/addSubAdmin': {
+    '/users&staff/subAdmin/addSubAdmin': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin', 'Add']
-    }, 
-    '/geography&regions/manage/countries': {
+        breadcrumbs: ['Users & Stuff', 'Manage Sub Admin', 'Add']
+    },
+    '/geography&regions/manageCountries': {
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Countries']
     },
-    '/geography&regions/manage/regions': {
+    '/geography&regions/manageRegions': {
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Regions']
     },
-    '/geography&regions/manage/area': {
+    '/geography&regions/manageAreas': {
         title: 'Geography & Regions',
-        breadcrumbs: ['Geography & Regions', 'Manage Area']
+        breadcrumbs: ['Geography & Regions', 'Manage Areas']
     },
     '/services&extra/manage/Service': {
         title: 'Services & Extra',
@@ -113,6 +113,91 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         breadcrumbs: ['Products & Orders', 'Manage Orders']
     },
 };
+
+// Sidebar menu configuration
+export const sidebarMenuItems = [
+    {
+        iconName: 'LayoutDashboard',
+        label: 'Dashboard',
+        path: '/',
+    },
+    {
+        iconName: 'Calendar',
+        label: 'Bookings',
+        pathPrefix: '/bookings',
+        subItems: [
+            {
+                label: 'Create Booking',
+                path: '/bookings/create'
+            },
+            {
+                label: 'Manage Bookings',
+                path: '/bookings/manage'
+            },
+            {
+                label: 'Manage Slot',
+                path: '/bookings/slot'
+            },
+        ],
+    },
+    {
+        iconName: 'CarFront',
+        label: 'Vehicles',
+        pathPrefix: '/vehicles',
+        subItems: [
+            {
+                label: 'Add Vehicle',
+                path: '/vehicles/add'
+            },
+            {
+                label: 'Manage Vehicle',
+                path: '/vehicles/manage'
+            }
+        ],
+    },
+    {
+        iconName: 'Users',
+        label: 'Users & Staff',
+        pathPrefix: '/users&staff',
+        subItems: [
+            {
+                label: 'Manage Users',
+                path: '/users&staff/manageUsers'
+            },
+            {
+                label: 'Manage Sub Admin',
+                path: '/users&staff/manageSubAdmin'
+            },
+            {
+                label: 'Manage Service Boy',
+                path: '/users&staff/manageServiceBoy'
+            },
+            {
+                label: 'Manage Users Wallet',
+                path: '/users&staff/manageUsersWallet'
+            }
+        ],
+    },
+    {
+        iconName: 'Map',
+        label: 'Geography & Regions',
+        pathPrefix: '/geography&regions',
+        subItems: [
+            {
+                label: 'Manage Countries',
+                path: '/geography&regions/manageCountries'
+            },
+            {
+                label: 'Manage Regions',
+                path: '/geography&regions/manageRegions'
+            },
+            {
+                label: 'Manage Area',
+                path: '/geography&regions/manageAreas'
+            }
+        ],
+    },
+];
 
 export const createBookingTabs = [
     { id: 'services', label: 'Services Booking' },
@@ -549,22 +634,22 @@ export const dummyUserWallets: any[] = [
 
 export const dummyCountries: any[] = [
     {
-        flag: EGYPT ,
+        flag: EGYPT,
         name: 'Egypt',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
-        flag: UAE ,
+        flag: UAE,
         name: 'United Arab Emirates',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
-        flag: KWU ,
+        flag: KWU,
         name: 'Kuwait',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
-        flag: KSA ,
+        flag: KSA,
         name: 'Saudi Arabia',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
@@ -642,25 +727,25 @@ export const dummyExtraService: any[] = [
 export const dummyRegions: any[] = [
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'Cairo',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'New Cairo',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : KSA ,
-            title : 'Saudi Arabia'
-        } ,
+            flag: KSA,
+            title: 'Saudi Arabia'
+        },
         regions: 'Riyadh',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
@@ -671,33 +756,33 @@ export const dummyRegions: any[] = [
 export const dummyMainArea: any[] = [
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'Cairo',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'El Shrouk',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'New Cairo',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : KSA ,
-            title : 'Saudi Arabia'
-        } ,
+            flag: KSA,
+            title: 'Saudi Arabia'
+        },
         regions: 'Riyadh',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
@@ -707,17 +792,17 @@ export const dummyMainArea: any[] = [
 export const dummySubArea: any[] = [
     {
         mainAreaName: {
-            flag : EGYPT ,
-            title : 'El Shrouk'
-        } ,
+            flag: EGYPT,
+            title: 'El Shrouk'
+        },
         areaName: 'Future City',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         mainAreaName: {
-            flag : EGYPT ,
-            title : 'El Shekh Zayed'
-        } ,
+            flag: EGYPT,
+            title: 'El Shekh Zayed'
+        },
         areaName: 'El Shekh Zayed',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
@@ -1058,7 +1143,6 @@ export const dummyOrders: any[] = [
     },
 ];
 
-//drop down with multi selections and options
 
 export const menus: MenuType[] = [
     {
@@ -1238,3 +1322,6 @@ export const manageSlotsTabs = [
     { id: 'manageDailySlot', label: 'Manage Daily Slot' },
     { id: 'manageFreeBooking', label: 'Manage Free Booking' },
 ];
+
+export const franchise = ['Franchise one', 'Franchise two', 'Franchise three'];
+export const exportTypes = ['CSV', 'Excel', 'PDF'];

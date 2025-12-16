@@ -1,9 +1,8 @@
 import type { FC } from 'react';
 import { useField } from 'formik';
 import { cn } from '../utils/utils';
-import { IoCheckmarkCircle, IoChevronDown } from 'react-icons/io5';
 import type { FormDropdownProps } from '../types/common';
-import { dummyCountries } from '../constants/data';
+import { ChevronDown, CircleCheck } from 'lucide-react';
 
 export const FormDropdown: FC<FormDropdownProps> = ({
     name,
@@ -53,11 +52,11 @@ export const FormDropdown: FC<FormDropdownProps> = ({
                         {placeholder || 'Select an option'}
                     </option>
                     {options.map((option) => (
-                        typeof option === "object" ? 
-                            <option key={option.name} value={option.name }>
+                        typeof option === "object" ?
+                            <option key={option.name} value={option.name}>
                                 {option.name}
                             </option>
-                        : 
+                            :
                             <option key={option} value={option}>
                                 {option}
                             </option>
@@ -67,9 +66,9 @@ export const FormDropdown: FC<FormDropdownProps> = ({
                 {/* Chevron or checkmark */}
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                     {isValid ? (
-                        <IoCheckmarkCircle className="w-5 h-5 text-green-500 animate-scale-up" />
+                        <CircleCheck className="w-5 h-5 text-green-500 animate-scale-up" />
                     ) : (
-                        <IoChevronDown className="w-5 h-5 text-gray-400" />
+                        <ChevronDown className="w-5 h-5 text-gray-400" />
                     )}
                 </div>
             </div>
