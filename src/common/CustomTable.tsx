@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+import { dummyCountries } from "../constants/data";
 import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
@@ -13,6 +15,9 @@ export function CustomTable<T extends Record<string, any>>({
     onPageChange,
     isLoading = false,
 }: TableProps<T>) {
+
+    const navigate = useNavigate();
+
     return (
         <div className="w-full bg-white rounded-lg border border-[#cfcfcf] overflow-hidden">
             {/* Table Container */}
@@ -67,8 +72,8 @@ export function CustomTable<T extends Record<string, any>>({
                                             key={column.key}
                                             className={cn(
                                                 "px-6 py-4 text-sm text-gray-600",
-                                                (row[column.key] === 'Close' || row[column.key] === 'Deactivated') && 'text-red-600 font-bold text-[15px]',
-                                                (row[column.key] === 'Open' || row[column.key] === 'Activated') && 'text-green-600 font-bold text-[15px]',
+                                              (row[column.key] === 'Close' || row[column.key] === 'Deactivated') && 'text-red-600 font-bold text-[15px]' ,
+                                              (row[column.key] === 'Open' || row[column.key] === 'Activated') && 'text-green-600 font-bold text-[15px]' ,
                                                 colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
                                             )}
                                         >
@@ -89,6 +94,17 @@ export function CustomTable<T extends Record<string, any>>({
                                                     :
                                                     row[column.key]
                                             }
+                                            
+                                            {column.navigate &&
+                                                <button
+                                                    className="text-primary hover:text-primary-700 font-semibold transition-colors"
+                                                    onClick={() => {
+                                                        navigate('/bookings/manage/id');
+                                                    }}
+                                                >
+                                                    View Details
+                                                </button> 
+                                            }
                                         </td>
                                     ))}
                                 </tr>
@@ -99,7 +115,7 @@ export function CustomTable<T extends Record<string, any>>({
             </div>
 
             {/* Pagination */}
-            {!isLoading && data.length > 0 && page !== 'countries' && page !== 'regions' && page !== 'area' && (
+            {!isLoading && data.length > 0 && page !== 'countries' && page !== 'regions' && page !== 'area' && page !== 'service' && (
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

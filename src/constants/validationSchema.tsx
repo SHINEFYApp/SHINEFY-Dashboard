@@ -113,6 +113,92 @@ export const addRegionsSchema = Yup.object().shape({
 });
 
 
+export const manageServiceValidationSchema = Yup.object({
+    serviceNameEnglish: Yup.string()
+        .required("Service Name (English) is required")
+        .min(3, "Must be at least 3 characters"),
+
+    serviceLabelEnglish: Yup.string()
+        .required("Service Label (English) is required"),
+
+    serviceNameArabic: Yup.string()
+        .required("Service Name (Arabic) is required"),
+
+    serviceLabelArabic: Yup.string()
+        .required("Service Label (Arabic) is required"),
+
+    servicePrice: Yup.number()
+        .typeError("Price must be a number")
+        .required("Service price is required")
+        .min(1, "Price must be greater than 0"),
+
+    serviceTime: Yup.number()
+        .typeError("Time must be a number")
+        .required("Service time is required")
+        .min(1, "Time must be greater than 0"),
+
+    serviceDiscount: Yup.number()
+        .typeError("Discount must be a number")
+        .min(0, "Minimum discount is 0")
+        .max(100, "Maximum discount is 100")
+        .required("Service discount is required"),
+
+    engishServiceDescription: Yup.string()
+        .required("English description is required")
+        .min(10, "Description must be at least 10 characters"),
+
+    arabicServiceDescription: Yup.string()
+        .required("Arabic description is required")
+        .min(10, "Description must be at least 10 characters"),
+
+    Date: Yup.date()
+        .required("Date is required"),
+
+    Time: Yup.string()
+        .required("Time is required"),
+});
+
+
+export const addExtraServiceValidationSchema = Yup.object({
+  extraServiceNameEnglish: Yup.string()
+    .required("Extra service name (English) is required")
+    .min(3, "Minimum 3 characters"),
+
+  extarServicePrice: Yup.number()
+    .typeError("Price must be a number")
+    .required("Price is required")
+    .min(1, "Price must be greater than 0"),
+
+  serviceNameArabic: Yup.string()
+    .required("Extra service name (Arabic) is required")
+    .min(3, "Minimum 3 characters"),
+
+  extraServiceDiscount: Yup.number()
+    .typeError("Discount must be a number")
+    .min(0, "Minimum discount is 0")
+    .max(100, "Maximum discount is 100")
+    .required("Service discount is required"),
+
+  extarServiceTime: Yup.number()
+    .typeError("Time must be a number")
+    .required("Extra service time is required")
+    .min(1, "Time must be greater than 0"),
+
+  englishServiceDescription: Yup.string()
+    .required("English description is required")
+    .min(10, "Minimum 10 characters"),
+
+  extraArabicServiceDescription: Yup.string()
+    .required("Arabic description is required")
+    .min(10, "Minimum 10 characters"),
+
+  Date: Yup.date()
+    .required("Date is required"),
+
+  Time: Yup.string()
+    .required("Time is required"),
+});
+
 export const addSubAdminSchema = Yup.object({
     name: Yup.string().required('the name is required'),
     phoneNumber: Yup.string().matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits').required('Phone number is required'),
@@ -137,4 +223,87 @@ export const addVehicleSchema = Yup.object({
     make: Yup.string().required('the make is required'),
     model: Yup.string().required('the model is required'),
     color: Yup.string().required('the color is required'),
+});
+
+
+export const addCouponValidationSchema = Yup.object({
+    user: Yup.string().required("User is required"),
+
+    couponAnount: Yup.number()
+        .typeError("Amount must be a number")
+        .positive("Amount must be positive")
+        .required("Coupon amount is required"),
+
+    couponCode: Yup.string()
+        .min(3, "Coupon code must be at least 3 characters")
+        .required("Coupon code is required"),
+
+    discount: Yup.number()
+        .typeError("Discount must be a number")
+        .min(1, "Minimum discount is 1%")
+        .max(100, "Maximum discount is 100%")
+        .required("Discount is required"),
+
+    services: Yup.string().required("Service is required"),
+
+    startDate: Yup.date()
+        .typeError("Start date is invalid")
+        .required("Start date is required"),
+
+    startTime: Yup.string()
+        .required("Start time is required"),
+
+    useCount: Yup.number()
+        .typeError("Use count must be a number")
+        .integer("Use count must be an integer")
+        .min(1, "Minimum is 1")
+        .required("Use count is required"),
+
+    endDate: Yup.date()
+        .typeError("End date is invalid")
+        .min(
+            Yup.ref("startDate"),
+            "End date cannot be before start date"
+        )
+        .required("End date is required"),
+
+    endTime: Yup.string()
+        .required("End time is required"),
+});
+
+
+export const addProductValidationSchema = Yup.object({
+    category: Yup.string()
+        .required("Category is required"),
+
+    englishName: Yup.string()
+        .min(2, "English name must be at least 2 characters")
+        .required("English name is required"),
+
+    arabicName: Yup.string()
+        .min(2, "Arabic name must be at least 2 characters")
+        .required("Arabic name is required"),
+
+    englishDescription: Yup.string()
+        .min(5, "Description is too short")
+        .required("English description is required"),
+
+    arabicDescription: Yup.string()
+        .min(5, "Description is too short")
+        .required("Arabic description is required"),
+
+    price: Yup.number()
+        .typeError("Price must be a number")
+        .positive("Price must be a positive number")
+        .required("Price is required"),
+});
+
+export const addCategoryValidationSchema = Yup.object({
+    englishName: Yup.string()
+        .min(2, "English name must be at least 2 characters")
+        .required("English name is required"),
+
+    arabicName: Yup.string()
+        .min(2, "Arabic name must be at least 2 characters")
+        .required("Arabic name is required"),
 });

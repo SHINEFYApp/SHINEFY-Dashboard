@@ -1,4 +1,3 @@
-import type { ReportFilters } from "../types/bookings";
 
 export const manageSlotInitialValues = {
     startDate: '',
@@ -61,6 +60,21 @@ export const addRegions = {
     description: ''
 };
 
+export const mangeServiceInitialValues = {
+    serviceNameEnglish: "",
+    serviceLabelEnglish: "",
+    serviceNameArabic: "",
+    serviceLabelArabic: "",
+    servicePrice: "",
+    serviceTime: "",
+    serviceDiscount: "",
+    engishServiceDescription: "",
+    arabicServiceDescription: "",
+    Date: null,
+    Time: null,
+};
+
+
 export const addSubAdminInitialValues = {
     name: '',
     phoneNumber: '',
@@ -76,39 +90,3 @@ export const addVehicleInitialValues = {
     model: '',
     color: '',
 };
-
-export const CompletedBookingChartInitialValues: ReportFilters = {
-    status: "",
-    startDate: "",
-    endDate: "",
-};
-
-export const RatedReportsChartInitialValues: ReportFilters = {
-    status: "",
-    startDate: "",
-    endDate: "",
-};
-
-export const manageSlotsSearchInitialValues = { type: "", status: "", date: "" };
-
-export const manageBookingSearchInitialValues = { search: "", date: "" };
-
-export const manageSubAdminSearchInitialValues = { search: '', franchise: '' };
-
-export const manageServiceBoySearchInitialValues = { search: '', franchise: '', status: '', export: '' };
-
-export const bookingFilterInitialValues = {
-    status: '',
-    service_boy: '',
-    address: '',
-    bookingNumber: '',
-    customerName: '',
-    serviceBoyName: '',
-    paymentMethod: '',
-    date: '',
-    time: '',
-    dateFrom: '',
-    dateTo: '',
-};
-
-
