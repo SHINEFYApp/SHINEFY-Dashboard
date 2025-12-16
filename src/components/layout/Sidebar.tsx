@@ -4,9 +4,8 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { CarFront, Map, Users } from 'lucide-react';
+import { Calendar, CarFront, ChevronDown, ChevronRight, LayoutDashboard, Map, Users } from 'lucide-react';
 import { Link } from 'react-router';
-import { sidebarMenuItems } from '../../constants/data';
 
 // Icon mapping
 const iconMap: Record<string, React.ReactNode> = {
@@ -38,12 +37,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
 
     const menuItems: MenuItem[] = [
         {
-            icon: <MdDashboard className="w-5 h-5" />,
+            icon: iconMap.LayoutDashboard,
             label: 'Dashboard',
             path: '/',
         },
         {
-            icon: <BsCalendarEvent className="w-5 h-5" />,
+            icon: iconMap.Calendar,
             label: 'Bookings',
             isActive: currentPath?.startsWith('/bookings'),
             subItems: [
@@ -65,7 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             ],
         },
         {
-            icon: <CarFront className="w-5 h-5" />,
+            icon: iconMap.CarFront,
             label: 'Vehicles',
             isActive: currentPath?.startsWith('/vehicles'),
             subItems: [
@@ -82,7 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             ],
         },
         {
-            icon: <Users className="w-5 h-5" />,
+            icon: iconMap.Users,
             label: 'Users & Staff',
             isActive: currentPath?.startsWith('/users&staff/manage'),
             subItems: [
@@ -108,7 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 }
             ],
         }, {
-            icon: <Map className="w-5 h-5" />,
+            icon: iconMap.Map,
             label: 'Geography & Regions',
             isActive: currentPath?.startsWith('/geography&regions/manage'),
             subItems: [

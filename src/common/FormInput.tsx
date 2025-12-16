@@ -70,7 +70,7 @@ export const FormInput: FC<FormInputProps> = ({
                 {/* Success checkmark */}
                 {isValid && checkmark && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 animate-scale-up">
-                        <IoCheckmarkCircle className="w-5 h-5 text-green-500" />
+                        <CircleCheck className="w-5 h-5 text-green-500" />
                     </div>
                 )}
 

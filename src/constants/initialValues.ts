@@ -1,4 +1,3 @@
-import type { ReportFilters } from "../types/bookings";
 
 export const manageSlotInitialValues = {
     startDate: '',

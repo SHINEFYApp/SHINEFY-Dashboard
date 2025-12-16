@@ -209,7 +209,6 @@ export const manageAreaTabs = [
     { id: 'subArea', label: 'Manage Sub Area' },
 ];
 
-export const exportTypes = ['CSV', 'Excel', 'PDF'];
 
 
 export const createBookingSteps = [
