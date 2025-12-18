@@ -25,6 +25,8 @@ import ManageVehicles from './pages/vehicles/ManageVehicles';
 import AddServiceBoy from './pages/users&staff/AddServiceBoy';
 import ServiceBoyDetails from './pages/users&staff/ServiceBoyDetails';
 import ManageUsers from './pages/users&staff/ManageUsers';
+import ManageServiceBoy from './pages/users&staff/ManageServiceBoy';
+import AddCoupon from './pages/services&extra/manageCoupon/addCoupon';
 
 function App() {
   const location = useLocation();
@@ -63,18 +65,20 @@ function App() {
               <Route path="/services&extras/manage/Service" element={<ManageService />} />
               <Route path="/services&extras/manage/Service/addService" element={<AddService />} />
               <Route path="/services&extras/manage/ExtreService" element={<ManageExtraService />} />
-              <Route path="/services&extras/manage/Service/addExtraService" element={<AddExtraService />} />
+              <Route path="/services&extra/manage/extreService/addExtraService" element={<AddExtraService />} />
               <Route path="/services&extras/manage/coupon" element={<ManageCoupon />} />
-            <Route path="/vehicles/manageVehicles" element={<ManageVehicles />} />
-            <Route path="/users&staff/manageUsers" element={<ManageUsers />} />
-            <Route path="/users&staff/manageSubAdmin" element={<ManageSubAdmin />} />
-            <Route path="/users&staff/manageServiceBoy/:id" element={<ServiceBoyDetails />} />
-            <Route path="/users&staff/manageServiceBoy/addServiceBoy" element={<AddServiceBoy />} />
-            <Route path="/users&staff/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
-            <Route path="/users&staff/manageUsersWallet" element={<UsersWallets />} />
-            <Route path="/geography&regions/manageCountries" element={<ManageCountries />} />
-            <Route path="/geography&regions/manageRegions" element={<ManageRegions />} />
-            <Route path="/geography&regions/manageAreas" element={<ManageAreas />} />
+              <Route path="/services&extra/manage/coupon/addCoupon" element={<AddCoupon />} />
+            <Route path="/vehicles/manage" element={<ManageVehicles />} />
+            <Route path="/users&staff/manage/users" element={<ManageUsers />} />
+            <Route path="/users&staff/manage/subAdmin" element={<ManageSubAdmin />} />
+              <Route path="/users&staff/manage/serviceBoy" element={<ManageServiceBoy />} />
+            <Route path="/users&staff/manage/serviceBoy/:id" element={<ServiceBoyDetails />} />
+            <Route path="/users&staff/manage/serviceBoy/addServiceBoy" element={<AddServiceBoy />} />
+            <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
+            <Route path="/users&staff/manage/usersWallet" element={<UsersWallets />} />
+            <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
+            <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
+            <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
           </Routes>
         </Layout>
       )}

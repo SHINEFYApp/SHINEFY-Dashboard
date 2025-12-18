@@ -60,17 +60,9 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Users & Stuff',
         breadcrumbs: ['Users & Stuff', 'Manage Service Boy', 'Service Boy Details']
     },
-    '/users&staff/manageServiceBoy/addServiceBoy': {
+    '/users&staff/manage/serviceBoy/addServiceBoy': {
         title: 'Users & Stuff',
         breadcrumbs: ['Users & Stuff', 'Manage Service Boy', 'Add Service Boy']
-    },
-    '/users&staff/manage/usersWallet': {
-        title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Users Wallet']
-    },
-    '/users&staff/manage/subAdmin/addSubAdmin': {
-        title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin', 'Add']
     },
     '/geography&regions/manage/countries': {
         title: 'Geography & Regions',
@@ -130,8 +122,7 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     },
 };
 
-    },
-};
+
 
 // Sidebar menu configuration
 export const sidebarMenuItems = [

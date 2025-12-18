@@ -1,3 +1,5 @@
+import type { ReportFilters } from "../types/bookings";
+
 export const manageSlotInitialValues = {
     startDate: '',
     startTime: '',
@@ -50,7 +52,7 @@ export const araeForms = {
     regions: '',
     areaName: '',
     subAreaName: '',
-}
+};
 
 export const addRegions = {
     country: '',
@@ -87,6 +89,53 @@ export const addVehicleInitialValues = {
     make: '',
     model: '',
     color: '',
+};
+
+export const CompletedBookingChartInitialValues: ReportFilters = {
+    status: "",
+    startDate: "",
+    endDate: "",
+};
+
+export const RatedReportsChartInitialValues: ReportFilters = {
+    status: "",
+    startDate: "",
+    endDate: "",
+};
+
+export const manageSlotsSearchInitialValues = { type: "", status: "", date: "" };
+
+export const manageBookingSearchInitialValues = { search: "", date: "" };
+
+export const manageSubAdminSearchInitialValues = { search: '', franchise: '' };
+
+export const manageServiceBoySearchInitialValues = { search: '', franchise: '', status: '', export: '' };
+
+export const bookingFilterInitialValues = {
+    status: '',
+    service_boy: '',
+    address: '',
+    bookingNumber: '',
+    customerName: '',
+    serviceBoyName: '',
+    paymentMethod: '',
+    date: '',
+    time: '',
+    dateFrom: '',
+    dateTo: '',
+};
+
+export const addServiceBoyInitialValues = {
+    name: '',
+    phoneNumber: '',
+    password: '',
+    confirmPassword: '',
+    availableDays: [],
+    startHour: '',
+    endHour: '',
+    drivingLicense: null,
+    licenseExpiredDate: '',
+    idCardImage: null,
 };
 
 export const addExtraServiceInitialValues = {
@@ -126,17 +175,4 @@ export const addCategoryInitialValues = {
     englishName: "",
     arabicName: "",
     price: "",
-};
-
-export const addServiceBoyInitialValues = {
-    name: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: '',
-    availableDays: [],
-    startHour: '',
-    endHour: '',
-    drivingLicense: null,
-    licenseExpiredDate: '',
-    idCardImage: null,
 };
