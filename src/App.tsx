@@ -32,6 +32,7 @@ import AddProduct from './pages/productsAndOrders/subPages/addProducts';
 import AddCategory from './pages/productsAndOrders/subPages/addCategory';
 import ManageOrders from './pages/productsAndOrders/manageOrders';
 import ManageVat from './pages/Financial & Points/manageVat';
+import ManageDriverCommission from './pages/Financial & Points/manageDriverCommission';
 
 function App() {
   const location = useLocation();
@@ -89,6 +90,7 @@ function App() {
             <Route path="/products&orders/manage/Products/addGategory" element={<AddCategory />} />
             <Route path="/products&orders/manage/Orders" element={<ManageOrders />} />
             <Route path="/financial&points/manage/Vat" element={<ManageVat />} />
+            <Route path="/financial&points/manage/driverCommission" element={<ManageDriverCommission />} />
           </Routes>
         </Layout>
       )}
