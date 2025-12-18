@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import Table from "../../components/tables/table";
-import { FormDropdown } from "../../common/FormDropdown";
 import { Form, Formik } from "formik";
 import { Button } from "../../components/ui/button";
 import { userWalletSchema } from "../../constants/validationSchema";
 import { userWalletInitialValues } from "../../constants/initialValues";
 import { FormInput } from "../../common/FormInput";
+import { FormDropdown } from "../../common/FormDropdown";
+import { CustomTable } from "../../common/CustomTable";
+import { dummyUserWallets } from "../../constants/data";
+import { FilterHeader } from "../../common/FilterHeader";
 import type { userWalletFormData } from "../../types/forms";
 
 export default function UsersWallets() {
     const [openWindowAddAmount, setOpenWindowAddAmount] = useState<boolean>();
     const [currentBayMethod, setCurrentBayMethod] = useState<string>('Credit');
     
+
     const [formData, setFormData] = useState<userWalletFormData>({
         user: '',
         amount: '',

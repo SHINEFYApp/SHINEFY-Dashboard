@@ -32,9 +32,9 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Vehicles',
         breadcrumbs: ['Vehicles', 'Add']
     },
-    '/vehicles/manage': {
+    '/vehicles/manageVehicles': {
         title: 'Vehicles',
-        breadcrumbs: ['Vehicles', 'Manage']
+        breadcrumbs: ['Vehicles', 'Manage Vehicles']
     },
     '/users&staff/manage/users': {
         title: 'Users & Stuff',
@@ -47,6 +47,22 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/users&staff/manage/serviceBoy': {
         title: 'Users & Stuff',
         breadcrumbs: ['Users & Stuff', 'Manage', 'Service Boy']
+    },
+    '/users&staff/manage/usersWallet': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Users Wallet']
+    },
+    '/users&staff/manage/subAdmin/addSubAdmin': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin', 'Add']
+    },
+    '/users&staff/manageServiceBoy/:id': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage Service Boy', 'Service Boy Details']
+    },
+    '/users&staff/manageServiceBoy/addServiceBoy': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage Service Boy', 'Add Service Boy']
     },
     '/users&staff/manage/usersWallet': {
         title: 'Users & Stuff',
@@ -113,6 +129,94 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         breadcrumbs: ['Products & Orders', 'Manage Orders']
     },
 };
+
+    },
+};
+
+// Sidebar menu configuration
+export const sidebarMenuItems = [
+    {
+        iconName: 'LayoutDashboard',
+        label: 'Dashboard',
+        path: '/',
+    },
+    {
+        iconName: 'Calendar',
+        label: 'Bookings',
+        pathPrefix: '/bookings',
+        subItems: [
+            {
+                label: 'Create Booking',
+                path: '/bookings/create'
+            },
+            {
+                label: 'Manage Bookings',
+                path: '/bookings/manage'
+            },
+            {
+                label: 'Manage Slot',
+                path: '/bookings/slot'
+            },
+        ],
+    },
+    {
+        iconName: 'CarFront',
+        label: 'Vehicles',
+        pathPrefix: '/vehicles',
+        subItems: [
+            {
+                label: 'Add Vehicle',
+                path: '/vehicles/add'
+            },
+            {
+                label: 'Manage Vehicle',
+                path: '/vehicles/manageVehicles'
+            }
+        ],
+    },
+    {
+        iconName: 'Users',
+        label: 'Users & Staff',
+        pathPrefix: '/users&staff',
+        subItems: [
+            {
+                label: 'Manage Users',
+                path: '/users&staff/manageUsers'
+            },
+            {
+                label: 'Manage Sub Admin',
+                path: '/users&staff/manageSubAdmin'
+            },
+            {
+                label: 'Manage Service Boy',
+                path: '/users&staff/manageServiceBoy'
+            },
+            {
+                label: 'Manage Users Wallet',
+                path: '/users&staff/manageUsersWallet'
+            }
+        ],
+    },
+    {
+        iconName: 'Map',
+        label: 'Geography & Regions',
+        pathPrefix: '/geography&regions',
+        subItems: [
+            {
+                label: 'Manage Countries',
+                path: '/geography&regions/manageCountries'
+            },
+            {
+                label: 'Manage Regions',
+                path: '/geography&regions/manageRegions'
+            },
+            {
+                label: 'Manage Area',
+                path: '/geography&regions/manageAreas'
+            }
+        ],
+    },
+];
 
 export const createBookingTabs = [
     { id: 'services', label: 'Services Booking' },
@@ -1166,6 +1270,146 @@ export const financeRows = [
     { label: "Grand Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" },
 ];
 
+export const dummyServiceBoyData: any[] = [
+    {
+        id: "SB001",
+        image: carImage,
+        name: 'Ahmed Ali',
+        phoneNumber: '+201001234567',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+    },
+    {
+        id: "SB002",
+        image: carImage,
+        name: 'Mohamed Hassan',
+        phoneNumber: '+201109876543',
+        registrationOn: '15-Oct-22 09:30 AM',
+        status: 'Deactivated',
+    },
+    {
+        id: "SB003",
+        image: carImage,
+        name: 'Youssef Ibrahim',
+        phoneNumber: '+201205555555',
+        registrationOn: '01-Jan-23 03:45 PM',
+        status: 'Activated',
+    },
+    {
+        id: "SB004",
+        image: carImage,
+        name: 'Omar Khaled',
+        phoneNumber: '+201501112222',
+        registrationOn: '10-Dec-22 11:20 AM',
+        status: 'Activated',
+    },
+    {
+        id: "SB005",
+        image: carImage,
+        name: 'Khaled Said',
+        phoneNumber: '+201004443333',
+        registrationOn: '05-Sep-22 08:15 AM',
+        status: 'Deactivated',
+    },
+];
+
+export const dummyMakeData: any[] = [
+    {
+        logo: carImage,
+        englishName: 'Porsche',
+        arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        logo: carImage,
+        englishName: 'BMW',
+        arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        logo: carImage,
+        englishName: 'Mercedes',
+        arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        logo: carImage,
+        englishName: 'Audi',
+        arabicName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+export const dummyMakeOptions = [
+    "Porsche",
+    "BMW",
+    "Mercedes",
+    "Audi"
+];
+
+export const dummyModelData: any[] = [
+    {
+        makeName: 'Audi',
+        englishModelName: 'Audi',
+        arabicModelName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        makeName: 'Audi',
+        englishModelName: 'Audi',
+        arabicModelName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        makeName: 'Audi',
+        englishModelName: 'Audi',
+        arabicModelName: 'بورش',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+export const dummyColorData: any[] = [
+    {
+        colorCode: '#FF0000',
+        englishColorName: 'Red',
+        arabicColorName: 'Red',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        colorCode: '#0000FF',
+        englishColorName: 'Blue',
+        arabicColorName: 'Blue',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        colorCode: '#00FF00',
+        englishColorName: 'Green',
+        arabicColorName: 'Green',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+export const dummyCarCategoryData: any[] = [
+    {
+        carCategoryImage: carImage,
+        englishCarCategoryName: 'SUV',
+        arabicCarCategoryName: 'SUV',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        carCategoryImage: carImage,
+        englishCarCategoryName: 'Sedan',
+        arabicCarCategoryName: 'Sedan',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+    {
+        carCategoryImage: carImage,
+        englishCarCategoryName: 'Coupe',
+        arabicCarCategoryName: 'Coupe',
+        createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
 export const mainDetails: DetailRowProps[] = [
     {
         label: "ID", value: "9388546579",
@@ -1237,4 +1481,13 @@ export const dummyVehicles: any[] = [
 export const manageSlotsTabs = [
     { id: 'manageDailySlot', label: 'Manage Daily Slot' },
     { id: 'manageFreeBooking', label: 'Manage Free Booking' },
+];
+
+export const franchise = ['Franchise one', 'Franchise two', 'Franchise three'];
+
+export const manageVehiclesTabs = [
+    { id: 'manageMake', label: 'Manage Make' },
+    { id: 'manageModel', label: 'Manage Model' },
+    { id: 'manageColor', label: 'Manage Color' },
+    { id: 'manageCarCategory', label: 'Manage Car Category' },
 ];

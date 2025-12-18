@@ -80,36 +80,36 @@ export const addCountrySchema = Yup.object({
 export const areaValidationSchema = (whoTap: string | undefined) =>
     Yup.object({
         country: Yup.string()
-        .required("Country is required"),
+            .required("Country is required"),
 
         regions: Yup.string()
-        .required("Regions is required"),
+            .required("Regions is required"),
 
         area: Yup.array()
-        .min(1, "Please draw an area on the map")
-        .required("Area is required"),
+            .min(1, "Please draw an area on the map")
+            .required("Area is required"),
 
         areaName: Yup.string()
-        .required("Area name is required"),
+            .required("Area name is required"),
 
         subAreaName: whoTap === "subArea"
-        ? Yup.string().required("Sub area name is required")
-        : Yup.string().notRequired(),
+            ? Yup.string().required("Sub area name is required")
+            : Yup.string().notRequired(),
     }
-);
+    );
 
 export const addRegionsSchema = Yup.object().shape({
-  country: Yup.string()
-    .required('Country is required')
-    .min(2, 'Country must be at least 2 characters'),
-  
-  name: Yup.string()
-    .required('Name is required')
-    .min(2, 'Name must be at least 2 characters'),
-  
-  description: Yup.string()
-    .required('Description is required')
-    .min(5, 'Description must be at least 5 characters')
+    country: Yup.string()
+        .required('Country is required')
+        .min(2, 'Country must be at least 2 characters'),
+
+    name: Yup.string()
+        .required('Name is required')
+        .min(2, 'Name must be at least 2 characters'),
+
+    description: Yup.string()
+        .required('Description is required')
+        .min(5, 'Description must be at least 5 characters')
 });
 
 
@@ -160,43 +160,43 @@ export const manageServiceValidationSchema = Yup.object({
 
 
 export const addExtraServiceValidationSchema = Yup.object({
-  extraServiceNameEnglish: Yup.string()
-    .required("Extra service name (English) is required")
-    .min(3, "Minimum 3 characters"),
+    extraServiceNameEnglish: Yup.string()
+        .required("Extra service name (English) is required")
+        .min(3, "Minimum 3 characters"),
 
-  extarServicePrice: Yup.number()
-    .typeError("Price must be a number")
-    .required("Price is required")
-    .min(1, "Price must be greater than 0"),
+    extarServicePrice: Yup.number()
+        .typeError("Price must be a number")
+        .required("Price is required")
+        .min(1, "Price must be greater than 0"),
 
-  serviceNameArabic: Yup.string()
-    .required("Extra service name (Arabic) is required")
-    .min(3, "Minimum 3 characters"),
+    serviceNameArabic: Yup.string()
+        .required("Extra service name (Arabic) is required")
+        .min(3, "Minimum 3 characters"),
 
-  extraServiceDiscount: Yup.number()
-    .typeError("Discount must be a number")
-    .min(0, "Minimum discount is 0")
-    .max(100, "Maximum discount is 100")
-    .required("Service discount is required"),
+    extraServiceDiscount: Yup.number()
+        .typeError("Discount must be a number")
+        .min(0, "Minimum discount is 0")
+        .max(100, "Maximum discount is 100")
+        .required("Service discount is required"),
 
-  extarServiceTime: Yup.number()
-    .typeError("Time must be a number")
-    .required("Extra service time is required")
-    .min(1, "Time must be greater than 0"),
+    extarServiceTime: Yup.number()
+        .typeError("Time must be a number")
+        .required("Extra service time is required")
+        .min(1, "Time must be greater than 0"),
 
-  englishServiceDescription: Yup.string()
-    .required("English description is required")
-    .min(10, "Minimum 10 characters"),
+    englishServiceDescription: Yup.string()
+        .required("English description is required")
+        .min(10, "Minimum 10 characters"),
 
-  extraArabicServiceDescription: Yup.string()
-    .required("Arabic description is required")
-    .min(10, "Minimum 10 characters"),
+    extraArabicServiceDescription: Yup.string()
+        .required("Arabic description is required")
+        .min(10, "Minimum 10 characters"),
 
-  Date: Yup.date()
-    .required("Date is required"),
+    Date: Yup.date()
+        .required("Date is required"),
 
-  Time: Yup.string()
-    .required("Time is required"),
+    Time: Yup.string()
+        .required("Time is required"),
 });
 
 export const addSubAdminSchema = Yup.object({
@@ -225,6 +225,22 @@ export const addVehicleSchema = Yup.object({
     color: Yup.string().required('the color is required'),
 });
 
+export const addServiceBoySchema = Yup.object({
+    name: Yup.string().required('Name is required'),
+    phoneNumber: Yup.string().matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits').required('Phone number is required'),
+    password: Yup.string()
+        .required('Password is required')
+        .min(8, 'Password must be at least 8 characters'),
+    confirmPassword: Yup.string()
+        .required('Confirm Password is required')
+        .oneOf([Yup.ref('password')], 'Passwords must match'),
+    availableDays: Yup.array().min(1, 'Select at least one day').required('Available days are required'),
+    startHour: Yup.string().required('Start hour is required'),
+    endHour: Yup.string().required('End hour is required'),
+    drivingLicense: Yup.mixed().required('Driving license is required'),
+    licenseExpiredDate: Yup.string().required('License expired date is required'),
+    idCardImage: Yup.mixed().nullable(),
+});
 
 export const addCouponValidationSchema = Yup.object({
     user: Yup.string().required("User is required"),

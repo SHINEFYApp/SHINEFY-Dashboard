@@ -21,6 +21,11 @@ import AddService from './pages/services&extra/manageService/addService';
 import ManageExtraService from './pages/services&extra/manageExtraService/manageExtraService';
 import AddExtraService from './pages/services&extra/manageExtraService/addExtraService';
 import ManageCoupon from './pages/services&extra/manageCoupon/manageCoupon';
+import ManageVehicles from './pages/vehicles/ManageVehicles';
+import AddServiceBoy from './pages/users&staff/AddServiceBoy';
+import ServiceBoyDetails from './pages/users&staff/ServiceBoyDetails';
+import ManageUsers from './pages/users&staff/ManageUsers';
+
 function App() {
   const location = useLocation();
 
@@ -60,6 +65,16 @@ function App() {
               <Route path="/services&extras/manage/ExtreService" element={<ManageExtraService />} />
               <Route path="/services&extras/manage/Service/addExtraService" element={<AddExtraService />} />
               <Route path="/services&extras/manage/coupon" element={<ManageCoupon />} />
+            <Route path="/vehicles/manageVehicles" element={<ManageVehicles />} />
+            <Route path="/users&staff/manageUsers" element={<ManageUsers />} />
+            <Route path="/users&staff/manageSubAdmin" element={<ManageSubAdmin />} />
+            <Route path="/users&staff/manageServiceBoy/:id" element={<ServiceBoyDetails />} />
+            <Route path="/users&staff/manageServiceBoy/addServiceBoy" element={<AddServiceBoy />} />
+            <Route path="/users&staff/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
+            <Route path="/users&staff/manageUsersWallet" element={<UsersWallets />} />
+            <Route path="/geography&regions/manageCountries" element={<ManageCountries />} />
+            <Route path="/geography&regions/manageRegions" element={<ManageRegions />} />
+            <Route path="/geography&regions/manageAreas" element={<ManageAreas />} />
           </Routes>
         </Layout>
       )}

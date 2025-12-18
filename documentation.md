@@ -60,40 +60,106 @@ You can use these variables in your Tailwind classes or arbitrary values:
 
 ## Common Components (`src/common`)
 
-These components are designed to be reusable across the application.
+These components are designed to be reusable across the application and are integrated with Formik where applicable.
+
+### `CustomTable`
+
+A dynamic table component with pagination support, custom cell rendering, and loading states.
+
+- **Props**: `columns`, `data`, `isLoading`, `pagination props...`
+- **Features**: Custom cell rendering via `render` function in columns, responsive design, empty state handling.
+
+### `FilterHeader`
+
+A comprehensive header component for management pages.
+
+- **Features**:
+  - Search input with debounce support
+  - Filter button to open a filter modal
+  - Action buttons (e.g., "Add New")
+  - Export dropdown
+- **Usage**: Used at the top of management pages to provide search and filtering capabilities.
 
 ### `FormInput`
 
 A wrapper around HTML input that integrates with Formik.
 
 - **Props**: `name`, `label`, `type`, `placeholder`, `icon`, `checkmark`, `receiveSms`
-- **Usage**: Must be used inside a Formik context.
+- **Features**:
+  - Automatic error display
+  - Success checkmark animation
+  - Optional SMS toggle for specific use cases
+  - Icon support
 
-```tsx
-<FormInput name="email" label="Email Address" icon={<MailIcon />} />
-```
+### `FormDropdown`
 
-### `CustomTable`
+A Formik-integrated select dropdown.
 
-A dynamic table component with pagination support.
+- **Props**: `name`, `label`, `options`, `icon`
+- **Features**: Supports both string arrays and object arrays for options.
 
-- **Props**: `columns`, `data`, `isLoading`, `pagination props...`
-- **Features**: Custom cell rendering, responsive design, loading states.
+### `FormDatePicker`
 
-```tsx
-<CustomTable
-  columns={[
-    { key: "name", title: "Name" },
-    {
-      key: "status",
-      title: "Status",
-      render: (val) => <StatusBadge status={val} />,
-    },
-  ]}
-  data={users}
-  isLoading={loading}
-/>
-```
+A date picker component integrated with Formik.
+
+- **Props**: `name`, `label`, `placeholder`
+- **Features**: Uses `date-fns` for formatting and a calendar popup for selection.
+
+### `FormTimePicker`
+
+A time picker input integrated with Formik.
+
+- **Props**: `name`, `label`, `icon`
+- **Features**: Native time input styling with Formik state management.
+
+### `TextArea`
+
+A textarea component integrated with Formik.
+
+- **Props**: `name`, `label`, `placeholder`, `icon`
+- **Features**: Similar styling to `FormInput` but for multi-line text.
+
+### `FileUploader`
+
+A drag-and-drop file upload component.
+
+- **Props**: `name`, `title`
+- **Features**:
+  - Drag and drop support
+  - File preview (name)
+  - Validation error display
+  - Formik integration
+
+### `GenericModal`
+
+A general-purpose modal component.
+
+- **Props**: `isOpen`, `onClose`, `title`, `subtitle`, `children`
+- **Features**: customizable content, backdrop blur, and animation.
+
+### `GenericFilterModal`
+
+A specialized modal for filtering options.
+
+- **Props**: `isOpen`, `onClose`, `onSubmit`, `initialValues`
+- **Features**: Includes "Apply Filters" and "Reset" buttons automatically.
+
+### `Pagination`
+
+A reusable pagination component.
+
+- **Props**: `currentPage`, `totalPages`, `onPageChange`
+- **Features**: Smart page number generation with ellipsis for large page counts.
+
+### `DrawMap`
+
+A Leaflet-based map component for drawing shapes.
+
+- **Props**: `name`
+- **Features**:
+  - Draws polygons/shapes on a map
+  - Saves coordinates to Formik state
+  - Requires `leaflet` and `leaflet-draw`
 
 ## API Layer (`src/api`)
 

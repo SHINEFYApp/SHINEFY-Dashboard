@@ -127,3 +127,16 @@ export const addCategoryInitialValues = {
     arabicName: "",
     price: "",
 };
+
+export const addServiceBoyInitialValues = {
+    name: '',
+    phoneNumber: '',
+    password: '',
+    confirmPassword: '',
+    availableDays: [],
+    startHour: '',
+    endHour: '',
+    drivingLicense: null,
+    licenseExpiredDate: '',
+    idCardImage: null,
+};

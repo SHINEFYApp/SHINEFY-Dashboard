@@ -166,7 +166,6 @@ const CreateBookings = () => {
         alert('Booking submitted successfully!');
     };
 
-
     return (
         <div className="w-full animate-fade-in bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
             <div className="mb-8">

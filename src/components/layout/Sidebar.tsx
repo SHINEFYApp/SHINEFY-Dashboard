@@ -8,6 +8,7 @@ import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
 import { CarFront, Map, Settings, Users } from 'lucide-react';
+
 import { Link } from 'react-router';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
