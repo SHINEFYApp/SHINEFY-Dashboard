@@ -55,7 +55,7 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/users&staff/manage/subAdmin/addSubAdmin': {
         title: 'Users & Stuff',
         breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin', 'Add']
-    }, 
+    },
     '/geography&regions/manage/countries': {
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Countries']
@@ -67,6 +67,50 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/geography&regions/manage/area': {
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Area']
+    },
+    '/services&extra/manage/Service': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Service']
+    },
+    '/services&extra/manage/Service/addService': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Service', 'Add Service']
+    },
+    '/services&extra/manage/ExtreService': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Extra Service']
+    },
+    '/services&extra/manage/extreService/addExtraService': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Extra Service', 'Add Extra Service']
+    },
+    '/services&extra/manage/Coupon': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Coupon']
+    },
+    '/services&extra/manage/coupon/addCoupon': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Coupon', 'Add Coupon']
+    },
+    '/services&extra/manage/Package': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Package']
+    },
+    '/products&orders/manage/Products': {
+        title: 'Products & Orders',
+        breadcrumbs: ['Products & Orders', 'Manage Products']
+    },
+    '/products&orders/manage/Products/addProduct': {
+        title: 'Products & Orders',
+        breadcrumbs: ['Products & Orders', 'Manage Products', 'Add Products']
+    },
+    '/products&orders/manage/Products/addGategory': {
+        title: 'Products & Orders',
+        breadcrumbs: ['Products & Orders', 'Manage Products', 'Add Gategory']
+    },
+    '/products&orders/manage/Orders': {
+        title: 'Products & Orders',
+        breadcrumbs: ['Products & Orders', 'Manage Orders']
     },
 };
 
@@ -80,6 +124,7 @@ export const manageAreaTabs = [
     { id: 'subArea', label: 'Manage Sub Area' },
 ];
 
+export const exportTypes = ['CSV', 'Excel', 'PDF'];
 
 
 export const createBookingSteps = [
@@ -504,22 +549,22 @@ export const dummyUserWallets: any[] = [
 
 export const dummyCountries: any[] = [
     {
-        flag: EGYPT ,
+        flag: EGYPT,
         name: 'Egypt',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
-        flag: UAE ,
+        flag: UAE,
         name: 'United Arab Emirates',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
-        flag: KWU ,
+        flag: KWU,
         name: 'Kuwait',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
-        flag: KSA ,
+        flag: KSA,
         name: 'Saudi Arabia',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
@@ -529,63 +574,63 @@ export const dummyCountries: any[] = [
 
 export const dummyExtraService: any[] = [
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
         extraServiceTime: 'Extra Service Time (minutes)',
     },
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
         extraServiceTime: 'Extra Service Time (minutes)',
     },
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
         extraServiceTime: 'Extra Service Time (minutes)',
     },
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
         extraServiceTime: 'Extra Service Time (minutes)',
     },
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
         extraServiceTime: 'Extra Service Time (minutes)',
     },
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
         extraServiceTime: 'Extra Service Time (minutes)',
     },
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
         extraServiceTime: 'Extra Service Time (minutes)',
     },
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
         extraServiceTime: 'Extra Service Time (minutes)',
     },
     {
-        image: '' ,
+        image: '',
         extraServiceEnglishName: 'SHINEFY Deep Cleaning',
         extraServiceArabicName: 'شاين-فاي تنظيف عميق',
         extraServicePrice: 'Extra Service Price',
@@ -597,25 +642,25 @@ export const dummyExtraService: any[] = [
 export const dummyRegions: any[] = [
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'Cairo',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'New Cairo',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : KSA ,
-            title : 'Saudi Arabia'
-        } ,
+            flag: KSA,
+            title: 'Saudi Arabia'
+        },
         regions: 'Riyadh',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
@@ -626,33 +671,33 @@ export const dummyRegions: any[] = [
 export const dummyMainArea: any[] = [
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'Cairo',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'El Shrouk',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : EGYPT ,
-            title : 'Egypt'
-        } ,
+            flag: EGYPT,
+            title: 'Egypt'
+        },
         regions: 'New Cairo',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         countries: {
-            flag : KSA ,
-            title : 'Saudi Arabia'
-        } ,
+            flag: KSA,
+            title: 'Saudi Arabia'
+        },
         regions: 'Riyadh',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
@@ -662,19 +707,354 @@ export const dummyMainArea: any[] = [
 export const dummySubArea: any[] = [
     {
         mainAreaName: {
-            flag : EGYPT ,
-            title : 'El Shrouk'
-        } ,
+            flag: EGYPT,
+            title: 'El Shrouk'
+        },
         areaName: 'Future City',
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
     {
         mainAreaName: {
-            flag : EGYPT ,
-            title : 'El Shekh Zayed'
-        } ,
+            flag: EGYPT,
+            title: 'El Shekh Zayed'
+        },
         areaName: 'El Shekh Zayed',
         createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+// Example for manage Service
+export const dummyService: any[] = [
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'true',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'false',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'true',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'false',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'true',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'false',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'true',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'false',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'true',
+    },
+    {
+        image: '',
+        serviceEnglishName: 'SHINEFY Internal',
+        serviceArabicName: 'SHINEFY الداخلي',
+        servicePrice: '150.00',
+        serviceTime: '45',
+        extraService: 'false',
+    },
+];
+
+// Example for manage products
+export const dummyProducts: any[] = [
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        englishName: 'Shinefy',
+        arabicName: 'شينيفاي',
+        category: 'Sport',
+        price: '25000',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+];
+
+// Example for manage products category table
+export const dummyCategory: any[] = [
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        categoryEnglishName: 'Sport',
+        categoryArabicName: 'العاب',
+        status: 'Active',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+];
+// Example for manage orders
+export const dummyOrders: any[] = [
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        hash: '1',
+        orderId: '584208',
+        items: '1',
+        total: '690.00',
+        status: 'Pending',
+        createDateAndTime: '21-Nov-22 12:10 PM',
     },
 ];
 
