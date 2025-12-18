@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { dummyCountries } from "../constants/data";
 import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
@@ -94,16 +95,6 @@ export function CustomTable<T extends Record<string, any>>({
                                                     row[column.key]
                                             }
                                             
-                                            {column.navigate &&
-                                                <button
-                                                    className="text-primary hover:text-primary-700 font-semibold transition-colors"
-                                                    onClick={() => {
-                                                        navigate('/bookings/manage/id');
-                                                    }}
-                                                >
-                                                    View Details
-                                                </button> 
-                                            }
                                         </td>
                                     ))}
                                 </tr>
