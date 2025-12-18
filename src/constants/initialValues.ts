@@ -1,4 +1,3 @@
-
 export const manageSlotInitialValues = {
     startDate: '',
     startTime: '',

@@ -7,7 +7,7 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { Calendar, CarFront, LayoutDashboard, Users, ChevronDown, Map, ChevronRight } from 'lucide-react';
+import { CarFront, Map, Users } from 'lucide-react';
 import { Link } from 'react-router';
 
 // Icon mapping
@@ -38,18 +38,100 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         }
     }, [currentPath]);
 
-    // Convert sidebarMenuItems to MenuItem format
-    const menuItems: MenuItem[] = sidebarMenuItems.map(item => ({
-        icon: iconMap[item.iconName],
-        label: item.label,
-        path: item.path,
-        isActive: item.pathPrefix ? currentPath?.startsWith(item.pathPrefix) : false,
-        subItems: item.subItems?.map(subItem => ({
-            icon: null,
-            label: subItem.label,
-            path: subItem.path
-        }))
-    }));
+    const menuItems: MenuItem[] = [
+        {
+            icon: <MdDashboard className="w-5 h-5" />,
+            label: 'Dashboard',
+            path: '/',
+        },
+        {
+            icon: <BsCalendarEvent className="w-5 h-5" />,
+            label: 'Bookings',
+            isActive: currentPath?.startsWith('/bookings'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Create Booking',
+                    path: '/bookings/create'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Bookings',
+                    path: '/bookings/manage'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Slot',
+                    path: '/bookings/slot'
+                },
+            ],
+        },
+        {
+            icon: <CarFront className="w-5 h-5" />,
+            label: 'Vehicles',
+            isActive: currentPath?.startsWith('/vehicles'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Add Vehicle',
+                    path: '/vehicles/add'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Vehicle',
+                    path: '/vehicles/manage'
+                }
+            ],
+        },
+        {
+            icon: <Users className="w-5 h-5" />,
+            label: 'Users & Staff',
+            isActive: currentPath?.startsWith('/users&staff/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Users',
+                    path: '/users&staff/manage/users'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Sub Admin',
+                    path: '/users&staff/manage/subAdmin'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Service Boy',
+                    path: '/users&staff/manage/serviceBoy'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Users Wallet',
+                    path: '/users&staff/manage/usersWallet'
+                }
+            ],
+        }, {
+            icon: <Map className="w-5 h-5" />,
+            label: 'Geography & Regions',
+            isActive: currentPath?.startsWith('/geography&regions/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Countries',
+                    path: '/geography&regions/manage/countries'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Regions',
+                    path: '/geography&regions/manage/regions'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Area',
+                    path: '/geography&regions/manage/area'
+                }
+            ],
+        },
+    ];
 
     const toggleSubmenu = (label: string) => {
         if (isCollapsed) return;
