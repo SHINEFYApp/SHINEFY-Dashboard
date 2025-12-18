@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import { cn } from '../utils/utils';
+import { IoCheckmarkCircle } from 'react-icons/io5';
 import type { FormTimePickerProps } from '../types/common';
-import { CircleCheck } from 'lucide-react';
 
 export const FormTimePicker = ({
     name,
@@ -47,7 +47,7 @@ export const FormTimePicker = ({
 
                 {isValid && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 animate-scale-up">
-                        <CircleCheck className="w-5 h-5 text-green-500" />
+                        <IoCheckmarkCircle className="w-5 h-5 text-green-500" />
                     </div>
                 )}
             </div>

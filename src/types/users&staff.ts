@@ -1,15 +1,9 @@
 export interface manageSubadmin {
     name: string,
     phoneNumber: string,
-    isSms: boolean,
+    isSms: boolean ,
     email: string,
     password: string,
     confirmPassword: string,
-    privileges: Record<number, string[]>;
-}
-
-export interface userWalletFormData {
-    user: string,
-    amount: string,
-    payMethod: string;
+    privileges : Record<number, string[]>
 }

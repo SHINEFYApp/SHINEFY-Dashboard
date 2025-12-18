@@ -1,4 +1,3 @@
-
 export const manageSlotInitialValues = {
     startDate: '',
     startTime: '',
@@ -22,7 +21,6 @@ export const servicesStep2InitialValues = {
     mainService: '',
     mainPackage: '',
     serviceBoy: '',
-    extraServices: [],
 };
 
 export const servicesStep3InitialValues = {
@@ -47,17 +45,17 @@ export const addCountry = {
 };
 
 export const araeForms = {
-    country: '',
-    area: [],
-    regions: '',
-    areaName: '',
-    subAreaName: '',
-};
+    country : '',
+    area: [] ,
+    regions : '',
+    areaName : '',
+    subAreaName : '',
+}
 
 export const addRegions = {
-    country: '',
-    name: '',
-    description: ''
+    country : '' ,
+    name : '' ,
+    description : ''
 };
 
 export const mangeServiceInitialValues = {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Formik, Form, useFormikContext } from 'formik';
 import { servicesStep1Schema } from '../../../../../constants/validationSchema';
 import { servicesStep1InitialValues } from '../../../../../constants/initialValues';
+import { IoCallOutline, IoLocationOutline } from 'react-icons/io5';
 import { FormInput } from '../../../../../common/FormInput';
 import { FormDropdown } from '../../../../../common/FormDropdown';
 import { FormDatePicker } from '../../../../../common/FormDatePicker';
@@ -10,7 +11,7 @@ import { Button } from '../../../../ui/button';
 import { SelectedVehicles } from '../SelectedVehicles';
 import { VehicleSelectionModal } from '../VehicleSelectionModal';
 import type { ServicesStep1Props, Vehicle } from '../../../../../types/bookings';
-import { Calendar, Clock, MapPin, PhoneCall } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 
 const ServicesStep1Content = ({
     formData,
@@ -51,12 +52,12 @@ const ServicesStep1Content = ({
     // Auto-save on value change
     useEffect(() => {
         onDataChange(values);
-    }, [values, onDataChange]);
+    }, [values]);
 
     // Notify parent about validation status
     useEffect(() => {
         onValidationChange(isValid);
-    }, [isValid, onValidationChange]);
+    }, [isValid]);
 
     return (
         <>
@@ -67,14 +68,14 @@ const ServicesStep1Content = ({
                         label="User phone number"
                         placeholder="User phone number"
                         type="tel"
-                        icon={<PhoneCall className="w-5 h-5" />}
+                        icon={<IoCallOutline className="w-5 h-5" />}
                     />
 
                     <FormDropdown
                         name="address"
                         label="Address"
                         placeholder="Select Address"
-                        icon={<MapPin className="w-5 h-5" />}
+                        icon={<IoLocationOutline className="w-5 h-5" />}
                         options={[
                             'Cairo',
                             'Alexandria',

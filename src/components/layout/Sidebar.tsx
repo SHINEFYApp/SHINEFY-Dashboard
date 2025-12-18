@@ -1,20 +1,14 @@
 import { useState, useEffect } from 'react';
+import { MdDashboard } from 'react-icons/md';
+import { BsCalendarEvent } from 'react-icons/bs';
+import { IoChevronDown, IoChevronForward } from 'react-icons/io5';
 import { cn } from '../../utils/utils';
 import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { Calendar, CarFront, ChevronDown, ChevronRight, LayoutDashboard, Map, Users } from 'lucide-react';
+import { CarFront, Map, Users } from 'lucide-react';
 import { Link } from 'react-router';
-
-// Icon mapping
-const iconMap: Record<string, React.ReactNode> = {
-    LayoutDashboard: <LayoutDashboard className="w-5 h-5" />,
-    Calendar: <Calendar className="w-5 h-5" />,
-    CarFront: <CarFront className="w-5 h-5" />,
-    Users: <Users className="w-5 h-5" />,
-    Map: <Map className="w-5 h-5" />,
-};
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
@@ -24,9 +18,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Vehicles');
         } else if (currentPath.startsWith('/bookings')) {
             setExpandedMenu('Bookings');
-        } else if (currentPath.startsWith('/users&staff')) {
+        } else if (currentPath.startsWith('/users&staff/manage')) {
             setExpandedMenu('Users & Staff');
-        } else if (currentPath.startsWith('/geography&regions')) {
+        } else if (currentPath.startsWith('/geography&regions/manage')) {
             setExpandedMenu('Geography & Regions');
         } else if (currentPath.startsWith('/services&extra/manage')) {
             setExpandedMenu('Services & Extra');
@@ -37,12 +31,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
 
     const menuItems: MenuItem[] = [
         {
-            icon: iconMap.LayoutDashboard,
+            icon: <MdDashboard className="w-5 h-5" />,
             label: 'Dashboard',
             path: '/',
         },
         {
-            icon: iconMap.Calendar,
+            icon: <BsCalendarEvent className="w-5 h-5" />,
             label: 'Bookings',
             isActive: currentPath?.startsWith('/bookings'),
             subItems: [
@@ -64,7 +58,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             ],
         },
         {
-            icon: iconMap.CarFront,
+            icon: <CarFront className="w-5 h-5" />,
             label: 'Vehicles',
             isActive: currentPath?.startsWith('/vehicles'),
             subItems: [
@@ -81,7 +75,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             ],
         },
         {
-            icon: iconMap.Users,
+            icon: <Users className="w-5 h-5" />,
             label: 'Users & Staff',
             isActive: currentPath?.startsWith('/users&staff/manage'),
             subItems: [
@@ -107,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 }
             ],
         }, {
-            icon: iconMap.Map,
+            icon: <Map className="w-5 h-5" />,
             label: 'Geography & Regions',
             isActive: currentPath?.startsWith('/geography&regions/manage'),
             subItems: [
@@ -210,7 +204,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                             )}
                                         </div>
                                         {!isCollapsed && item.subItems && (
-                                            <ChevronDown
+                                            <IoChevronDown
                                                 className={cn(
                                                     "w-5 h-5 transition-transform duration-300",
                                                     expandedMenu === item.label && "rotate-180"
@@ -288,7 +282,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     className="absolute -right-3 top-14 bg-primary text-[#1a1a1a] rounded-full p-2 shadow-xl hover:scale-110 transition-all duration-200 hover:shadow-2xl z-50"
                     aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
-                    <ChevronRight
+                    <IoChevronForward
                         className={cn(
                             "w-4 h-4 transition-transform duration-300 font-bold",
                             !isCollapsed && "rotate-180"

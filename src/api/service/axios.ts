@@ -8,9 +8,6 @@ const axiosInstance: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        'user-type': 'driver',
-        'app-version': 50,
-        'cookie': ''
     },
 });
 
