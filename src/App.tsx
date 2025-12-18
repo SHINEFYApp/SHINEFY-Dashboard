@@ -31,6 +31,8 @@ import ManageProducts from './pages/productsAndOrders/manageProducts';
 import AddProduct from './pages/productsAndOrders/subPages/addProducts';
 import AddCategory from './pages/productsAndOrders/subPages/addCategory';
 import ManageOrders from './pages/productsAndOrders/manageOrders';
+import AddMainArea from './pages/Geography&Regions/subPages/addMainArea';
+import AddSubArea from './pages/Geography&Regions/subPages/addSubArea';
 
 function App() {
   const location = useLocation();
@@ -83,6 +85,8 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
+            <Route path="/geography&regions/manage/area/addMainArea" element={<AddMainArea />} />
+            <Route path="/geography&regions/manage/area/addSubArea" element={<AddSubArea />} />
               <Route path="/products&orders/manage/Products" element={<ManageProducts />} />
               <Route path="/products&orders/manage/Products/addProduct" element={<AddProduct />} />
               <Route path="/products&orders/manage/Products/addGategory" element={<AddCategory />} />

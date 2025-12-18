@@ -147,7 +147,7 @@ export interface FilterFormValuesUserWallets {
 }
 
 // Table props
-export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions' | 'area' | 'service';
+export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions' | 'service';
 
 export interface ManageBookingsAndSlotsProps {
     manageSectionFromComponant: ManageSectionKey;

@@ -76,6 +76,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Area']
     },
+    '/geography&regions/manage/area/addMainArea': {
+        title: 'Geography & Regions',
+        breadcrumbs: ['Geography & Regions', 'Manage Area' , 'Add Main Area']
+    },
     '/services&extra/manage/Service': {
         title: 'Services & Extra',
         breadcrumbs: ['Services & Extra', 'Manage Service']
@@ -760,7 +764,6 @@ export const dummyRegions: any[] = [
         createDateAndTime: '21-Nov-25 07:09 PM',
     },
 ];
-
 
 // Example for manage Main Area
 export const dummyMainArea: any[] = [

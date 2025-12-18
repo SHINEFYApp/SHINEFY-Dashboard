@@ -105,7 +105,7 @@ export function CustomTable<T extends Record<string, any>>({
             </div>
 
             {/* Pagination */}
-            {!isLoading && data.length > 0 && page !== 'countries' && page !== 'regions' && page !== 'area' && page !== 'service' && (
+            {!isLoading && data.length > 0 && page !== 'countries' && page !== 'regions' && page !== 'area' && page !== 'service' && page !== 'manageArea' && (
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
