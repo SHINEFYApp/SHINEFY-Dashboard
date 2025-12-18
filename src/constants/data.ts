@@ -120,6 +120,22 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Products & Orders',
         breadcrumbs: ['Products & Orders', 'Manage Orders']
     },
+    '/financial&points/manage/Vat': {
+        title: 'Financial & Points',
+        breadcrumbs: ['Financial & Points', 'Manage Vat']
+    },
+    '/financial&points/manage/driverCommission': {
+        title: 'Financial & Points',
+        breadcrumbs: ['Financial & Points', 'Manage Driver Commission']
+    },
+    '/financial&points/manage/bonusPoint': {
+        title: 'Financial & Points',
+        breadcrumbs: ['Financial & Points', 'Manage Bonus Point']
+    },
+    '/financial&points/manage/adminEarning': {
+        title: 'Financial & Points',
+        breadcrumbs: ['Financial & Points', 'Manage Admin Earning']
+    }
 };
 
 

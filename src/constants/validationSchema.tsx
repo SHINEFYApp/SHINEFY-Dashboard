@@ -324,3 +324,11 @@ export const addCategoryValidationSchema = Yup.object({
         .min(2, "Arabic name must be at least 2 characters")
         .required("Arabic name is required"),
 });
+
+export const manageVatSchema = Yup.object({
+    vat: Yup.number()
+        .typeError("Vat must be a number")
+        .min(1, "Minimum Vat is 1%")
+        .max(100, "Maximum Vat is 100%")
+        .required("Vat is required"),
+});
