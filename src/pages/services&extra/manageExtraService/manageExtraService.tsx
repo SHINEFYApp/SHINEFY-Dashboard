@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { FormInput } from "../../../common/FormInput";
 import { ArrowUpToLine, Eye, Search, Trash2 } from "lucide-react";
 import { FormDropdown } from "../../../common/FormDropdown";
-import { dummyExtraService, exportTypes } from "../../../constants/data";
+import { dummyCountries, dummyExtraService, exportTypes } from "../../../constants/data";
 import { Form, Formik } from "formik";
 import { CustomTable } from "../../../common/CustomTable";
 import { useState } from "react";
@@ -65,21 +65,14 @@ export default function ManageExtraService(){
         },
     ]
 
-    const handleSubmit = (values : {search : string , export: string}) => {
-        console.log(`Search values: ${values.search} | Export File Extantion: ${values.export} `);
-    };
-
-
     return(
         <main className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
             <div className="mb-6">
                 <Formik
-                    initialValues={{
-                        search: '',
-                        export: '',
-                    }}
+                    initialValues={{}}
+                    validationSchema={{}}
                     onSubmit={(values) => {
-                        handleSubmit(values)
+                        console.log(values)
                     }}
                 >
                     {({}) => (
@@ -105,7 +98,7 @@ export default function ManageExtraService(){
                                 </div>
                                 <div className="flex flex-col lg:flex-row items-center gap-5">
                                     <Link
-                                        to={"/services&extra/manage/extreService/addExtraService"}
+                                        to={"/services&extras/manage/Service/addExtraService"}
                                         className="w-full lg:w-[164px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
                                         >
                                         Add Extra Services

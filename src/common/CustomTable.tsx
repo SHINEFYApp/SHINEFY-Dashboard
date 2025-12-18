@@ -72,8 +72,8 @@ export function CustomTable<T extends Record<string, any>>({
                                             key={column.key}
                                             className={cn(
                                                 "px-6 py-4 text-sm text-gray-600",
-                                              (row[column.key] === 'Close' || row[column.key] === 'Deactivated') && 'text-red-600 font-bold text-[15px]' ,
-                                              (row[column.key] === 'Open' || row[column.key] === 'Activated') && 'text-green-600 font-bold text-[15px]' ,
+                                              (row[column.key] === 'Close' || row[column.key] === 'Deactivated' || row[column.key] === 'false') && 'text-red-600 font-bold text-[15px]' ,
+                                              (row[column.key] === 'Open' || row[column.key] === 'Activated' || row[column.key] === 'true') && 'text-green-600 font-bold text-[15px]' ,
                                                 colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
                                             )}
                                         >

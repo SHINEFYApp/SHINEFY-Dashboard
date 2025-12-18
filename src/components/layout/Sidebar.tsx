@@ -7,7 +7,7 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { CarFront, Map, Users } from 'lucide-react';
+import { CarFront, Map, Settings, Users } from 'lucide-react';
 import { Link } from 'react-router';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
@@ -22,10 +22,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Users & Staff');
         } else if (currentPath.startsWith('/geography&regions/manage')) {
             setExpandedMenu('Geography & Regions');
-        } else if (currentPath.startsWith('/services&extra/manage')) {
-            setExpandedMenu('Services & Extra');
-        } else if (currentPath.startsWith('/products&orders/manage')) {
-            setExpandedMenu('Products & Orders');
+        } else if (currentPath.startsWith('/services&extras/manage')) {
+            setExpandedMenu('Services & Extras');
         }
     }, [currentPath]);
 
@@ -119,6 +117,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     icon: null,
                     label: 'Manage Area',
                     path: '/geography&regions/manage/area'
+                }
+            ],
+        }, {
+            icon: <Settings className="w-5 h-5" />,
+            label: 'Services & Extras',
+            isActive: currentPath?.startsWith('/services&extras/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Service',
+                    path: '/services&extras/manage/Service'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Extra Service',
+                    path: '/services&extras/manage/ExtreService'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Coupon',
+                    path: '/services&extras/manage/Coupon'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Package',
+                    path: '/services&extras/manage/Package'
                 }
             ],
         },
