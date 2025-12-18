@@ -46,7 +46,7 @@ export default function ManageCoupon(){
                                             className="mb-0"
                                             checkmark={false}
                                             />
-                                    </div>
+                                    </div>,
                                     <button
                                         type="submit"
                                         className="w-full md:w-[108px] h-fit py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
