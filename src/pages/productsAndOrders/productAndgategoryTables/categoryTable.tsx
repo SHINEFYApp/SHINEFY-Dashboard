@@ -1,13 +1,13 @@
-import { Link } from "react-router";
+import { Form, Formik } from "formik";
+import { useState } from "react";
 import { FormInput } from "../../../common/FormInput";
 import { ArrowUpToLine, Eye, Search, Trash2 } from "lucide-react";
+import { Link } from "react-router";
 import { FormDropdown } from "../../../common/FormDropdown";
-import { dummyExtraService, exportTypes } from "../../../constants/data";
-import { Form, Formik } from "formik";
+import { dummyCategory , exportTypes } from "../../../constants/data";
 import { CustomTable } from "../../../common/CustomTable";
-import { useState } from "react";
 
-export default function ManageExtraService(){
+export default function CategoryTable(){
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
     const totalEntries = 205;
@@ -15,27 +15,30 @@ export default function ManageExtraService(){
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
+    const handleSubmit = (values : {search : string , export: string}) => {
+        console.log(`Search values: ${values.search} | Export File Extantion: ${values.export} `);
+    };
 
     const columns = [
         {
-            key: "image",
-            title: "Extra Image",
+            key: "hash",
+            title: "#",
         },
         {
-            key: "extraServiceEnglishName",
-            title: "Extra Service Name English)",
+            key: "categoryEnglishName",
+            title: "Category English Name",
         },
         {
-            key: "extraServiceArabicName",
-            title: "Extra Service Name (Arabic)",
+            key: "categoryArabicName",
+            title: "Category Arabic Name",
         },
         {
-            key: "extraServicePrice",
-            title: "Extra Service Price",
+            key: "status",
+            title: "Status",
         },
         {
-            key: "extraServiceTime",
-            title: "Extra Service Time [ minutes ]",
+            key: "createDateAndTime",
+            title: "Create Date & Time",
         },
         {
             key: "action",
@@ -64,14 +67,8 @@ export default function ManageExtraService(){
             ),
         },
     ]
-
-    const handleSubmit = (values : {search : string , export: string}) => {
-        console.log(`Search values: ${values.search} | Export File Extantion: ${values.export} `);
-    };
-
-
     return(
-        <main className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
+        <main className={`w-full mt-10 bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
             <div className="mb-6">
                 <Formik
                     initialValues={{
@@ -86,6 +83,9 @@ export default function ManageExtraService(){
                         <Form>
                             <div className="flex justify-between">
                                 <div className="flex items-center gap-2">
+                                    <h1 className="text-[20px] font-bold">Category</h1>
+                                </div>
+                                <div className="flex flex-col lg:flex-row items-center gap-5">
                                     <div className="w-full md:w-52 lg:w-[446px] mb-2 -space-y-2">
                                         <FormInput
                                             name="search"
@@ -95,20 +95,19 @@ export default function ManageExtraService(){
                                             className="mb-0"
                                             checkmark={false}
                                             />
-                                    </div>,
+                                    </div>
                                     <button
                                         type="submit"
                                         className="w-full md:w-[108px] h-fit py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
                                         >
                                         Search
                                     </button>
-                                </div>
-                                <div className="flex flex-col lg:flex-row items-center gap-5">
+                                    <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                                     <Link
-                                        to={"/services&extra/manage/extreService/addExtraService"}
+                                        to={"/products&orders/manage/Products/addGategory"}
                                         className="w-full lg:w-[164px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
                                         >
-                                        Add Extra Services
+                                        Add Category
                                     </Link>
                                     <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                                     <div className="w-full lg:w-[135px]">
@@ -122,7 +121,7 @@ export default function ManageExtraService(){
             </div>
             <CustomTable
                 columns={columns}
-                data={dummyExtraService}
+                data={dummyCategory}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}

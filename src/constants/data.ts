@@ -68,30 +68,6 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Area']
     },
-    '/services&extras/manage/Service': {
-        title: 'Services & Extras',
-        breadcrumbs: ['Services & Extras', 'Manage Service']
-    },
-    '/services&extras/manage/ExtreService': {
-        title: 'Services & Extras',
-        breadcrumbs: ['Services & Extras', 'Manage Extra Service']
-    },
-    '/services&extras/manage/Coupon': {
-        title: 'Services & Extras',
-        breadcrumbs: ['Services & Extras', 'Manage Coupon']
-    },
-    '/services&extras/manage/Package': {
-        title: 'Services & Extras',
-        breadcrumbs: ['Services & Extras', 'Manage Package']
-    },
-    '/services&extras/manage/Service/addService': {
-        title: 'Services & Extras',
-        breadcrumbs: ['Services & Extras', 'Manage Service' , 'Add Service']
-    },
-    '/services&extras/manage/Service/addExtraService': {
-        title: 'Services & Extras',
-        breadcrumbs: ['Services & Extras', 'Manage Service' , 'Add Extra Service']
-    },
 };
 
 export const createBookingTabs = [
@@ -699,90 +675,6 @@ export const dummySubArea: any[] = [
         } ,
         areaName: 'El Shekh Zayed',
         createDateAndTime: '21-Nov-25 07:09 PM',
-    },
-];
-
-// Example for manage Service
-export const dummyService: any[] = [
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'true',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'false',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'true',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'false',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'true',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'false',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'true',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'false',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'true',
-    },
-    {
-        image: '' ,
-        serviceEnglishName: 'SHINEFY Internal' ,
-        serviceArabicName: 'SHINEFY الداخلي' ,
-        servicePrice: '150.00' ,
-        serviceTime: '45',
-        extraService: 'false',
     },
 ];
 

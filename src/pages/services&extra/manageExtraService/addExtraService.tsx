@@ -5,6 +5,7 @@ import { FormInput } from "../../../common/FormInput"
 import { Calendar, Clock } from "lucide-react"
 import { TextArea } from "../../../common/textArea"
 import { addExtraServiceValidationSchema } from "../../../constants/validationSchema"
+import { addExtraServiceInitialValues } from "../../../constants/initialValues"
 
 
 export default function AddExtraService(){
@@ -12,15 +13,7 @@ export default function AddExtraService(){
         <main className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
             <h1 className="text-[20px] font-bold mb-8">Add Extra Service</h1>
             <Formik
-                initialValues={{extraServiceNameEnglish: "",
-                extarServicePrice: "",
-                serviceNameArabic: "",
-                extraServiceDiscount: "",
-                extarServiceTime: "",
-                englishServiceDescription: "",
-                extraArabicServiceDescription: "",
-                Date: "",
-                Time: "",}}
+                initialValues={addExtraServiceInitialValues}
                 validationSchema={addExtraServiceValidationSchema}
                 onSubmit={(values) => {
                     console.log(values)
