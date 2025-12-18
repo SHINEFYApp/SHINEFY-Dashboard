@@ -9,16 +9,6 @@ import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
 import { CarFront, Map, Users } from 'lucide-react';
 import { Link } from 'react-router';
-import { sidebarMenuItems } from '../../constants/data';
-
-// Icon mapping
-const iconMap: Record<string, React.ReactNode> = {
-    LayoutDashboard: <LayoutDashboard className="w-5 h-5" />,
-    Calendar: <Calendar className="w-5 h-5" />,
-    CarFront: <CarFront className="w-5 h-5" />,
-    Users: <Users className="w-5 h-5" />,
-    Map: <Map className="w-5 h-5" />,
-};
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
