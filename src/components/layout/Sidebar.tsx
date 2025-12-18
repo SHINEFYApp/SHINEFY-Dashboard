@@ -9,6 +9,7 @@ import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
 import { CarFront, Map, Users } from 'lucide-react';
 import { Link } from 'react-router';
+import { sidebarMenuItems } from '../../constants/data';
 
 // Icon mapping
 const iconMap: Record<string, React.ReactNode> = {

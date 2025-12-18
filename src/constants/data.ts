@@ -678,6 +678,7 @@ export const dummySubArea: any[] = [
     },
 ];
 
+//drop down with multi selections and options
 
 export const menus: MenuType[] = [
     {
