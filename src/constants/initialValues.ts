@@ -23,7 +23,6 @@ export const servicesStep2InitialValues = {
     mainService: '',
     mainPackage: '',
     serviceBoy: '',
-    extraServices: [],
 };
 
 export const servicesStep3InitialValues = {
@@ -60,6 +59,21 @@ export const addRegions = {
     name: '',
     description: ''
 };
+
+export const mangeServiceInitialValues = {
+    serviceNameEnglish: "",
+    serviceLabelEnglish: "",
+    serviceNameArabic: "",
+    serviceLabelArabic: "",
+    servicePrice: "",
+    serviceTime: "",
+    serviceDiscount: "",
+    engishServiceDescription: "",
+    arabicServiceDescription: "",
+    Date: null,
+    Time: null,
+};
+
 
 export const addSubAdminInitialValues = {
     name: '',
@@ -123,5 +137,3 @@ export const addServiceBoyInitialValues = {
     licenseExpiredDate: '',
     idCardImage: null,
 };
-
-

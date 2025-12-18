@@ -1,4 +1,5 @@
 import { Eye, MapPin, Clock, Trash2, Ban, ArrowUpToLine } from "lucide-react";
+import { Link } from "react-router";
 
 export const manageServiceBoyColumns = [
     {
@@ -38,20 +39,21 @@ export const manageServiceBoyColumns = [
         key: "action",
         title: "Action",
         width: "w-[600px]",
-        render: () => (
+        render: (_: any, record: any) => (
             <div className="flex gap-2 items-center text-nowrap">
-                <button
+                <Link
+                    to={`/users&staff/manageServiceBoy/${record.id}`}
                     className="bg-[#D2E3FF] flex items-center gap-2 rounded-[2.75px] text-[#2196F3] border border-[#2196F3] capitalize hover:text-[#D2E3FF] hover:bg-[#2196F3] px-3.5 py-3 font-semibold transition-colors"
-                    onClick={() => alert('View')}
                 >
                     <Eye size={18} /> View
-                </button>
-                <button
+                </Link>
+                <Link
+                    to={`/users&staff/manageServiceBoy/${record.id}`}
+                    state={{ mode: 'edit' }}
                     className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3.5 py-3 font-semibold transition-colors"
-                    onClick={() => alert('updated item')}
                 >
                     <ArrowUpToLine size={18} /> update
-                </button>
+                </Link>
                 <button
                     className="bg-[#E1BEE7] flex items-center gap-2 rounded-[2.75px] text-[#9C27B0] border border-[#9C27B0] capitalize hover:text-[#E1BEE7] hover:bg-[#9C27B0] px-3.5 py-3 font-semibold transition-colors"
                     onClick={() => alert('Edit Areas')}

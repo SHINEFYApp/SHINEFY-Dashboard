@@ -36,37 +36,45 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Vehicles',
         breadcrumbs: ['Vehicles', 'Manage Vehicles']
     },
-    '/users&staff/manageUsers': {
+    '/users&staff/manage/users': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage Users']
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Users']
     },
-    '/users&staff/manageSubAdmin': {
+    '/users&staff/manage/subAdmin': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage Sub Admin']
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin']
     },
-    '/users&staff/manageServiceBoy': {
+    '/users&staff/manage/serviceBoy': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage Service Boy']
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Service Boy']
     },
-    '/users&staff/manageUsersWallet': {
+    '/users&staff/manageServiceBoy/:id': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage Users Wallet']
+        breadcrumbs: ['Users & Stuff', 'Manage Service Boy', 'Service Boy Details']
     },
-    '/users&staff/subAdmin/addSubAdmin': {
+    '/users&staff/manageServiceBoy/addServiceBoy': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage Sub Admin', 'Add']
+        breadcrumbs: ['Users & Stuff', 'Manage Service Boy', 'Add Service Boy']
     },
-    '/geography&regions/manageCountries': {
+    '/users&staff/manage/usersWallet': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Users Wallet']
+    },
+    '/users&staff/manage/subAdmin/addSubAdmin': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage', 'Sub Admin', 'Add']
+    },
+    '/geography&regions/manage/countries': {
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Countries']
     },
-    '/geography&regions/manageRegions': {
+    '/geography&regions/manage/regions': {
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Regions']
     },
-    '/geography&regions/manageAreas': {
+    '/geography&regions/manage/area': {
         title: 'Geography & Regions',
-        breadcrumbs: ['Geography & Regions', 'Manage Areas']
+        breadcrumbs: ['Geography & Regions', 'Manage Area']
     },
 };
 
@@ -164,6 +172,8 @@ export const manageAreaTabs = [
     { id: 'mainArea', label: 'Manage Main Area' },
     { id: 'subArea', label: 'Manage Sub Area' },
 ];
+
+
 
 export const createBookingSteps = [
     {
@@ -608,6 +618,74 @@ export const dummyCountries: any[] = [
     },
 ];
 
+// Example for manage countries
+
+export const dummyExtraService: any[] = [
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+    {
+        image: '',
+        extraServiceEnglishName: 'SHINEFY Deep Cleaning',
+        extraServiceArabicName: 'شاين-فاي تنظيف عميق',
+        extraServicePrice: 'Extra Service Price',
+        extraServiceTime: 'Extra Service Time (minutes)',
+    },
+];
+
 // Example for manage regions
 export const dummyRegions: any[] = [
     {
@@ -693,6 +771,7 @@ export const dummySubArea: any[] = [
     },
 ];
 
+//drop down with multi selections and options
 
 export const menus: MenuType[] = [
     {
@@ -802,6 +881,7 @@ export const financeRows = [
 
 export const dummyServiceBoyData: any[] = [
     {
+        id: "SB001",
         image: carImage,
         name: 'Ahmed Ali',
         phoneNumber: '+201001234567',
@@ -809,6 +889,7 @@ export const dummyServiceBoyData: any[] = [
         status: 'Activated',
     },
     {
+        id: "SB002",
         image: carImage,
         name: 'Mohamed Hassan',
         phoneNumber: '+201109876543',
@@ -816,6 +897,7 @@ export const dummyServiceBoyData: any[] = [
         status: 'Deactivated',
     },
     {
+        id: "SB003",
         image: carImage,
         name: 'Youssef Ibrahim',
         phoneNumber: '+201205555555',
@@ -823,6 +905,7 @@ export const dummyServiceBoyData: any[] = [
         status: 'Activated',
     },
     {
+        id: "SB004",
         image: carImage,
         name: 'Omar Khaled',
         phoneNumber: '+201501112222',
@@ -830,6 +913,7 @@ export const dummyServiceBoyData: any[] = [
         status: 'Activated',
     },
     {
+        id: "SB005",
         image: carImage,
         name: 'Khaled Said',
         phoneNumber: '+201004443333',

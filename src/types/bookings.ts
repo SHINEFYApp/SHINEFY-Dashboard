@@ -50,7 +50,7 @@ export interface FormData {
 export interface Vehicle {
     make: any;
     model: any;
-    colorHex: BackgroundColor | undefined;
+    colorHex: 'BackgroundColor' | undefined;
     id: string;
     name: string;
     type: string;
@@ -147,7 +147,7 @@ export interface FilterFormValuesUserWallets {
 }
 
 // Table props
-export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions' | 'area';
+export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions' | 'area' | 'service';
 
 export interface ManageBookingsAndSlotsProps {
     manageSectionFromComponant: ManageSectionKey;
@@ -191,3 +191,4 @@ export interface ReportFilters {
     startDate: string;
     endDate: string;
 }
+

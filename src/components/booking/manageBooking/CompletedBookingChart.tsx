@@ -15,13 +15,18 @@ import { FormDatePicker } from "../../../common/FormDatePicker";
 import { FormDropdown } from "../../../common/FormDropdown";
 import { dummyDays, dummyMonths, dummyYears } from "../../../constants/data";
 import { generateChartData } from "../../../utils/utils";
-import { CompletedBookingChartInitialValues } from "../../../constants/initialValues";
+import type { ReportFilters } from "../../../types/bookings";
 
 const CompletedBookingChart = () => {
     const [selectedYear, setSelectedYear] = useState("2025");
     const [selectedMonth, setSelectedMonth] = useState("January");
     const [chartData] = useState(generateChartData(dummyDays));
 
+    const initialValues: ReportFilters = {
+        status: "",
+        startDate: "",
+        endDate: "",
+    };
 
     const statuses = ["All", "Completed", "Pending", "Cancelled"];
 
@@ -42,7 +47,7 @@ const CompletedBookingChart = () => {
         <div className="w-full bg-white shadow-md p-4 md:p-6 rounded-2xl mt-6">
             {/* Header with Filters */}
             <div className="mb-6">
-                <Formik initialValues={CompletedBookingChartInitialValues} onSubmit={(values) => console.log(values)}>
+                <Formik initialValues={initialValues} onSubmit={(values) => console.log(values)}>
                     <Form>
                         <div className="flex flex-wrap items-center gap-3">
                             {/* Title */}

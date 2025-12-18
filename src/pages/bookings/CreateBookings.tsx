@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatedTabs } from '../../components/booking/AnimatedTabs';
 import { ProgressSteps } from '../../components/booking/ProgressSteps';
@@ -8,25 +8,21 @@ import type { FormData } from '../../types/bookings';
 import { createBackageBookingSteps, createBookingSteps, createBookingTabs } from '../../constants/data';
 import { FindStep } from './bookingSteps';
 
-const validTabs = ['services', 'package'];
 const CreateBookings = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+    const validTabs = ['services', 'package'];
     const [completedSteps, setCompletedSteps] = useState<number[]>([]);
     const [validatedSteps, setValidatedSteps] = useState<number[]>([]); // Track which steps are valid
     const stepValidationRef = useRef<(() => Promise<boolean>) | null>(null);
-
-    const getValidTab = useCallback((): string => {
+    const getValidTab = (): string => {
         const tabParam = searchParams.get('tab');
         return tabParam && validTabs.includes(tabParam) ? tabParam : 'services';
-    }, [searchParams]);
-
-    const [activeTab, setActiveTab] = useState<string>(() => {
-        const tabParam = searchParams.get('tab');
-        return tabParam && ['services', 'package'].includes(tabParam) ? tabParam : 'services';
-    });
+    };
+    
+    const [activeTab, setActiveTab] = useState<string>(getValidTab());
     const [currentStep, setCurrentStep] = useState<number>(1);
 
-    const StepComponent = FindStep(activeTab, currentStep);
+    const StepComponent = FindStep(activeTab , currentStep)
 
     const [formData, setFormData] = useState<FormData>({
         services: {
@@ -46,26 +42,20 @@ const CreateBookings = () => {
             adminNotes: '',
         },
         package: {
-            phoneNumber: '',
-            address: '',
-            vehicle: '',
-            vehicles: [],
-            bookingDate: '',
-            bookingTime: '',
-            mainPackage: '',
-            mainService: '',
-            extraServices: [],
-            serviceBoy: '',
-            userNote: '',
-            adminNotes: '',
+            phoneNumber: '' ,
+            address: '' ,
+            vehicle: '' ,
+            vehicles: [] ,
+            bookingDate: '' ,
+            bookingTime: '' ,
+            mainPackage : ''  ,
+            mainService: '' ,
+            extraServices: [] ,
+            serviceBoy: '' ,
+            userNote: '' ,
+            adminNotes: '' ,
         },
     });
-
-    const updateURL = useCallback((tab: string) => {
-        const params = new URLSearchParams();
-        params.set('tab', tab);
-        setSearchParams(params, { replace: true });
-    }, [setSearchParams]);
 
     useEffect(() => {
         const tab = getValidTab();
@@ -74,7 +64,13 @@ const CreateBookings = () => {
         if (searchParams.get('tab') !== tab) {
             updateURL(tab);
         }
-    }, [searchParams, getValidTab, updateURL]);
+    }, [searchParams]);
+
+    const updateURL = (tab: string) => {
+        const params = new URLSearchParams();
+        params.set('tab', tab);
+        setSearchParams(params, { replace: true });
+    };
 
     const handleTabChange = (tabId: string) => {
         setActiveTab(tabId);
@@ -102,7 +98,7 @@ const CreateBookings = () => {
         }
 
 
-        if (activeTab === 'package' && currentStep === 2) {
+        if(activeTab === 'package' && currentStep === 2) {
             setCurrentStep(currentStep + 2);
         }
 
@@ -112,8 +108,8 @@ const CreateBookings = () => {
         if (currentStep > 1) {
             setCurrentStep(currentStep - 1);
         }
-
-        if (activeTab === 'package' && currentStep === 4) {
+        
+        if(activeTab === 'package' && currentStep === 4) {
             setCurrentStep(currentStep - 2);
         }
     };
@@ -140,22 +136,15 @@ const CreateBookings = () => {
     };
 
     // Function to update step validation status
-    const updateStepValidation = useCallback((stepNumber: number, isValid: boolean) => {
-        setValidatedSteps((prev) => {
-            if (isValid && !prev.includes(stepNumber)) {
-                return [...prev, stepNumber];
-            } else if (!isValid && prev.includes(stepNumber)) {
-                return prev.filter((s) => s !== stepNumber);
-            }
-            return prev;
-        });
-    }, []);
+    const updateStepValidation = async (stepNumber: number, isValid: boolean) => {
+        if (isValid && !validatedSteps.includes(stepNumber)) {
+            setValidatedSteps([...validatedSteps, stepNumber]);
+        } else if (!isValid && validatedSteps.includes(stepNumber)) {
+            setValidatedSteps(validatedSteps.filter((s) => s !== stepNumber));
+        }
+    };
 
-    const handleValidationChange = useCallback((isValid: boolean) => {
-        updateStepValidation(currentStep, isValid);
-    }, [currentStep, updateStepValidation]);
-
-    const updateFormData = useCallback((tab: string, data: any) => {
+    const updateFormData = (tab: string, data: any) => {
         setFormData((prev) => ({
             ...prev,
             [tab]: {
@@ -163,11 +152,7 @@ const CreateBookings = () => {
                 ...data,
             },
         }));
-    }, []);
-
-    const handleDataChange = useCallback((data: any) => {
-        updateFormData(activeTab === 'services' ? 'services' : 'package', data);
-    }, [activeTab, updateFormData]);
+    };
 
     const handleRemoveVehicle = (vehicleId: string) => {
         const updatedVehicles = formData.services.vehicles.filter(
@@ -217,10 +202,14 @@ const CreateBookings = () => {
                     onBack={handlePreviousStep}
                     onSubmit={handleSubmit}
                     formData={activeTab === 'services' ? formData.services : formData.package}
-                    onDataChange={handleDataChange}
+                    onDataChange={(data: any) =>
+                        updateFormData(activeTab === 'services' ? 'services' : 'package', data)
+                    }
                     onRemoveVehicle={handleRemoveVehicle}
                     registerValidation={registerStepValidation}
-                    onValidationChange={handleValidationChange}
+                    onValidationChange={(isValid: boolean) =>
+                        updateStepValidation(currentStep, isValid)
+                    }
                     userPackageInput={activeTab !== 'services'}
                 />
             </div>
