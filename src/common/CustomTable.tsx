@@ -80,15 +80,15 @@ export function CustomTable<T extends Record<string, any>>({
                                             {/* {column.render ? column.render( row[column.key], row, rowIndex) : row[column.key]} */}
                                             {column.render 
                                                 ? column.render(row[column.key], row, rowIndex) 
-                                                : column.key.toLowerCase() === "image" || column.key.toLowerCase() === "flag" || column.key.toLowerCase() === "countries" || column.key.toLowerCase() === "mainareaname" ? 
+                                                : column.key.toLowerCase() === "image" || column.key.toLowerCase() === "flag" || column.key.toLowerCase() === "countries" || column.key.toLowerCase() === "mainareaname" || column.key.toLowerCase() === "customer" ? 
                                                     <div className="flex items-center gap-5">
                                                         <div className="w-[36.4px] h-[26px] bg-black/30 rounded-[5.2px] overflow-hidden">
                                                             {row[column.key] &&
-                                                                <img src={column.key.toLowerCase() === "flag" ? row[column.key] : row[column.key]?.flag} alt="flag" />
+                                                                <img src={column.key.toLowerCase() === "flag" ? row[column.key] : column.key.toLowerCase() === "customer" ? row[column.key]?.image : row[column.key]?.flag} alt="flag" />
                                                             }
                                                         </div>
-                                                        {row[column.key]?.title &&
-                                                            <p>{row[column.key].title}</p>
+                                                        {row[column.key]?.title || row[column.key]?.name &&
+                                                            <p>{row[column.key].title || row[column.key]?.name}</p>
                                                         }
                                                     </div>
                                                     :
