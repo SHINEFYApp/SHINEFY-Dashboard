@@ -27,6 +27,10 @@ import ServiceBoyDetails from './pages/users&staff/ServiceBoyDetails';
 import ManageUsers from './pages/users&staff/ManageUsers';
 import ManageServiceBoy from './pages/users&staff/ManageServiceBoy';
 import AddCoupon from './pages/services&extra/manageCoupon/addCoupon';
+import ManageProducts from './pages/productsAndOrders/manageProducts';
+import AddProduct from './pages/productsAndOrders/subPages/addProducts';
+import AddCategory from './pages/productsAndOrders/subPages/addCategory';
+import ManageOrders from './pages/productsAndOrders/manageOrders';
 
 function App() {
   const location = useLocation();
@@ -79,6 +83,10 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
+              <Route path="/products&orders/manage/Products" element={<ManageProducts />} />
+              <Route path="/products&orders/manage/Products/addProduct" element={<AddProduct />} />
+              <Route path="/products&orders/manage/Products/addGategory" element={<AddCategory />} />
+              <Route path="/products&orders/manage/Orders" element={<ManageOrders />} />
           </Routes>
         </Layout>
       )}
