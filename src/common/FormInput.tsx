@@ -36,7 +36,7 @@ export const FormInput: FC<FormInputProps> = ({
             <div className="relative mt-2">
                 {/* Icon on the left */}
                 {icon && (
-                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 text-gray-400`}>
+                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 mt-1`}>
                         {icon}
                     </div>
                 )}

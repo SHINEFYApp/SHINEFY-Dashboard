@@ -160,9 +160,3 @@ button {
 button:disabled {
   cursor: not-allowed;
 }
-
-.mask {
-  /* دائرة واحدة */
-  -webkit-mask-image: radial-gradient(circle at left, transparent 0 12px, black 12px);
-  mask-image: radial-gradient(circle at left, transparent 0 12px, black 12px);
-}
