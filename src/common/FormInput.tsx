@@ -1,8 +1,9 @@
 import type { FC } from 'react';
 import { useField } from 'formik';
 import { cn } from '../utils/utils';
+import { IoCheckmarkCircle } from 'react-icons/io5';
 import type { FormInputProps } from '../types/common';
-import { Check, CircleCheck } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 export const FormInput: FC<FormInputProps> = ({
     name,
@@ -23,7 +24,7 @@ export const FormInput: FC<FormInputProps> = ({
 
     const handleToggle = () => {
         if (!receiveSms) return;
-        setReceiveSms?.({ ...receiveSms, isSms: !receiveSms?.isSms });
+        setReceiveSms?.({ ...receiveSms, isSms: !receiveSms?.isSms});
     };
 
     return (
@@ -70,7 +71,7 @@ export const FormInput: FC<FormInputProps> = ({
                 {/* Success checkmark */}
                 {isValid && checkmark && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 animate-scale-up">
-                        <CircleCheck className="w-5 h-5 text-green-500" />
+                        <IoCheckmarkCircle className="w-5 h-5 text-green-500" />
                     </div>
                 )}
 
@@ -87,8 +88,8 @@ export const FormInput: FC<FormInputProps> = ({
             {receiveSms?.status && (
                 <div className="py-2">
                     <button onClick={handleToggle} type='button' className='flex gap-2 font-extrabold text-[14px] items-center'>
-                        {receiveSms.isSms ?
-                            <span className='w-5 rounded h-5 bg-green-600 flex justify-center items-center'><Check color='white' size={15} /></span>
+                        {receiveSms.isSms ? 
+                            <span className='w-5 rounded h-5 bg-green-600 flex justify-center items-center'><Check color='white' size={15}/></span>
                             :
                             <span className='w-5 rounded h-5 border border-black flex justify-center items-center'></span>
                         }

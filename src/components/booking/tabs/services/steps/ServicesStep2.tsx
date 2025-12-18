@@ -1,13 +1,16 @@
 import { Formik, Form } from 'formik';
 import { servicesBookingSchema, packageBookingSchema } from '../../../../../constants/validationSchema';
 import { servicesStep2InitialValues } from '../../../../../constants/initialValues';
+import { IoCarSportOutline, IoPeopleOutline } from 'react-icons/io5';
 import { FormDropdown } from '../../../../../common/FormDropdown';
 import { Button } from '../../../../ui/button';
 import type { ServicesStep2Props } from '../../../../../types/bookings';
 import { availableExtraServices } from '../../../../../constants/data';
-import { CarFront, Package, Users } from 'lucide-react';
+import { Package } from 'lucide-react';
 
 const ServicesStep2 = ({ onNext, onBack, userPackageInput, formData, onDataChange }: ServicesStep2Props) => {
+
+
 
     const handleQuantityChange = (serviceId: string, newQuantity: number) => {
         const existingServices = formData.extraServices || [];
@@ -56,7 +59,6 @@ const ServicesStep2 = ({ onNext, onBack, userPackageInput, formData, onDataChang
                     mainService: formData.mainService || servicesStep2InitialValues.mainService,
                     mainPackage: (formData as any).mainPackage || servicesStep2InitialValues.mainPackage,
                     serviceBoy: formData.serviceBoy || servicesStep2InitialValues.serviceBoy,
-                    extraServices: formData.extraServices || servicesStep2InitialValues.extraServices,
                 }}
                 validationSchema={userPackageInput ? packageBookingSchema : servicesBookingSchema}
                 enableReinitialize
@@ -91,7 +93,7 @@ const ServicesStep2 = ({ onNext, onBack, userPackageInput, formData, onDataChang
                                 label="Services"
                                 placeholder="Select Services"
                                 className='w-full'
-                                icon={<CarFront className="w-5 h-5" />}
+                                icon={<IoCarSportOutline className="w-5 h-5" />}
                                 options={[
                                     'Full Car Wash',
                                     'Interior Cleaning',
@@ -148,7 +150,7 @@ const ServicesStep2 = ({ onNext, onBack, userPackageInput, formData, onDataChang
                                 name="serviceBoy"
                                 label="Services Boy"
                                 placeholder="Select Services Boy"
-                                icon={<Users className="w-5 h-5" />}
+                                icon={<IoPeopleOutline className="w-5 h-5" />}
                                 options={[
                                     'Ahmed Mohamed',
                                     'Mohamed Ali',

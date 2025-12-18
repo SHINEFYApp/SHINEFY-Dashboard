@@ -1,9 +1,9 @@
-import './logInStyle.css';
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { Checkbox } from "../../components/ui/checkbox";
+import './logInStyle.css'
+import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
+import { Checkbox } from "../../components/ui/checkbox"
+import { BsEye } from "react-icons/bs";
 import Thunder from "@/assets/images/logIn/thunder.png";
-import { Eye } from 'lucide-react';
 export default function LogIn() {
     return (
         <section className="w-full flex justify-center items-center  bg-login h-auto min-h-screen m-auto overflow-hidden">
@@ -33,7 +33,7 @@ export default function LogIn() {
                                     <Input type="password" id="password" className='size-full placeholder:text-[16px] outline-0 placeholder:text-[#616161] rounded-[10px] border border-[#616161] py-[19px] px-5' placeholder="password" />
                                     <div className="h-full w-[15%] flex justify-center items-center absolute top-0 right-0">
                                         <button className="cursor-pointer">
-                                            <Eye />
+                                            <BsEye />
                                         </button>
                                     </div>
                                 </div>

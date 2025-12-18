@@ -1,11 +1,14 @@
+<<<<<<< HEAD
 import { useNavigate } from "react-router";
+=======
+>>>>>>> parent of 3a56ff3 (Merge pull request #17 from SHINEFYApp/abdelrahman)
 import { dummyCountries } from "../constants/data";
 import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
 
 export function CustomTable<T extends Record<string, any>>({
-    page,
+    page ,
     columns,
     data,
     currentPage,
@@ -78,9 +81,9 @@ export function CustomTable<T extends Record<string, any>>({
                                             )}
                                         >
                                             {/* {column.render ? column.render( row[column.key], row, rowIndex) : row[column.key]} */}
-                                            {column.render
-                                                ? column.render(row[column.key], row, rowIndex)
-                                                : column.key.toLowerCase() === "image" || column.key.toLowerCase() === "flag" || column.key.toLowerCase() === "countries" || column.key.toLowerCase() === "mainareaname" ?
+                                            {column.render 
+                                                ? column.render(row[column.key], row, rowIndex) 
+                                                : column.key.toLowerCase() === "image" || column.key.toLowerCase() === "flag" || column.key.toLowerCase() === "countries" || column.key.toLowerCase() === "mainareaname" ? 
                                                     <div className="flex items-center gap-5">
                                                         <div className="w-[36.4px] h-[26px] bg-black/30 rounded-[5.2px] overflow-hidden">
                                                             {row[column.key] &&

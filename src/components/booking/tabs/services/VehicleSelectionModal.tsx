@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { cn } from '../../../../utils/utils';
-import { CheckIcon, CircleX } from 'lucide-react';
+import { IoClose } from 'react-icons/io5';
+import { CheckIcon } from 'lucide-react';
 import type { Vehicle, VehicleSelectionModalProps } from '../../../../types/bookings';
 import { dummyDataVehicles } from '../../../../constants/data';
 
@@ -57,7 +58,7 @@ export const VehicleSelectionModal = ({
                             onClick={handleCancel}
                             className="text-gray-400 hover:text-gray-600 transition-colors"
                         >
-                            <CircleX className="w-8 h-8" />
+                            <IoClose className="w-8 h-8" />
                         </button>
                     </div>
 
