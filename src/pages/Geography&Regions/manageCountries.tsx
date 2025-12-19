@@ -11,40 +11,6 @@ import { dummyCountries, exportTypes } from "../../constants/data";
 import type { FilterFormValuesOnlySearch } from "../../types/bookings";
 import { CustomTable } from "../../common/CustomTable";
 
-// countries: {
-//         InitialValues: {
-//             search: ''
-//         },
-//         head: {
-//             headTitle: {
-//                 one: '',
-//                 two: ''
-//             },
-//             leftSide: [
-//                 <div className="w-full md:w-52 lg:w-[446px] mb-2 -space-y-2">
-//                     <FormInput
-//                         name="search"
-//                         label=""
-//                         placeholder="Search"
-//                         icon={<Search className="w-5 h-5" />}
-//                         className="mb-0"
-//                         checkmark={false}
-//                     />
-//                 </div>,
-//                 <button
-//                     type="submit"
-//                     className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
-//                 >
-//                     Search
-//                 </button>
-//             ],
-//             rightSide: [
-                
-//             ]
-//         },
-//         
-//     },
-
 
 const columns = [
     {

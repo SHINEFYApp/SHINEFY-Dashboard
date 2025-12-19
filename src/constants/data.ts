@@ -80,6 +80,14 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Geography & Regions',
         breadcrumbs: ['Geography & Regions', 'Manage Area']
     },
+    '/geography&regions/manage/area/add/mainArea': {
+        title: 'Geography & Regions',
+        breadcrumbs: ['Geography & Regions', 'Manage Area' , 'Add Main Area']
+    },
+    '/geography&regions/manage/area/add/subArea': {
+        title: 'Geography & Regions',
+        breadcrumbs: ['Geography & Regions', 'Manage Area' , 'Add Sub Area']
+    },
     '/services&extra/manage/Service': {
         title: 'Services & Extra',
         breadcrumbs: ['Services & Extra', 'Manage Service']

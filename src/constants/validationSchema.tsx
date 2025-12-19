@@ -96,7 +96,7 @@ export const areaValidationSchema = (whoTap: string | undefined) =>
             ? Yup.string().required("Sub area name is required")
             : Yup.string().notRequired(),
     }
-    );
+);
 
 
 export const addRegionsSchema = Yup.object().shape({
