@@ -5,6 +5,7 @@ import { FormInput } from "./FormInput";
 import { FormDropdown } from "./FormDropdown";
 import { GenericFilterModal } from "./GenericFilterModal";
 import type { ReactNode } from "react";
+import { Link } from "react-router";
 
 interface ActionButton {
     label: string;
@@ -16,7 +17,7 @@ interface ActionButton {
 
 interface FilterHeaderProps {
     // Header
-    subtitle: string;
+    subtitle?: string;
 
     // Search
     searchInitialValues: any;
@@ -121,13 +122,13 @@ export const FilterHeader = ({
 
                                             if (button.href) {
                                                 return (
-                                                    <a
+                                                    <Link
                                                         key={index}
-                                                        href={button.href}
+                                                        to={button.href}
                                                         className={className}
                                                     >
                                                         {button.label}
-                                                    </a>
+                                                    </Link>
                                                 );
                                             }
 

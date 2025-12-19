@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Table from "../../components/tables/table";
 import { Form, Formik } from "formik";
 import { FormInput } from "../../common/FormInput";
 import { Button } from "../../components/ui/button";
@@ -16,7 +15,6 @@ export default function ManageAreas(){
     return(
         <>
             <main>
-                <Table openWindow={openWindowArea} setOpenWindow={setOpenWindowArea} manageSectionFromComponant={'area'} setWhoTap={setWhoTap} />
             </main>
             <section
                 className={`

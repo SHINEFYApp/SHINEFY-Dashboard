@@ -66,11 +66,11 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
-              <Route path="/services&extras/manage/Service" element={<ManageService />} />
-              <Route path="/services&extras/manage/Service/addService" element={<AddService />} />
-              <Route path="/services&extras/manage/ExtreService" element={<ManageExtraService />} />
+              <Route path="/services&extra/manage/Service" element={<ManageService />} />
+              <Route path="/services&extra/manage/Service/addService" element={<AddService />} />
+              <Route path="/services&extra/manage/ExtreService" element={<ManageExtraService />} />
               <Route path="/services&extra/manage/extreService/addExtraService" element={<AddExtraService />} />
-              <Route path="/services&extras/manage/coupon" element={<ManageCoupon />} />
+              <Route path="/services&extra/manage/coupon" element={<ManageCoupon />} />
               <Route path="/services&extra/manage/coupon/addCoupon" element={<AddCoupon />} />
             <Route path="/vehicles/manage" element={<ManageVehicles />} />
             <Route path="/users&staff/manage/users" element={<ManageUsers />} />

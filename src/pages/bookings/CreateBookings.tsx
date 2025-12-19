@@ -12,7 +12,7 @@ const CreateBookings = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const validTabs = ['services', 'package'];
     const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-    const [validatedSteps, setValidatedSteps] = useState<number[]>([]); // Track which steps are valid
+    const [validatedSteps, setValidatedSteps] = useState<number[]>([]); 
     const stepValidationRef = useRef<(() => Promise<boolean>) | null>(null);
     const getValidTab = (): string => {
         const tabParam = searchParams.get('tab');

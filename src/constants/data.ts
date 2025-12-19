@@ -24,6 +24,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Bookings']
     },
+    '/bookings/manage/id': {
+        title: 'Bookings',
+        breadcrumbs: ['Bookings', 'Manage Bookings' , 'Manage Booking By Id']
+    },
     '/bookings/slot': {
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Slot']
@@ -220,6 +224,8 @@ export const manageAreaTabs = [
 ];
 
 export const exportTypes = ['CSV', 'Excel', 'PDF'];
+export const types = ['type one', 'type two', 'type three'];
+export const status = ['Open', 'Closed'];
 
 
 export const createBookingSteps = [

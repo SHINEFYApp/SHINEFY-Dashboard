@@ -102,7 +102,7 @@ export default function ProductsTable(){
                                             icon={<Search className="w-5 h-5" />}
                                             className="mb-0"
                                             checkmark={false}
-                                            />
+                                        />
                                     </div>
                                     <button
                                         type="submit"
