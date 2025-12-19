@@ -7,61 +7,6 @@ import type { FilterFormValuesManageSlots } from "../../../types/bookings";
 import { useState } from "react";
 import { FormDropdown } from "../../../common/FormDropdown";
 import { Link } from "react-router";
-//  manageSlots: {
-//         InitialValues: {
-//             type: "",
-//             status: "",
-//             date: "",
-//         },
-//         head: {
-//             headTitle: {
-//                 one: 'Filter',
-//                 two: 'Manage Slots'
-//             },
-//             leftSide: [
-//                 <div className={`w-full md:w-[178px] -space-y-2`}>
-//                     <FormDropdown name="type" label="" placeholder="Type" options={types} className="mb-2" />
-//                 </div>,
-//                 <div className="w-full md:w-[178px] -space-y-2">
-//                     <FormDropdown name="status" label="" placeholder="Status" options={status} className="mb-2" />
-//                 </div>,
-//                 <div className={`w-full md:w-[150px] -space-y-2`}>
-//                     <FormDatePicker
-//                         name="date"
-//                         label=""
-//                         placeholder="Date"
-//                         icon={<Calendar className="w-5 h-5" />}
-//                         className="mb-0"
-//                         checkmark={false}
-//                     />
-//                 </div>,
-//                 <button
-//                     type="submit"
-//                     className="px-6 lg:px-8 py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
-//                 >
-//                     Search
-//                 </button>
-//             ],
-//             rightSide: [
-//                 <div className="flex flex-col lg:flex-row items-center gap-5">
-//                     <div className="w-full lg:w-[135px]">
-//                         <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2" />
-//                     </div>
-//                     <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
-//                     <Link
-//                         to={"/bookings/slot/create"}
-//                         className="w-full lg:w-[94px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
-//                     >
-//                         Add Slot
-//                     </Link>
-//                 </div>
-//             ]
-//         },
-//        
-//     },
-
-
-
 
     const columns = [
         {
