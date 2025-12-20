@@ -124,28 +124,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             ]
         }, {
             icon: <Settings className="w-5 h-5" />,
-            label: 'Services & Extras',
-            isActive: currentPath?.startsWith('/services&extras/manage'),
+            label: 'Services & Extra',
+            isActive: currentPath?.startsWith('/services&extra/manage'),
             subItems: [
                 {
                     icon: null,
                     label: 'Manage Service',
-                    path: '/services&extras/manage/Service'
+                    path: '/services&extra/manage/Service'
                 },
                 {
                     icon: null,
                     label: 'Manage Extra Service',
-                    path: '/services&extras/manage/ExtreService'
+                    path: '/services&extra/manage/ExtreService'
                 },
                 {
                     icon: null,
                     label: 'Manage Coupon',
-                    path: '/services&extras/manage/Coupon'
+                    path: '/services&extra/manage/Coupon'
                 },
                 {
                     icon: null,
                     label: 'Manage Package',
-                    path: '/services&extras/manage/Package'
+                    path: '/services&extra/manage/Package'
                 }
             ],
         },

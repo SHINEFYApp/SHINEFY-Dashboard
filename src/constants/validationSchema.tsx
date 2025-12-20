@@ -324,3 +324,20 @@ export const addCategoryValidationSchema = Yup.object({
         .min(2, "Arabic name must be at least 2 characters")
         .required("Arabic name is required"),
 });
+
+
+// Schema to add new package with dynamic services
+export const addPackageSchema = Yup.object().shape({
+  packageNameEnglish: Yup.string().required("Package name in English is required"),
+  packageNameArabic: Yup.string().required("Package name in Arabic is required"),
+  packagePrice: Yup.number()
+    .typeError("Package price must be a number")
+    .required("Package price is required"),
+  packageTotalDays: Yup.number()
+    .typeError("Total days must be a number")
+    .required("Package total days is required"),
+  type: Yup.string().required("Type is required"),
+  interval: Yup.string().required("Interval is required"),
+  englishPackageDescription: Yup.string().required("English description is required"),
+  arabicPackageDescription: Yup.string().required("Arabic description is required"),
+});
