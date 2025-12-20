@@ -34,6 +34,12 @@ import ManageOrders from './pages/productsAndOrders/manageOrders';
 import AddAreas from './pages/Geography&Regions/subPagesAddAreas/addMainArea';
 import AddMainArea from './pages/Geography&Regions/subPagesAddAreas/addMainArea';
 import AddSubArea from './pages/Geography&Regions/subPagesAddAreas/addSubArea';
+import ManagePackage from './pages/services&extra/managePackage/managePackage';
+import AddNewPackage from './pages/services&extra/managePackage/addNewPackage';
+import ManageVat from './pages/Financial & Points/manageVat';
+import ManageDriverCommission from './pages/Financial & Points/manageDriverCommission';
+import ManageBonusPoint from './pages/Financial & Points/manageBonusPoint';
+import ManageAdminEarning from './pages/Financial & Points/manageAdminEarning';
 
 function App() {
   const location = useLocation();
@@ -69,7 +75,7 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
-            <Route path="/geography&regions/manage/area/add/mainArea" element={<AddMainArea />} />
+           <Route path="/geography&regions/manage/area/add/mainArea" element={<AddMainArea />} />
             <Route path="/geography&regions/manage/area/add/subArea" element={<AddSubArea />} />
               <Route path="/services&extra/manage/Service" element={<ManageService />} />
               <Route path="/services&extra/manage/Service/addService" element={<AddService />} />
@@ -77,10 +83,16 @@ function App() {
               <Route path="/services&extra/manage/extreService/addExtraService" element={<AddExtraService />} />
               <Route path="/services&extra/manage/coupon" element={<ManageCoupon />} />
               <Route path="/services&extra/manage/coupon/addCoupon" element={<AddCoupon />} />
+
+          
+        
+            <Route path="/services&extra/manage/package" element={<ManagePackage />} />
+            <Route path="/services&extra/manage/Package/addPackage" element={<AddNewPackage />} />
+           
             <Route path="/vehicles/manage" element={<ManageVehicles />} />
             <Route path="/users&staff/manage/users" element={<ManageUsers />} />
             <Route path="/users&staff/manage/subAdmin" element={<ManageSubAdmin />} />
-              <Route path="/users&staff/manage/serviceBoy" element={<ManageServiceBoy />} />
+            <Route path="/users&staff/manage/serviceBoy" element={<ManageServiceBoy />} />
             <Route path="/users&staff/manage/serviceBoy/:id" element={<ServiceBoyDetails />} />
             <Route path="/users&staff/manage/serviceBoy/addServiceBoy" element={<AddServiceBoy />} />
             <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
@@ -88,10 +100,14 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
-              <Route path="/products&orders/manage/Products" element={<ManageProducts />} />
-              <Route path="/products&orders/manage/Products/addProduct" element={<AddProduct />} />
-              <Route path="/products&orders/manage/Products/addGategory" element={<AddCategory />} />
-              <Route path="/products&orders/manage/Orders" element={<ManageOrders />} />
+            <Route path="/products&orders/manage/Products" element={<ManageProducts />} />
+            <Route path="/products&orders/manage/Products/addProduct" element={<AddProduct />} />
+            <Route path="/products&orders/manage/Products/addGategory" element={<AddCategory />} />
+            <Route path="/products&orders/manage/Orders" element={<ManageOrders />} />
+            <Route path="/financial&points/manage/Vat" element={<ManageVat />} />
+            <Route path="/financial&points/manage/driverCommission" element={<ManageDriverCommission />} />
+            <Route path="/financial&points/manage/bonusPoint" element={<ManageBonusPoint />} />
+            <Route path="/financial&points/manage/adminEarning" element={<ManageAdminEarning />} />
           </Routes>
         </Layout>
       )}

@@ -177,3 +177,11 @@ export const addCategoryInitialValues = {
     arabicName: "",
     price: "",
 };
+
+export interface managePackageAddPackageFormValues {
+    packageNameEnglish?: string;
+    packageNameArabic?: string;
+    packagePrice?: string;
+    packageTotalDays?: string;
+    [key: string]: any; 
+}

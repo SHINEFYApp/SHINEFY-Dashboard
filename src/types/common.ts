@@ -66,6 +66,7 @@ export interface FormDropdownProps {
     options?: (string | CountryOption)[];
     disabled?: boolean;
     className?: string;
+    moreOptions?: string
 }
 
 export interface FormDatePickerProps {
