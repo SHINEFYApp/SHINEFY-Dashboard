@@ -341,3 +341,32 @@ export const addPackageSchema = Yup.object().shape({
   englishPackageDescription: Yup.string().required("English description is required"),
   arabicPackageDescription: Yup.string().required("Arabic description is required"),
 });
+export const manageVatSchema = Yup.object({
+    vat: Yup.number()
+        .typeError("Vat must be a number")
+        .min(1, "Minimum Vat is 1%")
+        .max(100, "Maximum Vat is 100%")
+        .required("Vat is required"),
+});
+
+export const manageDriverCommissionSchema = Yup.object({
+    service: Yup.number()
+    .typeError("service must be a number")
+    .min(1, "Minimum service is 1%")
+    .max(100, "Maximum service is 100%")
+    .required("service is required"),
+    
+    extraService : Yup.number()
+    .typeError("Extra Service must be a number")
+    .min(1, "Minimum Extra Service is 1%")
+    .max(100, "Maximum Extra Service is 100%")
+    .required("Extra Service is required"),
+});
+
+export const manageBounusPointsSchema = Yup.object({
+    bonusPercentage : Yup.number()
+        .typeError("Vat must be a number")
+        .min(1, "Minimum Vat is 1%")
+        .max(100, "Maximum Vat is 100%")
+        .required("Vat is required"),
+});
