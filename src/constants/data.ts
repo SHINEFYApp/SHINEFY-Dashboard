@@ -10,6 +10,7 @@ import EGYPT from "@/assets/images/flags/EGYPT.png";
 import KSA from "@/assets/images/flags/KSA.png";
 import KWU from "@/assets/images/flags/KWU.png";
 import UAE from "@/assets/images/flags/UAE.png";
+import customer from "@/assets/images/a2d5b399907e9638f3692bc625edb48bf22a9919.jpg";
 
 export const routeConfig: Record<string, { title: string; breadcrumbs: string[]; }> = {
     '/dashboard': {
@@ -120,6 +121,22 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Products & Orders',
         breadcrumbs: ['Products & Orders', 'Manage Orders']
     },
+    '/financial&points/manage/Vat': {
+        title: 'Financial & Points',
+        breadcrumbs: ['Financial & Points', 'Manage Vat']
+    },
+    '/financial&points/manage/driverCommission': {
+        title: 'Financial & Points',
+        breadcrumbs: ['Financial & Points', 'Manage Driver Commission']
+    },
+    '/financial&points/manage/bonusPoint': {
+        title: 'Financial & Points',
+        breadcrumbs: ['Financial & Points', 'Manage Bonus Point']
+    },
+    '/financial&points/manage/adminEarning': {
+        title: 'Financial & Points',
+        breadcrumbs: ['Financial & Points', 'Manage Admin Earning']
+    }
 };
 
 
@@ -1151,6 +1168,140 @@ export const dummyOrders: any[] = [
         status: 'Pending',
         createDateAndTime: '21-Nov-22 12:10 PM',
     },
+];
+
+// Example for manage admin earning
+export const dummyAdminEarning: any[] = [
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    },
+    {
+        status : 'Completed',
+        bookingNumber : '7926287137',
+        customer: {
+            name: 'eidfathy' ,
+            image: customer ,
+        },
+        serviceBoyName : 'Khalil abdelmagid',
+        serviceName : 'SHINEFY Plus',
+        totalAmount : '150.00',
+        serviceDateAndTime : '21-Nov-22 12:10 PM',
+        create : '28-May-23 10:51 AM',
+    }
 ];
 
 //drop down with multi selections and options

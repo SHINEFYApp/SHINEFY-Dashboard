@@ -7,7 +7,7 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { Box, CarFront, Map, Settings, Users } from 'lucide-react';
+import { Box, CarFront, HandCoins, Map, Settings, Users } from 'lucide-react';
 
 import { Link } from 'react-router';
 
@@ -27,6 +27,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Services & Extra');
         } else if (currentPath.startsWith('/products&orders/manage')) {
             setExpandedMenu('Products & Orders');
+        }else if (currentPath.startsWith('/financial&points/manage')) {
+            setExpandedMenu('Financial & Points');
         }
     }, [currentPath]);
 
@@ -163,6 +165,33 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     icon: null,
                     label: 'Manage Orders',
                     path: '/products&orders/manage/Orders'
+                }
+            ],
+        },
+        {
+            icon: <HandCoins className="w-5 h-5" />,
+            label: 'Financial & Points',
+            isActive: currentPath?.startsWith('/financial&points/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage VAT',
+                    path: '/financial&points/manage/Vat'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Driver Commission',
+                    path: '/financial&points/manage/driverCommission'
+                },
+                {
+                    icon: null,
+                    label: 'Bonus Point',
+                    path: '/financial&points/manage/bonusPoint'
+                },
+                {
+                    icon: null,
+                    label: 'Admin Earning',
+                    path: '/financial&points/manage/adminEarning'
                 }
             ],
         },

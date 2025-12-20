@@ -2,11 +2,11 @@ import { Form, Formik } from "formik";
 import { FormInput } from "../../common/FormInput";
 import { ArrowUpToLine, Eye, Search, Trash2 } from "lucide-react";
 import { FormDropdown } from "../../common/FormDropdown";
-import { dummyOrders, exportTypes } from "../../constants/data";
+import { dummyAdminEarning, dummyOrders, exportTypes } from "../../constants/data";
 import { CustomTable } from "../../common/CustomTable";
 import { useState } from "react";
 
-export default function ManageOrders(){
+export default function ManageAdminEarning(){
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
     const totalEntries = 205;
@@ -20,55 +20,38 @@ export default function ManageOrders(){
     };
      const columns = [
         {
-            key: "hash",
-            title: "#",
-        },
-        {
-            key: "orderId",
-            title: "Order Id",
-        },
-        {
-            key: "items",
-            title: "Items",
-        },
-        {
-            key: "total",
-            title: "Total",
-        },
-        {
             key: "status",
             title: "Status",
         },
         {
-            key: "createDateAndTime",
-            title: "Create Date & Time",
+            key: "bookingNumber",
+            title: "Booking Number",
         },
         {
-            key: "action",
-            title: "Action",
-            render: () => (
-                <div className="flex gap-2 items-center">
-                     <button
-                        className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] p-2 font-semibold transition-colors"
-                        onClick={() => alert('view item')}
-                    >
-                        <Eye /> View
-                    </button>
-                    <button
-                        className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] p-2 font-semibold transition-colors"
-                        onClick={() => alert('updated item')}
-                    >
-                        <ArrowUpToLine /> update
-                    </button>
-                    <button
-                        className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] p-2 font-semibold transition-colors"
-                        onClick={() => alert('deleted item')}
-                    >
-                        <Trash2 /> delete
-                    </button>
-                </div>
-            ),
+            key: "customer",
+            title: "Customer Name",
         },
+        {
+            key: "serviceBoyName",
+            title: "Service Boy Name",
+        },
+        {
+            key: "serviceName",
+            title: "Service Name",
+        },
+        {
+            key: "totalAmount",
+            title: "Total Amount(EGP)",
+        },
+        {
+            key: "serviceDateAndTime",
+            title: "Service Date & Time",
+        },
+        {
+            key: "create",
+            title: "Create",
+        },
+       
     ]
     return(
         <main className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
@@ -115,7 +98,7 @@ export default function ManageOrders(){
             </div>
             <CustomTable
                 columns={columns}
-                data={dummyOrders}
+                data={dummyAdminEarning}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}
