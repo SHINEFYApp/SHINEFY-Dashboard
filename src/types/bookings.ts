@@ -141,13 +141,18 @@ export interface FilterFormValuesManageSubAdmin {
     franchise: string;
 }
 
-// USER WALLETS
-export interface FilterFormValuesUserWallets {
+// FILTER VALUES BY ONLY SEARCH 
+export interface FilterFormValuesOnlySearch{
+    search: string,
+}
+
+// MANAGE REGIONS
+export interface FilterFormValuesManageRegions {
     search: string,
 }
 
 // Table props
-export type ManageSectionKey = 'manageBookings' | 'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions' | 'area' | 'service';
+export type ManageSectionKey =  'manageSlots' | 'manageSubAdmin' | 'userWallets' | 'countries' | 'regions' | 'service';
 
 export interface ManageBookingsAndSlotsProps {
     manageSectionFromComponant: ManageSectionKey;

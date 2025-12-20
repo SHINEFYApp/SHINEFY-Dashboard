@@ -111,6 +111,7 @@ export const manageSubAdminSearchInitialValues = { search: '', franchise: '' };
 
 export const manageServiceBoySearchInitialValues = { search: '', franchise: '', status: '', export: '' };
 
+
 export const bookingFilterInitialValues = {
     status: '',
     service_boy: '',
