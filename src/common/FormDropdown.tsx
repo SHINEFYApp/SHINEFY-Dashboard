@@ -3,7 +3,6 @@ import { useField } from 'formik';
 import { cn } from '../utils/utils';
 import { IoCheckmarkCircle, IoChevronDown } from 'react-icons/io5';
 import type { FormDropdownProps } from '../types/common';
-import { dummyCountries } from '../constants/data';
 
 export const FormDropdown: FC<FormDropdownProps> = ({
     name,
@@ -13,6 +12,7 @@ export const FormDropdown: FC<FormDropdownProps> = ({
     options = [],
     disabled = false,
     className,
+    moreOptions
 }) => {
     const [field, meta] = useField(name);
     const hasError = meta.touched && meta.error;
@@ -38,8 +38,9 @@ export const FormDropdown: FC<FormDropdownProps> = ({
                     id={name}
                     disabled={disabled}
                     className={cn(
-                        'w-full appearance-none rounded-xl mt-2 border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200 cursor-pointer',
+                        'w-full appearance-none rounded-xl mt-2 border px-4 py-3.5 text-sm font-medium transition-all duration-200 cursor-pointer',
                         icon && 'pl-12',
+                        moreOptions === 'packageService' ? 'bg-[#191919] text-[#FFC107] border-[#E9EAEC]' : 'bg-gray-50',
                         'pr-12',
                         hasError
                             ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200'

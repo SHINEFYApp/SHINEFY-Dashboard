@@ -31,6 +31,8 @@ import ManageProducts from './pages/productsAndOrders/manageProducts';
 import AddProduct from './pages/productsAndOrders/subPages/addProducts';
 import AddCategory from './pages/productsAndOrders/subPages/addCategory';
 import ManageOrders from './pages/productsAndOrders/manageOrders';
+import ManagePackage from './pages/services&extra/managePackage/managePackage';
+import AddNewPackage from './pages/services&extra/managePackage/addNewPackage';
 import ManageVat from './pages/Financial & Points/manageVat';
 import ManageDriverCommission from './pages/Financial & Points/manageDriverCommission';
 import ManageBonusPoint from './pages/Financial & Points/manageBonusPoint';
@@ -70,6 +72,14 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
+            <Route path="/services&extra/manage/Service" element={<ManageService />} />
+            <Route path="/services&extra/manage/Service/addService" element={<AddService />} />
+            <Route path="/services&extra/manage/ExtreService" element={<ManageExtraService />} />
+            <Route path="/services&extra/manage/extreService/addExtraService" element={<AddExtraService />} />
+            <Route path="/services&extra/manage/coupon" element={<ManageCoupon />} />
+            <Route path="/services&extra/manage/coupon/addCoupon" element={<AddCoupon />} />
+            <Route path="/services&extra/manage/package" element={<ManagePackage />} />
+            <Route path="/services&extra/manage/Package/addPackage" element={<AddNewPackage />} />
             <Route path="/services&extras/manage/Service" element={<ManageService />} />
             <Route path="/services&extras/manage/Service/addService" element={<AddService />} />
             <Route path="/services&extras/manage/ExtreService" element={<ManageExtraService />} />
