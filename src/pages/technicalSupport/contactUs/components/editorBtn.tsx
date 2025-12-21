@@ -12,12 +12,15 @@ export default function EditorBtns({
     setFieldValue ,
     debouncedCommit ,
     currentDirBtn ,
-    setImagePreviews
+    setImagePreviews ,
+    undo ,
+    canUndo ,
+    redo ,
+    canRedo
 }: editorBtn){
     const [listState, setListState] = useState<listState>({ isNumber: false, isDot: false });
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [openFileUploader, setOpenFileUploader] = useState(false);
-    const { undo, redo, canUndo, canRedo } = useUndoRedo<string>("");
     /* Lists handling */
     const handleLists = useCallback(
         (type: ListType, message: string, setFieldValue: (field: string, val: string) => void) => {
@@ -94,9 +97,9 @@ export default function EditorBtns({
                     {openFileUploader && (
                         <div className="w-[300px] absolute bottom-10 right-0">
                             <FileUploader
-                                name="images" // ربطها مع Formik
+                                name="files"
                                 title="Image Uploader"
-                                multiple={true} // يسمح برفع أكثر من صورة
+                                multiple={true} 
                                 onPreview={(files) => {
                                 if (!files || files.length === 0) {
                                     setImagePreviews([]);
@@ -104,7 +107,6 @@ export default function EditorBtns({
                                     return;
                                 }
 
-                                // إنشاء previews لكل ملف
                                 const previews: ImagePreviewItem[] = files.map(file => ({
                                     id: crypto.randomUUID(),
                                     url: URL.createObjectURL(file),

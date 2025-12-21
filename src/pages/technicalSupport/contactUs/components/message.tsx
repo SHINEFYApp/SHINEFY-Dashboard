@@ -33,7 +33,7 @@ export default function Message({ openWindow, setOpenWindow }: messageProp) {
     });
 
     /* Undo / Redo */
-    const { value, set, undo, redo } = useUndoRedo<string>("");
+    const { value, set, undo, redo , canUndo, canRedo } = useUndoRedo<string>("");
 
     const debouncedCommit = useMemo(
         () => debounce((val: string) => set(val), 300),
@@ -85,7 +85,7 @@ export default function Message({ openWindow, setOpenWindow }: messageProp) {
             subject: "",
             message: "",
             linkUrl: "",
-            images: [],
+            files: [],
         }}
         validationSchema={validationMessageSchema}
         onSubmit={(values) => console.log("SEND:", values)}
@@ -198,7 +198,7 @@ export default function Message({ openWindow, setOpenWindow }: messageProp) {
                                     setFilePreviews((prev) => [...prev, ...newPreviews]);
                                     setFieldValue(
                                         "images",
-                                        [...values.images, ...selectedFiles]
+                                        [...values.files, ...selectedFiles]
                                     );
                                 }}
                             />
@@ -291,6 +291,10 @@ export default function Message({ openWindow, setOpenWindow }: messageProp) {
                         debouncedCommit={debouncedCommit}
                         currentDirBtn={currentDirBtn}
                         setImagePreviews={setFilePreviews}
+                        undo={undo}
+                        canUndo={canUndo}
+                        redo={redo}
+                        canRedo={canRedo}
                     />
                 </div>
                 </section>

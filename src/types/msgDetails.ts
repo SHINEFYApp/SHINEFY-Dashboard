@@ -52,7 +52,7 @@ export interface ContactFormValues {
     subject : string
     message: string;
     linkUrl: string;
-    images: File[];
+    files: File[];
 }
 
 
@@ -83,7 +83,11 @@ export interface editorBtn {
         class: string;
         icon: JSX.Element;
     } | undefined ,
-    setImagePreviews :  Dispatch<SetStateAction<ImagePreviewItem[]>>
+    setImagePreviews :  Dispatch<SetStateAction<ImagePreviewItem[]>> ,
+    undo : () => void ,
+    canUndo : boolean ,
+    redo : () => void ,
+    canRedo : boolean ,
 
 }
 
