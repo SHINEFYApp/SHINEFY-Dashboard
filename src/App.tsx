@@ -40,6 +40,7 @@ import ManageVat from './pages/Financial & Points/manageVat';
 import ManageDriverCommission from './pages/Financial & Points/manageDriverCommission';
 import ManageBonusPoint from './pages/Financial & Points/manageBonusPoint';
 import ManageAdminEarning from './pages/Financial & Points/manageAdminEarning';
+import ContactUs from './pages/technicalSupport/contactUs/contactUs';
 
 function App() {
   const location = useLocation();
@@ -75,20 +76,16 @@ function App() {
             <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
             <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />
             <Route path="/geography&regions/manage/area" element={<ManageAreas />} />
-           <Route path="/geography&regions/manage/area/add/mainArea" element={<AddMainArea />} />
+            <Route path="/geography&regions/manage/area/add/mainArea" element={<AddMainArea />} />
             <Route path="/geography&regions/manage/area/add/subArea" element={<AddSubArea />} />
-              <Route path="/services&extra/manage/Service" element={<ManageService />} />
-              <Route path="/services&extra/manage/Service/addService" element={<AddService />} />
-              <Route path="/services&extra/manage/ExtreService" element={<ManageExtraService />} />
-              <Route path="/services&extra/manage/extreService/addExtraService" element={<AddExtraService />} />
-              <Route path="/services&extra/manage/coupon" element={<ManageCoupon />} />
-              <Route path="/services&extra/manage/coupon/addCoupon" element={<AddCoupon />} />
-
-          
-        
+            <Route path="/services&extra/manage/Service" element={<ManageService />} />
+            <Route path="/services&extra/manage/Service/addService" element={<AddService />} />
+            <Route path="/services&extra/manage/ExtreService" element={<ManageExtraService />} />
+            <Route path="/services&extra/manage/extreService/addExtraService" element={<AddExtraService />} />
+            <Route path="/services&extra/manage/coupon" element={<ManageCoupon />} />
+            <Route path="/services&extra/manage/coupon/addCoupon" element={<AddCoupon />} />
             <Route path="/services&extra/manage/package" element={<ManagePackage />} />
             <Route path="/services&extra/manage/Package/addPackage" element={<AddNewPackage />} />
-           
             <Route path="/vehicles/manage" element={<ManageVehicles />} />
             <Route path="/users&staff/manage/users" element={<ManageUsers />} />
             <Route path="/users&staff/manage/subAdmin" element={<ManageSubAdmin />} />
@@ -108,6 +105,7 @@ function App() {
             <Route path="/financial&points/manage/driverCommission" element={<ManageDriverCommission />} />
             <Route path="/financial&points/manage/bonusPoint" element={<ManageBonusPoint />} />
             <Route path="/financial&points/manage/adminEarning" element={<ManageAdminEarning />} />
+            <Route path="/technicalSupport/contactUs" element={<ContactUs />} />
           </Routes>
         </Layout>
       )}

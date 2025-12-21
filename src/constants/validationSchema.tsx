@@ -370,3 +370,23 @@ export const manageBounusPointsSchema = Yup.object({
         .max(100, "Maximum Vat is 100%")
         .required("Vat is required"),
 });
+
+export const validationMessageSchema = Yup.object({
+  to: Yup.array()
+    .of(
+      Yup.string()
+        .required("Recipient is required")
+        .matches(/^@/, "Recipient must start with @")
+    )
+    .min(1, "At least one recipient is required"),
+
+  subject: Yup.string()
+    .trim()
+    .required("Subject is required"),
+
+  message: Yup.string()
+    .trim()
+    .required("Message is required"),
+
+  images: Yup.array(),
+});

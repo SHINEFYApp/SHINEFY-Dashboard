@@ -152,6 +152,26 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/financial&points/manage/adminEarning': {
         title: 'Financial & Points',
         breadcrumbs: ['Financial & Points', 'Manage Admin Earning']
+    },
+    '/technicalSupport/contactUs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Contact Us']
+    },
+    '/technicalSupport/manage/companies': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Companies']
+    },
+    '/technicalSupport/broadcast': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Broadcast']
+    },
+    '/technicalSupport/manage/faqs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage FAQs']
+    },
+    '/technicalSupport/manage/orderQuestions': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Order Questions']
     }
 };
 
@@ -1839,3 +1859,149 @@ export const manageVehiclesTabs = [
     { id: 'manageColor', label: 'Manage Color' },
     { id: 'manageCarCategory', label: 'Manage Car Category' },
 ];
+
+
+// examble for contact us messages from technical support section
+
+export const dummyContactUsMessages: any[] = [
+    {
+        id: '1',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '2',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '3',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '4',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '5',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '6',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '7',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '8',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '9',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '10',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+]
