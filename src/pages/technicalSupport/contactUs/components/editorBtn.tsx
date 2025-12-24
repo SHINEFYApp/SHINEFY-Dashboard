@@ -4,7 +4,6 @@ import { useCallback, useState } from "react";
 import FileUploader from "../../../../common/fileUploader";
 import { PopoverDemo } from "../../../../common/popOver";
 import type { listState, ImagePreviewItem, ListType, editorBtn } from "../../../../types/msgDetails";
-import { useUndoRedo } from "../../../../hooks/useUndoRedo";
 
 export default function EditorBtns({
     setLeftBtns ,
@@ -54,73 +53,73 @@ export default function EditorBtns({
     return(
         <div className="h-[120px] px-10 py-3 bg-[#F2F2F2] flex flex-col justify-between">
             <div className="flex justify-between">
-            {/* Left */}
-            <div className="flex gap-3">
-                <button type="button" onClick={() => setLeftBtns(p => ({ ...p, directionBtn: p.directionBtn === 3 ? 1 : p.directionBtn + 1 }))}>{currentDirBtn?.icon}</button>
-                <button type="button" onClick={() => setLeftBtns(p => ({ ...p, isBold: !p.isBold }))}><Bold /></button>
-                <button type="button" onClick={() => setLeftBtns(p => ({ ...p, isItalic: !p.isItalic }))}><Italic /></button>
-                <button type="button" onClick={() => setLeftBtns(p => ({ ...p, isUnderline: !p.isUnderline }))}><Underline /></button>
-            </div>
-
-            {/* Center */}
-            <div className="flex gap-3">
-                <button type="button" onClick={undo} disabled={!canUndo}><Undo /></button>
-                <button type="button" onClick={redo} disabled={!canRedo}><Redo /></button>
-            </div>
-
-            {/* Right */}
-            <div className="flex items-center gap-3">
-                <button type="button" onClick={() => handleLists("number", values.message, setFieldValue)}><ListOrdered /></button>
-                <button type="button" onClick={() => handleLists("dot", values.message, setFieldValue)}><List /></button>
-                <PopoverDemo setLink={link => setFieldValue("linkUrl", link)} />
-
-                <div className="relative">
-                <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>{showEmojiPicker ? <X /> : <Smile />}</button>
-                {showEmojiPicker && (
-                    <div className="absolute bottom-10 right-0">
-                    <EmojiPicker
-                        onEmojiClick={e => { const val = values.message + e.emoji; setFieldValue("message", val); debouncedCommit(val); }}
-                        lazyLoadEmojis
-                    />
-                    </div>
-                )}
+                {/* Left */}
+                <div className="flex gap-3">
+                    <button type="button" onClick={() => setLeftBtns(p => ({ ...p, directionBtn: p.directionBtn === 3 ? 1 : p.directionBtn + 1 }))}>{currentDirBtn?.icon}</button>
+                    <button type="button" onClick={() => setLeftBtns(p => ({ ...p, isBold: !p.isBold }))}><Bold /></button>
+                    <button type="button" onClick={() => setLeftBtns(p => ({ ...p, isItalic: !p.isItalic }))}><Italic /></button>
+                    <button type="button" onClick={() => setLeftBtns(p => ({ ...p, isUnderline: !p.isUnderline }))}><Underline /></button>
                 </div>
 
-                <div className="relative">
-                    <button
-                        type="button"
-                        onClick={() => setOpenFileUploader(!openFileUploader)}
-                    >
-                        {openFileUploader ? <X /> : <Image />}
-                    </button>
+                {/* Center */}
+                <div className="flex gap-3">
+                    <button type="button" onClick={undo} disabled={!canUndo}><Undo /></button>
+                    <button type="button" onClick={redo} disabled={!canRedo}><Redo /></button>
+                </div>
 
-                    {openFileUploader && (
-                        <div className="w-[300px] absolute bottom-10 right-0">
-                            <FileUploader
-                                name="files"
-                                title="Image Uploader"
-                                multiple={true} 
-                                onPreview={(files) => {
-                                if (!files || files.length === 0) {
-                                    setImagePreviews([]);
-                                    setFieldValue("images", []);
-                                    return;
-                                }
+                {/* Right */}
+                <div className="flex items-center gap-3">
+                    <button type="button" onClick={() => handleLists("number", values.message, setFieldValue)}><ListOrdered /></button>
+                    <button type="button" onClick={() => handleLists("dot", values.message, setFieldValue)}><List /></button>
+                    <PopoverDemo setLink={link => setFieldValue("linkUrl", link)} />
 
-                                const previews: ImagePreviewItem[] = files.map(file => ({
-                                    id: crypto.randomUUID(),
-                                    url: URL.createObjectURL(file),
-                                    file,
-                                }));
-
-                                setImagePreviews(previews);
-                                setFieldValue("images", files);
-                                }}
-                            />
+                    <div className="relative">
+                    <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>{showEmojiPicker ? <X /> : <Smile />}</button>
+                    {showEmojiPicker && (
+                        <div className="absolute bottom-10 right-0">
+                        <EmojiPicker
+                            onEmojiClick={e => { const val = values.message + e.emoji; setFieldValue("message", val); debouncedCommit(val); }}
+                            lazyLoadEmojis
+                        />
                         </div>
                     )}
+                    </div>
+
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => setOpenFileUploader(!openFileUploader)}
+                        >
+                            {openFileUploader ? <X /> : <Image />}
+                        </button>
+
+                        {openFileUploader && (
+                            <div className="w-[300px] absolute bottom-10 right-0">
+                                <FileUploader
+                                    name="files"
+                                    title="Image Uploader"
+                                    multiple={true} 
+                                    onPreview={(files) => {
+                                        if (!files || files.length === 0) {
+                                            setImagePreviews([]);
+                                            setFieldValue("images", []);
+                                            return;
+                                        }
+
+                                        const previews: ImagePreviewItem[] = files.map(file => ({
+                                            id: crypto.randomUUID(),
+                                            url: URL.createObjectURL(file),
+                                            file,
+                                        }));
+                                        
+                                        setImagePreviews(previews);
+                                        setFieldValue("images", files);
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
             </div>
 
             <button type="submit" className="mt-3 px-5 w-fit py-3 bg-[#FFC107] rounded-xl flex items-center gap-2 font-bold">
