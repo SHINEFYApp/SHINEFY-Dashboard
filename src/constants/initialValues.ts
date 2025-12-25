@@ -185,3 +185,12 @@ export interface managePackageAddPackageFormValues {
     packageTotalDays?: string;
     [key: string]: any; 
 }
+
+export const manageUsersInitioalValue = {
+    groupName : '',
+    companyName : '',
+    areaName : '',
+    deviceType : '',
+    registrationStart : '',
+    registrationEnd : '',
+}

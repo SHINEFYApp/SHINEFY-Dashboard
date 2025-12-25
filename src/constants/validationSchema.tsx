@@ -370,3 +370,5 @@ export const manageBounusPointsSchema = Yup.object({
         .max(100, "Maximum Vat is 100%")
         .required("Vat is required"),
 });
+
+
