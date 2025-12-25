@@ -436,3 +436,17 @@ export const AddFqsValidationSchema = Yup.object({
     .min(5, "الإجابة بالعربية يجب ألا تقل عن 5 حروف")
     .max(1000, "الإجابة بالعربية يجب ألا تزيد عن 1000 حرف"),
 });
+
+export const AddOrdersQuestionsSchema = Yup.object({
+  questionEnglish: Yup.string()
+    .trim()
+    .required("English question is required")
+    .min(5, "English question must be at least 5 characters")
+    .max(500, "English question must not exceed 500 characters"),
+
+  questionArabic: Yup.string()
+    .trim()
+    .required("السؤال بالعربية مطلوب")
+    .min(5, "السؤال بالعربية يجب ألا يقل عن 5 حروف")
+    .max(500, "السؤال بالعربية يجب ألا يزيد عن 500 حرف"),
+});

@@ -180,6 +180,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/technicalSupport/manage/orderQuestions': {
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage Order Questions']
+    },
+    '/technicalSupport/manage/orderQuestions/addOrdersQuestions': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Order Questions' , 'Add Orders Questions']
     }
 };
 
@@ -1156,6 +1160,76 @@ export const dummyService: any[] = [
         serviceTime: '45',
         extraService: 'false',
     },
+];
+
+// Example for Manage Orders Questions
+export const dummyManageOrdersQuestions: any[] = [
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
 ];
 
 // Example for manage products
