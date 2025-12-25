@@ -9,6 +9,7 @@ import { CustomTable } from "../../common/CustomTable";
 import { dummyUsers, exportTypes } from "../../constants/data";
 import { GenericModal } from "../../common/GenericModal";
 import FillterOptions from "./popUpWindow/filterOptions";
+import type { filterOptionsTypes } from "../../types/users&staff";
 
 const columns = [
     {
@@ -80,9 +81,16 @@ const columns = [
 ]
 
 export default function ManageUsers(){
-    const [filterOptions , setFilterOptions] = useState({
+    const [filterOptions , setFilterOptions] = useState<filterOptionsTypes>({
         state : false , 
-        data : {}
+        data : {
+            groupName: "",
+            companyName: "",
+            areaName: "",
+            deviceType: "",
+            registrationStart: "",
+            registrationEnd: ""
+        }
     })
 
     console.log(filterOptions.data)

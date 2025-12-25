@@ -1,22 +1,13 @@
 import { Form, Formik } from "formik";
-import type { Dispatch, SetStateAction } from "react";
 import { FormInput } from "../../../common/FormInput";
 import { Button } from "../../../components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { FormDropdown } from "../../../common/FormDropdown";
 import { FormDatePicker } from "../../../common/FormDatePicker";
 import { manageUsersInitioalValue } from "../../../constants/initialValues";
+import type { filteroptionsProps } from "../../../types/users&staff";
 
-interface filteroptionsProps {
-    filterOptions : {
-        state: boolean;
-        data: {};
-    }
-    setFilterOptions : Dispatch<SetStateAction<{
-        state: boolean;
-        data: {};
-    }>>
-}
+
 export default function FillterOptions({filterOptions , setFilterOptions} : filteroptionsProps){
     return(
         <section

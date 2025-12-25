@@ -43,7 +43,11 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     },
     '/users&staff/manage/users': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Users']
+        breadcrumbs: ['Users & Stuff', 'Manage Users']
+    },
+    '/users&staff/manage/users/manageGroup': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage Users' , 'Manage Group']
     },
     '/users&staff/manage/subAdmin': {
         title: 'Users & Stuff',
@@ -2087,4 +2091,78 @@ export const manageVehiclesTabs = [
     { id: 'manageModel', label: 'Manage Model' },
     { id: 'manageColor', label: 'Manage Color' },
     { id: 'manageCarCategory', label: 'Manage Car Category' },
+];
+
+
+
+//example names
+export const exNames = [
+  "Oliver",
+  "Amelia",
+  "Liam",
+  "Sophia",
+  "Noah",
+  "Isabella",
+  "Elijah",
+  "Mia",
+  "James",
+  "Charlotte",
+  "Benjamin",
+  "Ava",
+  "Lucas",
+  "Emily",
+  "Henry",
+  "Harper",
+  "Alexander",
+  "Evelyn",
+  "William",
+  "Ella",
+];
+
+//example regions
+export const egyptRegions = [
+  "Cairo",
+  "Alexandria",
+  "Giza",
+  "Luxor",
+  "Aswan",
+  "Suez",
+  "Port Said",
+  "Ismailia",
+  "Sharm El-Sheikh",
+  "Hurghada",
+  "Tanta",
+  "Mansoura",
+  "Zagazig",
+  "Sohag",
+  "Assiut",
+  "Damanhur",
+  "Beni Suef",
+  "Faiyum",
+  "Minya",
+  "El Mahalla El Kubra"
+];
+
+// example device type
+export const carWashMachines = [
+  "High Pressure Washer",
+  "Foam Cannon",
+  "Automatic Car Wash System",
+  "Touchless Car Wash Machine",
+  "Roller Brush Car Wash",
+  "Underbody Wash System",
+  "Steam Cleaner",
+  "Vacuum Cleaner",
+  "Water Recycling System",
+  "Wheel Cleaner",
+  "Foam Brush Machine",
+  "Self-Service Car Wash Kiosk",
+  "Car Dryer Blower",
+  "Car Shampoo Dispenser",
+  "Car Polishing Machine",
+  "Car Waxing Machine",
+  "Foam Gun",
+  "Pressure Foam Washer",
+  "Mobile Car Wash Unit",
+  "Handheld Pressure Washer"
 ];

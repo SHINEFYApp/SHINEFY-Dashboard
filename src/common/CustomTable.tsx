@@ -1,7 +1,7 @@
 import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
-
+import KsaMan from '../assets/images/a2d5b399907e9638f3692bc625edb48bf22a9919.jpg'
 export function CustomTable<T extends Record<string, any>>({
     page ,
     columns,
@@ -71,7 +71,9 @@ export function CustomTable<T extends Record<string, any>>({
                                                 "px-6 py-4 text-sm text-gray-600",
                                               (row[column.key] === 'Close' || row[column.key] === 'Deactivated' || row[column.key] === 'false') && 'text-red-600 font-bold text-[15px]' ,
                                               (row[column.key] === 'Open' || row[column.key] === 'Activated' || row[column.key] === 'true') && 'text-green-600 font-bold text-[15px]' ,
-                                                colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
+                                              (column.key === 'users') && 'max-w-[550px] overflow-hidden' ,
+                                                
+                                              colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
                                             )}
                                         >
                                             {/* {column.render ? column.render( row[column.key], row, rowIndex) : row[column.key]} */}
@@ -89,7 +91,23 @@ export function CustomTable<T extends Record<string, any>>({
                                                         }
                                                     </div>
                                                     :
-                                                    row[column.key]
+                                                    Array.isArray(row[column.key]) ?
+                                                        <div className=" flex items-center gap-5">
+                                                            {row[column.key].map((el : string , idx : number) => {
+                                                                return(
+                                                                    <div key={idx} className="p-2 flex gap-1 items-center rounded-2xl bg-[#FFF5D9]">
+                                                                        {el === 'Eid Fathy' ? 
+                                                                        <>
+                                                                            <img src={KsaMan} alt="" className="w-5 h-5 rounded-2xl" />
+                                                                            <p className="w-20">{el}</p>
+                                                                        </>
+                                                                        : el}
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                        :
+                                                        row[column.key]
                                             }
                                             
                                         </td>

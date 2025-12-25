@@ -99,6 +99,18 @@ export interface TableProps<T> {
     isLoading?: boolean;
 }
 
+export interface FormDataListProps {
+  name: string;
+  label: string;
+  placeholder?: string;
+  options: string[];
+  disabled?: boolean;
+  className?: string;
+  icon?: React.ReactNode;
+  checkmark?: boolean;
+}
+
+
 export interface PaginationProps {
     currentPage: number;
     totalPages: number;
