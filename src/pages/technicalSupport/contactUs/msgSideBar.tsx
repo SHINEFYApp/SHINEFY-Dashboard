@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import { FormInput } from "../../../common/FormInput";
 import { Form, Formik } from "formik";
 import { dummyContactUsMessages } from "../../../constants/data";
-import type { MsgDetails, MsgLayoutProps, windowState } from "../../../types/msgDetails";
+import type {MsgLayoutProps} from "../../../types/msgDetails";
 import { useSearchParams } from "react-router";
 import { useEffect } from "react";
 
@@ -10,7 +10,6 @@ import { useEffect } from "react";
 
 export default function MsgLayout({ msgData, setMsgData, setOpenWindow }: MsgLayoutProps) {
     const [searchParams, setSearchParams] = useSearchParams();
-    console.log(searchParams)
     const msgId = searchParams.get("msgId");
 
     function handleOpenWindowToRplay(){
@@ -53,7 +52,6 @@ export default function MsgLayout({ msgData, setMsgData, setOpenWindow }: MsgLay
         setSearchParams(params);
     };
 
-    console.log(msgData)
     return (    
         <section className={`w-[30%] ${msgId && "max-md:hidden"} `}>
             <div className="overflow-scroll flex flex-col gap-2 scrollbar-hide max-h-[85vh] bg-transparent">

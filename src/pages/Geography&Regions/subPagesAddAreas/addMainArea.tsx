@@ -46,14 +46,6 @@ export default function AddMainArea(){
                                         placeholder="Area Name"
                                         type="text"
                                     />
-                                    {/* {whoTap === 'subArea' &&
-                                        <FormInput
-                                            name="subAreaName"
-                                            label="Sub Areas Name"
-                                            placeholder="Sub Area Name"
-                                            type="text"
-                                        />
-                                    } */}
                                     <div className="grid grid-cols-2 gap-5 mt-10">
                                         <Link
                                             to={'/geography&regions/manage/area'}

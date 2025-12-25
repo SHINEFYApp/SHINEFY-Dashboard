@@ -2,7 +2,7 @@ import { useState } from "react";
 
 
 
-import MsgLayout from "./msgLayout";
+import MsgLayout from "./msgSideBar";
 import MsgContent from "./msgContent";
 import Message from "./components/message";
 import type { MsgDetails, windowState } from "../../../types/msgDetails";

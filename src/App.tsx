@@ -41,6 +41,9 @@ import ManageDriverCommission from './pages/Financial & Points/manageDriverCommi
 import ManageBonusPoint from './pages/Financial & Points/manageBonusPoint';
 import ManageAdminEarning from './pages/Financial & Points/manageAdminEarning';
 import ContactUs from './pages/technicalSupport/contactUs/contactUs';
+import ManageCompanies from './pages/technicalSupport/Manage Companies/manageCompanies';
+import Broadcast from './pages/technicalSupport/Broadcast/broadcast';
+import SendBroadcast from './pages/technicalSupport/Broadcast/sendBroadcast';
 
 function App() {
   const location = useLocation();
@@ -106,6 +109,9 @@ function App() {
             <Route path="/financial&points/manage/bonusPoint" element={<ManageBonusPoint />} />
             <Route path="/financial&points/manage/adminEarning" element={<ManageAdminEarning />} />
             <Route path="/technicalSupport/contactUs" element={<ContactUs />} />
+            <Route path="/technicalSupport/manage/companies" element={<ManageCompanies />} />
+            <Route path="/technicalSupport/broadcast" element={<Broadcast />} />
+            <Route path="/technicalSupport/broadcast/SendBroadcast" element={<SendBroadcast />} />
           </Routes>
         </Layout>
       )}

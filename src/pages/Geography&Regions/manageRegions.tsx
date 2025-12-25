@@ -52,17 +52,6 @@ export default function ManageRegions(){
         console.log("Search values:", values);
     };
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10;
-    
-
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
-
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
     return(
         <>
             <main>
@@ -118,14 +107,8 @@ export default function ManageRegions(){
                     </div>
                     {/* table  */}
                     <CustomTable
-                        page="countries"
                         columns={columns}
                         data={dummyRegions}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        totalEntries={totalEntries}
-                        pageSize={pageSize}
-                        onPageChange={handlePageChange}
                     />
                 </div>
             </main>

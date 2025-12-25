@@ -165,6 +165,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Broadcast']
     },
+    '/technicalSupport/broadcast/SendBroadcast': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Broadcast' , 'Send Broadcast']
+    },
     '/technicalSupport/manage/faqs': {
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage FAQs']
@@ -270,6 +274,11 @@ export const createBookingTabs = [
 export const manageAreaTabs = [
     { id: 'mainArea', label: 'Manage Main Area' },
     { id: 'subArea', label: 'Manage Sub Area' },
+];
+export const sendBroadcast = [
+    { id: 'sendUser', label: 'Send User' },
+    { id: 'sendServiceBoy', label: 'Send Service Boy' },
+    { id: 'sendGroup', label: 'Send Group' },
 ];
 
 export const exportTypes = ['CSV', 'Excel', 'PDF'];
@@ -1528,6 +1537,151 @@ export const dummyAdminEarning: any[] = [
         serviceDateAndTime : '21-Nov-22 12:10 PM',
         create : '28-May-23 10:51 AM',
     }
+];
+
+// Example for manage manage company
+export const dummyManageCopany: any[] = [
+    {
+        name : 'Elhlaly',
+        email : 'elhlaly@gmail.com',
+        code : '1',
+        numOfUsers : '6545316',
+        percentage : 'Pending',
+        startDate : '21-Nov-22  PM',
+        endDate : '21-Nov-22  PM',
+        createDateAndTime : '21-Nov-22  PM',
+    },
+];
+
+
+// Example for manage Broadcast
+export const dummyBroadcast: any[] = [
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : [
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : [
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
 ];
 
 //drop down with multi selections and options

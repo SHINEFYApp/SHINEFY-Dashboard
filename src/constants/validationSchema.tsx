@@ -390,3 +390,23 @@ export const validationMessageSchema = Yup.object({
 
   images: Yup.array(),
 });
+
+
+export const SendBroadcastValidationSchema = Yup.object({
+  user: Yup.string()
+    .required('User is required'),
+
+  title: Yup.string()
+    .required('Title is required')
+    .min(3, 'Title must be at least 3 characters'),
+
+  message: Yup.string()
+    .required('Message is required')
+    .min(5, 'Message must be at least 5 characters'),
+
+  dateScheduleNotification: Yup.date()
+    .required('Date is required'),
+
+  timeScheduleNotification: Yup.string()
+    .required('Time is required'),
+});
