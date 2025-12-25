@@ -173,6 +173,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage FAQs']
     },
+    '/technicalSupport/manage/faqs/addFqs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage FAQs' , 'Add Fqs']
+    },
     '/technicalSupport/manage/orderQuestions': {
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage Order Questions']
@@ -1929,6 +1933,71 @@ export const dummyCarCategoryData: any[] = [
         englishCarCategoryName: 'Coupe',
         arabicCarCategoryName: 'Coupe',
         createDateAndTime: '21-Nov-25 07:09 PM',
+    },
+];
+
+
+// Example for manage fqs
+export const dummyManageFqs: any[] = [
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
     },
 ];
 

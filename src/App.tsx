@@ -44,6 +44,8 @@ import ContactUs from './pages/technicalSupport/contactUs/contactUs';
 import ManageCompanies from './pages/technicalSupport/Manage Companies/manageCompanies';
 import Broadcast from './pages/technicalSupport/Broadcast/broadcast';
 import SendBroadcast from './pages/technicalSupport/Broadcast/sendBroadcast';
+import Managefaqs from './pages/technicalSupport/managefaqs/managefaqs';
+import AddFqs from './pages/technicalSupport/managefaqs/addFqs';
 
 function App() {
   const location = useLocation();
@@ -112,6 +114,8 @@ function App() {
             <Route path="/technicalSupport/manage/companies" element={<ManageCompanies />} />
             <Route path="/technicalSupport/broadcast" element={<Broadcast />} />
             <Route path="/technicalSupport/broadcast/SendBroadcast" element={<SendBroadcast />} />
+            <Route path="/technicalSupport/manage/faqs" element={<Managefaqs />} />
+            <Route path="/technicalSupport/manage/faqs/addFqs" element={<AddFqs />} />
           </Routes>
         </Layout>
       )}
