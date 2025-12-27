@@ -9,58 +9,58 @@ import { ArrowUpToLine, Eye, Search, Trash2 } from "lucide-react";
 import { FormDropdown } from "../../../common/FormDropdown";
 
 
-    const columns = [
-        {
-            key: "image",
-            title: "Service Image",
-        },
-        {
-            key: "serviceEnglishName",
-            title: "Service English Name",
-        },
-        {
-            key: "serviceArabicName",
-            title: "Sevice Arabic Name",
-        },
-        {
-            key: "servicePrice",
-            title: "Sevice Price",
-        },
-        {
-            key: "serviceTime",
-            title: "Sevice Time [ min ]",
-        },
-        {
-            key: "extraService",
-            title: "Extra Service",
-        },
-        {
-            key: "action",
-            title: "Action",
-            render: () => (
-                <div className="flex gap-2 items-center">
-                    <button
-                        className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] p-2 font-semibold transition-colors"
-                        onClick={() => alert('view item')}
-                    >
-                        <Eye /> View
-                    </button>
-                    <button
-                        className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] p-2 font-semibold transition-colors"
-                        onClick={() => alert('updated item')}
-                    >
-                        <ArrowUpToLine /> update
-                    </button>
-                    <button
-                        className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] p-2 font-semibold transition-colors"
-                        onClick={() => alert('deleted item')}
-                    >
-                        <Trash2 /> delete
-                    </button>
-                </div>
-            ),
-        },
-    ]
+const columns = [
+    {
+        key: "image",
+        title: "Service Image",
+    },
+    {
+        key: "serviceEnglishName",
+        title: "Service English Name",
+    },
+    {
+        key: "serviceArabicName",
+        title: "Sevice Arabic Name",
+    },
+    {
+        key: "servicePrice",
+        title: "Sevice Price",
+    },
+    {
+        key: "serviceTime",
+        title: "Sevice Time [ min ]",
+    },
+    {
+        key: "extraService",
+        title: "Extra Service",
+    },
+    {
+        key: "action",
+        title: "Action",
+        render: () => (
+            <div className="flex gap-2 items-center">
+                <button
+                    className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] p-2 font-semibold transition-colors"
+                    onClick={() => alert('view item')}
+                >
+                    <Eye /> View
+                </button>
+                <button
+                    className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] p-2 font-semibold transition-colors"
+                    onClick={() => alert('updated item')}
+                >
+                    <ArrowUpToLine /> update
+                </button>
+                <button
+                    className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] p-2 font-semibold transition-colors"
+                    onClick={() => alert('deleted item')}
+                >
+                    <Trash2 /> delete
+                </button>
+            </div>
+        ),
+    },
+]
 
 
 

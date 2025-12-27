@@ -7,7 +7,7 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { Box, CarFront, HandCoins, Map, Settings, Users } from 'lucide-react';
+import { Box, CarFront, HandCoins, Headphones, Map, Settings, Users } from 'lucide-react';
 
 import { Link } from 'react-router';
 
@@ -29,6 +29,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Products & Orders');
         }else if (currentPath.startsWith('/financial&points/manage')) {
             setExpandedMenu('Financial & Points');
+        } else if (currentPath.startsWith('/technicalSupport')) {
+            setExpandedMenu('Technical Support');
         }
     }, [currentPath]);
 
@@ -195,6 +197,38 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 }
             ],
         },
+        {
+            icon: <Headphones className="w-5 h-5" />,
+            label: 'Technical Support',
+            isActive: currentPath?.startsWith('/technicalSupport'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Contact Us',
+                    path: '/technicalSupport/contactUs'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Companies',
+                    path: '/technicalSupport/manage/companies'
+                },
+                {
+                    icon: null,
+                    label: 'Broadcast',
+                    path: '/technicalSupport/broadcast'
+                },
+                {
+                    icon: null,
+                    label: 'Manage FAQS',
+                    path: '/technicalSupport/manage/faqs'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Order Questions',
+                    path: '/technicalSupport/manage/orderQuestions'
+                }
+            ],
+        },
     ];
 
     const toggleSubmenu = (label: string) => {
@@ -221,133 +255,135 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         <>
             <aside
                 className={cn(
-                    "fixed left-0 top-0 h-screen bg-[#1a1a1a] text-white transition-all duration-300 ease-in-out z-30",
+                    "fixed left-0 top-0 bg-[#1a1a1a] text-white transition-all duration-300 ease-in-out z-30 ",
                     isCollapsed ? 'w-20' : 'w-72'
                 )}
             >
-                {/* Logo */}
-                <div className="flex items-center justify-center h-20 border-b border-secondary-800/50 px-4">
-                    <div className="flex items-center gap-2 overflow-hidden">
-                        {<img src={logo} alt="Logo" />}
+                <div className='h-screen overflow-y-auto scrollbar-hide'>
+                    {/* Logo */}
+                    <div className="sticky top-0 bg-[#1a1a1a] z-50 flex items-center justify-center h-20 border-b border-secondary-800/50 px-4">
+                        <div className="flex items-center gap-2 overflow-hidden">
+                            {<img src={logo} alt="Logo" />}
+                        </div>
                     </div>
-                </div>
 
-                {/* Menu Items */}
-                <nav className="mt-6 px-3 space-y-2">
-                    {menuItems.map((item) => {
-                        const isMenuActive = item.path ? currentPath === item.path : item.isActive;
+                    {/* Menu Items */}
+                    <nav className="mt-6 px-3 space-y-2">
+                        {menuItems.map((item) => {
+                            const isMenuActive = item.path ? currentPath === item.path : item.isActive;
 
-                        return (
-                            <div key={item.label} className="relative">
-                                {item.path && !item.subItems ? (
-                                    <Link
-                                        to={item.path}
-                                        className={cn(
-                                            "w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 relative",
-                                            isMenuActive
-                                                ? 'bg-primary text-[#1a1a1a] font-semibold shadow-lg'
-                                                : 'text-gray-300 hover:bg-secondary-800/50 hover:text-white'
-                                        )}
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            {item.icon}
-                                            {!isCollapsed && (
-                                                <span className="text-base font-medium whitespace-nowrap">
-                                                    {item.label}
-                                                </span>
+                            return (
+                                <div key={item.label} className="relative">
+                                    {item.path && !item.subItems ? (
+                                        <Link
+                                            to={item.path}
+                                            className={cn(
+                                                "w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 relative",
+                                                isMenuActive
+                                                    ? 'bg-primary text-[#1a1a1a] font-semibold shadow-lg'
+                                                    : 'text-gray-300 hover:bg-secondary-800/50 hover:text-white'
                                             )}
-                                        </div>
-                                    </Link>
-                                ) : (
-                                    <button
-                                        onClick={() => handleMenuClick(item)}
-                                        className={cn(
-                                            "w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 relative",
-                                            isMenuActive
-                                                ? 'bg-primary text-[#1a1a1a] font-semibold shadow-lg'
-                                                : 'text-gray-300 hover:bg-secondary-800/50 hover:text-white'
-                                        )}
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            {item.icon}
-                                            {!isCollapsed && (
-                                                <span className="text-base font-medium whitespace-nowrap">
-                                                    {item.label}
-                                                </span>
-                                            )}
-                                        </div>
-                                        {!isCollapsed && item.subItems && (
-                                            <IoChevronDown
-                                                className={cn(
-                                                    "w-5 h-5 transition-transform duration-300",
-                                                    expandedMenu === item.label && "rotate-180"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                {item.icon}
+                                                {!isCollapsed && (
+                                                    <span className="text-base font-medium whitespace-nowrap">
+                                                        {item.label}
+                                                    </span>
                                                 )}
-                                            />
-                                        )}
-                                    </button>
-                                )}
+                                            </div>
+                                        </Link>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleMenuClick(item)}
+                                            className={cn(
+                                                "w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 relative",
+                                                isMenuActive
+                                                    ? 'bg-primary text-[#1a1a1a] font-semibold shadow-lg'
+                                                    : 'text-gray-300 hover:bg-secondary-800/50 hover:text-white'
+                                            )}
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                {item.icon}
+                                                {!isCollapsed && (
+                                                    <span className="text-base font-medium whitespace-nowrap">
+                                                        {item.label}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            {!isCollapsed && item.subItems && (
+                                                <IoChevronDown
+                                                    className={cn(
+                                                        "w-5 h-5 transition-transform duration-300",
+                                                        expandedMenu === item.label && "rotate-180"
+                                                    )}
+                                                />
+                                            )}
+                                        </button>
+                                    )}
 
-                                {/* Submenu with curved connectors */}
-                                {!isCollapsed && item.subItems && (
-                                    <div
-                                        className={cn(
-                                            "overflow-hidden transition-all duration-300 ease-in-out",
-                                            expandedMenu === item.label
-                                                ? "max-h-[400px] opacity-100 mt-3"
-                                                : "max-h-0 opacity-0"
-                                        )}
-                                    >
-                                        <div className="relative pl-6 space-y-2">
-                                            {/* Vertical Line */}
-                                            <div className={`absolute left-6 top-0 bottom-0 w-0.5 bg-gray-600 ${item.subItems.length === 2 ? 'h-[60%]' : 'h-[79%]'}`} />
+                                    {/* Submenu with curved connectors */}
+                                    {!isCollapsed && item.subItems && (
+                                        <div
+                                            className={cn(
+                                                "overflow-hidden transition-all duration-300 ease-in-out",
+                                                expandedMenu === item.label
+                                                    ? "max-h-[400px] opacity-100 mt-3"
+                                                    : "max-h-0 opacity-0"
+                                            )}
+                                        >
+                                            <div className="relative pl-6 space-y-2">
+                                                {/* Vertical Line */}
+                                                <div className={`absolute left-6 -top-8 bottom-0 w-0.5 bg-gray-600 h-full`} />
 
-                                            {item.subItems.map((subItem, index) => {
-                                                const isActive = currentPath === subItem.path;
+                                                {item.subItems.map((subItem, index) => {
+                                                    const isActive = currentPath === subItem.path;
 
-                                                return (
-                                                    <div key={index} className="relative">
-                                                        {/* Curved connector line */}
-                                                        <svg
-                                                            className="absolute left-0 top-1/2 -translate-y-1/2"
-                                                            width="24"
-                                                            height="40"
-                                                            viewBox="0 0 24 40"
-                                                            fill="none"
-                                                        >
-                                                            <path
-                                                                d="M 0 0 Q 0 20 20 20"
-                                                                stroke="#4B5563"
-                                                                strokeWidth="2"
+                                                    return (
+                                                        <div key={index} className="relative">
+                                                            {/* Curved connector line */}
+                                                            <svg
+                                                                className="absolute left-0 top-1/2 -translate-y-1/2"
+                                                                width="24"
+                                                                height="40"
+                                                                viewBox="0 0 24 40"
                                                                 fill="none"
-                                                            />
-                                                        </svg>
+                                                            >
+                                                                <path
+                                                                    d="M 0 0 Q 0 20 20 20"
+                                                                    stroke="#4B5563"
+                                                                    strokeWidth="2"
+                                                                    fill="none"
+                                                                />
+                                                            </svg>
 
-                                                        <Link
-                                                            to={subItem.path}
-                                                            className={cn(
-                                                                "flex items-center gap-3 pl-8 pr-4 py-3 text-sm rounded-xl transition-all duration-200 group relative",
-                                                                isActive
-                                                                    ? "text-primary font-medium"
-                                                                    : "text-gray-400 hover:text-white hover:bg-secondary-800/30"
-                                                            )}
-                                                        >
-                                                            <img
-                                                                src={isActive ? activeCalendar : calendar}
-                                                                alt=""
-                                                                className="w-5 h-5 transition-all duration-200"
-                                                            />
-                                                            <span className="whitespace-nowrap">{subItem.label}</span>
-                                                        </Link>
-                                                    </div>
-                                                );
-                                            })}
+                                                            <Link
+                                                                to={subItem.path}
+                                                                className={cn(
+                                                                    "flex items-center gap-3 pl-8 pr-4 py-3 text-sm rounded-xl transition-all duration-200 group relative",
+                                                                    isActive
+                                                                        ? "text-primary font-medium"
+                                                                        : "text-gray-400 hover:text-white hover:bg-secondary-800/30"
+                                                                )}
+                                                            >
+                                                                <img
+                                                                    src={isActive ? activeCalendar : calendar}
+                                                                    alt=""
+                                                                    className="w-5 h-5 transition-all duration-200"
+                                                                />
+                                                                <span className="whitespace-nowrap">{subItem.label}</span>
+                                                            </Link>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
-                </nav>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </nav>
+                </div>
 
                 {/* Toggle Button */}
                 <button

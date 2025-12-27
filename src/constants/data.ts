@@ -152,6 +152,38 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/financial&points/manage/adminEarning': {
         title: 'Financial & Points',
         breadcrumbs: ['Financial & Points', 'Manage Admin Earning']
+    },
+    '/technicalSupport/contactUs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Contact Us']
+    },
+    '/technicalSupport/manage/companies': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Companies']
+    },
+    '/technicalSupport/broadcast': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Broadcast']
+    },
+    '/technicalSupport/broadcast/SendBroadcast': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Broadcast' , 'Send Broadcast']
+    },
+    '/technicalSupport/manage/faqs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage FAQs']
+    },
+    '/technicalSupport/manage/faqs/addFqs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage FAQs' , 'Add Fqs']
+    },
+    '/technicalSupport/manage/orderQuestions': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Order Questions']
+    },
+    '/technicalSupport/manage/orderQuestions/addOrdersQuestions': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Order Questions' , 'Add Orders Questions']
     }
 };
 
@@ -250,6 +282,11 @@ export const createBookingTabs = [
 export const manageAreaTabs = [
     { id: 'mainArea', label: 'Manage Main Area' },
     { id: 'subArea', label: 'Manage Sub Area' },
+];
+export const sendBroadcast = [
+    { id: 'sendUser', label: 'Send User' },
+    { id: 'sendServiceBoy', label: 'Send Service Boy' },
+    { id: 'sendGroup', label: 'Send Group' },
 ];
 
 export const exportTypes = ['CSV', 'Excel', 'PDF'];
@@ -1125,6 +1162,76 @@ export const dummyService: any[] = [
     },
 ];
 
+// Example for Manage Orders Questions
+export const dummyManageOrdersQuestions: any[] = [
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+];
+
 // Example for manage products
 export const dummyProducts: any[] = [
     {
@@ -1510,6 +1617,151 @@ export const dummyAdminEarning: any[] = [
     }
 ];
 
+// Example for manage manage company
+export const dummyManageCopany: any[] = [
+    {
+        name : 'Elhlaly',
+        email : 'elhlaly@gmail.com',
+        code : '1',
+        numOfUsers : '6545316',
+        percentage : 'Pending',
+        startDate : '21-Nov-22  PM',
+        endDate : '21-Nov-22  PM',
+        createDateAndTime : '21-Nov-22  PM',
+    },
+];
+
+
+// Example for manage Broadcast
+export const dummyBroadcast: any[] = [
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : [
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : [
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+];
+
 //drop down with multi selections and options
 
 export const menus: MenuType[] = [
@@ -1758,6 +2010,71 @@ export const dummyCarCategoryData: any[] = [
     },
 ];
 
+
+// Example for manage fqs
+export const dummyManageFqs: any[] = [
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+];
+
 export const mainDetails: DetailRowProps[] = [
     {
         label: "ID", value: "9388546579",
@@ -1839,3 +2156,149 @@ export const manageVehiclesTabs = [
     { id: 'manageColor', label: 'Manage Color' },
     { id: 'manageCarCategory', label: 'Manage Car Category' },
 ];
+
+
+// examble for contact us messages from technical support section
+
+export const dummyContactUsMessages: any[] = [
+    {
+        id: '1',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '2',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '3',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '4',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '5',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '6',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '7',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '8',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '9',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '10',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+]
