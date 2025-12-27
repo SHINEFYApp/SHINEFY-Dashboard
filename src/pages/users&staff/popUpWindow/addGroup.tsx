@@ -28,7 +28,7 @@ const render = ({wordOfreder , setAddGroup , addGroup , setWordToRender} : rende
                             chooseUser: []
                         }}
                         onSubmit={(values) => {
-                            setAddGroup({data : {groupName : values.groupName , users: values.chooseUser } , state : false})
+                            // setAddGroup({data : {groupName : values.groupName , users: values.chooseUser } , state : false})
                             console.log(values)
                         }}
                     >
