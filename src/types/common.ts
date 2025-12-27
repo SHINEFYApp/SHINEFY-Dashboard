@@ -91,11 +91,11 @@ export interface TableProps<T> {
     page?: string ;
     columns: Column<T>[];
     data: T[];
-    currentPage: number;
-    totalPages: number;
-    totalEntries: number;
-    pageSize: number;
-    onPageChange: (page: number) => void;
+    currentPage?: number;
+    totalPages?: number;
+    totalEntries?: number;
+    pageSize?: number;
+    onPageChange?: (page: number) => void;
     isLoading?: boolean;
 }
 
@@ -112,11 +112,11 @@ export interface FormDataListProps {
 
 
 export interface PaginationProps {
-    currentPage: number;
-    totalPages: number;
-    totalEntries: number;
-    pageSize: number;
-    onPageChange: (page: number) => void;
+    currentPage?: number;
+    totalPages?: number;
+    totalEntries?: number;
+    pageSize?: number;
+    onPageChange?: (page: number) => void;
 }
 
 //drop down with multi select

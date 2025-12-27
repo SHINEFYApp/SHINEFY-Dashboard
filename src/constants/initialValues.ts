@@ -103,6 +103,15 @@ export const RatedReportsChartInitialValues: ReportFilters = {
     endDate: "",
 };
 
+export const SendBroadcastInitialValues = {
+  user: '',
+  title: '',
+  message: '',
+  dateScheduleNotification: null,
+  timeScheduleNotification: null,
+};
+
+
 export const manageSlotsSearchInitialValues = { type: "", status: "", date: "" };
 
 export const manageBookingSearchInitialValues = { search: "", date: "" };

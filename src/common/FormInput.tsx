@@ -41,7 +41,7 @@ export const FormInput: FC<FormInputProps> = ({
                     </div>
                 )}
 
-                {moreOptions && (
+                {(moreOptions &&  moreOptions !== 'bgWhite') && (
                     <div className="absolute rounded-br-xl uppercase flex justify-center items-center rounded-tr-xl right-0 w-20 h-full bg-black top-0 text-primary">
                         {moreOptions}
                     </div>
@@ -57,6 +57,7 @@ export const FormInput: FC<FormInputProps> = ({
                     className={cn(
                         'w-full rounded-xl border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200',
                         icon && 'pl-12',
+                        moreOptions === 'bgWhite' ? 'bg-white' : 'bg-gray-50',
                         isValid && checkmark && 'pr-12',
                         hasError
                         ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200'

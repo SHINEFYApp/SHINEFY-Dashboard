@@ -372,3 +372,82 @@ export const manageBounusPointsSchema = Yup.object({
 });
 
 
+export const validationMessageSchema = Yup.object({
+  to: Yup.array()
+    .of(
+      Yup.string()
+        .required("Recipient is required")
+        .matches(/^@/, "Recipient must start with @")
+    )
+    .min(1, "At least one recipient is required"),
+
+  subject: Yup.string()
+    .trim()
+    .required("Subject is required"),
+
+  message: Yup.string()
+    .trim()
+    .required("Message is required"),
+
+  images: Yup.array(),
+});
+
+
+export const SendBroadcastValidationSchema = Yup.object({
+  user: Yup.string()
+    .required('User is required'),
+
+  title: Yup.string()
+    .required('Title is required')
+    .min(3, 'Title must be at least 3 characters'),
+
+  message: Yup.string()
+    .required('Message is required')
+    .min(5, 'Message must be at least 5 characters'),
+
+  dateScheduleNotification: Yup.date()
+    .required('Date is required'),
+
+  timeScheduleNotification: Yup.string()
+    .required('Time is required'),
+});
+
+export const AddFqsValidationSchema = Yup.object({
+  englishQuestion: Yup.string()
+    .trim()
+    .required("English question is required")
+    .min(5, "English question must be at least 5 characters")
+    .max(500, "English question must not exceed 500 characters"),
+
+  englishAnswar: Yup.string()
+    .trim()
+    .required("English answer is required")
+    .min(5, "English answer must be at least 5 characters")
+    .max(1000, "English answer must not exceed 1000 characters"),
+
+  arabicQuestion: Yup.string()
+    .trim()
+    .required("السؤال بالعربية مطلوب")
+    .min(5, "السؤال بالعربية يجب ألا يقل عن 5 حروف")
+    .max(500, "السؤال بالعربية يجب ألا يزيد عن 500 حرف"),
+
+  arabicAnswar: Yup.string()
+    .trim()
+    .required("الإجابة بالعربية مطلوبة")
+    .min(5, "الإجابة بالعربية يجب ألا تقل عن 5 حروف")
+    .max(1000, "الإجابة بالعربية يجب ألا تزيد عن 1000 حرف"),
+});
+
+export const AddOrdersQuestionsSchema = Yup.object({
+  questionEnglish: Yup.string()
+    .trim()
+    .required("English question is required")
+    .min(5, "English question must be at least 5 characters")
+    .max(500, "English question must not exceed 500 characters"),
+
+  questionArabic: Yup.string()
+    .trim()
+    .required("السؤال بالعربية مطلوب")
+    .min(5, "السؤال بالعربية يجب ألا يقل عن 5 حروف")
+    .max(500, "السؤال بالعربية يجب ألا يزيد عن 500 حرف"),
+});

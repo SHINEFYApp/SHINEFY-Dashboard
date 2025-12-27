@@ -41,6 +41,14 @@ import AddSubAdmin from './pages/users&staff/subPages/addSubAdmin';
 import ServiceBoyDetails from './pages/users&staff/subPages/ServiceBoyDetails';
 import ManageGroup from './pages/users&staff/subPages/ManageGroup';
 import AddGroup from './pages/users&staff/popUpWindow/addGroup';
+import ContactUs from './pages/technicalSupport/contactUs/contactUs';
+import ManageCompanies from './pages/technicalSupport/Manage Companies/manageCompanies';
+import Broadcast from './pages/technicalSupport/Broadcast/broadcast';
+import SendBroadcast from './pages/technicalSupport/Broadcast/sendBroadcast';
+import Managefaqs from './pages/technicalSupport/managefaqs/managefaqs';
+import AddFqs from './pages/technicalSupport/managefaqs/addFqs';
+import ManageOrdersQuestions from './pages/technicalSupport/manage orders questions/manageOrdersQuestions';
+import AddOrdersQuestions from './pages/technicalSupport/manage orders questions/addOrdersQuestions';
 
 function App() {
   const location = useLocation();
@@ -103,6 +111,14 @@ function App() {
             <Route path="/financial&points/manage/driverCommission" element={<ManageDriverCommission />} />
             <Route path="/financial&points/manage/bonusPoint" element={<ManageBonusPoint />} />
             <Route path="/financial&points/manage/adminEarning" element={<ManageAdminEarning />} />
+            <Route path="/technicalSupport/contactUs" element={<ContactUs />} />
+            <Route path="/technicalSupport/manage/companies" element={<ManageCompanies />} />
+            <Route path="/technicalSupport/broadcast" element={<Broadcast />} />
+            <Route path="/technicalSupport/broadcast/SendBroadcast" element={<SendBroadcast />} />
+            <Route path="/technicalSupport/manage/faqs" element={<Managefaqs />} />
+            <Route path="/technicalSupport/manage/faqs/addFqs" element={<AddFqs />} />
+            <Route path="/technicalSupport/manage/orderQuestions" element={<ManageOrdersQuestions />} />
+            <Route path="/technicalSupport/manage/orderQuestions/addOrdersQuestions" element={<AddOrdersQuestions />} />
           </Routes>
         </Layout>
       )}

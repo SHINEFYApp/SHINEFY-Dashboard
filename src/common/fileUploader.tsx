@@ -1,63 +1,110 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import Arrow from "@/assets/images/fileUploader/Vector.png";
 import { useField } from "formik";
 import { X } from "lucide-react";
+import Arrow from "@/assets/images/fileUploader/Vector.png";
 
-export default function FileUploader({ name , title }: { name: string , title: string }) {
+interface FileUploaderProps {
+  name: string;
+  title: string;
+  multiple?: boolean; // لتحديد إذا يقبل أكثر من صورة
+  onPreview?: (files: File[]) => void; // ترجع مصفوفة من الملفات
+}
+
+export default function FileUploader({
+  name,
+  title,
+  multiple = false,
+  onPreview,
+}: FileUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [field , meta, helpers] = useField(name);
-  const [fileName, setFileName] = useState<string>("");
+  const [, meta, helpers] = useField<File[]>(name);
+  const [files, setFiles] = useState<File[]>([]);
 
-  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const files = e.dataTransfer.files;
-
-    if (files?.length) {
-      helpers.setValue(files[0]);
-      setFileName(files[0].name);
-    }
-  }, []);
-
-  const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length) {
-      helpers.setValue(e.target.files[0]);
-      setFileName(e.target.files[0].name);
-    }
+  const updateFiles = (newFiles: File[]) => {
+    const updated = multiple ? [...files, ...newFiles] : newFiles;
+    setFiles(updated);
+    helpers.setValue(updated);
+    onPreview?.(updated);
   };
 
-  const openFileDialog = () => {
-    fileInputRef.current?.click();
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const droppedFiles = Array.from(e.dataTransfer.files);
+      if (droppedFiles.length) updateFiles(droppedFiles);
+    },
+    [files, multiple]
+  );
+
+  const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files ? Array.from(e.target.files) : [];
+    if (selectedFiles.length) updateFiles(selectedFiles);
+  };
+
+  const clearFile = (index?: number) => {
+    if (typeof index === "number") {
+      const updated = files.filter((_, i) => i !== index);
+      setFiles(updated);
+      helpers.setValue(updated);
+      onPreview?.(updated);
+    } else {
+      setFiles([]);
+      helpers.setValue([]);
+      onPreview?.([]);
+    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
     <>
-      <div className={`w-full flex flex-col gap-[10.94px] h-[185.46px] bg-gray-50 p-[16.46px] rounded-xl shadow border ${meta.error && meta.touched ? 'border-red-500' : 'border-gray-200'}`}>
-        <div className="flex items-center justify-between w-full">
-          <h1 className="font-bold text-[12.31px] text-gray-900">{title}</h1>
-          <button type="button" onClick={() => {
-            setFileName('')
-          }}>
-            <X size={15} />
-          </button>
+      <div
+        className={`w-full flex flex-col gap-2 h-[185px] bg-gray-50 p-4 rounded-xl shadow border
+        ${meta.error && meta.touched ? "border-red-500" : "border-gray-200"}`}
+      >
+        <div className="flex items-center justify-between">
+          <h1 className="font-bold text-sm">{title}</h1>
+          {(files.length > 0 && title !== 'Image Uploader') && (
+            <button type="button" onClick={() => clearFile()}>
+              <X size={15} />
+            </button>
+          )}
         </div>
 
         <div
-          onClick={openFileDialog}
+          onClick={() => fileInputRef.current?.click()}
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
-          className="w-full h-[99px] border-2 border-dashed border-yellow-400 rounded-xl 
-                    flex flex-col gap-2 justify-center items-center bg-white text-gray-500 cursor-pointer"
+          className="w-full h-[99px] border-2 border-dashed border-yellow-400 rounded-xl
+            flex flex-col gap-2 justify-center items-center bg-white cursor-pointer"
         >
-          <img className="w-[24.61px] h-[16.41px]" src={Arrow} alt="" />
+          <img src={Arrow} className="w-6 h-4" alt="" />
 
-          <p className="text-[9.57px]">
-            {fileName
-              ? <span className="font-semibold text-gray-900">{fileName}</span>
-              : <>Drag your file(s) or <span className="text-yellow-500 underline">browse</span> <br />
+          <p className="text-xs text-gray-500 text-center">
+            {files.length > 0 ? (
+              files.slice(0 , 1).map((file, idx) => (
+                <span key={idx} className="block font-semibold text-gray-900">
+                  {file.name }{files.length > 1 ? " and more..." : ' '}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      clearFile(idx);
+                    }}
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              ))
+            ) : (
+              <>
+                Drag your file{multiple ? "(s)" : ""} or{" "}
+                <span className="text-yellow-500 underline">browse</span>
+                <br />
                 Max 10 MB files are allowed
-              </>}
+              </>
+            )}
           </p>
 
           <input
@@ -65,16 +112,18 @@ export default function FileUploader({ name , title }: { name: string , title: s
             type="file"
             onChange={handleSelect}
             className="hidden"
+            multiple={multiple}
+            accept=".jpg,.png,.svg"
           />
         </div>
 
-
-        <p className="text-[9px] text-gray-400 mt-1">
-          Only support .jpg, .png, .svg and .zip — Max 10 MB files are allowed
+        <p className="text-[9px] text-gray-400">
+          Only support .jpg, .png, .svg — Max 10 MB
         </p>
       </div>
+
       {meta.error && meta.touched && (
-        <p className="text-xs text-red-500 mt-3">{meta.error}</p>
+        <p className="text-xs text-red-500 mt-2">{meta.error}</p>
       )}
     </>
   );

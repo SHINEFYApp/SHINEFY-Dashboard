@@ -9,6 +9,15 @@ export const Pagination = ({
     pageSize,
     onPageChange,
 }: PaginationProps) => {
+    if (
+        currentPage === undefined ||
+        totalPages === undefined ||
+        pageSize === undefined ||
+        totalEntries === undefined ||
+        !onPageChange
+    ) {
+        return null;
+    }
     const startEntry = (currentPage - 1) * pageSize + 1;
     const endEntry = Math.min(currentPage * pageSize, totalEntries);
 

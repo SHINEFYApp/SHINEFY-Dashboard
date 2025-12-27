@@ -146,6 +146,12 @@ export interface FilterFormValuesOnlySearch{
     search: string,
 }
 
+// FILTER VALUES BROADCAST 
+export interface FilterFormValuesBroadcast{
+    search: string,
+    date: string,
+}
+
 // MANAGE REGIONS
 export interface FilterFormValuesManageRegions {
     search: string,

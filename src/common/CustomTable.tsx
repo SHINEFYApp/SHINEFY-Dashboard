@@ -2,6 +2,7 @@ import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
 import KsaMan from '../assets/images/a2d5b399907e9638f3692bc625edb48bf22a9919.jpg'
+
 export function CustomTable<T extends Record<string, any>>({
     page ,
     columns,
@@ -74,6 +75,10 @@ export function CustomTable<T extends Record<string, any>>({
                                               (column.key === 'users') && 'max-w-[550px] overflow-hidden' ,
                                                 
                                               colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
+                                              (row[column.key] === 'Open' || row[column.key] === 'Activated' || row[column.key] === 'true' || row[column.key] === 'All') && 'text-green-600 font-bold text-[15px]' ,
+                                              (row[column.key] === 'Pending') && 'text-[#FFC107] font-bold text-[15px]' ,
+                                              (column.key === 'customers') && 'max-w-[300px] overflow-hidden' ,
+                                                colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
                                             )}
                                         >
                                             {/* {column.render ? column.render( row[column.key], row, rowIndex) : row[column.key]} */}
@@ -86,6 +91,7 @@ export function CustomTable<T extends Record<string, any>>({
                                                                 <img src={column.key.toLowerCase() === "flag" ? row[column.key] : column.key.toLowerCase() === "customer" ? row[column.key]?.image : row[column.key]?.flag} alt="flag" />
                                                             }
                                                         </div>
+                                                        
                                                         {row[column.key]?.title || row[column.key]?.name &&
                                                             <p>{row[column.key].title || row[column.key]?.name}</p>
                                                         }
@@ -120,15 +126,16 @@ export function CustomTable<T extends Record<string, any>>({
             </div>
 
             {/* Pagination */}
-            {!isLoading && data.length > 0 && page !== 'countries' && page !== 'regions' && page !== 'area' && page !== 'service' && (
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    totalEntries={totalEntries}
-                    pageSize={pageSize}
-                    onPageChange={onPageChange}
-                />
-            )}
+            {!isLoading && data.length > 0 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        totalEntries={totalEntries}
+                        pageSize={pageSize}
+                        onPageChange={onPageChange}
+                    />
+                )
+            }
         </div>
     );
 }
