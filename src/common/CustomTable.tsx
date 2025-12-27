@@ -1,7 +1,7 @@
 import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
-import KsaMan from "@/assets/images/a2d5b399907e9638f3692bc625edb48bf22a9919.jpg";
+import KsaMan from '../assets/images/a2d5b399907e9638f3692bc625edb48bf22a9919.jpg'
 
 export function CustomTable<T extends Record<string, any>>({
     page ,
@@ -71,6 +71,10 @@ export function CustomTable<T extends Record<string, any>>({
                                             className={cn(
                                                 "px-6 py-4 text-sm text-gray-600",
                                               (row[column.key] === 'Close' || row[column.key] === 'Deactivated' || row[column.key] === 'false') && 'text-red-600 font-bold text-[15px]' ,
+                                              (row[column.key] === 'Open' || row[column.key] === 'Activated' || row[column.key] === 'true') && 'text-green-600 font-bold text-[15px]' ,
+                                              (column.key === 'users') && 'max-w-[550px] overflow-hidden' ,
+                                                
+                                              colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
                                               (row[column.key] === 'Open' || row[column.key] === 'Activated' || row[column.key] === 'true' || row[column.key] === 'All') && 'text-green-600 font-bold text-[15px]' ,
                                               (row[column.key] === 'Pending') && 'text-[#FFC107] font-bold text-[15px]' ,
                                               (column.key === 'customers') && 'max-w-[300px] overflow-hidden' ,

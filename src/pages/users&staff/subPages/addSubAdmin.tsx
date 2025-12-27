@@ -1,12 +1,12 @@
 import { Formik, Form } from 'formik';
-import { addSubAdminSchema } from '../../constants/validationSchema';
-import { addSubAdminInitialValues } from '../../constants/initialValues';
-import { Button } from '../../components/ui/button';
-import { FormInput } from '../../common/FormInput';
+import { addSubAdminSchema } from '../../../constants/validationSchema';
+import { addSubAdminInitialValues } from '../../../constants/initialValues';
+import { Button } from '../../../components/ui/button';
+import { FormInput } from '../../../common/FormInput';
 import { useEffect, useState } from 'react';
-import type { smsStatus } from '../../types/common';
-import type { manageSubadmin } from '../../types/users&staff';
-import { FormDropdown } from '../../common/FormDropdown';
+import type { smsStatus } from '../../../types/common';
+import type { manageSubadmin } from '../../../types/users&staff';
+import { FormDropdown } from '../../../common/FormDropdown';
 
 export default function AddSubAdmin() {
 

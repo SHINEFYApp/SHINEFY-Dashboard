@@ -371,6 +371,7 @@ export const manageBounusPointsSchema = Yup.object({
         .required("Vat is required"),
 });
 
+
 export const validationMessageSchema = Yup.object({
   to: Yup.array()
     .of(
