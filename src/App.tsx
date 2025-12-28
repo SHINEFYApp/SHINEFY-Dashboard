@@ -40,7 +40,6 @@ import AddServiceBoy from './pages/users&staff/subPages/AddServiceBoy';
 import AddSubAdmin from './pages/users&staff/subPages/addSubAdmin';
 import ServiceBoyDetails from './pages/users&staff/subPages/ServiceBoyDetails';
 import ManageGroup from './pages/users&staff/subPages/ManageGroup';
-import AddGroup from './pages/users&staff/popUpWindow/addGroup';
 import ContactUs from './pages/technicalSupport/contactUs/contactUs';
 import ManageCompanies from './pages/technicalSupport/Manage Companies/manageCompanies';
 import Broadcast from './pages/technicalSupport/Broadcast/broadcast';

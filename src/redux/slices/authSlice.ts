@@ -1,7 +1,19 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { authStorage } from '../../lib/cookies';
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
-const initialState: any = {
+interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  token: string | null;
+  refreshToken: string | null;
+}
+
+const initialState: AuthState = {
     isAuthenticated: false,
     user: null,
     token: null,
@@ -14,7 +26,7 @@ const authSlice = createSlice({
     reducers: {
         loginSuccess: (
             state,
-            action: PayloadAction<{ user: any; access: string; refresh: string; }>
+            action: PayloadAction<{ user: User ; access: string; refresh: string; }>
         ) => {
             state.isAuthenticated = true;
             state.user = action.payload.user;
