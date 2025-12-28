@@ -203,3 +203,9 @@ export const manageUsersInitioalValue = {
     registrationStart : '',
     registrationEnd : '',
 }
+
+export interface LoginFormInitialValues {
+  email: string;
+  password: string;
+  remember : boolean
+}

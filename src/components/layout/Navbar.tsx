@@ -11,6 +11,8 @@ import { BsGrid } from 'react-icons/bs';
 import { cn } from '../../utils/utils';
 import type { BreadcrumbItem, NavbarProps } from '../../types/layout';
 import { routeConfig } from '../../constants/data';
+import { logout } from '../../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/dashboard' }) => {
 
@@ -32,6 +34,8 @@ export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/das
         };
     }, [currentPath]);
 
+
+    const dispatch = useDispatch() 
     return (
         <header
             className={cn(
@@ -47,6 +51,13 @@ export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/das
                             {pageTitle}
                         </h1>
                     </div>
+                    {/* <button onClick={() => {
+                        dispatch(logout());
+                        // navigate("/login");
+
+                    }}  >
+                        log out
+                    </button> */}
                 </div>
 
                 {/* Right Section - Dropdowns & Submit */}
