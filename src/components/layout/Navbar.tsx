@@ -51,13 +51,13 @@ export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/das
                             {pageTitle}
                         </h1>
                     </div>
-                    {/* <button onClick={() => {
+                    <button onClick={() => {
                         dispatch(logout());
                         // navigate("/login");
 
                     }}  >
                         log out
-                    </button> */}
+                    </button>
                 </div>
 
                 {/* Right Section - Dropdowns & Submit */}

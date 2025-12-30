@@ -9,30 +9,61 @@ import { dummyTableData } from "../../../constants/data";
 import type { FilterFormValues } from "../../../types/bookings";
 import { useState } from "react";
 import { CustomTable } from "../../../common/CustomTable";
+import { useGet } from "../../../api/useGetData";
+import Loader from "../../../common/loader";
+import { toast } from "sonner";
+
+
+    export interface Booking {
+        booking_id: number;
+        booking_no: string;
+        total_price: string;
+        customer_name: string;
+        service_boy_name: string | null;
+        service_name: string;
+        payment_option: string;
+    }
+    export interface Pagination {
+        current_page: number;
+        total_pages: number;
+        total_items: number;
+        limit: number;
+    }
+
+    export interface BookingsData {
+        bookings: Booking[];
+        pagination: Pagination;
+    }
+
+    export interface ApiResponse {
+        status: string;
+        data: BookingsData;
+    }
+
 
     const columns = [
         {
-            key: "bookingNumber",
+            key: "booking_no",
             title: "Booking Number",
         },
         {
-            key: "customerName",
+            key: "customer_name",
             title: "Customer Name",
         },
         {
-            key: "serviceBoyName",
+            key: "service_boy_name",
             title: "Service Boy Name",
         },
         {
-            key: "serviceName",
+            key: "service_name",
             title: "Service Name",
         },
         {
-            key: "paymentMethod",
+            key: "payment_option",
             title: "Payment Method",
         },
         {
-            key: "totalAmount",
+            key: "total_price",
             title: "Total Amount(EGP)",
         },
         {
@@ -49,21 +80,51 @@ import { CustomTable } from "../../../common/CustomTable";
         },
     ]
 
+    interface formDataManageBooking{
+        search : string ,
+        date : string
+    }
+
 export default function ManageBooking(){
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10;
-
-    const handleSubmit = (values: FilterFormValues) => {
-        console.log("Search values:", values);
-    };
-
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
-
-
+    const [formData , setFormData] = useState<formDataManageBooking>({
+        search : '' ,
+        date : ''
+    })
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
+
+    const baseURL = import.meta.env.VITE_API_URL
+    
+    const { data, isLoading, isError, error , refetch } = useGet<ApiResponse>({
+        route: `${baseURL}/admin/api/getBookings`,
+        queryKey: ["bookings", currentPage, formData.search, formData.date],
+        params: {
+            page: currentPage,
+            limit: 20,                
+            booking_date: formData.date,
+            search: formData.search,
+            // booking_type: '0', 
+            // order: "desc", 
+        },
+        options: {
+            staleTime: 1000 * 10,
+        },
+    });
+    
+    const handleSubmit = (values: FilterFormValues) => {
+        console.log("Search values:", values);
+        setFormData({...values})
+        refetch()
+    };
+    
+    const bookings = data?.data.bookings
+    const pagination = data?.data.pagination
+
+    if(isLoading) return <Loader />
+    if(isError) return toast.error(error.message)
+
     return (
         <main>
             <div className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl`}>
@@ -127,11 +188,11 @@ export default function ManageBooking(){
                 </div>
                 <CustomTable
                     columns={columns}
-                    data={dummyTableData}
+                    data={bookings}
                     currentPage={currentPage}
-                    totalPages={totalPages}
-                    totalEntries={totalEntries}
-                    pageSize={pageSize}
+                    totalPages={pagination.total_pages}
+                    totalEntries={pagination.total_pages}
+                    pageSize={pagination.limit}
                     onPageChange={handlePageChange}
                 />
             </div>
