@@ -3,8 +3,6 @@ import { toast } from "sonner";
 import Cookies from "js-cookie";
 import api from "./service/axios";
 
-const baseURL = import.meta.env.VITE_API_URL as string;
-
 interface LoginValues {
   email: string;
   password: string;
@@ -12,33 +10,33 @@ interface LoginValues {
 }
 
 interface LoginResponse {
-  success: boolean;
-  message: string;
-  token: string;
-  user: {
-    user_id: number;
-    name: string;
-    email: string;
-    user_type: number;
-    previlages: string | null;
-  };
+    success: boolean;
+    message: string;
+    token: string;
+    user: {
+        user_id: number;
+        name: string;
+        email: string;
+        user_type: number;
+        previlages: string | null;
+    };
 }
 
 
 const loginRequest = async (values: LoginValues): Promise<LoginResponse> => {
-  const { data } = await api.post<LoginResponse>(
-    "/admin/api/dashboard/login",
-    values,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        app_type: "dashboard",
-      },
-    }
-  );
+    const { data } = await api.post<LoginResponse>(
+        "/admin/api/dashboard/login",
+        values,
+        {
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            app_type: "dashboard",
+        },
+        }
+    );
 
-  return data;
+    return data;
 };
 
 
