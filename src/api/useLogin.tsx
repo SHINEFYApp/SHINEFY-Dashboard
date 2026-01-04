@@ -4,9 +4,9 @@ import Cookies from "js-cookie";
 import api from "./service/axios";
 
 interface LoginValues {
-  email: string;
-  password: string;
-  remember?: boolean;
+    email: string;
+    password: string;
+    remember?: boolean;
 }
 
 interface LoginResponse {
@@ -28,15 +28,15 @@ const loginRequest = async (values: LoginValues): Promise<LoginResponse> => {
         "/admin/api/dashboard/login",
         values,
         {
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            app_type: "dashboard",
-        },
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                app_type: "dashboard",
+            },
         }
     );
-
     return data;
+
 };
 
 
@@ -52,7 +52,8 @@ export const useLogin = () => {
             }
         },
         onError: (error) => {
-            toast.error(error.message || "Something went wrong");
+            console.log(error)
+            toast.error(error.data.message || "Something went wrong");
         },
     });
 };

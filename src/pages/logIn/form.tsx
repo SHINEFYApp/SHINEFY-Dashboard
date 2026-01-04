@@ -23,8 +23,13 @@ export default function LogInForm() {
     const loginMutation = useLogin();
 
     const handleSubmit = async (values: LoginFormInitialValues) => {
-        const data = await loginMutation.mutateAsync(values);
-        dispatch(loginSuccess({ user: data.user, token: data.token }));
+        try {
+            const data = await loginMutation.mutateAsync(values);
+            console.log(data)
+            dispatch(loginSuccess({ user: data.user, token: data.token }));
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     return (
