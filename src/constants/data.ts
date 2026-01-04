@@ -1413,6 +1413,7 @@ export const dummyUsers: any[] = [
         status: 'Activated',
         groupName: '21-Nov-22 ',
     },
+]
 // Example for Manage Orders Questions
 export const dummyManageOrdersQuestions: any[] = [
     {

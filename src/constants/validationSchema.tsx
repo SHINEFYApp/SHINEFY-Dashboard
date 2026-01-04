@@ -451,3 +451,9 @@ export const AddOrdersQuestionsSchema = Yup.object({
     .min(5, "السؤال بالعربية يجب ألا يقل عن 5 حروف")
     .max(500, "السؤال بالعربية يجب ألا يزيد عن 500 حرف"),
 });
+
+
+export const LoginFormValidationSchema = Yup.object({
+    email: Yup.string().email("Invalid email format").required("Email is required"),
+    password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+});
