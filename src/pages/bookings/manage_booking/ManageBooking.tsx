@@ -31,6 +31,7 @@ import { toast } from "sonner";
     }
 
     export interface BookingsData {
+        [x: string]: any;
         bookings: Booking[];
         pagination: Pagination;
     }
@@ -69,14 +70,7 @@ import { toast } from "sonner";
         {
             key: "action",
             title: "Action",
-            render: () => (
-                <Link 
-                to={'/bookings/manage/id'}
-                className="text-primary hover:text-primary-700 font-semibold transition-colors"
-                >
-                    View Details
-                </Link>
-            ),
+            dynmincPage : 'single_booking_details'
         },
     ]
 
@@ -118,6 +112,7 @@ export default function ManageBooking(){
         setFormData({...values})
         refetch()
     };
+    
     
     const bookings = data?.data.bookings
     const pagination = data?.data.pagination

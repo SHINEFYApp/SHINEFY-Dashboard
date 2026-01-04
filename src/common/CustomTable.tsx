@@ -2,6 +2,7 @@ import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
 import KsaMan from '../assets/images/a2d5b399907e9638f3692bc625edb48bf22a9919.jpg'
+import { Link } from "react-router";
 
 export function CustomTable<T extends Record<string, any>>({
     page ,
@@ -111,9 +112,14 @@ export function CustomTable<T extends Record<string, any>>({
                                                             })}
                                                         </div>
                                                         :
-                                                        row[column.key]
+                                                        column.dynmincPage === 'single_booking_details' ? 
+                                                            <Link to={`/bookings/manage/${row.booking_id}`} className="text-primary">View Details</Link>
+                                                            :
+                                                            column.key === 'car_category_image'?
+                                                                <img src={KsaMan} alt="" className="w-20 h-20 rounded-2xl" />
+                                                                :
+                                                                row[column.key]
                                             }
-                                            
                                         </td>
                                     ))}
                                 </tr>

@@ -20,9 +20,9 @@ export const FormDataList: FC<FormDataListProps> = ({
   const [field, meta, helpers] = useField(name);
   const [open, setOpen] = useState(false);
 
-    const filteredOptions = options.filter((item) =>
-        item.toLowerCase().includes(String(field.value || "").toLowerCase())
-    );
+  const filteredOptions = options.filter((item) =>
+      item.toLowerCase().includes(String(field.value || "").toLowerCase())
+  );
 
 
   const hasError = meta.touched && meta.error;
