@@ -11,8 +11,6 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import ServiceBoys from "../../../components/booking/service_boys";
 
-
-
 const ManageBookingDetails = () => {
     const { id } = useParams()
     const baseURL = import.meta.env.VITE_API_URL
@@ -32,7 +30,6 @@ const ManageBookingDetails = () => {
     const vehicles = data?.data.vehicles
     
     const [allData, setAllData] = useState<BookingState | null>(null);
-    console.log(allData)
 
     useEffect(() => {
         if (!data?.data.booking) return;
@@ -70,8 +67,6 @@ const ManageBookingDetails = () => {
         toast.error(error.message);
         return null;
     }
-
-    console.log(extra_services)
 
     // Handle vehicle actions
     const handleUpdateVehicle = (vehicle: any) => {

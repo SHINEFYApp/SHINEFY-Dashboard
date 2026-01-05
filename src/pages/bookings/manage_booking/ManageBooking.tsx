@@ -1,11 +1,9 @@
-import { Link } from "react-router";
 import CompletedBookingChart from "../../../components/booking/manageBooking/CompletedBookingChart";
 import RatedReportsChart from "../../../components/booking/manageBooking/RatedReportsChart";
 import { Form, Formik } from "formik";
 import { FormInput } from "../../../common/FormInput";
 import { Calendar, Search, SlidersHorizontal } from "lucide-react";
 import { FormDatePicker } from "../../../common/FormDatePicker";
-import { dummyTableData } from "../../../constants/data";
 import type { FilterFormValues } from "../../../types/bookings";
 import { useState } from "react";
 import { CustomTable } from "../../../common/CustomTable";

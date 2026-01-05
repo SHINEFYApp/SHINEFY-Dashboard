@@ -6,6 +6,7 @@ import { cn } from "../../utils/utils"
 import { ArrowUpFromLine, Trash2 } from "lucide-react"
 import type { JSX } from "react/jsx-runtime"
 import type { BookingState } from "../../types/bookings"
+import Loader from "../../common/loader"
 
 type FieldKey = keyof BookingState
 
@@ -78,14 +79,14 @@ export default function ServiceBoys({
         title: 'Services Boys',
         render: () => (
             <CustomTable
-            columns={vehicleColumns}
-            data={data}
-            currentPage={1}
-            totalPages={1}
-            totalEntries={data.length}
-            pageSize={10}
-            onPageChange={(page) => console.log("Page changed:", page)}
-            isLoading={false}
+                columns={vehicleColumns}
+                data={data}
+                currentPage={1}
+                totalPages={1}
+                totalEntries={data.length}
+                pageSize={10}
+                onPageChange={(page) => console.log("Page changed:", page)}
+                isLoading={false}
             />
         )
         },
@@ -94,14 +95,14 @@ export default function ServiceBoys({
         title: 'Extra Services',
         render: () => (
             <CustomTable
-            columns={extraServicesColumns}
-            data={extraServices}
-            currentPage={1}
-            totalPages={1}
-            totalEntries={extraServices.length}
-            pageSize={10}
-            onPageChange={(page) => console.log("Page changed:", page)}
-            isLoading={false}
+                columns={extraServicesColumns}
+                data={extraServices}
+                currentPage={1}
+                totalPages={1}
+                totalEntries={extraServices.length}
+                pageSize={10}
+                onPageChange={(page) => console.log("Page changed:", page)}
+                isLoading={false}
             />
         )
         },
@@ -110,14 +111,14 @@ export default function ServiceBoys({
         title: 'Services',
         render: () => (
             <CustomTable
-            columns={vehicleColumns}
-            data={data}
-            currentPage={1}
-            totalPages={1}
-            totalEntries={data.length}
-            pageSize={10}
-            onPageChange={(page) => console.log("Page changed:", page)}
-            isLoading={false}
+                columns={vehicleColumns}
+                data={data}
+                currentPage={1}
+                totalPages={1}
+                totalEntries={data.length}
+                pageSize={10}
+                onPageChange={(page) => console.log("Page changed:", page)}
+                isLoading={false}
             />
         ),
         feilds: [
@@ -135,7 +136,7 @@ export default function ServiceBoys({
         }
     ]
 
-    if (!allData) return null
+    if (!allData) return <Loader />
 
     return (
         <div>

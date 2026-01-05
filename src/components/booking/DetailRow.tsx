@@ -1,4 +1,4 @@
-import { Eye, Pen, X } from "lucide-react";
+import { Pen, X } from "lucide-react";
 import type { BookingState, DetailItem } from "../../types/bookings";
 import { cn } from "../../utils/utils";
 import { useState, type Dispatch, type SetStateAction } from "react";
