@@ -7,9 +7,9 @@ import { store } from "../redux/store";
 
 
 interface LoginValues {
-  email: string;
-  password: string;
-  remember?: boolean;
+    email: string;
+    password: string;
+    remember?: boolean;
 }
 
 interface LoginResponse {

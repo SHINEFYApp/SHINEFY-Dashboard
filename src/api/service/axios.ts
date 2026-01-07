@@ -1,6 +1,7 @@
 import axios from "axios";
 import { store } from "../../redux/store";
 import { logout } from "../../redux/slices/authSlice";
+import { toast } from "sonner";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
