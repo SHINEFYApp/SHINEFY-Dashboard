@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
+body {
+  direction: ltr;
+}
 @theme {
   /* Primary Colors (Amber/Yellow) */
   --color-primary-50: #fffbeb;
@@ -200,7 +202,7 @@ input[type=number] {
   border-radius: 10px;
   background-color: var(--base-color);
   --base-color: #212121;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex ;
   justify-content: center;

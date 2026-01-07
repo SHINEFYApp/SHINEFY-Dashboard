@@ -1,4 +1,4 @@
-import type { DetailRowProps, Vehicle } from "../types/bookings";
+import type { DetailItem, DetailRowProps, Vehicle } from "../types/bookings";
 import car from '../assets/car.svg';
 import cash from '../assets/icons/cash.svg';
 import credit from '../assets/icons/credit.svg';
@@ -25,7 +25,7 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Bookings']
     },
-    '/bookings/manage/id': {
+    '/bookings/manage/:id': {
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Bookings' , 'Manage Booking By Id']
     },
@@ -2327,50 +2327,6 @@ export const dummyManageFqs: any[] = [
     },
 ];
 
-export const mainDetails: DetailRowProps[] = [
-    {
-        label: "ID", value: "9388546579",
-        type: "badge"
-    },
-    {
-        label: "Customer Name",
-        value: "Eid Fathy",
-        actionButton: {
-            text: "View",
-            icon: Eye,
-            onClick: () => console.log("View customer")
-        },
-        type: "badge"
-    },
-    { label: "Type", value: "Normal", type: "badge", badgeColor: "yellow" },
-    {
-        label: "Booking Date", value: "2025-10-18",
-        type: "badge"
-    },
-    {
-        label: "Booking Time", value: "05:30 PM",
-        type: "badge"
-    },
-    { label: "Address Type", value: "Home", type: "badge", badgeColor: "blue" },
-    {
-        label: "Address",
-        value: "cairo,",
-        actionButton: {
-            text: "View",
-            icon: Eye,
-            onClick: () => console.log("View address")
-        },
-        type: "badge"
-    },
-];
-
-export const statusDetails: DetailRowProps[] = [
-    { label: "Status", value: "Pending", type: "badge", badgeColor: "yellow" },
-    { label: "Note", value: "NA", type: "badge", badgeColor: "red" },
-    { label: "Payment Option", value: "Cash", type: "badge", badgeColor: "blue" },
-    { label: "Collect Money Status", value: "Not Collected", type: "badge", badgeColor: "yellow" },
-    { label: "Grand Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" }
-];
 
 
 export const dummyVehicles: any[] = [
@@ -2626,3 +2582,101 @@ export const dummyContactUsMessages: any[] = [
         }
     },
 ]
+
+export const mainDetails: DetailItem[] = [
+        {
+            key: "id",
+            label: "ID",
+            type: "badge",
+        },
+        {
+            key: "customer_name",
+            label: "Customer Name",
+            type: "badge",
+            actionButton: {
+            text: "View",
+            icon: Eye,
+            onClick: () => console.log("View customer"),
+            },
+        },
+        {
+            key: "type",
+            label: "Type",
+            type: "select",
+            options: ["Normal", "Option Two", "Option Three"],
+            badgeColor: "yellow",
+        },
+        {
+            key: "booking_date",
+            label: "Booking Date",
+            type: "date",
+        },
+        {
+            key: "booking_time",
+            label: "Booking Time",
+            type: "time",
+        },
+        {
+            key: "address_type",
+            label: "Address Type",
+            type: "select",
+            options: ["Home", "Work"],
+            badgeColor: "blue",
+        },
+        {
+            key: "address",
+            label: "Address",
+            type: "textArea",
+            actionButton: {
+            text: "View",
+            icon: Eye,
+            onClick: () => console.log("View address"),
+            },
+        },
+    ];
+
+export const statusDetails: DetailItem[] = [
+        {
+            key: "booking_status",
+            label: "Status",
+            type: "select",
+            options: [
+                "Pending",
+                "In Progcess",
+                "Canceled",
+                "Completed",
+                "Confirmed",
+            ],
+            badgeColor: "yellow",
+        },
+        {
+            key: "note",
+            label: "Note",
+            type: "textArea",
+            badgeColor: "red",
+        },
+        {
+            key: "pay_option",
+            label: "Payment Option",
+            type: "select",
+            options : [
+                'Cash',
+                'Package'
+            ],
+            badgeColor: "blue",
+        },
+        {
+            key: "mony_status",
+            label: "Collect Money Status",
+            type: "select",
+            options: ["Not Collected", "Collected"],
+            badgeColor: "yellow",
+        },
+        {
+            key: "total",
+            label: "Grand Total",
+            type: "text",
+            badgeColor: "green",
+        },
+    ];
+

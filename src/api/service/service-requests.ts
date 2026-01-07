@@ -1,27 +1,36 @@
-import type { AxiosResponse } from 'axios';
-import axiosInstance from './axios';
+import type { AxiosResponse } from "axios";
+import api from "./axios";
 
-// GET Request
-export const getService = async (route: string, params?: any): Promise<AxiosResponse> => {
-    return await axiosInstance.get(route, { params });
-};
+// GET
+export const getService = async <T = any>(
+  route: string,
+  params?: any
+): Promise<AxiosResponse<T>> => api.get(route, { params });
 
-// POST Request
-export const postService = async (route: string, data?: any, params?: any): Promise<AxiosResponse> => {
-    return await axiosInstance.post(route, data, { params });
-};
+// POST
+export const postService = async <T = any>(
+  route: string,
+  data?: any,
+  params?: any
+): Promise<AxiosResponse<T>> => api.post(route, data, { params });
 
-// PUT Request
-export const putService = async (route: string, data?: any, params?: any): Promise<AxiosResponse> => {
-    return await axiosInstance.put(route, data, { params });
-};
+// PUT
+export const putService = async <T = any>(
+  route: string,
+  data?: any,
+  params?: any
+): Promise<AxiosResponse<T>> => api.put(route, data, { params });
 
-// PATCH Request
-export const patchService = async (route: string, data?: any, params?: any): Promise<AxiosResponse> => {
-    return await axiosInstance.patch(route, data, { params });
-};
+// PATCH
+export const patchService = async <T = any>(
+  route: string,
+  data?: any,
+  params?: any
+): Promise<AxiosResponse<T>> => api.patch(route, data, { params });
 
-// DELETE Request
-export const deleteService = async (route: string, data?: any, params?: any): Promise<AxiosResponse> => {
-    return await axiosInstance.delete(route, { params, data });
-};
+// DELETE
+export const deleteService = async <T = any>(
+  route: string,
+  data?: any,
+  params?: any
+): Promise<AxiosResponse<T>> => api.delete(route, { data, params });

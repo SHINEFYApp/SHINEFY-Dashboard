@@ -197,9 +197,80 @@ export interface ReportFilters {
     endDate: string;
 }
 
+export interface BookingState {
+    id: number;
+    customer_name: string;
+    type: string;
+    booking_date: Date;
+    booking_time: Date | null;
+    address_type: "Home" | "Work";
+    address: string;
+    booking_status: string;
+    note: string | null;
+    pay_option: string;
+    mony_status: string;
+    total: string;
+    Coupon_Applied : number
+    Coupon_Code : string
+    Coupon_Amount : number
+    Sub_Total : number
+    Wallet_Amount : number
+    Gradn_Total : number
+    User_Note : string
+    Admin_Note : string
+    Create_Date : Date
+    Create_Time : Date | null
+}
+
 export interface ReportFilters {
     status: string;
     startDate: string;
     endDate: string;
 }
 
+
+type BookingKey = keyof BookingState;
+type DetailType =
+  | "badge"
+  | "text"
+  | "select"
+  | "date"
+  | "time"
+  | "textArea";
+
+interface ActionButton {
+  text: string;
+  icon: React.ElementType;
+  onClick: () => void;
+}
+
+interface BaseDetail {
+  key: BookingKey;
+  label: string;
+  type: DetailType;
+  badgeColor?: "yellow" | "blue" | "red" | "green";
+  actionButton?: ActionButton;
+}
+
+interface SelectDetail extends BaseDetail {
+  type: "select";
+  options: string[];
+}
+
+interface BadgeDetail extends BaseDetail {
+  type: "badge";
+}
+
+interface TextDetail extends BaseDetail {
+  type: "text" | "textArea";
+}
+
+interface DateDetail extends BaseDetail {
+  type: "date" | "time";
+}
+
+export type DetailItem =
+  | SelectDetail
+  | BadgeDetail
+  | TextDetail
+  | DateDetail;
