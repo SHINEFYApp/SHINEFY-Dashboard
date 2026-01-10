@@ -1,26 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import type { AxiosError, AxiosResponse } from "axios";
-import { getService } from "./service/service-requests";
+import type { AxiosError } from "axios";
 
 interface UseGetProps<T> {
-  route: string;
   queryKey: unknown[];
-  params?: any;
+  queryFn: () => Promise<T>;
   options?: any;
 }
 
 export const useGet = <T = any>({
-  route,
+  queryFn,
   queryKey,
-  params,
   options,
 }: UseGetProps<T>) => {
   return useQuery<T, AxiosError>({
+    queryFn ,
     queryKey,
-    queryFn: async () => {
-      const res: AxiosResponse<T> = await getService<T>(route, params);
-      return res.data;
-    },
     refetchInterval: 1000 * 10,
     ...options,
   });

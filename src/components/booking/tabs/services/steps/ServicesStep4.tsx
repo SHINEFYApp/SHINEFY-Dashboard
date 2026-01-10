@@ -1,12 +1,14 @@
 import { Formik, Form } from 'formik';
 import { servicesStep4Schema } from '../../../../../constants/validationSchema';
-import { servicesStep4InitialValues } from '../../../../../constants/initialValues';
 import { Button } from '../../../../ui/button';
-import type { ServicesStep4Props } from '../../../../../types/bookings';
+import type { stepsProps } from '../../../../../types/bookings';
 
-const ServicesStep4 = ({ onBack, onSubmit, formData, onDataChange }: ServicesStep4Props) => {
-
-
+const ServicesStep4 = ({ 
+    onBack, 
+    onSubmit, 
+    formData ,
+    setFormData
+}: stepsProps) => {
 
     return (
         <>
@@ -16,18 +18,17 @@ const ServicesStep4 = ({ onBack, onSubmit, formData, onDataChange }: ServicesSte
 
             <Formik
                 initialValues={{
-                    ...servicesStep4InitialValues,
-                    userNote: formData.userNote || servicesStep4InitialValues.userNote,
-                    adminNotes: formData.adminNotes || servicesStep4InitialValues.adminNotes,
+                    userNote: formData.userNote || '',
+                    adminNotes: formData.adminNotes || '',
                 }}
                 validationSchema={servicesStep4Schema}
                 enableReinitialize
-                onSubmit={(values) => {
-                    onDataChange(values);
+                onSubmit={() => {
+                    console.log(formData)
                     onSubmit();
                 }}
             >
-                {({ values, setFieldValue }) => (
+                {({ }) => (
                     <Form>
                         {/* User Note */}
                         <div className="mb-8">
@@ -36,10 +37,9 @@ const ServicesStep4 = ({ onBack, onSubmit, formData, onDataChange }: ServicesSte
                             </label>
                             <textarea
                                 name="userNote"
-                                value={values.userNote}
+                                value={formData.userNote}
                                 onChange={(e) => {
-                                    setFieldValue('userNote', e.target.value);
-                                    onDataChange({ userNote: e.target.value });
+                                    setFormData({...formData , userNote: e.target.value });
                                 }}
                                 placeholder="Enter Note"
                                 rows={6}
@@ -57,10 +57,9 @@ const ServicesStep4 = ({ onBack, onSubmit, formData, onDataChange }: ServicesSte
 
                             <textarea
                                 name="adminNotes"
-                                value={values.adminNotes}
+                                value={formData.adminNotes}
                                 onChange={(e) => {
-                                    setFieldValue('adminNotes', e.target.value);
-                                    onDataChange({ adminNotes: e.target.value });
+                                    setFormData({...formData , adminNotes: e.target.value });
                                 }}
                                 placeholder="Enter Note"
                                 rows={8}

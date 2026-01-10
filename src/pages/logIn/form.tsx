@@ -14,9 +14,9 @@ export default function LogInForm() {
     const [showPass, setShowPass] = useState<boolean>(false);
 
     const initialValues: LoginFormInitialValues = {
-        email: "",
-        password: "",
-        remember: false
+        email: "Info@shinefy.co",
+        password: "12345678",
+        remember: true
     };
 
     const dispatch = useDispatch();

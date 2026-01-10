@@ -1,86 +1,114 @@
+import { useField } from 'formik';
 import { CheckIcon, X } from 'lucide-react';
 import addVehicle from '../../../../assets/addVehicle.svg';
-import type { SelectedVehiclesProps } from '../../../../types/bookings';
+import car from '../../../../assets/addVehicle.svg';
+import { cn } from '../../../../utils/utils';
+import type { Vehicle } from '../../../../types/bookings';
 
-export const SelectedVehicles = ({
-    vehicles,
+type FormSelectedVehiclesProps = {
+    name: string;
+    label?: string;
+    vehicles?: Vehicle[];
+    onAddClick: () => void;
+    className?: string;
+};
+
+export const FormSelectedVehicles = ({
+    name,
+    label = 'Select Vehicle',
     onAddClick,
-    onRemoveVehicle
-}: SelectedVehiclesProps) => {
-    if (vehicles.length === 0) {
-        return (
-            <div>
-                <label className="text-sm font-medium text-gray-700 mb-3 block">
-                    Select Vehicle
-                </label>
+    className,
+}: FormSelectedVehiclesProps) => {
+    const [field, meta, helpers] = useField<Vehicle[]>(name);
+
+    const vehicles = field.value || [];
+    const hasError = meta.touched && meta.error;
+    const isValid = meta.touched && !meta.error && vehicles.length > 0;
+
+    const handleRemove = (vehicleId: number) => {
+        const updated = vehicles.filter(v => v.vehicle_id !== vehicleId);
+        helpers.setValue(updated);
+    };
+
+    return (
+        <div className={cn('space-y-2', className)}>
+            <label className="text-sm font-medium text-gray-700 block">
+                {label}
+            </label>
+
+            {vehicles.length === 0 ? (
                 <button
                     type="button"
                     onClick={onAddClick}
-                    className="w-full md:w-80 h-56 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-200 group"
+                    className={cn(
+                        'w-full md:w-80 h-56 rounded-2xl border-2 border-dashed bg-gray-50 flex flex-col items-center justify-center transition-all duration-200',
+                        hasError
+                            ? 'border-red-500 bg-red-50'
+                            : 'border-gray-300 hover:border-primary hover:bg-primary/5'
+                    )}
                 >
                     <img src={addVehicle} alt="add vehicle" className="size-52" />
                 </button>
-            </div>
-        );
-    }
-
-    return (
-        <div>
-            <label className="text-sm font-medium text-gray-700 mb-3 block">
-                Select Vehicle
-            </label>
-            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                {/* Selected Vehicles */}
-                {vehicles.map((vehicle) => (
-                    <div
-                        key={vehicle.id}
-                        className="shrink-0 w-80 p-6 rounded-2xl border-2 border-green-500 bg-white relative transition-all duration-200 hover:shadow-lg group"
-                    >
-                        {/* Green Checkmark */}
-                        <div className="absolute top-4 right-4 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-md animate-scale-up">
-                            <CheckIcon className="text-white" />
-                        </div>
-
-                        {/* Remove Button (X) - Shows on Hover */}
-                        <button
-                            type="button"
-                            onClick={() => onRemoveVehicle?.(vehicle.id)}
-                            className="absolute top-4 left-4 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600"
+            ) : (
+                <div className="flex gap-4 flex-wrap overflow-x-auto pb-4 scrollbar-hide">
+                    {vehicles.map(vehicle => (
+                        <div
+                            key={vehicle.vehicle_id}
+                            className={cn(
+                                'relative shrink-0 w-[30%] p-6 rounded-2xl border-2 bg-white transition-all duration-200 hover:shadow-lg',
+                                isValid
+                                    ? 'border-green-500'
+                                    : hasError
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
+                            )}
                         >
-                            <X className="w-5 h-5" />
-                        </button>
+                            {/* Check */}
+                            {isValid && (
+                                <div className="absolute top-4 right-4 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-scale-up">
+                                    <CheckIcon className="text-white" />
+                                </div>
+                            )}
 
-                        {/* Vehicle Info */}
-                        <div className="mb-4">
-                            <h3 className="font-bold text-lg text-gray-900">{vehicle.name}</h3>
-                            <p className="text-sm text-gray-500">{vehicle.type}</p>
+                            {/* Remove */}
+                            <button
+                                type="button"
+                                onClick={() => handleRemove(vehicle.vehicle_id)}
+                                className="absolute top-4 left-4 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+
+                            <h3 className="font-bold text-lg text-gray-900 mb-2">
+                                {vehicle.vehicle_name}
+                            </h3>
+
+                            <div className="flex items-center justify-center h-32">
+                                <img
+                                    src={car}
+                                    alt={vehicle.vehicle_name}
+                                    className="w-full h-full object-contain"
+                                />
+                            </div>
                         </div>
+                    ))}
 
-                        {/* Vehicle Image */}
-                        <div className="flex items-center justify-center h-32">
-                            <img
-                                src={vehicle.image}
-                                alt={vehicle.name}
-                                className="w-full h-full object-contain"
-                            />
-                        </div>
-                    </div>
-                ))}
-
-                {/* Add More "Select" Card */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-gray-700">
-                        Select Vehicle
-                    </label>
+                    {/* Add more */}
                     <button
                         type="button"
                         onClick={onAddClick}
-                        className="w-80 h-56 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300 cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-200 group shrink-0"
+                        className="w-80 h-56 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300 hover:border-primary hover:bg-primary/5 transition-all duration-200"
                     >
                         <img src={addVehicle} alt="add vehicle" className="size-52 mx-auto" />
                     </button>
                 </div>
-            </div>
+            )}
+
+            {hasError && (
+                <p className="text-xs text-red-500 animate-slide-down pl-1">
+                    {meta.error as string}
+                </p>
+            )}
         </div>
     );
 };

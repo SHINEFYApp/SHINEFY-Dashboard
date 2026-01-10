@@ -3,9 +3,9 @@ import type { BookingState, DetailItem } from "../../types/bookings";
 import { cn } from "../../utils/utils";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { Input } from "../ui/input";
-import Loader from "../../common/loader";
 import { CalenderList } from "../../common/clalenderList";
 import { Textarea } from "../ui/textarea";
+import { SkeletonDemo } from "../../common/loader";
 
 interface userBookingDetailsProps {
     data : BookingState | null
@@ -34,7 +34,7 @@ export default function UserDetails({data , setData , details} : userBookingDeta
         return String(value); 
     };
 
-    if (!data) return <Loader />;
+    if (!data) return <SkeletonDemo />;
 
     return (
         <div className="flex flex-col sm:flex-row sm:items-center py-3">

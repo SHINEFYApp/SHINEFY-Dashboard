@@ -24,12 +24,14 @@ export const FormDatePicker = ({
 
     const handleDateSelect = (date: Date | undefined) => {
         if (date) {
-            helpers.setValue(format(date, 'dd.MM.yyyy'));
+            helpers.setValue(format(date, 'yyyy-MM-dd'));
             setOpen(false);
         }
     };
 
-    const selectedDate = field.value ? new Date(field.value.split('.').reverse().join('-')) : undefined;
+    const selectedDate = field.value
+    ? new Date(field.value)
+    : undefined;
 
     return (
         <div className={cn('space-y-2', className)}>

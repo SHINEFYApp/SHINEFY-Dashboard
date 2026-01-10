@@ -1,28 +1,28 @@
 import { ArrowUpFromLine, Trash2, History } from "lucide-react";
 import { CustomTable } from "../../../common/CustomTable";
 import { dummyVehicles, mainDetails, statusDetails } from "../../../constants/data";
-import type { BookingState, Vehicle } from "../../../types/bookings";
+import type { ApiResponse, BookingState, Vehicle } from "../../../types/bookings";
 import UserDetails from "../../../components/booking/DetailRow";
-import type { ApiResponse } from "./ManageBooking";
 import { useGet } from "../../../api/useGetData";
 import { useParams } from "react-router";
-import Loader from "../../../common/loader";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import ServiceBoys from "../../../components/booking/service_boys";
+import { singleBookingDetails } from "../../../api/features/bookings";
+import { SkeletonDemo } from "../../../common/loader";
 
 const ManageBookingDetails = () => {
     const { id } = useParams()
     const baseURL = import.meta.env.VITE_API_URL
+    const route = `${baseURL}/admin/api/book/get/${id}`
     const { data, isLoading, isError, error } = useGet<ApiResponse>({
-        route: `${baseURL}/admin/api/book/get/${id}`,
+        queryFn : () =>  singleBookingDetails(route),
         queryKey: ["booking" , 'details' , id],
         options: {
             staleTime: 1000 * 10,
         },
     });
 
-    
     const booking = data?.data.booking
     const extra_services = data?.data.extra_services
     const rating = data?.data.rating
@@ -62,7 +62,7 @@ const ManageBookingDetails = () => {
         });
     }, [data]);
 
-    if(isLoading) return <Loader />
+    if(isLoading) return <div className=" h-screen"><SkeletonDemo /></div>
     if (isError) {
         toast.error(error.message);
         return null;
@@ -114,7 +114,7 @@ const ManageBookingDetails = () => {
                 <div className="flex items-center gap-3">
                     <div
                         className="w-8 h-8 rounded-md border border-gray-300 shadow-sm"
-                        style={{ backgroundColor: row.colorHex }}
+                        style={{ backgroundColor: row.color_name }}
                     />
                     <span className="text-gray-700 font-medium">{value}</span>
                 </div>

@@ -1,5 +1,4 @@
 import type { DetailItem, DetailRowProps, Vehicle } from "../types/bookings";
-import car from '../assets/car.svg';
 import cash from '../assets/icons/cash.svg';
 import credit from '../assets/icons/credit.svg';
 import free from '../assets/icons/free.svg';
@@ -332,71 +331,6 @@ export const createBackageBookingSteps = [
     },
 ];
 
-export const dummyDataVehicles: Vehicle[] = [
-    {
-        id: '1',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '2',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '3',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '4',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '5',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '6',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '7',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-];
 
 export const paymentMethods = [
     {

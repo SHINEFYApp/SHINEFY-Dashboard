@@ -31,6 +31,7 @@ export const FormTimePicker = ({
                     {...field}
                     id={name}
                     type="time"
+                    step={1}
                     disabled={disabled}
                     className={cn(
                         'w-full rounded-xl border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200',

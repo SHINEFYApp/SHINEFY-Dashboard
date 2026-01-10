@@ -11,25 +11,79 @@ export const manageSlotSchema = Yup.object({
     slotType: Yup.string().required('Slot type is required'),
 });
 
+
 export const servicesStep1Schema = Yup.object({
     phoneNumber: Yup.string()
         .matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits')
         .required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    vehicles: Yup.array().min(1, 'Please select at least one vehicle'),
-    bookingDate: Yup.string().required('Booking date is required'),
-    bookingTime: Yup.string().required('Booking time is required'),
+
+    address: Yup.object().nullable().required('Address is required'),
+
+    vehicles: Yup.array()
+        .min(1, 'Please select at least one vehicle')
+        .required(),
+
+    bookingDate: Yup.string()
+        .required('Booking date is required')
+        .matches(
+            /^\d{4}-\d{2}-\d{2}$/,
+            'Date must be in yyyy-mm-dd format'
+        )
+        .test(
+            'not-in-past',
+            'Booking date cannot be earlier than today',
+            (value) => {
+                if (!value) return false;
+
+                const selectedDate = new Date(value);
+                const today = new Date();
+
+                today.setHours(0, 0, 0, 0);
+                selectedDate.setHours(0, 0, 0, 0);
+
+                return selectedDate >= today;
+            }
+        ),
+
+    bookingTime: Yup.string()
+        .required('Booking time is required')
+        .matches(
+            /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/,
+            'Time must be in HH:mm:ss format'
+        )
+        .test(
+            'not-in-past-time',
+            'Booking time must be later than current time',
+            function (value) {
+                const { bookingDate } = this.parent;
+
+                if (!value || !bookingDate) return true;
+
+                const now = new Date();
+                const selectedDateTime = new Date(`${bookingDate}T${value}`);
+
+                // نتحقق من الوقت فقط إذا التاريخ هو اليوم
+                const isToday =
+                    new Date(bookingDate).toDateString() ===
+                    now.toDateString();
+
+                if (!isToday) return true;
+
+                return selectedDateTime > now;
+            }
+        ),
 });
 
+
 export const servicesBookingSchema = Yup.object({
-    mainService: Yup.string().required('Please select a service'),
-    serviceBoy: Yup.string().required('Please select a service boy'),
+    mainService:  Yup.string().required(),
+    serviceBoy: Yup.object().required('Please select a service boy'),
 });
 
 export const packageBookingSchema = Yup.object({
-    mainService: Yup.string().required('Please select a service'),
-    mainPackage: Yup.string().required('Please select a package'),
-    serviceBoy: Yup.string().required('Please select a service boy'),
+    mainService:  Yup.string().required(),
+    mainPackage: Yup.object().required('Please select a package'),
+    serviceBoy: Yup.object().required('Please select a service boy'),
 });
 
 export const servicesStep3Schema = Yup.object({
