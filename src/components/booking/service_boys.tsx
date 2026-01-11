@@ -6,7 +6,7 @@ import { cn } from "../../utils/utils"
 import { ArrowUpFromLine, Trash2 } from "lucide-react"
 import type { JSX } from "react/jsx-runtime"
 import type { BookingState } from "../../types/bookings"
-import Loader from "../../common/loader"
+import { SkeletonDemo } from "../../common/loader"
 
 type FieldKey = keyof BookingState
 
@@ -136,7 +136,7 @@ export default function ServiceBoys({
         }
     ]
 
-    if (!allData) return <Loader />
+    if (!allData) return <SkeletonDemo />
 
     return (
         <div>

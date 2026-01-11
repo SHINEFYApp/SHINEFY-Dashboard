@@ -28,9 +28,12 @@ api.interceptors.response.use(
   (error) => {
     if ([401].includes(error.response?.status)) {
       store.dispatch(logout());
+      return Promise.reject(
+        error.response?.data?.message ?? "Session expired. Please login again."
+      );
     }
     return Promise.reject(
-      error.response?.data?.message ?? "Session expired. Please login again."
+      error.response
     );
   }
 );

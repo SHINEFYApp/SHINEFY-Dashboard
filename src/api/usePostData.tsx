@@ -1,19 +1,32 @@
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError, type AxiosResponse,  } from "axios";
+import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
+import type { AxiosError, AxiosResponse } from "axios";
 import { postService } from "./service/service-requests";
-import type { UsePostProps } from "../types/api";
 
+interface UsePostProps<TResponse, TPayload> {
+  route: string;
+  params?: any;
+  options?: UseMutationOptions<
+    TResponse,
+    AxiosError,
+    TPayload,
+    unknown
+  >;
+}
 
-export const usePost = <TResponse = any , TPayload = any>({
+export const usePost = <TResponse, TPayload>({
   route,
   params,
   options,
 }: UsePostProps<TResponse, TPayload>) => {
-    return useMutation<TResponse, AxiosError, TPayload>({
-        mutationFn: async (data: TPayload) => {
-        const res: AxiosResponse<TResponse> = await postService(route, data, params);
-            return res.data;
-        },
-        ...options,
-    });
+  return useMutation<TResponse, AxiosError, TPayload>({
+    mutationFn: async (payload: TPayload) => {
+      const res: AxiosResponse<TResponse> = await postService(
+        route,
+        payload,
+        params
+      );
+      return res.data;
+    },
+    ...options,
+  });
 };

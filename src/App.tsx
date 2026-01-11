@@ -11,12 +11,8 @@ import { RoutesPages } from './routes';
 
 function App() {
 
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
   const dispatch = useDispatch();
 
-  console.log(isAuthenticated)
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";

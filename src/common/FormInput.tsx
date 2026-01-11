@@ -16,7 +16,8 @@ export const FormInput: FC<FormInputProps> = ({
     className,
     receiveSms,
     setReceiveSms ,
-    moreOptions
+    moreOptions ,
+    onBlur
 }) => {
     const [field, meta] = useField(name);
     const hasError = meta.touched && meta.error;
@@ -54,6 +55,10 @@ export const FormInput: FC<FormInputProps> = ({
                     type={type}
                     placeholder={placeholder}
                     disabled={disabled}
+                    onBlur={(e) => {
+                        field.onBlur(e);
+                        onBlur?.(e.target.value);
+                    }}
                     className={cn(
                         'w-full rounded-xl border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200',
                         icon && 'pl-12',
