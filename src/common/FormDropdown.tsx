@@ -22,8 +22,8 @@ export const FormDropdown: FC<FormDropdownProps & { onChangeExternal?: (value: s
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        setFieldValue(name, value); 
-        if (onChangeExternal) onChangeExternal(value); 
+        setFieldValue(name, value);
+        if (onChangeExternal) onChangeExternal(value);
     };
 
     return (
@@ -54,13 +54,16 @@ export const FormDropdown: FC<FormDropdownProps & { onChangeExternal?: (value: s
                     )}
                 >
                     <option value="" disabled>{placeholder || 'Select an option'}</option>
-                    {options.map((option, index) => (
-                        typeof option === 'object' && 'name' in option ? (
-                            <option key={index} value={option.name}>{option.name}</option>
-                        ) : (
-                            <option key={index} value={option}>{option}</option>
-                        )
-                    ))}
+                    {options.map((option, index) => {
+                        if (option && typeof option === 'object') {
+                            const val = 'value' in option ? (option as any).value :
+                                ('name' in option ? (option as any).name : '');
+                            const label = 'label' in option ? (option as any).label :
+                                ('name' in option ? (option as any).name : '');
+                            return <option key={index} value={val}>{label}</option>;
+                        }
+                        return <option key={index} value={option as string}>{option as string}</option>;
+                    })}
                 </select>
 
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
