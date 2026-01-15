@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router";
 import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
 import ManageCarCategory from "../../components/vehicles/ManageCarCategory";
 import ManageColor from "../../components/vehicles/ManageColor";
@@ -8,6 +9,7 @@ import { useState } from "react";
 
 const ManageVehicles = () => {
     const [activeTab, setActiveTab] = useState('manageMake');
+
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);

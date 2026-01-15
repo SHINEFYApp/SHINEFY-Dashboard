@@ -9,11 +9,11 @@ export const manageCarCategoryColumns = [
         )
     },
     {
-        key: "category_name",
+        key: "car_category_name_english",
         title: "English Car Category Name",
     },
     {
-        key: "category_name_arabic",
+        key: "car_category_name_arabic",
         title: "Arabic Car Category Name",
     },
     {
