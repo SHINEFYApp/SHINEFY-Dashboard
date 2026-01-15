@@ -1,43 +1,80 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { servicesStep3Schema } from '../../../../../constants/validationSchema';
-import { servicesStep3InitialValues } from '../../../../../constants/initialValues';
-import { FormDropdown } from '../../../../../common/FormDropdown';
 import { Button } from '../../../../ui/button';
-import { IoTicketOutline, IoWalletOutline } from 'react-icons/io5';
+import { IoWalletOutline } from 'react-icons/io5';
 import { cn } from '../../../../../utils/utils';
-import type { ServicesStep3Props } from '../../../../../types/bookings';
+import type { stepsProps } from '../../../../../types/bookings';
 import { paymentMethods } from '../../../../../constants/data';
+import { getCoupons } from '../../../../../api/features/bookings';
+import { useGet } from '../../../../../api/useGetData';
+import { toast } from 'sonner';
+import { SkeletonDemo } from '../../../../../common/loader';
+import { DropDownToSendObject } from '../../../../../common/DropDownToSendObject ';
+import { TicketSlash } from 'lucide-react';
 
-const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3Props) => {
+const ServicesStep3 = ({ 
+    onNext, 
+    onBack, 
+    formData,
+    setFormData
+}: stepsProps) => {
     const [selectedPayment, setSelectedPayment] = useState<string>(formData.paymentMethod || '');
-
-
-
 
     const handlePaymentSelect = (method: string, setFieldValue: any) => {
         setSelectedPayment(method);
         setFieldValue('paymentMethod', method);
-        onDataChange({ paymentMethod: method as any });
+        setFormData({...formData , paymentMethod: method });
     };
 
+    const baseURL = import.meta.env.VITE_API_URL;
+    const route = `${baseURL}/admin/api/coupons`;
+    // Fetch data
+    const { data, isLoading, isError, isSuccess , error } = useGet({
+        queryFn: () => getCoupons(route),
+        queryKey: ["coupons"],
+        options: { staleTime: 1000 * 10 },
+    });
+
+    useEffect(() => {
+        if (isError && error) {
+            toast.error(error.message);
+        }
+    }, [isError, error]);
+    
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success('The Process Of Fetchong Data Has Successfuly');
+        }
+    }, [isSuccess]);
+
+    const coupons = data?.data.data
+
     return (
-        <>
+        <main className=' relative'>
+            {isLoading &&
+                <div className=' h-full w-full absolute top-0 left-0 z-500 bg-white'>
+                    <SkeletonDemo quantity={15} />
+                </div>
+            }
             <h2 className="text-2xl font-bold text-gray-900 mb-8">
                 Enter reservation data
             </h2>
 
             <Formik
                 initialValues={{
-                    ...servicesStep3InitialValues,
-                    coupon: formData.coupon || servicesStep3InitialValues.coupon,
-                    paymentMethod: formData.paymentMethod || servicesStep3InitialValues.paymentMethod,
-                    walletAmount: formData.walletAmount || servicesStep3InitialValues.walletAmount,
+                    coupon: formData.coupon,
+                    paymentMethod: formData.paymentMethod || '',
+                    walletAmount: formData.walletAmount || '',
                 }}
                 validationSchema={servicesStep3Schema}
                 enableReinitialize
                 onSubmit={(values) => {
-                    onDataChange(values as any);
+                    setFormData((prev) => {
+                        const updated = { ...prev, ...values};
+                        console.log(updated);
+                        return updated;
+                    });
                     onNext();
                 }}
             >
@@ -45,18 +82,12 @@ const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3
                     <Form>
                         {/* Coupon Selection */}
                         <div className="mb-8 md:w-1/2 w-full">
-                            <FormDropdown
+                            <DropDownToSendObject
                                 name="coupon"
                                 label="Coupon"
                                 placeholder="Select Coupon"
-                                icon={<IoTicketOutline className="w-5 h-5" />}
-                                options={[
-                                    'SAVE10',
-                                    'SAVE20',
-                                    'SAVE30',
-                                    'FIRSTTIME',
-                                    'SUMMER2025',
-                                ]}
+                                icon={<TicketSlash className="w-5 h-5" />}
+                                options={coupons} 
                             />
                         </div>
 
@@ -98,12 +129,11 @@ const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3
                                     type="text"
                                     name="walletAmount"
                                     placeholder="Wallet Amount"
-                                    disabled
                                     onChange={(e) => {
                                         setFieldValue('walletAmount', e.target.value);
-                                        onDataChange({ walletAmount: e.target.value });
+                                        setFormData({...formData , walletAmount: e.target.value });
                                     }}
-                                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3.5 pl-12 text-sm font-medium text-gray-400 cursor-not-allowed"
+                                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3.5 pl-12 text-sm font-medium text-gray-400"
                                 />
                             </div>
                         </div>
@@ -128,7 +158,7 @@ const ServicesStep3 = ({ onNext, onBack, formData, onDataChange }: ServicesStep3
                     </Form>
                 )}
             </Formik>
-        </>
+        </main>
     );
 };
 

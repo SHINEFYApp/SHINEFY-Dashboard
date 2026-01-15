@@ -33,7 +33,7 @@ export interface FormInputProps {
     name: string;
     label: string;
     placeholder?: string;
-    type?: 'text' | 'tel' | 'email' | 'password' | 'number';
+    type?: 'text' | 'tel' | 'email' | 'password' | 'number' | 'color';
     icon?: React.ReactNode;
     disabled?: boolean;
     checkmark?: boolean;
@@ -41,6 +41,7 @@ export interface FormInputProps {
     receiveSms?: smsStatus;
     setReceiveSms?: React.Dispatch<React.SetStateAction<smsStatus>>;
     moreOptions?: string
+    onBlur?: (value: string) => void;
 }
 
 export interface FormTextArea {
@@ -58,12 +59,63 @@ export type CountryOption = {
   flag?: string;
 };
 
+interface Locations {
+    createtime: string
+    latitude: string
+    location: string
+    longitude: string
+}
+
+export type CouponData = {
+  id: number;
+  code: string;
+  amount: number;
+  discount_percent: number;
+  audience_type: "all_users" | "specific_users" | "groups";
+  max_users: number;
+  max_uses_per_user: number;
+  total_booking: number;
+  limit_to_hours: boolean;
+  services_mode: "all" | "specific";
+  services_text: string;
+  start_at: string;
+  end_at: string;
+  start_hour: string | null;
+  end_hour: string | null;
+  created_at: string;
+  created_at_formatted: string;
+  group_ids: number[];
+  groups_names: string[] | null;
+  user_ids: number[];
+  users_names: string[] | null;
+  service_ids: number[];
+};
+
+export interface services_boys {
+    user_id : number
+    name : string
+}
+
+export interface LocationDropdownProps<T> {
+  name: string;
+  label: string;
+  placeholder?: string;
+  icon?: React.ReactNode;
+  options?: T[];
+  disabled?: boolean;
+  className?: string;
+  moreOptions?: string;
+  getOptionLabel: (option: T) => string;
+}
+
+
+
 export interface FormDropdownProps {
     name: string;
     label: string;
     placeholder?: string;
     icon?: React.ReactNode;
-    options?: (string | CountryOption)[];
+    options?: (string | CountryOption )[];
     disabled?: boolean;
     className?: string;
     moreOptions?: string
@@ -91,20 +143,32 @@ export interface TableProps<T> {
     page?: string ;
     columns: Column<T>[];
     data: T[];
-    currentPage: number;
-    totalPages: number;
-    totalEntries: number;
-    pageSize: number;
-    onPageChange: (page: number) => void;
+    currentPage?: number;
+    totalPages?: number;
+    totalEntries?: number;
+    pageSize?: number;
+    onPageChange?: (page: number) => void;
     isLoading?: boolean;
 }
 
+export interface FormDataListProps {
+  name: string;
+  label: string;
+  placeholder?: string;
+  options: string[];
+  disabled?: boolean;
+  className?: string;
+  icon?: React.ReactNode;
+  checkmark?: boolean;
+}
+
+
 export interface PaginationProps {
-    currentPage: number;
-    totalPages: number;
-    totalEntries: number;
-    pageSize: number;
-    onPageChange: (page: number) => void;
+    currentPage?: number;
+    totalPages?: number;
+    totalEntries?: number;
+    pageSize?: number;
+    onPageChange?: (page: number) => void;
 }
 
 //drop down with multi select

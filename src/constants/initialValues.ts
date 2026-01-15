@@ -1,4 +1,4 @@
-import type { ReportFilters } from "../types/bookings";
+import type { BookingFormData, ReportFilters } from "../types/bookings";
 
 export const manageSlotInitialValues = {
     startDate: '',
@@ -11,9 +11,83 @@ export const manageSlotInitialValues = {
     slotType: '',
 };
 
+//form data to booking service & package
+export const formDataInitialValues: BookingFormData = {
+    userDetails:{
+        user_id : 0,
+        name: '' 
+    },
+    phoneNumber: '',
+    address: {
+        createtime : '',
+        latitude : '',
+        location : '',
+        longitude : '',
+    },
+    vehicle: '',
+    vehicles: [],
+    bookingDate: '',
+    bookingTime: '',
+    mainPackage : {
+        delete_flag : '' ,
+        description : '' ,
+        description_ar : '' ,
+        extra_services_count : 0 ,
+        id : 0 ,
+        main_services_count : 0 ,
+        name : '' ,
+        name_ar : '' ,
+        package_img : '' ,
+        price : 0 ,
+        schedule_interval : '' ,
+        schedule_type : '' ,
+        total_days : 0 ,
+        total_used : 0 ,
+    } ,
+    mainService: '' ,
+    extraServices: [] ,
+    serviceBoy: {
+        user_id : 0 ,
+        name : '' ,
+    } ,
+    userNote: '' ,
+    adminNotes: '' ,
+    coupon: {
+        id: 0,
+        code: '',
+        amount: 0 ,
+        discount_percent: 0,
+        audience_type: 'all_users',
+        max_users: 0,
+        max_uses_per_user: 0 ,
+        total_booking: 0,
+        limit_to_hours: true ,
+        services_mode: "all",
+        services_text: '',
+        start_at: '',
+        end_at: '',
+        start_hour: null,
+        end_hour: null,
+        created_at: '' ,
+        created_at_formatted: '',
+        group_ids: [],
+        groups_names: null,
+        user_ids: [],
+        users_names: null,
+        service_ids: [],
+    } ,
+    paymentMethod: '',
+    walletAmount: '',
+}
+
 export const servicesStep1InitialValues = {
     phoneNumber: '',
-    address: '',
+    address: {
+        createtime : '',
+        latitude : '',
+        location : '',
+        longitude : '',
+    },
     vehicles: [],
     bookingDate: '',
     bookingTime: '',
@@ -103,6 +177,15 @@ export const RatedReportsChartInitialValues: ReportFilters = {
     endDate: "",
 };
 
+export const SendBroadcastInitialValues = {
+  user: '',
+  title: '',
+  message: '',
+  dateScheduleNotification: null,
+  timeScheduleNotification: null,
+};
+
+
 export const manageSlotsSearchInitialValues = { type: "", status: "", date: "" };
 
 export const manageBookingSearchInitialValues = { search: "", date: "" };
@@ -184,4 +267,19 @@ export interface managePackageAddPackageFormValues {
     packagePrice?: string;
     packageTotalDays?: string;
     [key: string]: any; 
+}
+
+export const manageUsersInitioalValue = {
+    groupName : '',
+    companyName : '',
+    areaName : '',
+    deviceType : '',
+    registrationStart : '',
+    registrationEnd : '',
+}
+
+export interface LoginFormInitialValues {
+  email: string;
+  password: string;
+  remember : boolean
 }

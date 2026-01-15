@@ -19,11 +19,11 @@ export const TextArea: FC<FormTextArea> = ({
 
     return (
         <div className={cn('space-y-2', className)}>
-            <label htmlFor={name} className="text-sm font-medium text-gray-700">
+            <label htmlFor={name} className="text-sm h-[20%] font-medium text-gray-700">
                 {label}
             </label>
 
-            <div className="relative">
+            <div className="relative h-[80%]">
                 {/* Icon on the left */}
                 {icon && (
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 mt-1">
@@ -38,7 +38,7 @@ export const TextArea: FC<FormTextArea> = ({
                     placeholder={placeholder}
                     disabled={disabled}
                     className={cn(
-                        'w-full rounded-xl mt-2 border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200',
+                        'w-full rounded-xl h-full resize-none mt-2 border bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200',
                         icon && 'pl-12',
                         isValid && checkmark && 'pr-12',
                         hasError

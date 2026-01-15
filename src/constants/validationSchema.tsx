@@ -11,25 +11,79 @@ export const manageSlotSchema = Yup.object({
     slotType: Yup.string().required('Slot type is required'),
 });
 
+
 export const servicesStep1Schema = Yup.object({
     phoneNumber: Yup.string()
         .matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits')
         .required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    vehicles: Yup.array().min(1, 'Please select at least one vehicle'),
-    bookingDate: Yup.string().required('Booking date is required'),
-    bookingTime: Yup.string().required('Booking time is required'),
+
+    address: Yup.object().nullable().required('Address is required'),
+
+    vehicles: Yup.array()
+        .min(1, 'Please select at least one vehicle')
+        .required(),
+
+    bookingDate: Yup.string()
+        .required('Booking date is required')
+        .matches(
+            /^\d{4}-\d{2}-\d{2}$/,
+            'Date must be in yyyy-mm-dd format'
+        )
+        .test(
+            'not-in-past',
+            'Booking date cannot be earlier than today',
+            (value) => {
+                if (!value) return false;
+
+                const selectedDate = new Date(value);
+                const today = new Date();
+
+                today.setHours(0, 0, 0, 0);
+                selectedDate.setHours(0, 0, 0, 0);
+
+                return selectedDate >= today;
+            }
+        ),
+
+    bookingTime: Yup.string()
+        .required('Booking time is required')
+        .matches(
+            /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/,
+            'Time must be in HH:mm:ss format'
+        )
+        .test(
+            'not-in-past-time',
+            'Booking time must be later than current time',
+            function (value) {
+                const { bookingDate } = this.parent;
+
+                if (!value || !bookingDate) return true;
+
+                const now = new Date();
+                const selectedDateTime = new Date(`${bookingDate}T${value}`);
+
+                // نتحقق من الوقت فقط إذا التاريخ هو اليوم
+                const isToday =
+                    new Date(bookingDate).toDateString() ===
+                    now.toDateString();
+
+                if (!isToday) return true;
+
+                return selectedDateTime > now;
+            }
+        ),
 });
 
+
 export const servicesBookingSchema = Yup.object({
-    mainService: Yup.string().required('Please select a service'),
-    serviceBoy: Yup.string().required('Please select a service boy'),
+    mainService:  Yup.string().required(),
+    serviceBoy: Yup.object().required('Please select a service boy'),
 });
 
 export const packageBookingSchema = Yup.object({
-    mainService: Yup.string().required('Please select a service'),
-    mainPackage: Yup.string().required('Please select a package'),
-    serviceBoy: Yup.string().required('Please select a service boy'),
+    mainService:  Yup.string().required(),
+    mainPackage: Yup.object().required('Please select a package'),
+    serviceBoy: Yup.object().required('Please select a service boy'),
 });
 
 export const servicesStep3Schema = Yup.object({
@@ -369,4 +423,91 @@ export const manageBounusPointsSchema = Yup.object({
         .min(1, "Minimum Vat is 1%")
         .max(100, "Maximum Vat is 100%")
         .required("Vat is required"),
+});
+
+
+export const validationMessageSchema = Yup.object({
+  to: Yup.array()
+    .of(
+      Yup.string()
+        .required("Recipient is required")
+        .matches(/^@/, "Recipient must start with @")
+    )
+    .min(1, "At least one recipient is required"),
+
+  subject: Yup.string()
+    .trim()
+    .required("Subject is required"),
+
+  message: Yup.string()
+    .trim()
+    .required("Message is required"),
+
+  images: Yup.array(),
+});
+
+
+export const SendBroadcastValidationSchema = Yup.object({
+  user: Yup.string()
+    .required('User is required'),
+
+  title: Yup.string()
+    .required('Title is required')
+    .min(3, 'Title must be at least 3 characters'),
+
+  message: Yup.string()
+    .required('Message is required')
+    .min(5, 'Message must be at least 5 characters'),
+
+  dateScheduleNotification: Yup.date()
+    .required('Date is required'),
+
+  timeScheduleNotification: Yup.string()
+    .required('Time is required'),
+});
+
+export const AddFqsValidationSchema = Yup.object({
+  englishQuestion: Yup.string()
+    .trim()
+    .required("English question is required")
+    .min(5, "English question must be at least 5 characters")
+    .max(500, "English question must not exceed 500 characters"),
+
+  englishAnswar: Yup.string()
+    .trim()
+    .required("English answer is required")
+    .min(5, "English answer must be at least 5 characters")
+    .max(1000, "English answer must not exceed 1000 characters"),
+
+  arabicQuestion: Yup.string()
+    .trim()
+    .required("السؤال بالعربية مطلوب")
+    .min(5, "السؤال بالعربية يجب ألا يقل عن 5 حروف")
+    .max(500, "السؤال بالعربية يجب ألا يزيد عن 500 حرف"),
+
+  arabicAnswar: Yup.string()
+    .trim()
+    .required("الإجابة بالعربية مطلوبة")
+    .min(5, "الإجابة بالعربية يجب ألا تقل عن 5 حروف")
+    .max(1000, "الإجابة بالعربية يجب ألا تزيد عن 1000 حرف"),
+});
+
+export const AddOrdersQuestionsSchema = Yup.object({
+  questionEnglish: Yup.string()
+    .trim()
+    .required("English question is required")
+    .min(5, "English question must be at least 5 characters")
+    .max(500, "English question must not exceed 500 characters"),
+
+  questionArabic: Yup.string()
+    .trim()
+    .required("السؤال بالعربية مطلوب")
+    .min(5, "السؤال بالعربية يجب ألا يقل عن 5 حروف")
+    .max(500, "السؤال بالعربية يجب ألا يزيد عن 500 حرف"),
+});
+
+
+export const LoginFormValidationSchema = Yup.object({
+    email: Yup.string().email("Invalid email format").required("Email is required"),
+    password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
 });

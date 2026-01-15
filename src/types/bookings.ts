@@ -1,73 +1,184 @@
 import type { ComponentType, Dispatch, SetStateAction } from "react";
+import type { CouponData, services_boys } from "./common";
 
-// CREATE BOOKING
-export interface ServicesFormData {
+export interface Location {
+  location: string;
+  latitude: string;
+  longitude: string;
+  createtime: string;
+}
+
+interface user_info {
+    user_id: number,
+    name: string
+}
+
+export interface createServiceBookingPayload {
+    booking_date: string,
+    booking_time: string,
+    latitude: string,
+    longitude: string,
+    address_loc:  string,
+    coupon_id: number | undefined, 
+    service_id: number,
+    area_id: number,
+    vehicle_id: number[], 
+    free_status: number,
+    payment_option: string | undefined,
+    service_time: number,
+    service_boy_id: number,
+    user_id: number,
+    wallet_amount: number,
+    note:  string, 
+    booking_admin_note: string,
+    extra_services: {
+        id: string,
+        quantity : number
+    }[],
+}
+
+export interface createPackageBookingPayload {
+    user_package_id: string,
+    package_id: string,
+    booking_date: string,
+    booking_time: string,
+    latitude: string,
+    longitude: string,
+    address_loc: string,
+    coupon_id: number ,
+    service_id: number ,
+    area_id: number ,
+    vehicle_id: number[] ,
+    free_status: number,
+    payment_option: string
+    service_time: number,
+    service_boy_id: number,
+    user_id: number,
+    extra_service: {
+        id: string,
+        quantity: number
+    }[]  
+}
+
+export interface createServiceBookingRespons {
+    status : string,
+    data : {
+        booking_id : number
+    }
+}
+
+export interface createPackageBookingRespons {
+    status : string,
+    data : {
+        booking_id : number
+    }
+}
+
+export type BookingPayload =
+    | createServiceBookingPayload
+    | createPackageBookingPayload;
+
+export type BookingResponse =
+    | createServiceBookingRespons
+    | createPackageBookingRespons;
+
+export interface packageTyps {
+    delete_flag : string ,
+    description : string ,
+    description_ar : string ,
+    extra_services_count : number ,
+    id : number ,
+    main_services_count : number ,
+    name : string ,
+    name_ar : string ,
+    package_img : string ,
+    price : number ,
+    schedule_interval : string ,
+    schedule_type : string ,
+    total_days : number ,
+    total_used : number ,
+}
+
+export interface BookingFormData {
+    userDetails: user_info ;
     phoneNumber: string;
-    address: string;
+    address: {
+        location: string;
+        latitude: string;
+        longitude: string;
+        createtime: string;
+    } ;
     vehicle: string;
     vehicles: Vehicle[];
     bookingDate: string;
     bookingTime: string;
     mainService: string;
     extraServices: ExtraService[];
-    serviceBoy: string;
-    coupon: string;
-    paymentMethod: 'cash' | 'credit' | 'free' | '';
-    walletAmount: string;
+    serviceBoy: services_boys
     userNote: string;
     adminNotes: string;
+    mainPackage?: packageTyps;
+    coupon?: CouponData
+    paymentMethod?: string;
+    walletAmount?: string;
 }
 
-export interface PackageFormData {
-    phoneNumber: string;
-    address: string;
-    vehicle: string;
-    vehicles: Vehicle[];
-    bookingDate: string;
-    bookingTime: string;
-    mainPackage: string;
-    mainService: string;
-    extraServices: ExtraService[];
-    serviceBoy: string;
-    userNote: string;
-    adminNotes: string;
+
+
+export interface stepsProps {
+    onNext: () => Promise<void>
+    onBack : () => void
+    onSubmit :  () => void
+    formData : BookingFormData
+    setFormData: React.Dispatch<React.SetStateAction<BookingFormData>>;
+    registerValidation : (validationFn: () => Promise<boolean>) => void
+    onValidationChange : (isValid: boolean) => Promise<void>
+    userPackageInput : boolean
+    activeTab?: string;
+    currentStep?: number;
 }
 
-export interface ServicesStep1Props {
-    onNext: () => void;
-    formData: Partial<ServicesFormData> | Partial<PackageFormData>;
-    onDataChange: (data: Partial<ServicesFormData> | Partial<PackageFormData>) => void;
-    onRemoveVehicle: (vehicleId: string) => void;
-    registerValidation: (validationFn: () => Promise<boolean>) => void;
-    onValidationChange: (isValid: boolean) => void;
+export interface ServiceData {
+    services: BookingFormData;
 }
-
-export interface FormData {
-    services: ServicesFormData;
-    package: PackageFormData;
+export interface PackageData {
+    package: BookingFormData;
 }
 
 export interface Vehicle {
-    make: any;
-    model: any;
-    colorHex: 'BackgroundColor' | undefined;
-    id: string;
-    name: string;
-    type: string;
-    image: string;
+    car_category_id : number
+    color_id : number
+    color_name : string
+    createtime : string
+    delete_flag : number
+    make_id : number
+    make_name : string
+    model_id : number
+    model_name : string
+    mysqltime : string
+    plate_number : string
+    updatetime : string
+    user_id : string
+    vehicle_id : number
+    vehicle_image : number
+    vehicle_name : string
+    vehicle_name_arabic : string
 }
+
 
 export interface SelectedVehiclesProps {
     vehicles: Vehicle[];
     onAddClick: () => void;
-    onRemoveVehicle?: (vehicleId: string) => void;
+    onChange?: (newVehicles: Vehicle[]) => void
 }
 
 export interface VehicleSelectionModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSelect: (vehicles: Vehicle[]) => void;
     selectedVehicles: Vehicle[];
+    setSelectedVehicles : (newVehicles: Vehicle[]) => void
+    dummyDataVehicles : any
+    isSuccess : boolean
 }
 
 export interface ExtraService {
@@ -83,15 +194,6 @@ export interface ServicesStep2Data {
     serviceBoy: string;
 }
 
-export interface ServicesStep2Props {
-    onNext: () => void;
-    onBack: () => void;
-    userPackageInput?: boolean; //user package input in package tap
-    formData: Partial<ServicesFormData> | Partial<PackageFormData>;
-    onDataChange: (data: Partial<ServicesFormData> | Partial<PackageFormData>) => void;
-    registerValidation: (validationFn: () => Promise<boolean>) => void;
-    onValidationChange: (isValid: boolean) => void;
-}
 
 export interface ServicesStep3Data {
     coupon: string;
@@ -99,33 +201,17 @@ export interface ServicesStep3Data {
     walletAmount: string;
 }
 
-export interface ServicesStep3Props {
-    onNext: () => void;
-    onBack: () => void;
-    formData: Partial<ServicesFormData>;
-    onDataChange: (data: Partial<ServicesFormData>) => void;
-    registerValidation: (validationFn: () => Promise<boolean>) => void;
-    onValidationChange: (isValid: boolean) => void;
-}
-
 export interface ServicesStep4Data {
     userNote: string;
     adminNotes: string;
 }
 
-export interface ServicesStep4Props {
-    onBack: () => void;
-    formData: Partial<ServicesFormData> | Partial<PackageFormData>;
-    onDataChange: (data: Partial<ServicesFormData> | Partial<PackageFormData>) => void;
-    registerValidation: (validationFn: () => Promise<boolean>) => void;
-    onValidationChange: (isValid: boolean) => void;
-    onSubmit: () => void;
-}
 
 // MANAGE BOOKINGS
 export interface FilterFormValues {
     search: string;
     date: string;
+    limit : string
 }
 
 // MANAGE SLOTS
@@ -144,6 +230,12 @@ export interface FilterFormValuesManageSubAdmin {
 // FILTER VALUES BY ONLY SEARCH 
 export interface FilterFormValuesOnlySearch{
     search: string,
+}
+
+// FILTER VALUES BROADCAST 
+export interface FilterFormValuesBroadcast{
+    search: string,
+    date: string,
 }
 
 // MANAGE REGIONS
@@ -191,9 +283,151 @@ export interface ReportFilters {
     endDate: string;
 }
 
+export interface BookingState {
+    id: number;
+    customer_name: string;
+    type: string;
+    booking_date: Date;
+    booking_time: Date | null;
+    address_type: "Home" | "Work";
+    address: string;
+    booking_status: string;
+    note: string | null;
+    pay_option: string;
+    mony_status: string;
+    total: string;
+    Coupon_Applied : number
+    Coupon_Code : string
+    Coupon_Amount : number
+    Sub_Total : number
+    Wallet_Amount : number
+    Gradn_Total : number
+    User_Note : string
+    Admin_Note : string
+    Create_Date : Date
+    Create_Time : Date | null
+}
+
 export interface ReportFilters {
     status: string;
     startDate: string;
     endDate: string;
 }
 
+
+type BookingKey = keyof BookingState;
+type DetailType =
+  | "badge"
+  | "text"
+  | "select"
+  | "date"
+  | "time"
+  | "textArea";
+
+interface ActionButton {
+  text: string;
+  icon: React.ElementType;
+  onClick: () => void;
+}
+
+interface BaseDetail {
+  key: BookingKey;
+  label: string;
+  type: DetailType;
+  badgeColor?: "yellow" | "blue" | "red" | "green";
+  actionButton?: ActionButton;
+}
+
+interface SelectDetail extends BaseDetail {
+  type: "select";
+  options: string[];
+}
+
+interface BadgeDetail extends BaseDetail {
+  type: "badge";
+}
+
+interface TextDetail extends BaseDetail {
+  type: "text" | "textArea";
+}
+
+interface DateDetail extends BaseDetail {
+  type: "date" | "time";
+}
+
+export type DetailItem =
+  | SelectDetail
+  | BadgeDetail
+  | TextDetail
+  | DateDetail;
+
+export interface UserInfo {
+  user_id: number;
+  name: string;
+}
+
+
+export interface servicesBoysPayload {
+    latitude: string
+    longitude: string
+    booking_date: string
+    booking_time: string
+    service_duration: number
+}
+
+export interface servicesBoysResponse {
+    status: string,
+    data: {
+        available_service_boys: {
+            user_id: number,
+            name: string
+        }[],
+        total_found: number
+    }
+}
+
+
+export interface getUserInfoByNumberPayload {
+    phone_number: string
+} 
+export interface getUserInfoByNumberResponse {
+    data : {
+        user_info: UserInfo;
+        vehicles: Vehicle[];
+        locations: Location[];
+        packages: any[];
+    }
+}
+
+export interface Booking {
+    booking_id: number;
+    booking_no: string;
+    total_price: string;
+    customer_name: string;
+    service_boy_name: string | null;
+    service_name: string;
+    payment_option: string;
+}
+export interface Pagination {
+    current_page: number;
+    total_pages: number;
+    total_items: number;
+    limit: number;
+}
+
+export interface BookingsData {
+    [x: string]: any;
+    bookings: Booking[];
+    pagination: Pagination;
+}
+
+export interface ApiResponse {
+    status: string;
+    data: BookingsData;
+}
+
+export interface formDataManageBooking{
+    search : string ,
+    date : string ,
+    limit : string
+}

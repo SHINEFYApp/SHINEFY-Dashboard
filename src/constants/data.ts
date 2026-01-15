@@ -1,5 +1,4 @@
-import type { DetailRowProps, Vehicle } from "../types/bookings";
-import car from '../assets/car.svg';
+import type { DetailItem, DetailRowProps, Vehicle } from "../types/bookings";
 import cash from '../assets/icons/cash.svg';
 import credit from '../assets/icons/credit.svg';
 import free from '../assets/icons/free.svg';
@@ -25,7 +24,7 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Bookings']
     },
-    '/bookings/manage/id': {
+    '/bookings/manage/:id': {
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Bookings' , 'Manage Booking By Id']
     },
@@ -43,7 +42,11 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     },
     '/users&staff/manage/users': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage', 'Users']
+        breadcrumbs: ['Users & Stuff', 'Manage Users']
+    },
+    '/users&staff/manage/users/manageGroup': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage Users' , 'Manage Group']
     },
     '/users&staff/manage/subAdmin': {
         title: 'Users & Stuff',
@@ -152,6 +155,38 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/financial&points/manage/adminEarning': {
         title: 'Financial & Points',
         breadcrumbs: ['Financial & Points', 'Manage Admin Earning']
+    },
+    '/technicalSupport/contactUs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Contact Us']
+    },
+    '/technicalSupport/manage/companies': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Companies']
+    },
+    '/technicalSupport/broadcast': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Broadcast']
+    },
+    '/technicalSupport/broadcast/SendBroadcast': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Broadcast' , 'Send Broadcast']
+    },
+    '/technicalSupport/manage/faqs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage FAQs']
+    },
+    '/technicalSupport/manage/faqs/addFqs': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage FAQs' , 'Add Fqs']
+    },
+    '/technicalSupport/manage/orderQuestions': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Order Questions']
+    },
+    '/technicalSupport/manage/orderQuestions/addOrdersQuestions': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Order Questions' , 'Add Orders Questions']
     }
 };
 
@@ -251,6 +286,11 @@ export const manageAreaTabs = [
     { id: 'mainArea', label: 'Manage Main Area' },
     { id: 'subArea', label: 'Manage Sub Area' },
 ];
+export const sendBroadcast = [
+    { id: 'sendUser', label: 'Send User' },
+    { id: 'sendServiceBoy', label: 'Send Service Boy' },
+    { id: 'sendGroup', label: 'Send Group' },
+];
 
 export const exportTypes = ['CSV', 'Excel', 'PDF'];
 export const types = ['type one', 'type two', 'type three'];
@@ -291,71 +331,6 @@ export const createBackageBookingSteps = [
     },
 ];
 
-export const dummyDataVehicles: Vehicle[] = [
-    {
-        id: '1',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '2',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '3',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '4',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '5',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '6',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-    {
-        id: '7',
-        name: 'Porsche 718 Cayman S',
-        type: 'Coupe',
-        image: car,
-        make: undefined,
-        model: undefined,
-        colorHex: undefined
-    },
-];
 
 export const paymentMethods = [
     {
@@ -1125,6 +1100,324 @@ export const dummyService: any[] = [
     },
 ];
 
+// Example for manage group
+export const dummyManageGroup: any[] = [
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+    {
+        groupName: 'SHINEFY',
+        users: [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        createDateAndTime: '21-Nov-22 12:10 PM',
+    },
+
+];
+
+// Example for manage users
+export const dummyUsers: any[] = [
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+    {
+        image: '',
+        name: 'eid fathy',
+        email: 'Other',
+        phoneNumber: '201004894245',
+        registrationOn: '21-Nov-22 12:10 PM',
+        status: 'Activated',
+        groupName: '21-Nov-22 ',
+    },
+]
+// Example for Manage Orders Questions
+export const dummyManageOrdersQuestions: any[] = [
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+    {
+        orderQuestionInEnglish: 'What are the materials used for the service?',
+        orderQuestionInArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        createDateAndTime: '31-Aug-22 03:05 PM',
+    },
+    
+];
+
 // Example for manage products
 export const dummyProducts: any[] = [
     {
@@ -1510,6 +1803,151 @@ export const dummyAdminEarning: any[] = [
     }
 ];
 
+// Example for manage manage company
+export const dummyManageCopany: any[] = [
+    {
+        name : 'Elhlaly',
+        email : 'elhlaly@gmail.com',
+        code : '1',
+        numOfUsers : '6545316',
+        percentage : 'Pending',
+        startDate : '21-Nov-22  PM',
+        endDate : '21-Nov-22  PM',
+        createDateAndTime : '21-Nov-22  PM',
+    },
+];
+
+
+// Example for manage Broadcast
+export const dummyBroadcast: any[] = [
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : [
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : [
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+            'Eid Fathy',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : [
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+            'Group',
+        ],
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'User',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Service Boy',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+    {
+        message : 'test',
+        type : 'Group',
+        customers : 'All',
+        broadcastDate : '31-Aug-22 03:05 PM',
+    },
+];
+
 //drop down with multi selections and options
 
 export const menus: MenuType[] = [
@@ -1758,50 +2196,71 @@ export const dummyCarCategoryData: any[] = [
     },
 ];
 
-export const mainDetails: DetailRowProps[] = [
+
+// Example for manage fqs
+export const dummyManageFqs: any[] = [
     {
-        label: "ID", value: "9388546579",
-        type: "badge"
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
     },
     {
-        label: "Customer Name",
-        value: "Eid Fathy",
-        actionButton: {
-            text: "View",
-            icon: Eye,
-            onClick: () => console.log("View customer")
-        },
-        type: "badge"
-    },
-    { label: "Type", value: "Normal", type: "badge", badgeColor: "yellow" },
-    {
-        label: "Booking Date", value: "2025-10-18",
-        type: "badge"
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
     },
     {
-        label: "Booking Time", value: "05:30 PM",
-        type: "badge"
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
     },
-    { label: "Address Type", value: "Home", type: "badge", badgeColor: "blue" },
     {
-        label: "Address",
-        value: "cairo,",
-        actionButton: {
-            text: "View",
-            icon: Eye,
-            onClick: () => console.log("View address")
-        },
-        type: "badge"
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
+    },
+    {
+        questionEnglish: 'What are the materials used for the service?',
+        answerEnglish: '- Water is used to remove dust and dirt - A Class Exported Chemicals is',
+        questionArabic: 'ماهي المواد المستخدمة في الغسيل؟',
+        answerArabic: '- يتم استخدام الماء لأزاله الغبار والأوساخ - يتم استخدام أفضل المواد المستوردة',
     },
 ];
 
-export const statusDetails: DetailRowProps[] = [
-    { label: "Status", value: "Pending", type: "badge", badgeColor: "yellow" },
-    { label: "Note", value: "NA", type: "badge", badgeColor: "red" },
-    { label: "Payment Option", value: "Cash", type: "badge", badgeColor: "blue" },
-    { label: "Collect Money Status", value: "Not Collected", type: "badge", badgeColor: "yellow" },
-    { label: "Grand Total", value: "EGP 1500.00", type: "badge", badgeColor: "green" }
-];
 
 
 export const dummyVehicles: any[] = [
@@ -1839,3 +2298,319 @@ export const manageVehiclesTabs = [
     { id: 'manageColor', label: 'Manage Color' },
     { id: 'manageCarCategory', label: 'Manage Car Category' },
 ];
+
+
+
+//example names
+export const exNames = [
+  "Oliver",
+  "Amelia",
+  "Liam",
+  "Sophia",
+  "Noah",
+  "Isabella",
+  "Elijah",
+  "Mia",
+  "James",
+  "Charlotte",
+  "Benjamin",
+  "Ava",
+  "Lucas",
+  "Emily",
+  "Henry",
+  "Harper",
+  "Alexander",
+  "Evelyn",
+  "William",
+  "Ella",
+];
+
+//example regions
+export const egyptRegions = [
+  "Cairo",
+  "Alexandria",
+  "Giza",
+  "Luxor",
+  "Aswan",
+  "Suez",
+  "Port Said",
+  "Ismailia",
+  "Sharm El-Sheikh",
+  "Hurghada",
+  "Tanta",
+  "Mansoura",
+  "Zagazig",
+  "Sohag",
+  "Assiut",
+  "Damanhur",
+  "Beni Suef",
+  "Faiyum",
+  "Minya",
+  "El Mahalla El Kubra"
+];
+
+// example device type
+export const carWashMachines = [
+  "High Pressure Washer",
+  "Foam Cannon",
+  "Automatic Car Wash System",
+  "Touchless Car Wash Machine",
+  "Roller Brush Car Wash",
+  "Underbody Wash System",
+  "Steam Cleaner",
+  "Vacuum Cleaner",
+  "Water Recycling System",
+  "Wheel Cleaner",
+  "Foam Brush Machine",
+  "Self-Service Car Wash Kiosk",
+  "Car Dryer Blower",
+  "Car Shampoo Dispenser",
+  "Car Polishing Machine",
+  "Car Waxing Machine",
+  "Foam Gun",
+  "Pressure Foam Washer",
+  "Mobile Car Wash Unit",
+  "Handheld Pressure Washer"
+];
+// examble for contact us messages from technical support section
+
+export const dummyContactUsMessages: any[] = [
+    {
+        id: '1',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '2',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '3',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '4',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '5',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '6',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '7',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '8',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '9',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'new',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+    {
+        id: '10',
+        avatar : 'KN',
+        name : 'Khaled Nabil',
+        email : 'kevinnicholassyahputra@mail.com',
+        time : '18:30 PM ' ,
+        status : 'opened',
+        shortDiscussion : 'Sometimes I wish. That I could still call you mine. Still call you mine~',
+        msgDetails : {
+            date: 'Dec 11, 2025, 7:34 PM (2 days ago)',
+            head: 'Hey Hainley Collective',
+            body: 'La saeta, al final, del tiempo clava, un alma enamorada. Una que empieza en blanco, y que no se rinde, un alma que se enfrenta al futuro. Una que alza su esperanza, que empieza, un alma enamorada, un alma enamorada. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Enemigo en la contienda, cuando pierde da la mano, sin envidias ni rencores, como bueno y fiel hermano. Los domingos por la tarde, caminando a Chamartín, las mocitas madrileñas van alegres y risueñas porque hoy juega su Madrid. Hala Madrid, hala Madrid, noble y bélico adalid, caballero del honor.A triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid.Noble y bélico adalid, caballero del honor. Hala Madrid, hala Madrid, a triunfar en buena lid, defendiendo tu color. Hala Madrid, hala Madrid'
+        }
+    },
+]
+
+export const mainDetails: DetailItem[] = [
+        {
+            key: "id",
+            label: "ID",
+            type: "badge",
+        },
+        {
+            key: "customer_name",
+            label: "Customer Name",
+            type: "badge",
+            actionButton: {
+            text: "View",
+            icon: Eye,
+            onClick: () => console.log("View customer"),
+            },
+        },
+        {
+            key: "type",
+            label: "Type",
+            type: "select",
+            options: ["Normal", "Option Two", "Option Three"],
+            badgeColor: "yellow",
+        },
+        {
+            key: "booking_date",
+            label: "Booking Date",
+            type: "date",
+        },
+        {
+            key: "booking_time",
+            label: "Booking Time",
+            type: "time",
+        },
+        {
+            key: "address_type",
+            label: "Address Type",
+            type: "select",
+            options: ["Home", "Work"],
+            badgeColor: "blue",
+        },
+        {
+            key: "address",
+            label: "Address",
+            type: "textArea",
+            actionButton: {
+            text: "View",
+            icon: Eye,
+            onClick: () => console.log("View address"),
+            },
+        },
+    ];
+
+export const statusDetails: DetailItem[] = [
+        {
+            key: "booking_status",
+            label: "Status",
+            type: "select",
+            options: [
+                "Pending",
+                "In Progcess",
+                "Canceled",
+                "Completed",
+                "Confirmed",
+            ],
+            badgeColor: "yellow",
+        },
+        {
+            key: "note",
+            label: "Note",
+            type: "textArea",
+            badgeColor: "red",
+        },
+        {
+            key: "pay_option",
+            label: "Payment Option",
+            type: "select",
+            options : [
+                'Cash',
+                'Package'
+            ],
+            badgeColor: "blue",
+        },
+        {
+            key: "mony_status",
+            label: "Collect Money Status",
+            type: "select",
+            options: ["Not Collected", "Collected"],
+            badgeColor: "yellow",
+        },
+        {
+            key: "total",
+            label: "Grand Total",
+            type: "text",
+            badgeColor: "green",
+        },
+    ];
+

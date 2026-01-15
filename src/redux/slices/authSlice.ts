@@ -1,54 +1,63 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { authStorage } from '../../lib/cookies';
+import Cookies from 'js-cookie';
 
-const initialState: any = {
-    isAuthenticated: false,
-    user: null,
-    token: null,
-    refreshToken: null,
+interface User {
+  user_id: number;
+  name: string;
+  email: string;
+  user_type: number;
+  previlages: string | null;
+}
+
+interface AuthState {
+  isAuthenticated: boolean;
+  isInitialized: boolean;
+  user: User | null;
+  token: string | null;
+}
+
+const initialState: AuthState = {
+  isAuthenticated: false,
+  isInitialized: false,
+  user: null,
+  token: null,
 };
 
+
 const authSlice = createSlice({
-    name: 'auth',
-    initialState,
-    reducers: {
-        loginSuccess: (
-            state,
-            action: PayloadAction<{ user: any; access: string; refresh: string; }>
-        ) => {
-            state.isAuthenticated = true;
-            state.user = action.payload.user;
-            state.token = action.payload.access;
-            state.refreshToken = action.payload.refresh;
-
-            // Save to sessionStorage
-            authStorage.setToken(action.payload.access);
-            authStorage.setRefreshToken(action.payload.refresh);
-            authStorage.setUser(action.payload.user);
-        },
-        logout: (state) => {
-            state.isAuthenticated = false;
-            state.user = null;
-            state.token = null;
-            state.refreshToken = null;
-
-            // Clear storage
-            authStorage.clearAuth();
-        },
-        initializeAuth: (state) => {
-            // Initialize from sessionStorage
-            const token = authStorage.getToken();
-            const refreshToken = authStorage.getRefreshToken();
-            const user = authStorage.getUser();
-
-            if (token && user) {
-                state.isAuthenticated = true;
-                state.token = token;
-                state.refreshToken = refreshToken;
-                state.user = user;
-            }
-        },
+  name: 'auth',
+  initialState,
+  reducers: {
+    loginSuccess: (
+      state,
+      action: PayloadAction<{ user: User; token: string }>
+    ) => {
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
+    logout: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.token = null;
+
+      Cookies.remove('token');
+      Cookies.remove('user');
+    },
+    initializeAuth: (state) => {
+        const token = Cookies.get("token");
+        const user = Cookies.get("user");
+
+        if (token && user) {
+            state.isAuthenticated = true;
+            state.token = token;
+            state.user = JSON.parse(user);
+        }
+
+        state.isInitialized = true;
+    }
+
+  },
 });
 
 export const { loginSuccess, logout, initializeAuth } = authSlice.actions;

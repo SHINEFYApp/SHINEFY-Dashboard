@@ -2,11 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatedTabs } from '../../components/booking/AnimatedTabs';
 import { ProgressSteps } from '../../components/booking/ProgressSteps';
-import type { FormData } from '../../types/bookings';
-
-// import { FindStep } from
+import type { BookingFormData, BookingPayload, BookingResponse } from '../../types/bookings';
 import { createBackageBookingSteps, createBookingSteps, createBookingTabs } from '../../constants/data';
-import { FindStep } from './bookingSteps';
+import StepsRender from './bookingSteps';
+import { usePost } from '../../api/usePostData';
+import { toast } from 'sonner';
+import { SkeletonDemo } from '../../common/loader';
+import { formDataInitialValues } from '../../constants/initialValues';
+import { mutateBookingPackage, mutateBookingService } from './mutates';
 
 const CreateBookings = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -18,44 +21,9 @@ const CreateBookings = () => {
         const tabParam = searchParams.get('tab');
         return tabParam && validTabs.includes(tabParam) ? tabParam : 'services';
     };
-    
     const [activeTab, setActiveTab] = useState<string>(getValidTab());
     const [currentStep, setCurrentStep] = useState<number>(1);
-
-    const StepComponent = FindStep(activeTab , currentStep)
-
-    const [formData, setFormData] = useState<FormData>({
-        services: {
-            phoneNumber: '',
-            address: '',
-            vehicle: '',
-            vehicles: [],
-            bookingDate: '',
-            bookingTime: '',
-            mainService: '',
-            extraServices: [],
-            serviceBoy: '',
-            coupon: '',
-            paymentMethod: '',
-            walletAmount: '',
-            userNote: '',
-            adminNotes: '',
-        },
-        package: {
-            phoneNumber: '' ,
-            address: '' ,
-            vehicle: '' ,
-            vehicles: [] ,
-            bookingDate: '' ,
-            bookingTime: '' ,
-            mainPackage : ''  ,
-            mainService: '' ,
-            extraServices: [] ,
-            serviceBoy: '' ,
-            userNote: '' ,
-            adminNotes: '' ,
-        },
-    });
+    const [formData, setFormData] = useState<BookingFormData>(formDataInitialValues);
 
     useEffect(() => {
         const tab = getValidTab();
@@ -65,7 +33,7 @@ const CreateBookings = () => {
             updateURL(tab);
         }
     }, [searchParams]);
-
+    
     const updateURL = (tab: string) => {
         const params = new URLSearchParams();
         params.set('tab', tab);
@@ -75,6 +43,7 @@ const CreateBookings = () => {
     const handleTabChange = (tabId: string) => {
         setActiveTab(tabId);
         setCurrentStep(1);
+        setFormData(formDataInitialValues)
         setCompletedSteps([]);
         setValidatedSteps([]);
         updateURL(tabId);
@@ -144,76 +113,101 @@ const CreateBookings = () => {
         }
     };
 
-    const updateFormData = (tab: string, data: any) => {
-        setFormData((prev) => ({
-            ...prev,
-            [tab]: {
-                ...prev[tab as keyof FormData],
-                ...data,
-            },
-        }));
-    };
+    const baseURL = import.meta.env.VITE_API_URL;
+    const { mutate, isPending , isSuccess , isError, error } = usePost<
+        BookingResponse,
+        BookingPayload
+    >({
+        route: `${baseURL}/admin/api/book/create`,
+        options: {
+        onSuccess: (data) => console.log(data),
+        onError: (err: any) => {
+            console.log('API Error full response:', err);
+            toast.error(err.response?.data?.message ?? err.message);
+        },
+        },
+    });
 
-    const handleRemoveVehicle = (vehicleId: string) => {
-        const updatedVehicles = formData.services.vehicles.filter(
-            (v) => v.id !== vehicleId
-        );
-        updateFormData('services', { vehicles: updatedVehicles });
-    };
+    const vehicles_id = formData.vehicles.map((el) => el.vehicle_id)
+    const extra_services = formData.extraServices.map(s => ({ id: s.id, quantity: s.quantity }))
 
     const handleSubmit = () => {
-        console.log('Final form data:', formData);
-        alert('Booking submitted successfully!');
+        if(activeTab === 'services'){
+            mutate(mutateBookingService(formData , vehicles_id , extra_services ))
+        }else{
+            mutate(mutateBookingPackage(formData , vehicles_id , extra_services ))
+        }
     };
 
+     useEffect(() => {
+        if (isError && error) {
+
+            toast.error(error.message);
+        }
+    }, [isError, error]);
+
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success('Sucessfuly Booking Service');
+            setCurrentStep(1);
+            setFormData(formDataInitialValues)
+            setCompletedSteps([])
+        }
+    }, [isSuccess]);
+
     return (
-        <div className="w-full animate-fade-in bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <div className="mb-8">
-                <AnimatedTabs
-                    tabs={createBookingTabs}
-                    activeTab={activeTab}
-                    onTabChange={handleTabChange}
-                />
+        <main className=' relative'>
+            {isPending &&
+                <div className=' h-full w-full absolute top-0 left-0 z-500 bg-white'>
+                    <SkeletonDemo quantity={30} />
+                </div>
+            }
+            <div className="w-full animate-fade-in bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+
+                <div className="mb-8">
+                    <AnimatedTabs
+                        tabs={createBookingTabs}
+                        activeTab={activeTab}
+                        onTabChange={handleTabChange}
+                    />
+                </div>
+
+                {activeTab === 'services' && (
+                    <ProgressSteps
+                        steps={createBookingSteps}
+                        currentStep={currentStep}
+                        completedSteps={completedSteps}
+                        validatedSteps={validatedSteps}
+                        onStepClick={handleStepClick}
+                    />
+                )}
+
+                {activeTab === 'package' && (
+                    <ProgressSteps
+                        steps={createBackageBookingSteps}
+                        currentStep={currentStep}
+                        completedSteps={completedSteps}
+                        validatedSteps={validatedSteps}
+                        onStepClick={handleStepClick}
+                    />
+                )}
+
+                <div className="mt-8 ">
+                    <StepsRender
+                        onNext={handleNextStep}
+                        onBack={handlePreviousStep}
+                        onSubmit={handleSubmit}
+                        formData={formData}
+                        setFormData={setFormData}
+                        registerValidation={registerStepValidation}
+                        onValidationChange={(isValid: boolean) => updateStepValidation(currentStep, isValid)}
+                        userPackageInput={activeTab !== 'services'} 
+                        activeTab={activeTab} 
+                        currentStep={currentStep}
+                    />
+                </div>
             </div>
-
-            {activeTab === 'services' && (
-                <ProgressSteps
-                    steps={createBookingSteps}
-                    currentStep={currentStep}
-                    completedSteps={completedSteps}
-                    validatedSteps={validatedSteps}
-                    onStepClick={handleStepClick}
-                />
-            )}
-
-            {activeTab === 'package' && (
-                <ProgressSteps
-                    steps={createBackageBookingSteps}
-                    currentStep={currentStep}
-                    completedSteps={completedSteps}
-                    validatedSteps={validatedSteps}
-                    onStepClick={handleStepClick}
-                />
-            )}
-
-            <div className="mt-8">
-                <StepComponent
-                    onNext={handleNextStep}
-                    onBack={handlePreviousStep}
-                    onSubmit={handleSubmit}
-                    formData={activeTab === 'services' ? formData.services : formData.package}
-                    onDataChange={(data: any) =>
-                        updateFormData(activeTab === 'services' ? 'services' : 'package', data)
-                    }
-                    onRemoveVehicle={handleRemoveVehicle}
-                    registerValidation={registerStepValidation}
-                    onValidationChange={(isValid: boolean) =>
-                        updateStepValidation(currentStep, isValid)
-                    }
-                    userPackageInput={activeTab !== 'services'}
-                />
-            </div>
-        </div>
+        </main>
     );
 };
 
