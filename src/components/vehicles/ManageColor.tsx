@@ -133,6 +133,7 @@ const ManageColor = () => {
                         <Form className="space-y-5">
                             <div className="grid grid-cols-1 gap-5">
                                 <FormInput
+                                type="color"
                                     name="colorCode"
                                     label="Color Code"
                                     placeholder="Enter color code (e.g., #FFFFFF)"

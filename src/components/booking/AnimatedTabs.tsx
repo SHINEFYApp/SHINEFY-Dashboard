@@ -1,6 +1,7 @@
-import type { FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { cn } from '../../utils/utils';
 import type { AnimatedTabsProps } from '../../types/common';
+import { useSearchParams } from 'react-router';
 
 export const AnimatedTabs: FC<AnimatedTabsProps> = ({
     tabs,
@@ -8,6 +9,11 @@ export const AnimatedTabs: FC<AnimatedTabsProps> = ({
     onTabChange,
     className,
 }) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    useEffect(() => {
+        setSearchParams({})
+    }, [activeTab]);
+
     return (
         <div className={cn('w-full', className)}>
             <div className="flex items-center gap-8 border-b border-gray-200 relative">

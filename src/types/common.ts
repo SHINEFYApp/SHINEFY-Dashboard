@@ -33,7 +33,7 @@ export interface FormInputProps {
     name: string;
     label: string;
     placeholder?: string;
-    type?: 'text' | 'tel' | 'email' | 'password' | 'number';
+    type?: 'text' | 'tel' | 'email' | 'password' | 'number' | 'color';
     icon?: React.ReactNode;
     disabled?: boolean;
     checkmark?: boolean;
