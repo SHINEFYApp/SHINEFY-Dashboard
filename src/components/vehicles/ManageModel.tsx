@@ -44,7 +44,7 @@ const ManageModel = () => {
 
     // Add model using usePost hook
     const addModelMutation = usePost<any, any>({
-        route: `${baseURL}/admin/api/models`,
+        route: `${baseURL}/api/models`,
         options: {
             onSuccess: () => {
                 toast.success('Model added successfully');

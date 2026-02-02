@@ -14,10 +14,10 @@ import { SkeletonDemo } from "../../../common/loader";
 const ManageBookingDetails = () => {
     const { id } = useParams()
     const baseURL = import.meta.env.VITE_API_URL
-    const route = `${baseURL}/admin/api/book/get/${id}`
+    const route = `${baseURL}/api/book/get/${id}`
     const { data, isLoading, isError, error } = useGet<ApiResponse>({
-        queryFn : () =>  singleBookingDetails(route),
-        queryKey: ["booking" , 'details' , id],
+        queryFn: () => singleBookingDetails(route),
+        queryKey: ["booking", 'details', id],
         options: {
             staleTime: 1000 * 10,
         },
@@ -28,7 +28,7 @@ const ManageBookingDetails = () => {
     const rating = data?.data.rating
     const service_boys = data?.data.service_boys
     const vehicles = data?.data.vehicles
-    
+
     const [allData, setAllData] = useState<BookingState | null>(null);
 
     useEffect(() => {
@@ -49,20 +49,20 @@ const ManageBookingDetails = () => {
             pay_option: booking.payment_option,
             mony_status: booking.payment_collect_status,
             total: `EGP ${booking.total_price}`,
-            Coupon_Applied : 0 ,
-            Coupon_Code : '',
-            Coupon_Amount : 0,
-            Sub_Total : 0,
-            Wallet_Amount : 0,
-            Gradn_Total : 0,
-            User_Note : '',
-            Admin_Note : '',
-            Create_Date : new Date,
-            Create_Time : new Date ,
+            Coupon_Applied: 0,
+            Coupon_Code: '',
+            Coupon_Amount: 0,
+            Sub_Total: 0,
+            Wallet_Amount: 0,
+            Gradn_Total: 0,
+            User_Note: '',
+            Admin_Note: '',
+            Create_Date: new Date,
+            Create_Time: new Date,
         });
     }, [data]);
 
-    if(isLoading) return <div className=" h-screen"><SkeletonDemo /></div>
+    if (isLoading) return <div className=" h-screen"><SkeletonDemo /></div>
     if (isError) {
         toast.error(error.message);
         return null;
@@ -144,7 +144,7 @@ const ManageBookingDetails = () => {
             ),
         },
     ];
-    
+
     return (
         <div className="space-y-6">
             {/* Booking Details Section */}
@@ -179,8 +179,8 @@ const ManageBookingDetails = () => {
 
                 {/* Booking Details Grid */}
                 <div className="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-x-[5%] gap-y-4">
-                    <UserDetails data={allData} setData={setAllData} details={mainDetails}  />                    
-                    <UserDetails data={allData} setData={setAllData} details={statusDetails}/>                    
+                    <UserDetails data={allData} setData={setAllData} details={mainDetails} />
+                    <UserDetails data={allData} setData={setAllData} details={statusDetails} />
                 </div>
 
                 {/* Vehicle Table Section */}
@@ -206,7 +206,7 @@ const ManageBookingDetails = () => {
                         isLoading={false}
                     />
                 </div>
-  
+
                 <div>
                     <ServiceBoys data={service_boys} vehicleColumns={vehicleColumns} extraServices={extra_services} allData={allData} setAllData={setAllData} />
                 </div>

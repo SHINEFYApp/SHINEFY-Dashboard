@@ -7,9 +7,9 @@ import { store } from "../redux/store";
 
 
 interface LoginValues {
-    email: string;
-    password: string;
-    remember?: boolean;
+  email: string;
+  password: string;
+  remember?: boolean;
 }
 
 interface LoginResponse {
@@ -27,14 +27,14 @@ interface LoginResponse {
 
 const loginRequest = async (values: LoginValues): Promise<LoginResponse> => {
   const { data } = await api.post<LoginResponse>(
-    "/admin/api/dashboard/login",
+    "/api/dashboard/login",
     values,
     {
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "app-type": "dashboard",
-        },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "app-type": "dashboard",
+      },
     }
   );
 

@@ -32,7 +32,7 @@ const ManageCarCategory = () => {
 
     // Add category using usePost hook
     const addCategoryMutation = usePost<any, FormData>({
-        route: `${baseURL}/admin/api/categories`,
+        route: `${baseURL}/api/categories`,
         options: {
             onSuccess: () => {
                 toast.success('Category added successfully');

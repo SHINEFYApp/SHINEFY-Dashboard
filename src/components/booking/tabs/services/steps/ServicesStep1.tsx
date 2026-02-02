@@ -14,32 +14,32 @@ import { VehicleSelectionModal } from '../VehicleSelectionModal';
 
 import { usePost } from '../../../../../api/usePostData';
 import type {
-  getUserInfoByNumberPayload,
-  getUserInfoByNumberResponse,
-  stepsProps,
+    getUserInfoByNumberPayload,
+    getUserInfoByNumberResponse,
+    stepsProps,
 } from '../../../../../types/bookings';
 import { SkeletonDemo } from '../../../../../common/loader';
 import { DropDownToSendObject } from '../../../../../common/DropDownToSendObject ';
 
 export default function ServicesStep1({
-  onNext,
-  formData,
-  setFormData,
+    onNext,
+    formData,
+    setFormData,
 }: stepsProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [lastRequestedPhone, setLastRequestedPhone] = useState<string | null>(null);
     const baseURL = import.meta.env.VITE_API_URL;
-    const { mutate, isPending , isSuccess , data, isError, error } = usePost<
+    const { mutate, isPending, isSuccess, data, isError, error } = usePost<
         getUserInfoByNumberResponse,
         getUserInfoByNumberPayload
     >({
-        route: `${baseURL}/admin/api/book/user-details`,
+        route: `${baseURL}/api/book/user-details`,
         options: {
-        onSuccess: (data) => console.log(data),
-        onError: (err: any) => {
-            console.log('API Error full response:', err.response);
-            toast.error(err.response?.data?.message ?? err.message);
-        },
+            onSuccess: (data) => console.log(data),
+            onError: (err: any) => {
+                console.log('API Error full response:', err.response);
+                toast.error(err.response?.data?.message ?? err.message);
+            },
         },
     });
 
@@ -73,7 +73,7 @@ export default function ServicesStep1({
 
     const locations = data?.data.locations;
     const vehiclesData = data?.data.vehicles;
-    
+
 
     return (
         <main className=' relative'>
@@ -98,25 +98,25 @@ export default function ServicesStep1({
                     validationSchema={servicesStep1Schema}
                     onSubmit={(values) => {
                         setFormData((prev) => {
-                            const updated = { ...prev, ...values};
+                            const updated = { ...prev, ...values };
                             console.log(updated);
                             return updated;
                         });
                         onNext();
                     }}
                 >
-                    {({ isValid, setFieldValue , values }) => (
-                        
+                    {({ isValid, setFieldValue, values }) => (
+
                         <Form>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <FormInput
-                                name="phoneNumber"
-                                label="User phone number"
-                                placeholder="User phone number"
-                                type="tel"
-                                icon={<IoCallOutline className="w-5 h-5" />}
-                                onBlur={(value) => handlePhoneBlur(value)}
-                            />
+                                <FormInput
+                                    name="phoneNumber"
+                                    label="User phone number"
+                                    placeholder="User phone number"
+                                    type="tel"
+                                    icon={<IoCallOutline className="w-5 h-5" />}
+                                    onBlur={(value) => handlePhoneBlur(value)}
+                                />
 
                                 <div className="mt-2">
                                     <DropDownToSendObject
@@ -139,7 +139,7 @@ export default function ServicesStep1({
                             <VehicleSelectionModal
                                 isOpen={isModalOpen}
                                 onClose={() => setIsModalOpen(false)}
-                                selectedVehicles={values.vehicles}  
+                                selectedVehicles={values.vehicles}
                                 setSelectedVehicles={(newVehicles) => {
                                     setFieldValue('vehicles', newVehicles);
                                 }}
@@ -148,28 +148,28 @@ export default function ServicesStep1({
                             />
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <FormDatePicker
-                                name="bookingDate"
-                                label="Select Booking Date"
-                                icon={<Calendar className="size-5" />}
-                                checkmark={false}
-                            />
+                                <FormDatePicker
+                                    name="bookingDate"
+                                    label="Select Booking Date"
+                                    icon={<Calendar className="size-5" />}
+                                    checkmark={false}
+                                />
 
-                            <FormTimePicker
-                                name="bookingTime"
-                                label="Select Booking Time"
-                                icon={<Clock className="size-5" />}
-                            />
+                                <FormTimePicker
+                                    name="bookingTime"
+                                    label="Select Booking Time"
+                                    icon={<Clock className="size-5" />}
+                                />
                             </div>
 
                             <div className="flex justify-start">
-                            <Button
-                                type="submit"
-                                disabled={!isValid}
-                                className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-2 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                            >
-                                Next
-                            </Button>
+                                <Button
+                                    type="submit"
+                                    disabled={!isValid}
+                                    className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-2 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                >
+                                    Next
+                                </Button>
                             </div>
                         </Form>
                     )}

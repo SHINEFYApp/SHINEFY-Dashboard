@@ -31,7 +31,7 @@ const ManageColor = () => {
 
     // Add color using usePost hook
     const addColorMutation = usePost<any, any>({
-        route: `${baseURL}/admin/api/colors`,
+        route: `${baseURL}/api/colors`,
         options: {
             onSuccess: () => {
                 toast.success('Color added successfully');
@@ -133,7 +133,7 @@ const ManageColor = () => {
                         <Form className="space-y-5">
                             <div className="grid grid-cols-1 gap-5">
                                 <FormInput
-                                type="color"
+                                    type="color"
                                     name="colorCode"
                                     label="Color Code"
                                     placeholder="Enter color code (e.g., #FFFFFF)"

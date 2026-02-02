@@ -61,50 +61,50 @@ export interface UserPackagesParams {
     search?: string;
 }
 
-// GET /admin/api/getUsers
+// GET /api/getUsers
 export const getUsersList = async (params: UsersParams): Promise<GetUsersResponse> => {
-    const res: AxiosResponse<GetUsersResponse> = await getService("/admin/api/getUsers", params);
+    const res: AxiosResponse<GetUsersResponse> = await getService("/api/getUsers", params);
     return res.data;
 };
 
-// POST /admin/api/users/ExportUsers
+// POST /api/users/ExportUsers
 export const exportUsers = async (data: ExportUsersPayload) => {
-    const res: AxiosResponse = await postService("/admin/api/users/ExportUsers", data, { responseType: "blob" });
+    const res: AxiosResponse = await postService("/api/users/ExportUsers", data, { responseType: "blob" });
     return res.data;
 };
 
-// GET /admin/api/users/view/user-details?user_id=957
+// GET /api/users/view/user-details?user_id=957
 export const getUserDetails = async (params: UserDetailsParams) => {
-    const res: AxiosResponse = await getService("/admin/api/users/view/user-details", params);
+    const res: AxiosResponse = await getService("/api/users/view/user-details", params);
     return res.data;
 };
 
-// GET /admin/api/users/view/booking-history?user_id=957&limit=10&page=1
+// GET /api/users/view/booking-history?user_id=957&limit=10&page=1
 export const getUserBookingHistory = async (params: BookingHistoryParams) => {
-    const res: AxiosResponse = await getService("/admin/api/users/view/booking-history", params);
+    const res: AxiosResponse = await getService("/api/users/view/booking-history", params);
     return res.data;
 };
 
-// GET /admin/api/users/view/my-vehicles?user_id=957
+// GET /api/users/view/my-vehicles?user_id=957
 export const getUserVehicles = async (params: { user_id: number | string }) => {
-    const res: AxiosResponse = await getService("/admin/api/users/view/my-vehicles", params);
+    const res: AxiosResponse = await getService("/api/users/view/my-vehicles", params);
     return res.data;
 };
 
-// GET /admin/api/users/view/my-locations?user_id=12
+// GET /api/users/view/my-locations?user_id=12
 export const getUserLocations = async (params: { user_id: number | string }) => {
-    const res: AxiosResponse = await getService("/admin/api/users/view/my-locations", params);
+    const res: AxiosResponse = await getService("/api/users/view/my-locations", params);
     return res.data;
 };
 
-// GET /admin/api/users/view/wallet-history?user_id=957&search=0
+// GET /api/users/view/wallet-history?user_id=957&search=0
 export const getUserWalletHistory = async (params: WalletHistoryParams) => {
-    const res: AxiosResponse = await getService("/admin/api/users/view/wallet-history", params);
+    const res: AxiosResponse = await getService("/api/users/view/wallet-history", params);
     return res.data;
 };
 
-// GET /admin/api/users/view/user-packages?user_id=242&search=Exterior Package Quarter package
+// GET /api/users/view/user-packages?user_id=242&search=Exterior Package Quarter package
 export const getUserPackages = async (params: UserPackagesParams) => {
-    const res: AxiosResponse = await getService("/admin/api/users/view/user-packages", params);
+    const res: AxiosResponse = await getService("/api/users/view/user-packages", params);
     return res.data;
 };

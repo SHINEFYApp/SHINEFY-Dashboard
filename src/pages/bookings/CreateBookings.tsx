@@ -15,7 +15,7 @@ const CreateBookings = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const validTabs = ['services', 'package'];
     const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-    const [validatedSteps, setValidatedSteps] = useState<number[]>([]); 
+    const [validatedSteps, setValidatedSteps] = useState<number[]>([]);
     const stepValidationRef = useRef<(() => Promise<boolean>) | null>(null);
     const getValidTab = (): string => {
         const tabParam = searchParams.get('tab');
@@ -33,7 +33,7 @@ const CreateBookings = () => {
             updateURL(tab);
         }
     }, [searchParams]);
-    
+
     const updateURL = (tab: string) => {
         const params = new URLSearchParams();
         params.set('tab', tab);
@@ -67,7 +67,7 @@ const CreateBookings = () => {
         }
 
 
-        if(activeTab === 'package' && currentStep === 2) {
+        if (activeTab === 'package' && currentStep === 2) {
             setCurrentStep(currentStep + 2);
         }
 
@@ -77,8 +77,8 @@ const CreateBookings = () => {
         if (currentStep > 1) {
             setCurrentStep(currentStep - 1);
         }
-        
-        if(activeTab === 'package' && currentStep === 4) {
+
+        if (activeTab === 'package' && currentStep === 4) {
             setCurrentStep(currentStep - 2);
         }
     };
@@ -114,17 +114,17 @@ const CreateBookings = () => {
     };
 
     const baseURL = import.meta.env.VITE_API_URL;
-    const { mutate, isPending , isSuccess , isError, error } = usePost<
+    const { mutate, isPending, isSuccess, isError, error } = usePost<
         BookingResponse,
         BookingPayload
     >({
-        route: `${baseURL}/admin/api/book/create`,
+        route: `${baseURL}/api/book/create`,
         options: {
-        onSuccess: (data) => console.log(data),
-        onError: (err: any) => {
-            console.log('API Error full response:', err);
-            toast.error(err.response?.data?.message ?? err.message);
-        },
+            onSuccess: (data) => console.log(data),
+            onError: (err: any) => {
+                console.log('API Error full response:', err);
+                toast.error(err.response?.data?.message ?? err.message);
+            },
         },
     });
 
@@ -132,14 +132,14 @@ const CreateBookings = () => {
     const extra_services = formData.extraServices.map(s => ({ id: s.id, quantity: s.quantity }))
 
     const handleSubmit = () => {
-        if(activeTab === 'services'){
-            mutate(mutateBookingService(formData , vehicles_id , extra_services ))
-        }else{
-            mutate(mutateBookingPackage(formData , vehicles_id , extra_services ))
+        if (activeTab === 'services') {
+            mutate(mutateBookingService(formData, vehicles_id, extra_services))
+        } else {
+            mutate(mutateBookingPackage(formData, vehicles_id, extra_services))
         }
     };
 
-     useEffect(() => {
+    useEffect(() => {
         if (isError && error) {
 
             toast.error(error.message);
@@ -201,8 +201,8 @@ const CreateBookings = () => {
                         setFormData={setFormData}
                         registerValidation={registerStepValidation}
                         onValidationChange={(isValid: boolean) => updateStepValidation(currentStep, isValid)}
-                        userPackageInput={activeTab !== 'services'} 
-                        activeTab={activeTab} 
+                        userPackageInput={activeTab !== 'services'}
+                        activeTab={activeTab}
                         currentStep={currentStep}
                     />
                 </div>
