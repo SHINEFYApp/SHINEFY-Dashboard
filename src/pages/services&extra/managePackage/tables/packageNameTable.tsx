@@ -12,7 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const columns = [
     {
-        key: "packageName",
+        key: "name",
         title: "Package Name",
     },
     {
@@ -20,29 +20,29 @@ const columns = [
         title: "Price",
     },
     {
-        key: "totalUsed",
+        key: "total_used",
         title: "Total Used",
     },
     {
-        key: "totalDays",
+        key: "total_days",
         title: "Total Days",
     },
     {
-        key: "type",
+        key: "schedule_type",
         title: "Type",
     },
     {
-        key: "interval",
+        key: "schedule_interval",
         title: "Interval",
     },
     {
-        key: "createDateAndTime",
+        key: "created_at_formatted",
         title: "Create Date & Time",
     },
     {
         key: "action",
         title: "Action",
-        render: (item: any) => {
+        render: (_: any, item: any) => {
             const queryClient = useQueryClient();
             const { mutate: deletePackage } = useDeletePackage({
                 onSuccess: () => {
@@ -90,7 +90,7 @@ export default function PackageNameTable() {
         search: search
     });
 
-    const packages = data?.data?.packages || [];
+    const packages = data?.data?.data || [];
     const pagination = data?.data?.pagination;
 
     const totalEntries = pagination?.total_items || 0;

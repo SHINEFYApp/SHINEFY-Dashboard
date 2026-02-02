@@ -34,17 +34,26 @@ export interface AddPackagePayload {
 
 export interface UpdatePackagePayload extends AddPackagePayload { }
 
-export interface PackageResponseItem extends AddPackagePayload {
+export interface PackageResponseItem {
     id: number;
+    name: string;
+    name_ar: string;
+    price: number;
+    total_used: number;
+    total_days: number;
+    schedule_type: string;
+    schedule_interval: string;
+    package_img: string;
+    package_img_url: string;
     created_at?: string;
-    // Add other fields as needed
+    created_at_formatted?: string;
 }
 
 export interface GetPackagesResponse {
     status: string;
     data: {
-        packages: PackageResponseItem[];
-        pagination: {
+        data: PackageResponseItem[];
+        pagination?: {
             current_page: number;
             total_pages: number;
             total_items: number;
