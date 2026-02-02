@@ -7,24 +7,19 @@ import {
 // Interfaces
 
 export interface WalletItem {
-    id: number;
+    wallet_id: number;
     user_id: number;
-    amount: number;
-    amount_type: string; // e.g., "Credit"
-    type: string; // e.g., "Bonus" or "Main"
+    amount_type: string;
+    amount: string;
     reason: string;
-    created_at: string;
-    user?: {
-        id: number;
-        name: string;
-        phone: string;
-    };
-    // Add other fields as needed based on actual API response
+    name: string; // User Name
+    phone_number: string;
+    createtime: string;
 }
 
 export interface GetWalletsParams {
     search_text?: string;
-    page?: number;
+    start?: number;
     limit?: number;
 }
 
@@ -56,7 +51,7 @@ export interface AddWalletPayload {
 // Endpoints
 
 export const getWallets = async (params: GetWalletsParams) => {
-    return await getService("/api/getWallet", { params });
+    return await getService("/api/getWallet", params);
 };
 
 export const addWallet = async (data: AddWalletPayload) => {

@@ -15,27 +15,32 @@ import { useGetUsers } from "../../api/features/ManageUsers.hooks";
 
 const columns = [
     {
-        key: "userName",
+        key: "name",
         title: "User Name",
     },
     {
-        key: "mobileNumber",
+        key: "phone_number",
         title: "Mobile Number",
     },
     {
-        key: "amountType",
-        title: "Amount typr",
+        key: "amount_type",
+        title: "Amount Type",
+        render: (type: string) => (
+            <span className={type === "Credit" ? "text-green-600 font-bold" : "text-red-500 font-bold"}>
+                {type}
+            </span>
+        )
     },
     {
-        key: "type",
-        title: "Type",
+        key: "amount",
+        title: "Amount", // Renamed from Type for clarity, though design might say Type
     },
     {
         key: "reason",
         title: "Reason",
     },
     {
-        key: "createDateAndTime",
+        key: "createtime",
         title: "Create Date & Time",
     }
 ]
@@ -91,13 +96,14 @@ export default function UsersWallets() {
     const pageSize = 10;
 
     const { data, isLoading } = useGetWallets({
-        page: currentPage,
+        start: (currentPage - 1) * pageSize,
         limit: pageSize,
         search_text: search
     });
 
-    const wallets = data?.data?.wallets || []; // Verify response structure
-    const pagination = data?.data?.pagination;
+    const walletsRaw = data?.data?.data?.wallets; // Response -> Body -> Data -> Wallets
+    const wallets = (Array.isArray(walletsRaw) ? walletsRaw : []) as any[];
+    const pagination = data?.data?.data?.pagination;
 
     const totalEntries = pagination?.total_items || 0;
     const totalPages = pagination?.total_pages || 0;

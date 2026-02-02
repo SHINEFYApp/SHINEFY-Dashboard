@@ -1,83 +1,121 @@
 import { Form, Formik } from "formik";
-import { dummyManageSubAdmins, exportTypes, franchise } from "../../constants/data";
+import { exportTypes, franchise } from "../../constants/data";
 import { FormDropdown } from "../../common/FormDropdown";
-import { ArrowUpToLine, Eye, Search, Shield, Trash2 } from "lucide-react";
-import { Link } from "react-router";
+import { ArrowUpToLine, Eye, Search, Shield, Trash2, Ban, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { CustomTable } from "../../common/CustomTable";
-import type { FilterFormValuesManageSubAdmin } from "../../types/bookings";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { FormInput } from "../../common/FormInput";
+import { useGetSubAdmins, useDeleteSubAdmin, useExportSubAdmins } from "../../api/features/subAdmins.hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
+export default function ManageSubAdmin() {
+    const queryClient = useQueryClient();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState("");
+    const pageSize = 10;
 
-    const columns = [
+    const handleSubmit = (values: any) => {
+        setSearch(values.search);
+        setCurrentPage(1);
+    };
+
+    // Data Fetching
+    const { data, isLoading } = useGetSubAdmins({
+        limit: pageSize,
+        start: (currentPage - 1) * pageSize,
+        search: search
+    });
+
+    const subAdminsRaw = data?.data?.data?.data || data?.data?.data || [];
+    const subAdmins = (Array.isArray(subAdminsRaw) ? subAdminsRaw : []) as any[];
+
+    const pagination = data?.data?.pagination;
+    const totalEntries = pagination?.total_items || subAdmins.length; // Fallback
+    const totalPages = pagination?.total_pages || Math.ceil(totalEntries / pageSize);
+
+    // Mutations
+    const deleteMutation = useDeleteSubAdmin({
+        onSuccess: () => {
+            toast.success("Sub Admin deleted successfully");
+            queryClient.invalidateQueries({ queryKey: ["sub-admins"] });
+        },
+        onError: () => toast.error("Failed to delete")
+    });
+
+    const exportMutation = useExportSubAdmins({
+        onSuccess: () => toast.success("Export successful"),
+        onError: () => toast.error("Export failed")
+    });
+
+    const handleDelete = (id: number) => {
+        if (window.confirm("Are you sure?")) {
+            deleteMutation.mutate(id);
+        }
+    };
+
+    const handleExport = (type: string) => {
+        const exportType = type.toLowerCase() as 'csv' | 'excel' | 'pdf';
+        exportMutation.mutate({
+            type: exportType,
+            params: { search }
+        });
+    };
+
+    // Columns
+    const columns = useMemo(() => [
         {
-            key: "image",
+            key: "image_url", // API uses image_url likely? or image? Postman create uses 'image'. Service Boys used 'image_url'. I'll try image_url, fallback image
             title: "Image",
+            render: (image: string) => (
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                    {image ? <img src={image} alt="Sub Admin" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200"></div>}
+                </div>
+            )
         },
+        { key: "name", title: "Name" },
+        { key: "email", title: "Email" }, // Sub Admin has email
+        { key: "phone_number", title: "Phone Number" },
+        { key: "created_at", title: "Registration On" }, // Verify field
         {
-            key: "name",
-            title: "Name",
-        },
-        {
-            key: "email",
-            title: "Email",
-        },
-        {
-            key: "phoneNumber",
-            title: "Phone Number",
-        },
-        {
-            key: "registrationOn",
-            title: "Registration On",
-        },
-        {
-            key: "status",
+            key: "active_flag", // Assuming active_flag exists
             title: "Status",
+            render: (status: number) => (
+                <span className={`font-bold ${status === 1 ? 'text-green-600' : 'text-red-500'}`}>
+                    {status === 1 ? 'Active' : 'Inactive'}
+                </span>
+            )
         },
         {
             key: "action",
             title: "Action",
-            render: () => (
-                <div className="flex gap-2 items-center">
-                    <button
-                        className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] px-2 py-3 font-semibold transition-colors"
-                        onClick={() => alert('updated item')}
+            width: "w-[500px]",
+            render: (_: any, record: any) => (
+                <div className="flex gap-2 items-center text-nowrap">
+                    <Link
+                        to={`/users&staff/manage/subAdmin/${record.user_id || record.id}`}
+                        className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] px-3 py-3 font-semibold transition-colors"
                     >
-                        <Eye /> View
-                    </button>
-                    <button
-                        className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-2 py-3 font-semibold transition-colors"
-                        onClick={() => alert('updated item')}
+                        <Eye size={18} /> View
+                    </Link>
+                    <Link
+                        to={`/users&staff/manage/subAdmin/${record.user_id || record.id}`}
+                        state={{ mode: 'edit' }} // Passing state to reuse page or if separate edit page exists
+                        className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3 py-3 font-semibold transition-colors"
                     >
-                        <ArrowUpToLine /> Update
-                    </button>
-                    <button
-                        className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-2 py-3 font-semibold transition-colors"
-                        onClick={() => alert('deleted item')}
-                    >
-                        <Trash2 /> Delete
-                    </button>
+                        <ArrowUpToLine size={18} /> Update
+                    </Link>
                     <button
                         className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-3 py-3 font-semibold transition-colors"
-                        onClick={() => alert('deleted item')}
+                        onClick={() => handleDelete(record.user_id || record.id)}
                     >
-                        <Shield /> Deactivated
+                        <Trash2 size={18} /> Delete
                     </button>
                 </div>
             ),
         },
-    ]
-
-export default function ManageSubAdmin(){
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10;
-
-    const handleSubmit = (values: FilterFormValuesManageSubAdmin) => {
-        console.log("Search values:", values);
-    };
-
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
+    ], [handleDelete]);
 
 
     const handlePageChange = (page: number) => {
@@ -124,14 +162,20 @@ export default function ManageSubAdmin(){
                                     <div className="flex flex-col lg:flex-row items-center gap-5">
                                         <div className="flex flex-col lg:flex-row items-center gap-5">
                                             <Link to="/users&staff/manage/subAdmin/addSubAdmin"
-                                                type="button"
                                                 className="w-full lg:w-[179px] py-3 flex justify-center items-center bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
                                             >
                                                 Add Sub Admin
                                             </Link>
                                             <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                                             <div className="w-full lg:w-[135px]">
-                                                <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2 w-full" />
+                                                <FormDropdown
+                                                    name="export"
+                                                    label=""
+                                                    placeholder={'Export'}
+                                                    options={exportTypes}
+                                                    onChangeExternal={handleExport}
+                                                    className="mb-2 w-full"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -141,15 +185,17 @@ export default function ManageSubAdmin(){
                     </Formik>
                 </div>
                 {/* table */}
-                <CustomTable
-                    columns={columns}
-                    data={dummyManageSubAdmins}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    totalEntries={totalEntries}
-                    pageSize={pageSize}
-                    onPageChange={handlePageChange}
-                />
+                {isLoading ? <div>Loading...</div> : (
+                    <CustomTable
+                        columns={columns}
+                        data={subAdmins}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        totalEntries={totalEntries}
+                        pageSize={pageSize}
+                        onPageChange={handlePageChange}
+                    />
+                )}
             </div>
         </main>
     );

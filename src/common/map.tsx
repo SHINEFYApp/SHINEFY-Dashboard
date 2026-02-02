@@ -51,15 +51,23 @@ const DrawMap = ({ name }: DrawMapProps) => {
     map.on(L.Draw.Event.CREATED, (event: LeafletEvent) => {
       const layer = (event as any).layer;
 
-      drawnItems.clearLayers();    
+      drawnItems.clearLayers();
       drawnItems.addLayer(layer);
 
-      const coords = layer.getLatLngs()[0].map((c: any) => ({
-        lat: c.lat,
-        lng: c.lng,
-      }));
+      if (typeof layer.getLatLngs === 'function') {
+        const latLngs = layer.getLatLngs();
+        // Leaflet polygons usually return LatLng[][] (array of rings)
+        // We take the first ring [0] if it's an array of arrays
+        const points = Array.isArray(latLngs[0]) ? latLngs[0] : latLngs;
 
-      setFieldValue(name, coords);
+        const coords = points.map((c: any) => ({
+          lat: c.lat,
+          lng: c.lng,
+        }));
+        setFieldValue(name, coords);
+      } else {
+        console.warn("Layer does not support getLatLngs", layer);
+      }
     });
 
     return () => {
