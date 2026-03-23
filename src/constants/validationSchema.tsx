@@ -297,6 +297,27 @@ export const addServiceBoySchema = Yup.object({
     idCardImage: Yup.mixed().nullable(),
 });
 
+export const editServiceBoySchema = Yup.object({
+    name: Yup.string().required('Name is required'),
+    phoneNumber: Yup.string().matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits').required('Phone number is required'),
+    password: Yup.string()
+        .nullable()
+        .notRequired()
+        .transform((value) => (value === '' ? null : value))
+        .min(8, 'Password must be at least 8 characters'),
+    confirmPassword: Yup.string()
+        .nullable()
+        .notRequired()
+        .transform((value) => (value === '' ? null : value))
+        .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    availableDays: Yup.array().min(1, 'Select at least one day').required('Available days are required'),
+    startHour: Yup.string().required('Start hour is required'),
+    endHour: Yup.string().required('End hour is required'),
+    drivingLicense: Yup.mixed().nullable().notRequired(),
+    licenseExpiredDate: Yup.string().required('License expired date is required'),
+    idCardImage: Yup.mixed().nullable(),
+});
+
 export const addCouponValidationSchema = Yup.object({
     user: Yup.string().required("User is required"),
 

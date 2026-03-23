@@ -1,14 +1,14 @@
 import { Formik, Form, useField } from 'formik';
-import { addServiceBoySchema } from '../../../constants/validationSchema';
+import { editServiceBoySchema } from '../../../constants/validationSchema';
 import { addServiceBoyInitialValues } from '../../../constants/initialValues';
 import { Button } from '../../../components/ui/button';
 import { FormInput } from '../../../common/FormInput';
 import { FormTimePicker } from '../../../common/FormTimePicker';
 import { FormDatePicker } from '../../../common/FormDatePicker';
-import { useRef, useState } from 'react';
-import { useAddServiceBoy, useUploadServiceBoyImages } from "../../../api/features/serviceBoys.hooks";
+import { useRef, useState, useEffect } from 'react';
+import { useUpdateServiceBoy, useUploadServiceBoyImages, useGetServiceBoyDetails } from "../../../api/features/serviceBoys.hooks";
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from "@tanstack/react-query";
 
 const FormCheckboxDays = ({ name, label }: { name: string, label: string }) => {
@@ -53,7 +53,7 @@ const FormCheckboxDays = ({ name, label }: { name: string, label: string }) => {
     );
 };
 
-// Custom File Upload Component to match the design
+// Custom File Upload Component
 const CustomFileUpload = ({ name, title }: { name: string, title: string; }) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [, meta, helpers] = useField(name);
@@ -96,64 +96,84 @@ const CustomFileUpload = ({ name, title }: { name: string, title: string; }) => 
     );
 };
 
-
-export default function AddServiceBoy() {
+export default function EditServiceBoy() {
     const navigate = useNavigate();
+    const { id } = useParams();
     const queryClient = useQueryClient();
 
-    const { mutateAsync: addServiceBoy, isPending: isAdding } = useAddServiceBoy();
+    const { data: responseData, isLoading: isFetching } = useGetServiceBoyDetails(id as string);
+    const serviceBoy = responseData?.data?.data || responseData?.data;
+
+    const { mutateAsync: updateServiceBoy, isPending: isUpdating } = useUpdateServiceBoy();
     const { mutateAsync: uploadImages, isPending: isUploading } = useUploadServiceBoyImages();
 
-    const isSubmitting = isAdding || isUploading;
+    const isSubmitting = isUpdating || isUploading;
+
+    const [formValues, setFormValues] = useState<any>(addServiceBoyInitialValues);
+
+    useEffect(() => {
+        if (serviceBoy) {
+            setFormValues({
+                name: serviceBoy.name || '',
+                phoneNumber: serviceBoy.phone_number || '',
+                password: '', // Should be empty initially
+                confirmPassword: '',
+                availableDays: serviceBoy.available_days || [],
+                startHour: serviceBoy.start_hour || '',
+                endHour: serviceBoy.end_hour || '',
+                licenseExpiredDate: serviceBoy.licence_expiery_date || '',
+                drivingLicense: null,
+                idCardImage: null,
+            });
+        }
+    }, [serviceBoy]);
+
+    if (isFetching) {
+        return <div className="p-10 text-center font-bold">Loading details for editing...</div>;
+    }
 
     return (
         <main>
             <div className="w-full bg-white shadow-md p-4 md:p-6 rounded-2xl">
-                <h1 className="text-[20px] font-bold mb-8">Enter Service Boy information</h1>
+                <h1 className="text-[20px] font-bold mb-8">Edit Service Boy Information</h1>
                 <Formik
-                    initialValues={addServiceBoyInitialValues}
-                    validationSchema={addServiceBoySchema}
+                    initialValues={formValues}
+                    enableReinitialize={true}
+                    validationSchema={editServiceBoySchema}
                     onSubmit={async (values) => {
                         try {
-                            const payload = {
+                            const payload: any = {
                                 name: values.name,
                                 phone_number: values.phoneNumber,
-                                address: "Default Address", // UI missing address field? Postman requires it. Assuming default or adding input.
-                                // Actually checking initialValues/Schema might reveal if address exists. 
-                                // Looking at provided code: Form inputs for name, phoneNumber, password, confirmPassword, availableDays, startHour, endHour.
-                                // MISSING: Address, Licence Expiry Date (wait, licenseExpiredDate IS there on line 136).
-                                // Postman also sends: latitude, longitude. UI doesn't have map. 
-                                // I will use dummy values for missing required fields to satisfy API or add fields if critical.
-                                // Address is likely needed. I'll add a hidden default or simple input if space allows.
-                                // Latitude/Longitude: 0.0 for now.
+                                address: "Default Address",
                                 licence_expiery_date: values.licenseExpiredDate,
                                 available_days: values.availableDays || [],
                                 start_hour: values.startHour,
                                 end_hour: values.endHour,
                                 latitude: "0.0",
                                 longitude: "0.0",
-                                password: values.password
                             };
+                            
+                            // Only include password if changed so we don't accidentally blank it
+                            if (values.password && values.password.trim() !== "") {
+                                payload.password = values.password;
+                            }
 
-                            // 1. Create Service Boy
-                            const response = await addServiceBoy(payload);
-                            const newId = response?.data?.id || response?.data?.data?.id; // Safely access ID
+                            await updateServiceBoy({ id: id as string, data: payload });
 
-                            if (!newId) throw new Error("Failed to get ID from response");
-
-                            // 2. Upload Images if present
+                            // Upload Images if present
                             if (values.drivingLicense || values.idCardImage) {
                                 const formData = new FormData();
                                 if (values.drivingLicense) formData.append('driver_licence', values.drivingLicense);
                                 if (values.idCardImage) formData.append('id_card_image', values.idCardImage);
-                                // Profile image?
 
-                                await uploadImages({ id: newId, formData });
+                                await uploadImages({ id: id as string, formData });
                             }
 
-                            toast.success("Service Boy added successfully");
+                            toast.success("Service Boy updated successfully");
                             queryClient.invalidateQueries({ queryKey: ["service-boys"] });
-                            navigate('/users&staff/manage/ServiceBoy'); // Redirect to list
+                            queryClient.invalidateQueries({ queryKey: ["service-boy-details", id] });
+                            navigate('/users&staff/manage/ServiceBoy');
 
                         } catch (error: any) {
                             console.error(error);
@@ -166,79 +186,37 @@ export default function AddServiceBoy() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 grid-flow-dense">
                                 {/* Left Side - Form Fields */}
                                 <div className="order-2 md:order-1 grid grid-cols-1 gap-6">
-                                    <FormInput
-                                        name="name"
-                                        label="Name"
-                                        placeholder="Name"
-                                        type="text"
-                                    />
-                                    <FormInput
-                                        name="phoneNumber"
-                                        label="Phone Number"
-                                        placeholder="Phone Number"
-                                        type="tel"
-                                    />
-                                    <FormInput
-                                        name="password"
-                                        label="Password"
-                                        placeholder="Password"
-                                        type="password"
-                                    />
-                                    <FormInput
-                                        name="confirmPassword"
-                                        label="Confirm Password"
-                                        placeholder="Confirm Password"
-                                        type="password"
-                                    />
+                                    <FormInput name="name" label="Name" placeholder="Name" type="text" />
+                                    <FormInput name="phoneNumber" label="Phone Number" placeholder="Phone Number" type="tel" />
+                                    <FormInput name="password" label="New Password (optional)" placeholder="Leave blank to keep same" type="password" />
+                                    <FormInput name="confirmPassword" label="Confirm Password" placeholder="Confirm Password" type="password" />
 
-                                    <FormCheckboxDays
-                                        name="availableDays"
-                                        label="Available Days"
-                                    />
-                                    <FormTimePicker
-                                        name="startHour"
-                                        label="Start Hour"
-                                    />
-                                    <FormTimePicker
-                                        name="endHour"
-                                        label="End Hour"
-                                    />
+                                    <FormCheckboxDays name="availableDays" label="Available Days" />
+                                    <FormTimePicker name="startHour" label="Start Hour" />
+                                    <FormTimePicker name="endHour" label="End Hour" />
                                 </div>
 
                                 {/* Right Side - Profile Image and Documents */}
                                 <div className="order-1 md:order-2 h-fit w-full flex flex-col items-center">
                                     <div className='flex flex-col justify-center items-start mb-8'>
-                                        <h1 className='font-bold capitalize'>your profile</h1>
-                                        <p className='text-[#616161] pb-5'>This will be displayed on your profile.</p>
-                                        <div className='w-60 h-60 bg-[#B0B0B0] rounded-md'>
-                                            {/* Image preview would go here */}
-                                        </div>
-                                        <div className='flex w-60 items-center py-5 gap-5'>
-                                            <button type="button" className='text-[#B0B0B0]'>Delete</button>
-                                            <button type="button" className='text-[#FFC107]'>Update</button>
+                                        <h1 className='font-bold capitalize'>Profile Image</h1>
+                                        <p className='text-[#616161] pb-5'>Current avatar displayed on profile.</p>
+                                        <div className='w-60 h-60 bg-[#B0B0B0] rounded-md overflow-hidden'>
+                                            {serviceBoy?.image_url ? (
+                                                <img src={serviceBoy.image_url} alt="Profile" className="w-full h-full object-cover"/>
+                                            ) : null}
                                         </div>
                                     </div>
 
-                                    {/* Documents Section moved here */}
+                                    {/* Documents Section */}
                                     <div className="w-full max-w-md space-y-6 pt-4 border-t border-gray-100">
-                                        <CustomFileUpload
-                                            name="drivingLicense"
-                                            title="Driving License"
-                                        />
+                                        <CustomFileUpload name="drivingLicense" title="Driving License (Update Optional)" />
 
                                         <div className="max-w-md">
-                                            <FormDatePicker
-                                                name="licenseExpiredDate"
-                                                label="License Expired Date"
-                                                placeholder="Select Date"
-                                                checkmark={false}
-                                            />
+                                            <FormDatePicker name="licenseExpiredDate" label="License Expired Date" placeholder="Select Date" checkmark={false} />
                                         </div>
 
-                                        <CustomFileUpload
-                                            name="idCardImage"
-                                            title="ID Card Image(Optional)"
-                                        />
+                                        <CustomFileUpload name="idCardImage" title="ID Card Image (Update Optional)" />
                                     </div>
                                 </div>
                             </div>
@@ -247,9 +225,9 @@ export default function AddServiceBoy() {
                                 <Button
                                     type="submit"
                                     disabled={!isValid || isSubmitting}
-                                    className="bg-primary hover:bg-primary-600 text-gray-900 font-bold h-[58px] rounded-xl text-[20px] shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                    className="bg-primary hover:bg-primary-600 text-gray-900 font-bold h-[58px] rounded-xl text-[20px] shadow-md hover:shadow-lg transition-all"
                                 >
-                                    {isSubmitting ? "Submitting..." : "Submit"}
+                                    {isSubmitting ? "Updating..." : "Update Service Boy"}
                                 </Button>
                             </div>
                         </Form>
