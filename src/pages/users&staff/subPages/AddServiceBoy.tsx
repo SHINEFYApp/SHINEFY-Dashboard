@@ -153,7 +153,7 @@ export default function AddServiceBoy() {
 
                             toast.success("Service Boy added successfully");
                             queryClient.invalidateQueries({ queryKey: ["service-boys"] });
-                            navigate('/users&staff/manageServiceBoy'); // Redirect to list
+                            navigate('/users&staff/manage/ServiceBoy'); // Redirect to list
 
                         } catch (error: any) {
                             console.error(error);

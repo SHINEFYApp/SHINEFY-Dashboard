@@ -123,13 +123,13 @@ const ManageServiceBoy = () => {
             render: (_: any, record: any) => (
                 <div className="flex gap-2 items-center text-nowrap">
                     <Link
-                        to={`/users&staff/manageServiceBoy/${record.user_id}`}
+                        to={`/users&staff/manage/ServiceBoy/${record.user_id}`}
                         className="bg-[#D2E3FF] flex items-center gap-2 rounded-[2.75px] text-[#2196F3] border border-[#2196F3] capitalize hover:text-[#D2E3FF] hover:bg-[#2196F3] px-3.5 py-3 font-semibold transition-colors"
                     >
                         <Eye size={18} /> View
                     </Link>
                     <Link
-                        to={`/users&staff/manageServiceBoy/${record.user_id}`}
+                        to={`/users&staff/manage/ServiceBoy/${record.user_id}`}
                         state={{ mode: 'edit' }}
                         className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3.5 py-3 font-semibold transition-colors"
                     >
