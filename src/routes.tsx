@@ -34,6 +34,7 @@ import ManageBonusPoint from './pages/Financial & Points/manageBonusPoint';
 import ManageAdminEarning from './pages/Financial & Points/manageAdminEarning';
 import ManageSubAdmin from './pages/users&staff/manageSubAdmin';
 import AddServiceBoy from './pages/users&staff/subPages/AddServiceBoy';
+import EditServiceBoy from './pages/users&staff/subPages/EditServiceBoy';
 import AddSubAdmin from './pages/users&staff/subPages/addSubAdmin';
 import ServiceBoyDetails from './pages/users&staff/subPages/ServiceBoyDetails';
 import ManageGroup from './pages/users&staff/subPages/ManageGroup';
@@ -62,6 +63,7 @@ export const RoutesPages = () => {
         <Route path="/users&staff/manage/subAdmin" element={<ManageSubAdmin />} />
         <Route path="/users&staff/manage/serviceBoy" element={<ManageServiceBoy />} />
         <Route path="/users&staff/manage/serviceBoy/:id" element={<ServiceBoyDetails />} />
+        <Route path="/users&staff/manage/serviceBoy/edit/:id" element={<EditServiceBoy />} />
         <Route path="/users&staff/manage/serviceBoy/addServiceBoy" element={<AddServiceBoy />} />
         <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
         <Route path="/users&staff/manage/usersWallet" element={<UsersWallets />} />

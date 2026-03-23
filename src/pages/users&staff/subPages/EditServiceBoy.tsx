@@ -1,0 +1,251 @@
+import { Formik, Form, useField } from 'formik';
+import { editServiceBoySchema } from '../../../constants/validationSchema';
+import { addServiceBoyInitialValues } from '../../../constants/initialValues';
+import { Button } from '../../../components/ui/button';
+import { FormInput } from '../../../common/FormInput';
+import { FormTimePicker } from '../../../common/FormTimePicker';
+import { FormDatePicker } from '../../../common/FormDatePicker';
+import { useRef, useState, useEffect } from 'react';
+import { useUpdateServiceBoy, useUploadServiceBoyImages, useGetServiceBoyDetails } from "../../../api/features/serviceBoys.hooks";
+import { toast } from 'sonner';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useQueryClient } from "@tanstack/react-query";
+
+const FormCheckboxDays = ({ name, label }: { name: string, label: string }) => {
+    const [field, meta, helpers] = useField<string[]>(name);
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    const toggleDay = (day: string) => {
+        const currentDays = field.value || [];
+        if (currentDays.includes(day)) {
+            helpers.setValue(currentDays.filter(d => d !== day));
+        } else {
+            helpers.setValue([...currentDays, day]);
+        }
+    };
+
+    return (
+        <div className="space-y-2">
+            <label className="text-sm font-bold text-gray-900">{label}</label>
+            <div className="flex flex-wrap gap-2 mt-2">
+                {days.map((day) => {
+                    const isSelected = (field.value || []).includes(day);
+                    return (
+                        <button
+                            key={day}
+                            type="button"
+                            onClick={() => toggleDay(day)}
+                            className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors border ${
+                                isSelected 
+                                    ? 'bg-black text-white border-black' 
+                                    : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                            }`}
+                        >
+                            {day}
+                        </button>
+                    );
+                })}
+            </div>
+            {meta.touched && meta.error && (
+                <p className="text-xs text-red-500">{meta.error}</p>
+            )}
+        </div>
+    );
+};
+
+// Custom File Upload Component
+const CustomFileUpload = ({ name, title }: { name: string, title: string; }) => {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [, meta, helpers] = useField(name);
+    const [fileName, setFileName] = useState<string>("");
+
+    const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.length) {
+            helpers.setValue(e.target.files[0]);
+            setFileName(e.target.files[0].name);
+        }
+    };
+
+    return (
+        <div className="space-y-2">
+            <h3 className="text-sm font-bold text-gray-900">{title}</h3>
+            <p className="text-xs text-gray-500">
+                Maximum file size allowed is 2MB, supported file formats include .jpg, .png, and .pdf.
+            </p>
+            <div className="flex items-center gap-4">
+                <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="bg-black text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                    Browse Files
+                </button>
+                {fileName && <span className="text-sm text-gray-700">{fileName}</span>}
+            </div>
+            <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handleSelect}
+                className="hidden"
+                accept=".jpg,.png,.pdf"
+            />
+            {meta.touched && meta.error && (
+                <p className="text-xs text-red-500">{meta.error}</p>
+            )}
+        </div>
+    );
+};
+
+export default function EditServiceBoy() {
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const queryClient = useQueryClient();
+
+    const { data: responseData, isLoading: isFetching } = useGetServiceBoyDetails(id as string);
+    const serviceBoy = responseData?.data?.data || responseData?.data;
+
+    const { mutateAsync: updateServiceBoy, isPending: isUpdating } = useUpdateServiceBoy();
+    const { mutateAsync: uploadImages, isPending: isUploading } = useUploadServiceBoyImages();
+
+    const isSubmitting = isUpdating || isUploading;
+
+    const [formValues, setFormValues] = useState<any>(addServiceBoyInitialValues);
+
+    useEffect(() => {
+        if (serviceBoy) {
+            setFormValues({
+                name: serviceBoy.name || '',
+                phoneNumber: serviceBoy.phone_number || '',
+                password: '', // Should be empty initially
+                confirmPassword: '',
+                availableDays: serviceBoy.available_days || [],
+                startHour: serviceBoy.start_hour || '',
+                endHour: serviceBoy.end_hour || '',
+                licenseExpiredDate: serviceBoy.licence_expiery_date || '',
+                drivingLicense: null,
+                idCardImage: null,
+            });
+        }
+    }, [serviceBoy]);
+
+    if (isFetching) {
+        return <div className="p-10 text-center font-bold">Loading details for editing...</div>;
+    }
+
+    return (
+        <main>
+            <div className="w-full bg-white shadow-md p-4 md:p-6 rounded-2xl">
+                <h1 className="text-[20px] font-bold mb-8">Edit Service Boy Information</h1>
+                <Formik
+                    initialValues={formValues}
+                    enableReinitialize={true}
+                    validationSchema={editServiceBoySchema}
+                    onSubmit={async (values) => {
+                        try {
+                            const payload: any = {
+                                name: values.name,
+                                phone_number: values.phoneNumber,
+                                address: "Default Address",
+                                licence_expiery_date: values.licenseExpiredDate,
+                                available_days: values.availableDays || [],
+                                start_hour: values.startHour,
+                                end_hour: values.endHour,
+                                latitude: "0.0",
+                                longitude: "0.0",
+                            };
+                            
+                            // Only include password if changed so we don't accidentally blank it
+                            if (values.password && values.password.trim() !== "") {
+                                payload.password = values.password;
+                            }
+
+                            await updateServiceBoy({ id: id as string, data: payload });
+
+                            // Upload Images if present
+                            if (values.drivingLicense || values.idCardImage) {
+                                const formData = new FormData();
+                                if (values.drivingLicense) formData.append('driver_licence', values.drivingLicense);
+                                if (values.idCardImage) formData.append('id_card_image', values.idCardImage);
+
+                                await uploadImages({ id: id as string, formData });
+                            }
+
+                            toast.success("Service Boy updated successfully");
+                            queryClient.invalidateQueries({ queryKey: ["service-boys"] });
+                            queryClient.invalidateQueries({ queryKey: ["service-boy-details", id] });
+                            navigate('/users&staff/manage/ServiceBoy');
+
+                        } catch (error: any) {
+                            console.error(error);
+                            const errorData = error?.data || error?.response?.data;
+                            if (errorData?.status === 'fail' && errorData?.data && typeof errorData.data === 'object') {
+                                Object.values(errorData.data).forEach((messages: any) => {
+                                    if (Array.isArray(messages)) {
+                                        messages.forEach((msg: string) => toast.error(msg));
+                                    } else if (typeof messages === 'string') {
+                                        toast.error(messages);
+                                    }
+                                });
+                            } else {
+                                toast.error(errorData?.message || "Failed to update Service Boy");
+                            }
+                        }
+                    }}
+                >
+                    {({ isValid }) => (
+                        <Form className="space-y-8">
+                            {/* Top Section */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 grid-flow-dense">
+                                {/* Left Side - Form Fields */}
+                                <div className="order-2 md:order-1 grid grid-cols-1 gap-6">
+                                    <FormInput name="name" label="Name" placeholder="Name" type="text" />
+                                    <FormInput name="phoneNumber" label="Phone Number" placeholder="Phone Number" type="tel" />
+                                    <FormInput name="password" label="New Password (optional)" placeholder="Leave blank to keep same" type="password" />
+                                    <FormInput name="confirmPassword" label="Confirm Password" placeholder="Confirm Password" type="password" />
+
+                                    <FormCheckboxDays name="availableDays" label="Available Days" />
+                                    <FormTimePicker name="startHour" label="Start Hour" />
+                                    <FormTimePicker name="endHour" label="End Hour" />
+                                </div>
+
+                                {/* Right Side - Profile Image and Documents */}
+                                <div className="order-1 md:order-2 h-fit w-full flex flex-col items-center">
+                                    <div className='flex flex-col justify-center items-start mb-8'>
+                                        <h1 className='font-bold capitalize'>Profile Image</h1>
+                                        <p className='text-[#616161] pb-5'>Current avatar displayed on profile.</p>
+                                        <div className='w-60 h-60 bg-[#B0B0B0] rounded-md overflow-hidden'>
+                                            {serviceBoy?.image_url ? (
+                                                <img src={serviceBoy.image_url} alt="Profile" className="w-full h-full object-cover"/>
+                                            ) : null}
+                                        </div>
+                                    </div>
+
+                                    {/* Documents Section */}
+                                    <div className="w-full max-w-md space-y-6 pt-4 border-t border-gray-100">
+                                        <CustomFileUpload name="drivingLicense" title="Driving License (Update Optional)" />
+
+                                        <div className="max-w-md">
+                                            <FormDatePicker name="licenseExpiredDate" label="License Expired Date" placeholder="Select Date" checkmark={false} />
+                                        </div>
+
+                                        <CustomFileUpload name="idCardImage" title="ID Card Image (Update Optional)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 pt-4">
+                                <Button
+                                    type="submit"
+                                    disabled={!isValid || isSubmitting}
+                                    className="bg-primary hover:bg-primary-600 text-gray-900 font-bold h-[58px] rounded-xl text-[20px] shadow-md hover:shadow-lg transition-all"
+                                >
+                                    {isSubmitting ? "Updating..." : "Update Service Boy"}
+                                </Button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
+        </main>
+    );
+}

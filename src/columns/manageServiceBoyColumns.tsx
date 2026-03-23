@@ -48,7 +48,7 @@ export const manageServiceBoyColumns = [
                     <Eye size={18} /> View
                 </Link>
                 <Link
-                    to={`/users&staff/manage/ServiceBoy/${record.id}`}
+                    to={`/users&staff/manage/serviceBoy/edit/${record.id}`}
                     state={{ mode: 'edit' }}
                     className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3.5 py-3 font-semibold transition-colors"
                 >
