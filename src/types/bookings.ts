@@ -399,6 +399,33 @@ export interface getUserInfoByNumberResponse {
     }
 }
 
+export interface ApiExtraService {
+    extra_service_id: number;
+    extra_service_name: string[];
+    extra_service_image?: string;
+    extra_service_price?: string;
+    extra_service_time?: number;
+    extra_service_description?: string[];
+}
+
+export interface ApiMainService {
+    service_id: number;
+    service_name: string[];
+    service_image?: string;
+    service_price?: string;
+    service_time?: number;
+    service_description?: string[];
+    apply_add_extra_service?: number; // 0 or 1
+}
+
+export interface GetServiceResponse {
+    success: string;
+    all_service_arr: {
+        sorted_main_services: ApiMainService[];
+        sorted_extra_services: ApiExtraService[];
+    };
+}
+
 export interface Booking {
     booking_id: number;
     booking_no: string;

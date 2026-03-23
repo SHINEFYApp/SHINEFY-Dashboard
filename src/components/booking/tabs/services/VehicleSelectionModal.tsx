@@ -5,6 +5,17 @@ import { CheckIcon } from 'lucide-react';
 import type { Vehicle, VehicleSelectionModalProps } from '../../../../types/bookings';
 import car from '../../../../assets/addVehicle.svg';
 
+// Small labelled detail row used inside each vehicle card
+const DetailRow = ({ label, value }: { label: string; value?: string | number | null }) => {
+    if (!value && value !== 0) return null;
+    return (
+        <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">{label}</span>
+            <span className="text-sm font-semibold text-gray-700 truncate">{value}</span>
+        </div>
+    );
+};
+
 export const VehicleSelectionModal = ({
     isOpen,
     onClose,
@@ -98,16 +109,36 @@ export const VehicleSelectionModal = ({
                                         </div>
                                     )}
 
-                                    {/* Vehicle Info */}
-                                    <div className="text-left mb-4">
-                                        <h3 className="font-bold text-gray-900 mb-1">{vehicle.vehicle_name}</h3>
-                                        <p className="text-sm text-gray-500">{vehicle.vehicle_name}</p>
+                                    {/* Vehicle image */}
+                                    <div className="flex items-center justify-center mb-3">
+                                        <img src={car} alt={vehicle.vehicle_name} className="w-full h-28 object-contain" />
                                     </div>
 
-                                    {/* Vehicle Image */}
-                                    <div className="flex items-center justify-center">
-                                        <img src={car} alt={vehicle.vehicle_name} className="w-full h-32 object-contain" />
+                                    {/* Vehicle name header */}
+                                    <div className="text-left mb-3 border-b border-gray-100 pb-3">
+                                        <h3 className="font-bold text-gray-900 leading-tight">{vehicle.vehicle_name}</h3>
+                                        {vehicle.vehicle_name_arabic && (
+                                            <p className="text-xs text-gray-400 mt-0.5 text-right" dir="rtl">{vehicle.vehicle_name_arabic}</p>
+                                        )}
                                     </div>
+
+                                    {/* Detail grid */}
+                                    <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-left">
+                                        <DetailRow label="Make" value={vehicle.make_name} />
+                                        <DetailRow label="Model" value={vehicle.model_name} />
+                                        <DetailRow label="Plate No." value={vehicle.plate_number} />
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Color</span>
+                                            <div className="flex items-center gap-1.5 mt-0.5">
+                                                <span
+                                                    className="inline-block w-3 h-3 rounded-full border border-gray-200 shrink-0"
+                                                    style={{ backgroundColor: vehicle.color_name ?? '#ccc' }}
+                                                />
+                                                <span className="text-sm font-semibold text-gray-700 truncate">{vehicle.color_name}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     </button>
                                 );
                                 })}

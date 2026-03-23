@@ -11,6 +11,48 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from "@tanstack/react-query";
 
+const FormCheckboxDays = ({ name, label }: { name: string, label: string }) => {
+    const [field, meta, helpers] = useField<string[]>(name);
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    const toggleDay = (day: string) => {
+        const currentDays = field.value || [];
+        if (currentDays.includes(day)) {
+            helpers.setValue(currentDays.filter(d => d !== day));
+        } else {
+            helpers.setValue([...currentDays, day]);
+        }
+    };
+
+    return (
+        <div className="space-y-2">
+            <label className="text-sm font-bold text-gray-900">{label}</label>
+            <div className="flex flex-wrap gap-2 mt-2">
+                {days.map((day) => {
+                    const isSelected = (field.value || []).includes(day);
+                    return (
+                        <button
+                            key={day}
+                            type="button"
+                            onClick={() => toggleDay(day)}
+                            className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors border ${
+                                isSelected 
+                                    ? 'bg-black text-white border-black' 
+                                    : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                            }`}
+                        >
+                            {day}
+                        </button>
+                    );
+                })}
+            </div>
+            {meta.touched && meta.error && (
+                <p className="text-xs text-red-500">{meta.error}</p>
+            )}
+        </div>
+    );
+};
+
 // Custom File Upload Component to match the design
 const CustomFileUpload = ({ name, title }: { name: string, title: string; }) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -85,7 +127,7 @@ export default function AddServiceBoy() {
                                 // Address is likely needed. I'll add a hidden default or simple input if space allows.
                                 // Latitude/Longitude: 0.0 for now.
                                 licence_expiery_date: values.licenseExpiredDate,
-                                available_days: values.availableDays ? [String(values.availableDays)] : [],
+                                available_days: values.availableDays || [],
                                 start_hour: values.startHour,
                                 end_hour: values.endHour,
                                 latitude: "0.0",
@@ -115,7 +157,20 @@ export default function AddServiceBoy() {
 
                         } catch (error: any) {
                             console.error(error);
-                            toast.error(error?.response?.data?.message || "Failed to add Service Boy");
+                            const errorData = error?.data;
+                            console.log(errorData)
+                            if (errorData?.status === 'fail' && errorData?.data && typeof errorData.data === 'object') {
+                                Object.values(errorData.data).forEach((messages: any) => {
+                                    console.log(messages)
+                                    if (Array.isArray(messages)) {
+                                        messages.forEach((msg: string) => toast.error(msg));
+                                    } else if (typeof messages === 'string') {
+                                        toast.error(messages);
+                                    }
+                                });
+                            } else {
+                                toast.error(errorData?.message || "Failed to add Service Boy");
+                            }
                         }
                     }}
                 >
@@ -150,11 +205,9 @@ export default function AddServiceBoy() {
                                         type="password"
                                     />
 
-                                    <FormInput
+                                    <FormCheckboxDays
                                         name="availableDays"
                                         label="Available Days"
-                                        placeholder="Available Days"
-                                        type="text"
                                     />
                                     <FormTimePicker
                                         name="startHour"

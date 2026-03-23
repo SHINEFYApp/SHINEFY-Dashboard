@@ -1,18 +1,23 @@
+import { useState, useEffect, useRef } from 'react';
 import { Formik, Form } from 'formik';
 import { servicesBookingSchema, packageBookingSchema } from '../../../../../constants/validationSchema';
-import { IoCarSportOutline } from 'react-icons/io5';
-import { FormDropdown } from '../../../../../common/FormDropdown';
+import { Package, PersonStanding, Plus, X } from 'lucide-react';
 import { Button } from '../../../../ui/button';
-import type { servicesBoysPayload, servicesBoysResponse, stepsProps } from '../../../../../types/bookings';
-import { availableExtraServices } from '../../../../../constants/data';
-import { Package, PersonStanding } from 'lucide-react';
+import type {
+    ApiMainService,
+    ApiExtraService,
+    GetServiceResponse,
+    servicesBoysPayload,
+    servicesBoysResponse,
+    stepsProps,
+} from '../../../../../types/bookings';
 import { usePost } from '../../../../../api/usePostData';
 import { toast } from 'sonner';
-import { useEffect } from 'react';
 import { SkeletonDemo } from '../../../../../common/loader';
 import { DropDownToSendObject } from '../../../../../common/DropDownToSendObject ';
-import { getPackage } from '../../../../../api/features/bookings';
-import { useGet } from '../../../../../api/useGetData';
+import { getPackage, getServices } from '../../../../../api/features/bookings';
+import { useGet } from '../../../../../api/useGetData.tsx';
+import { ExtraServiceModal } from '../ExtraServiceModal';
 
 export default function ServicesStep2({
     onNext,
@@ -21,31 +26,33 @@ export default function ServicesStep2({
     formData,
     setFormData
 }: stepsProps) {
-
-    // Fetch data
-
+  
+    const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
     const baseURL = import.meta.env.VITE_API_URL;
-    const getServicesBoys = usePost<
-        servicesBoysResponse,
-        servicesBoysPayload
-    >({
+
+    // Fetch available service boys
+    const getServicesBoys = usePost<servicesBoysResponse, servicesBoysPayload>({
         route: `${baseURL}/api/book/available-service-boys`,
         options: {
-            onSuccess: (data) => console.log(data),
             onError: (err: any) => {
-                console.log('API Error full response:', err.response);
                 toast.error(err.response?.data?.message ?? err.message);
             },
         },
     });
 
-    const route = `${baseURL}/api/packages`;
+    // Fetch packages (for package tab)
     const getPackages = useGet({
-        queryFn: () => getPackage(route),
-        queryKey: ["packages"],
+        queryFn: () => getPackage(`${baseURL}/api/packages`),
+        queryKey: ['packages'],
         options: { staleTime: 1000 * 10 },
     });
 
+    // Fetch services (for services tab only)
+    const getServicesQuery = useGet<GetServiceResponse>({
+        queryFn: () => getServices(`${baseURL}/api/get_service/`),
+        queryKey: ['services'],
+        options: { staleTime: 1000 * 30, enabled: !userPackageInput },
+    });
 
     useEffect(() => {
         if (!formData.address) return;
@@ -56,176 +63,176 @@ export default function ServicesStep2({
             booking_time: formData.bookingTime,
             service_duration: 60,
         } as servicesBoysPayload);
-
     }, [formData.address]);
 
-    const handleQuantityChange = (serviceId: string, newQuantity: number) => {
-        setFormData((prev) => {
-            const existingServices = prev.extraServices || [];
-            const serviceIndex = existingServices.findIndex((s) => s.id === serviceId);
+    const available_service_boys = getServicesBoys.data?.data.available_service_boys;
+    const packages = getPackages.data?.packages;
+    const allServices: ApiMainService[] = getServicesQuery.data?.all_service_arr?.sorted_main_services ?? [];
+    const allExtras: ApiExtraService[] = getServicesQuery.data?.all_service_arr?.sorted_extra_services ?? [];
+    console.log(allExtras)
+    // Derive the extra services available for the currently selected main service
+    // formData.mainService is now an object due to DropDownToSendObject sending the full object
+    console.log(formData.mainService  , "formData.mainService ")
+    const selectedServiceId = String((formData.mainService as any)?.service_id ?? formData.mainService ?? '');
+    const selectedServiceObj = allServices.find((s) => String(s.service_id) === selectedServiceId);
+    const availableExtras = selectedServiceObj?.apply_add_extra_service == 1 ? allExtras : [];
+    console.log(selectedServiceId , "d")
+    console.log(selectedServiceObj?.apply_add_extra_service)
+    // Clear extra services when the main service changes
+    const prevServiceIdRef = useRef<any>(null);
+    useEffect(() => {
+        const currentId = String((formData.mainService as any)?.service_id ?? formData.mainService ?? '');
+        if (prevServiceIdRef.current !== null && prevServiceIdRef.current !== currentId) {
+            setFormData((prev) => ({ ...prev, extraServices: [] }));
+        }
+        prevServiceIdRef.current = currentId;
+    }, [formData.mainService]);
 
-            let updatedServices = [...existingServices];
-            if (serviceIndex >= 0) {
-                if (newQuantity <= 0) {
-                    updatedServices.splice(serviceIndex, 1);
-                } else {
-                    updatedServices[serviceIndex].quantity = newQuantity;
-                }
-            } else if (newQuantity > 0) {
-                const service = availableExtraServices.find((s) => s.id === serviceId);
-                if (service) {
-                    updatedServices.push({ id: serviceId, name: service.name, quantity: newQuantity });
-                }
-            }
-
-            return { ...prev, extraServices: updatedServices };
-        });
+    const handleRemoveExtra = (id: string) => {
+        setFormData((prev) => ({
+            ...prev,
+            extraServices: prev.extraServices.filter((s) => s.id !== id),
+        }));
     };
 
-    const getQuantity = (serviceId: string) => {
-        const service = formData.extraServices?.find((s) => s.id === serviceId);
-        return service?.quantity || 0;
-    };
-
-    useEffect(() => {
-        if (getServicesBoys.isError || getPackages.isError && getServicesBoys.error || getPackages.error) {
-            toast.error(getServicesBoys.error?.message || getPackages.error?.message);
-        }
-    }, [getServicesBoys.isError, getServicesBoys.error, getPackages.isError, getPackages.error]);
-
-    useEffect(() => {
-        if (getServicesBoys.isSuccess || getPackages.isSuccess) {
-            toast.success('The Process Of Fetchong Data Has Successfuly');
-        }
-    }, [getServicesBoys.isSuccess, getPackages.isSuccess]);
-
-
-    const available_service_boys = getServicesBoys.data?.data.available_service_boys
-    const packages = getPackages.data?.packages
-
-
-    console.log(packages)
+    const isPending = getServicesBoys.isPending || getPackages.isPending || getServicesQuery.isLoading;
 
     return (
-        <main className=' relative'>
-            {(getServicesBoys.isPending || getPackages.isPending) &&
-                <div className=' h-full w-full absolute top-0 left-0 z-500 bg-white'>
+        <main className="relative">
+            {isPending && (
+                <div className="h-full w-full absolute top-0 left-0 z-500 bg-white">
                     <SkeletonDemo quantity={15} />
                 </div>
-            }
+            )}
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">
-                Enter reservation data
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-8">Enter reservation data</h2>
 
             <Formik
                 initialValues={{
                     mainPackage: formData.mainPackage,
-                    mainService: formData.mainService || '',
+                    mainService: formData.mainService ?? '',
                     serviceBoy: formData.serviceBoy,
                 }}
                 validationSchema={userPackageInput ? packageBookingSchema : servicesBookingSchema}
                 enableReinitialize
                 onSubmit={(values) => {
-                    setFormData((prev) => {
-                        const updated = { ...prev, ...values };
-                        console.log(updated);
-                        return updated;
-                    });
+                    setFormData((prev) => ({ ...prev, ...values }));
                     onNext();
                 }}
             >
-                {({ isValid, values }) => {
-                    console.log('values', values)
-                    return (
-                        <Form>
-                            <div className={`mb-8 ${userPackageInput ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : ' md:w-1/2 w-full'}`}>
-                                {userPackageInput && (
-                                    <DropDownToSendObject
-                                        name="mainPackage"
-                                        label="User Packages"
-                                        placeholder="Select User Package"
-                                        icon={<Package className="w-5 h-5" />}
-                                        options={packages}
-                                    />
-                                )}
-                                <FormDropdown
-                                    name="mainService"
-                                    label="Services"
-                                    placeholder="Select Services"
-                                    className='w-full'
-                                    icon={<IoCarSportOutline className="w-5 h-5" />}
-                                    options={[
-                                        'service one',
-                                        'service two',
-                                        'service three',
-                                        'service four',
-                                    ]}
-                                />
-                            </div>
-
-                            <div className="space-y-6 mb-8">
-                                {availableExtraServices.map((service) => {
-                                    const quantity = getQuantity(service.id);
-                                    return (
-                                        <div key={service.id} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                                                    Extra Services
-                                                </label>
-                                                <div className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3.5 text-sm font-medium text-gray-600">
-                                                    {service.name}
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                                                    Qty
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    min="0"
-                                                    value={quantity}
-                                                    onChange={(e) =>
-                                                        handleQuantityChange(service.id, parseInt(e.target.value) || 0)
-                                                    }
-                                                    className="w-full rounded-xl border-2 bg-gray-50 px-4 py-3.5 text-sm font-medium border-gray-200"
-                                                />
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-
-                            <div className="mb-8 md:w-1/2 w-full">
+                {({ isValid }) => (
+                    <Form>
+                        {/* ── Main service / package selection ── */}
+                        <div className={`mb-8 ${userPackageInput ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : 'md:w-1/2 w-full'}`}>
+                            {userPackageInput ? (
                                 <DropDownToSendObject
-                                    name="serviceBoy"
-                                    label="Service Boy"
-                                    placeholder="Select Service Boy"
-                                    icon={<PersonStanding className="w-5 h-5" />}
-                                    options={available_service_boys}
+                                    name="mainPackage"
+                                    label="User Packages"
+                                    placeholder="Select User Package"
+                                    icon={<Package className="w-5 h-5" />}
+                                    options={packages}
                                 />
-                            </div>
+                            ) : (
+                                <DropDownToSendObject
+                                    name="mainService"
+                                    label="Service"
+                                    placeholder="Select Service"
+                                    icon={<Package className="w-5 h-5" />}
+                                    options={allServices}
+                                    setFormData={setFormData}
+                                    valueExtractor={(opt) => String(opt.service_id)}
+                                    getOptionLabel={(opt) => opt.service_name?.[0] || 'Unknown'}
+                                />
+                            )}
+                        </div>
 
-                            <div className="flex items-center justify-between gap-4">
+                        {/* ── Extra Services (services tab only) ── */}
+                        {!userPackageInput && (
+                            <div className="mb-8">
+                                <label className="text-sm font-medium text-gray-700 block mb-3">
+                                    Extra Services
+                                </label>
+
+                                {/* Selected extras chips */}
+                                {formData.extraServices.length > 0 && (
+                                    <div className="flex flex-wrap gap-3 mb-4">
+                                        {formData.extraServices.map((s) => (
+                                            <div
+                                                key={s.id}
+                                                className="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-green-400 bg-green-50 text-sm font-medium text-gray-800 animate-slide-up"
+                                            >
+                                                <span>{s.name}</span>
+                                                <span className="text-xs text-green-600 font-semibold">×{s.quantity}</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveExtra(s.id)}
+                                                    className="ml-1 text-red-400 hover:text-red-600 transition-colors"
+                                                >
+                                                    <X className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Add button */}
                                 <button
                                     type="button"
-                                    onClick={onBack}
-                                    className="flex-1 md:flex-none md:px-16 py-2 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all duration-200"
+                                    onClick={() => setIsExtraModalOpen(true)}
+                                    disabled={availableExtras.length === 0}
+                                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                                 >
-                                    Back
+                                    <Plus className="w-4 h-4" />
+                                    {availableExtras.length === 0
+                                        ? 'Select a service first'
+                                        : 'Add Extra Service'}
                                 </button>
-                                <Button
-                                    type="submit"
-                                    disabled={!isValid}
-                                    className="flex-1 md:flex-none bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-4 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                                >
-                                    Next
-                                </Button>
                             </div>
-                        </Form>
-                    );
-                }}
+                        )}
+
+                        {/* ── Service Boy ── */}
+                        <div className="mb-8 md:w-1/2 w-full">
+                            <DropDownToSendObject
+                                name="serviceBoy"
+                                label="Service Boy"
+                                placeholder="Select Service Boy"
+                                setFormData={setFormData}
+                                icon={<PersonStanding className="w-5 h-5" />}
+                                options={available_service_boys}
+                            />
+                        </div>
+
+                        {/* ── Navigation ── */}
+                        <div className="flex items-center justify-between gap-4">
+                            <button
+                                type="button"
+                                onClick={onBack}
+                                className="flex-1 md:flex-none md:px-16 py-2 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all duration-200"
+                            >
+                                Back
+                            </button>
+                            <Button
+                                type="submit"
+                                disabled={!isValid}
+                                className="flex-1 md:flex-none bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-4 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            >
+                                Next
+                            </Button>
+                        </div>
+
+                        {/* ── Extra Service Modal ── */}
+                        {isExtraModalOpen && (
+                            <ExtraServiceModal
+                                onClose={() => setIsExtraModalOpen(false)}
+                                availableExtras={availableExtras}
+                                selectedExtras={formData.extraServices}
+                                onConfirm={(updated) =>
+                                    setFormData((prev) => ({ ...prev, extraServices: updated }))
+                                }
+                            />
+                        )}
+                    </Form>
+                )}
             </Formik>
         </main>
     );

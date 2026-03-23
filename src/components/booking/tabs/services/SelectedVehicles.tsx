@@ -79,16 +79,51 @@ export const FormSelectedVehicles = ({
                                 <X className="w-5 h-5" />
                             </button>
 
-                            <h3 className="font-bold text-lg text-gray-900 mb-2">
-                                {vehicle.vehicle_name}
-                            </h3>
+                            {/* Vehicle image */}
+                            <div className="flex items-center justify-center mb-3">
+                                <img src={car} alt={vehicle.vehicle_name} className="w-full h-28 object-contain" />
+                            </div>
 
-                            <div className="flex items-center justify-center h-32">
-                                <img
-                                    src={car}
-                                    alt={vehicle.vehicle_name}
-                                    className="w-full h-full object-contain"
-                                />
+                            {/* Name header */}
+                            <div className="text-left mb-3 border-b border-gray-100 pb-3">
+                                <h3 className="font-bold text-gray-900 leading-tight">{vehicle.vehicle_name}</h3>
+                                {vehicle.vehicle_name_arabic && (
+                                    <p className="text-xs text-gray-400 mt-0.5 text-right" dir="rtl">{vehicle.vehicle_name_arabic}</p>
+                                )}
+                            </div>
+
+                            {/* Detail grid */}
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-left">
+                                {vehicle.make_name && (
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Make</span>
+                                        <span className="text-sm font-semibold text-gray-700 truncate">{vehicle.make_name}</span>
+                                    </div>
+                                )}
+                                {vehicle.model_name && (
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Model</span>
+                                        <span className="text-sm font-semibold text-gray-700 truncate">{vehicle.model_name}</span>
+                                    </div>
+                                )}
+                                {vehicle.plate_number && (
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Plate No.</span>
+                                        <span className="text-sm font-semibold text-gray-700 truncate">{vehicle.plate_number}</span>
+                                    </div>
+                                )}
+                                {vehicle.color_name && (
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Color</span>
+                                        <div className="flex items-center gap-1.5 mt-0.5">
+                                            <span
+                                                className="inline-block w-3 h-3 rounded-full border border-gray-200 shrink-0"
+                                                style={{ backgroundColor: vehicle.color_name }}
+                                            />
+                                            <span className="text-sm font-semibold text-gray-700 truncate">{vehicle.color_name}</span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}

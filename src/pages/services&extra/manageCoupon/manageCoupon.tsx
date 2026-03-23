@@ -66,7 +66,7 @@ export default function ManageCoupon() {
                 <Formik
                     initialValues={{
                         search: '',
-                        export: '',
+                        export: '', 
                     }}
                     onSubmit={(values) => {
                         handleSubmit(values)

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { IoCallOutline, IoLocationOutline } from 'react-icons/io5';
-import { Calendar, Clock } from 'lucide-react';
+import { Calendar, Clock, User, Hash, MapPin, Car, UserX } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { servicesStep1Schema } from '../../../../../constants/validationSchema';
@@ -42,7 +42,7 @@ export default function ServicesStep1({
             },
         },
     });
-
+    
     const handlePhoneBlur = (phone: string) => {
         if (!phone) return;
 
@@ -53,26 +53,24 @@ export default function ServicesStep1({
         mutate({ phone_number: cleanPhone } as getUserInfoByNumberPayload);
     };
 
+    const [clientNotFound, setClientNotFound] = useState(false);
+
     useEffect(() => {
         if (data?.data.user_info) {
             setFormData({ ...formData, userDetails: data.data.user_info });
+            setClientNotFound(false);
         }
     }, [data]);
 
     useEffect(() => {
         if (isError && error) {
-            toast.error(error.message);
+            setClientNotFound(true);
         }
     }, [isError, error]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            toast.success('The Process Of Fetchong Data Has Successfuly');
-        }
-    }, [isSuccess]);
-
     const locations = data?.data.locations;
     const vehiclesData = data?.data.vehicles;
+    const userInfo = data?.data.user_info;
 
 
     return (
@@ -86,6 +84,65 @@ export default function ServicesStep1({
                 <h2 className="text-2xl font-bold text-gray-900 mb-8">
                     Enter reservation data
                 </h2>
+                  {/* Client info card */}
+                            {userInfo && (
+                                <div
+                                    className="mb-8 rounded-2xl border border-green-200 bg-green-50 p-5 flex items-start gap-4 animate-slide-up"
+                                >
+                                    <div className="shrink-0 w-11 h-11 rounded-full bg-green-100 flex items-center justify-center">
+                                        <User className="w-5 h-5 text-green-600" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-semibold text-green-800 mb-1">Client Found</p>
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+                                            <div className="flex items-center gap-2">
+                                                <User className="w-4 h-4 text-green-500" />
+                                                <div>
+                                                    <p className="text-xs text-green-500">Name</p>
+                                                    <p className="text-sm font-medium text-gray-800">{userInfo.name}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Hash className="w-4 h-4 text-green-500" />
+                                                <div>
+                                                    <p className="text-xs text-green-500">User ID</p>
+                                                    <p className="text-sm font-medium text-gray-800">#{userInfo.user_id}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <MapPin className="w-4 h-4 text-green-500" />
+                                                <div>
+                                                    <p className="text-xs text-green-500">Saved Locations</p>
+                                                    <p className="text-sm font-medium text-gray-800">{locations?.length ?? 0}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Car className="w-4 h-4 text-green-500" />
+                                                <div>
+                                                    <p className="text-xs text-green-500">Vehicles</p>
+                                                    <p className="text-sm font-medium text-gray-800">{vehiclesData?.length ?? 0}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Client not-found card */}
+                            {clientNotFound && !userInfo && (
+                                <div
+                                    className="mb-8 rounded-2xl border border-red-200 bg-red-50 p-5 flex items-center gap-4 animate-slide-up"
+                                >
+                                    <div className="shrink-0 w-11 h-11 rounded-full bg-red-100 flex items-center justify-center">
+                                        <UserX className="w-5 h-5 text-red-500" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-semibold text-red-700">No client found</p>
+                                        <p className="text-xs text-red-400 mt-0.5">No account is linked to this phone number.</p>
+                                    </div>
+                                </div>
+                            )}
+
 
                 <Formik
                     initialValues={{
@@ -99,7 +156,6 @@ export default function ServicesStep1({
                     onSubmit={(values) => {
                         setFormData((prev) => {
                             const updated = { ...prev, ...values };
-                            console.log(updated);
                             return updated;
                         });
                         onNext();
@@ -115,7 +171,10 @@ export default function ServicesStep1({
                                     placeholder="User phone number"
                                     type="tel"
                                     icon={<IoCallOutline className="w-5 h-5" />}
-                                    onBlur={(value) => handlePhoneBlur(value)}
+                                    onBlur={(value) => {
+                                        setClientNotFound(false);
+                                        handlePhoneBlur(value);
+                                    }}
                                 />
 
                                 <div className="mt-2">
@@ -129,6 +188,7 @@ export default function ServicesStep1({
                                 </div>
                             </div>
 
+                          
                             <div className="mb-8">
                                 <FormSelectedVehicles
                                     name="vehicles"
