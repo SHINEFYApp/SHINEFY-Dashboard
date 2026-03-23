@@ -79,7 +79,7 @@ export default function StepsRender({
             ),
         },
     ];
-
+    console.log(formData)
     const stepToRender =
         activeTab === "services"
         ? steps.find((el) => el.id === currentStep)

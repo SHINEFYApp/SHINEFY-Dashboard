@@ -27,6 +27,7 @@ import AddMainArea from './pages/Geography&Regions/subPagesAddAreas/addMainArea'
 import AddSubArea from './pages/Geography&Regions/subPagesAddAreas/addSubArea';
 import ManagePackage from './pages/services&extra/managePackage/managePackage';
 import AddNewPackage from './pages/services&extra/managePackage/addNewPackage';
+import UpdatePackage from './pages/services&extra/managePackage/updatePackage';
 import ManageVat from './pages/Financial & Points/manageVat';
 import ManageDriverCommission from './pages/Financial & Points/manageDriverCommission';
 import ManageBonusPoint from './pages/Financial & Points/manageBonusPoint';
@@ -77,6 +78,7 @@ export const RoutesPages = () => {
         <Route path="/services&extra/manage/coupon/addCoupon" element={<AddCoupon />} />
         <Route path="/services&extra/manage/package" element={<ManagePackage />} />
         <Route path="/services&extra/manage/Package/addPackage" element={<AddNewPackage />} />
+        <Route path="/services&extra/manage/Package/updatePackage/:id" element={<UpdatePackage />} />
         <Route path="/vehicles/manage" element={<ManageVehicles />} />
         <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
         <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />

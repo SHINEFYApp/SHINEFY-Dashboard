@@ -6,34 +6,41 @@ import { userWalletInitialValues } from "../../constants/initialValues";
 import { FormInput } from "../../common/FormInput";
 import { FormDropdown } from "../../common/FormDropdown";
 import { CustomTable } from "../../common/CustomTable";
-import { dummyUserWallets, exportTypes } from "../../constants/data";
-import type { userWalletFormData } from "../../types/forms";
 import type { FilterFormValuesOnlySearch } from "../../types/bookings";
 import { Search } from "lucide-react";
+import { useGetWallets, useAddWallet, useExportWallets } from "../../api/features/wallets.hooks";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGetUsers } from "../../api/features/ManageUsers.hooks";
 
 const columns = [
     {
-        key: "userName",
+        key: "name",
         title: "User Name",
     },
     {
-        key: "mobileNumber",
+        key: "phone_number",
         title: "Mobile Number",
     },
     {
-        key: "amountType",
-        title: "Amount typr",
+        key: "amount_type",
+        title: "Amount Type",
+        render: (type: string) => (
+            <span className={type === "Credit" ? "text-green-600 font-bold" : "text-red-500 font-bold"}>
+                {type}
+            </span>
+        )
     },
     {
-        key: "type",
-        title: "Type",
+        key: "amount",
+        title: "Amount", // Renamed from Type for clarity, though design might say Type
     },
     {
         key: "reason",
         title: "Reason",
     },
     {
-        key: "createDateAndTime",
+        key: "createtime",
         title: "Create Date & Time",
     }
 ]
@@ -41,10 +48,34 @@ const columns = [
 export default function UsersWallets() {
     const [openWindowAddAmount, setOpenWindowAddAmount] = useState<boolean>();
     const [currentBayMethod, setCurrentBayMethod] = useState<string>('Credit');
-    const [formData, setFormData] = useState<userWalletFormData>({
-        user: '',
-        amount: '',
-        payMethod: '',
+    const queryClient = useQueryClient();
+
+    // Fetch users for dropdown
+    const { data: usersData } = useGetUsers({ page: 1, limit: 100 }); // Adjust limit or add search if needed
+    const userOptions = usersData?.data?.users?.map((u: any) => ({
+        label: u.name || `User ${u.id}`,
+        value: u.id
+    })) || [];
+
+    const { mutate: addWallet, isPending: isAdding } = useAddWallet({
+        onSuccess: () => {
+            toast.success("Amount added successfully");
+            setOpenWindowAddAmount(false);
+            queryClient.invalidateQueries({ queryKey: ["wallets"] });
+        },
+        onError: (err: any) => {
+            toast.error(err.response?.data?.message || "Failed to add amount");
+        }
+    });
+
+    const { mutate: exportWallets } = useExportWallets({
+        onSuccess: (data: any) => {
+            // Check if data is URL or blob? Assuming simple success for now.
+            toast.success("Export started");
+        },
+        onError: (err: any) => {
+            toast.error("Failed to export");
+        }
     });
     const payMethods = [
         'Credit',
@@ -52,19 +83,30 @@ export default function UsersWallets() {
     ];
 
     const handleSubmit = (values: FilterFormValuesOnlySearch) => {
-        console.log("Search values:", values);
+        setSearch(values.search);
+        setCurrentPage(1);
     };
 
     useEffect(() => {
-        setFormData(prev => ({ ...prev, payMethod: currentBayMethod }));
+        // Just updating state for visual toggle if needed, or remove effect if not used
     }, [currentBayMethod]);
 
     const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState("");
     const pageSize = 10;
-    
 
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
+    const { data, isLoading } = useGetWallets({
+        start: (currentPage - 1) * pageSize,
+        limit: pageSize,
+        search_text: search
+    });
+
+    const walletsRaw = data?.data?.data?.wallets; // Response -> Body -> Data -> Wallets
+    const wallets = (Array.isArray(walletsRaw) ? walletsRaw : []) as any[];
+    const pagination = data?.data?.data?.pagination;
+
+    const totalEntries = pagination?.total_items || 0;
+    const totalPages = pagination?.total_pages || 0;
 
 
     const handlePageChange = (page: number) => {
@@ -117,7 +159,13 @@ export default function UsersWallets() {
                                                 </button>
                                                 <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                                                 <div className="w-full lg:w-[135px]">
-                                                    <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2 w-full" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => exportWallets({})}
+                                                        className="w-full py-3 bg-[#C9FFCB] rounded-lg text-[#4CAF50] border border-[#4CAF50] font-semibold transition-all hover:bg-[#4CAF50] hover:text-white"
+                                                    >
+                                                        Export
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -126,16 +174,19 @@ export default function UsersWallets() {
                             )}
                         </Formik>
                     </div>
-                    {/* table */}
-                    <CustomTable
-                        columns={columns}
-                        data={dummyUserWallets}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        totalEntries={totalEntries}
-                        pageSize={pageSize}
-                        onPageChange={handlePageChange}
-                    />
+                    {isLoading ? (
+                        <div className="p-4 text-center">Loading...</div>
+                    ) : (
+                        <CustomTable
+                            columns={columns}
+                            data={wallets}
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            totalEntries={totalEntries}
+                            pageSize={pageSize}
+                            onPageChange={handlePageChange}
+                        />
+                    )}
                 </div>
             </main>
             {/* popup window  */}
@@ -155,7 +206,18 @@ export default function UsersWallets() {
                             initialValues={userWalletInitialValues}
                             validationSchema={userWalletSchema}
                             onSubmit={(values) => {
-                                setFormData({ ...formData, ...values });
+                                // Map form values to API payload
+                                // Request says: user_type=0, optradio=0, bonus_percentage=1 (defaults?)
+                                // Form has: user, amount, payMethod (via state currentBayMethod)
+                                const payload = {
+                                    user_type: 0,
+                                    users: values.user ? [Number(values.user)] : [], // Assuming user is ID
+                                    optradio: 0, // 0 for amount?
+                                    amount: Number(values.amount),
+                                    bonus_percentage: 1, // Default from request
+                                    // Add logic for payMethod if API supports it? API doesn't seem to show payMethod in POST /addWallet params provided
+                                };
+                                addWallet(payload);
                             }}
                         >
                             {({ isValid }) => (
@@ -165,11 +227,7 @@ export default function UsersWallets() {
                                             name="user"
                                             label="Select User"
                                             placeholder="Select User"
-                                            options={[
-                                                'user one',
-                                                'user two',
-                                                'user three'
-                                            ]}
+                                            options={userOptions as any}
                                         />
                                     </div>
                                     <div className="w-[376px] flex items-center justify-center gap-5 py-10">
@@ -204,7 +262,7 @@ export default function UsersWallets() {
                                             disabled={!isValid}
                                             className="bg-primary hover:bg-primary-600 text-gray-900 font-bold w-[429px] h-[58px] rounded-xl text-[20px] shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                         >
-                                            Submit
+                                            {isAdding ? "Submitting..." : "Submit"}
                                         </Button>
                                     </div>
                                 </Form>

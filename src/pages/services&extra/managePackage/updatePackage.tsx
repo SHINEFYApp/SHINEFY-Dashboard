@@ -1,16 +1,16 @@
 import { Form, Formik } from "formik";
 import { FormInput } from "../../../common/FormInput";
 import { FormDropdown } from "../../../common/FormDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { managePackageAddPackageFormValues } from "../../../constants/initialValues";
 import { TextArea } from "../../../common/textArea";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
-import { useAddPackage } from "../../../api/features/packages.hooks";
+import { usePackageDetails, useUpdatePackage } from "../../../api/features/packages.hooks";
 import { availableExtraServices } from "../../../constants/data";
 import { addPackageSchema } from "../../../constants/validationSchema";
 
-// Mock services for Main Services (since no API available)
+// Mock services for Main Services (same as Add)
 const availableMainServices = [
     { id: 16, name: "Service one" },
     { id: 17, name: "Service two" },
@@ -20,6 +20,10 @@ const availableMainServices = [
 const mapServiceId = (name: string, list: any[]) => {
     const found = list.find(item => item.name === name);
     return found ? Number(found.id) : 0;
+};
+const mapServiceName = (id: number, list: any[]) => {
+    const found = list.find(item => Number(item.id) === Number(id));
+    return found ? found.name : "";
 };
 
 
@@ -63,24 +67,70 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({ title, count, setCount,
     );
 };
 
-export default function AddNewPackage() {
+export default function UpdatePackage() {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [mainPackageServices, setMainPackageServices] = useState<number>(1);
     const [extraPackageServices, setExtraPackageServices] = useState<number>(1);
-    const initialValues: managePackageAddPackageFormValues = {};
-    const navigate = useNavigate();
+    const [initialValues, setInitialValues] = useState<managePackageAddPackageFormValues>({});
 
-    const { mutate: addPackage, isPending } = useAddPackage({
+    const { data: packageDetails, isLoading } = usePackageDetails(id as string, {
+        enabled: !!id,
+    });
+
+    const { mutate: updatePackage, isPending } = useUpdatePackage({
         onSuccess: () => {
-            toast.success("Package added successfully");
+            toast.success("Package updated successfully");
             navigate("/services&extra/manage/Package");
         },
         onError: (err: any) => {
-            toast.error(err.response?.data?.message || "Failed to add package");
+            toast.error(err.response?.data?.message || "Failed to update package");
         }
     });
 
+    useEffect(() => {
+        if (packageDetails) {
+            const pkg = packageDetails.data; // adjust based on response structure
+            // If response is nested: pkg = packageDetails.data or packageDetails
+            // Assuming packageDetails is the Payload from API. 
+            // BUT api/features/packages.ts says: getPackageDetails returns res.data.
+            // Check response structure for single package. Usually { status: "success", data: { ... } } or just { ... }
+
+            // Map main services
+            const mainSvcs = pkg.main_services || [];
+            if (mainSvcs.length > 0) setMainPackageServices(mainSvcs.length);
+
+            // Map extra services
+            const extraSvcs = pkg.extra_services || [];
+            if (extraSvcs.length > 0) setExtraPackageServices(extraSvcs.length);
+
+            const values: managePackageAddPackageFormValues = {
+                packageNameEnglish: pkg.name,
+                packageNameArabic: pkg.name_ar,
+                englishPackageDescription: pkg.description,
+                arabicPackageDescription: pkg.description_ar,
+                packagePrice: String(pkg.price),
+                packageTotalDays: String(pkg.total_days),
+                type: pkg.schedule_type,
+                interval: pkg.schedule_interval,
+            };
+
+            mainSvcs.forEach((svc: any, idx: number) => {
+                values[`mainPackageService_${idx + 1}`] = mapServiceName(svc.service_id, availableMainServices);
+                values[`mainPackageQuantity_${idx + 1}`] = String(svc.quantity);
+            });
+
+            extraSvcs.forEach((svc: any, idx: number) => {
+                values[`extraPackageService_${idx + 1}`] = mapServiceName(svc.extra_service_id, availableExtraServices);
+                values[`extraPackageQuantity_${idx + 1}`] = String(svc.quantity);
+            });
+
+            setInitialValues(values);
+        }
+    }, [packageDetails]);
+
     const handleSubmit = (values: managePackageAddPackageFormValues) => {
-        // Transform values to api payload
+        // Transform values to api payload (Same as Add)
         const main_services = [];
         for (let i = 1; i <= mainPackageServices; i++) {
             const name = values[`mainPackageService_${i}`];
@@ -111,7 +161,7 @@ export default function AddNewPackage() {
             description: values.englishPackageDescription || null,
             description_ar: values.arabicPackageDescription || null,
             price: Number(values.packagePrice),
-            total_used: 0, // Default?
+            total_used: 0,
             total_days: Number(values.packageTotalDays),
             schedule_type: values.type || "pre_schedule",
             schedule_interval: values.interval || "daily",
@@ -119,17 +169,19 @@ export default function AddNewPackage() {
             extra_services
         };
 
-        console.log("Submitting Payload:", payload);
         // @ts-ignore
-        addPackage(payload);
+        updatePackage({ id, data: payload });
     };
+
+    if (isLoading) return <div>Loading...</div>;
 
     return (
         <main className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen">
-            <h1 className="text-[20px] font-bold pb-3 mb-10 border-b border-black/10">Add New Package</h1>
+            <h1 className="text-[20px] font-bold pb-3 mb-10 border-b border-black/10">Update Package</h1>
             <Formik
                 initialValues={initialValues}
                 validationSchema={addPackageSchema}
+                enableReinitialize
                 onSubmit={handleSubmit}
             >
                 {({ isValid }) => (
@@ -179,7 +231,7 @@ export default function AddNewPackage() {
                                     name='type'
                                     label="Type"
                                     placeholder="Type"
-                                    options={["Type one", "Type two", "type three"]}
+                                    options={["pre_schedule", "schedule"]} // Assuming mock values
                                 />
                                 <TextArea
                                     name="englishPackageDescription"
@@ -192,7 +244,7 @@ export default function AddNewPackage() {
                                     name='interval'
                                     label="Interval"
                                     placeholder="Interval"
-                                    options={["Interval one", "Interval two", "Interval three"]}
+                                    options={["daily", "weekly", "monthly"]} // Assuming mock values
                                 />
                                 <TextArea
                                     name="arabicPackageDescription"
@@ -206,7 +258,7 @@ export default function AddNewPackage() {
                             disabled={!isValid || isPending}
                             className="w-[376px] py-3 bg-[#FFC107] rounded-[10px] text-[20px] font-bold mt-10 hover:bg-[#e6ac00] transition-all disabled:opacity-50"
                         >
-                            {isPending ? "Submitting..." : "Submit"}
+                            {isPending ? "Updating..." : "Update"}
                         </button>
                     </Form>
                 )}

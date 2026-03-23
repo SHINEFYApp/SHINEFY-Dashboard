@@ -13,9 +13,9 @@ import { SkeletonDemo } from '../../../../../common/loader';
 import { DropDownToSendObject } from '../../../../../common/DropDownToSendObject ';
 import { TicketSlash } from 'lucide-react';
 
-const ServicesStep3 = ({ 
-    onNext, 
-    onBack, 
+const ServicesStep3 = ({
+    onNext,
+    onBack,
     formData,
     setFormData
 }: stepsProps) => {
@@ -24,13 +24,13 @@ const ServicesStep3 = ({
     const handlePaymentSelect = (method: string, setFieldValue: any) => {
         setSelectedPayment(method);
         setFieldValue('paymentMethod', method);
-        setFormData({...formData , paymentMethod: method });
+        setFormData({ ...formData, paymentMethod: method });
     };
 
     const baseURL = import.meta.env.VITE_API_URL;
-    const route = `${baseURL}/admin/api/coupons`;
+    const route = `${baseURL}/api/coupons`;
     // Fetch data
-    const { data, isLoading, isError, isSuccess , error } = useGet({
+    const { data, isLoading, isError, isSuccess, error } = useGet({
         queryFn: () => getCoupons(route),
         queryKey: ["coupons"],
         options: { staleTime: 1000 * 10 },
@@ -41,7 +41,7 @@ const ServicesStep3 = ({
             toast.error(error.message);
         }
     }, [isError, error]);
-    
+
     useEffect(() => {
         if (isSuccess) {
             toast.success('The Process Of Fetchong Data Has Successfuly');
@@ -71,7 +71,7 @@ const ServicesStep3 = ({
                 enableReinitialize
                 onSubmit={(values) => {
                     setFormData((prev) => {
-                        const updated = { ...prev, ...values};
+                        const updated = { ...prev, ...values };
                         console.log(updated);
                         return updated;
                     });
@@ -87,7 +87,7 @@ const ServicesStep3 = ({
                                 label="Coupon"
                                 placeholder="Select Coupon"
                                 icon={<TicketSlash className="w-5 h-5" />}
-                                options={coupons} 
+                                options={coupons}
                             />
                         </div>
 
@@ -131,7 +131,7 @@ const ServicesStep3 = ({
                                     placeholder="Wallet Amount"
                                     onChange={(e) => {
                                         setFieldValue('walletAmount', e.target.value);
-                                        setFormData({...formData , walletAmount: e.target.value });
+                                        setFormData({ ...formData, walletAmount: e.target.value });
                                     }}
                                     className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3.5 pl-12 text-sm font-medium text-gray-400"
                                 />

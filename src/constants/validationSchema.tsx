@@ -76,12 +76,12 @@ export const servicesStep1Schema = Yup.object({
 
 
 export const servicesBookingSchema = Yup.object({
-    mainService:  Yup.string().required(),
+    mainService: Yup.mixed().required('Please select a service'),
     serviceBoy: Yup.object().required('Please select a service boy'),
 });
 
 export const packageBookingSchema = Yup.object({
-    mainService:  Yup.string().required(),
+    mainService: Yup.mixed().required('Please select a service'),
     mainPackage: Yup.object().required('Please select a package'),
     serviceBoy: Yup.object().required('Please select a service boy'),
 });

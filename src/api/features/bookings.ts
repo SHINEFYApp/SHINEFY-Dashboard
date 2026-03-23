@@ -20,3 +20,8 @@ export const getPackage = async (route: string, params?: any) => {
     const res: AxiosResponse = await getService(route, params ? params : null);
     return res.data;
 }
+
+export const getServices = async (route: string, params?: any) => {
+    const res: AxiosResponse = await getService(route, params ? params : null);
+    return res.data;
+}

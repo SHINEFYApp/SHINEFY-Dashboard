@@ -32,7 +32,7 @@ const ManageMake = () => {
 
     // Add make using usePost hook
     const addMakeMutation = usePost<any, FormData>({
-        route: `${baseURL}/admin/api/makes`,
+        route: `${baseURL}/api/makes`,
         options: {
             onSuccess: () => {
                 toast.success('Make added successfully');

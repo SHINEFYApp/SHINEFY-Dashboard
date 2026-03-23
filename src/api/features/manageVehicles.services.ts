@@ -80,32 +80,32 @@ export interface CategoriesParams {
 }
 
 export const addUserVehicle = async (data: StoreVehiclePayload) => {
-    const res: AxiosResponse = await postService("/admin/api/vehicles/store", data);
+    const res: AxiosResponse = await postService("/api/vehicles/store", data);
     return res.data;
 };
 
 export const getUserVehicles = async (data: VehicleLookupsPayload) => {
-    const res: AxiosResponse = await postService("/admin/api/vehicles/lookups", data);
+    const res: AxiosResponse = await postService("/api/vehicles/lookups", data);
     return res.data;
 };
 
 export const getModelsByMake = async (makeId: number) => {
-    const res: AxiosResponse = await getService(`/admin/api/vehicles/models/${makeId}`);
+    const res: AxiosResponse = await getService(`/api/vehicles/models/${makeId}`);
     return res.data;
 }
 
 export const getModelsList = async (params: ModelsParams) => {
-    const res: AxiosResponse = await getService("/admin/api/models", params);
+    const res: AxiosResponse = await getService("/api/models", params);
     return res.data;
 }
 
 export const addModel = async (data: ModelPayload) => {
-    const res: AxiosResponse = await postService("/admin/api/models", data);
+    const res: AxiosResponse = await postService("/api/models", data);
     return res.data;
 }
 
 export const updateModel = async (data: UpdateModelPayload) => {
-    const res: AxiosResponse = await putService("/admin/api/models", data);
+    const res: AxiosResponse = await putService("/api/models", data);
     return res.data;
 }
 
@@ -115,62 +115,62 @@ export const deleteModel = async (modelId: number) => {
 }
 
 export const getMakesList = async (params: MakesParams) => {
-    const res: AxiosResponse = await getService("/admin/api/makes", params);
+    const res: AxiosResponse = await getService("/api/makes", params);
     return res.data;
 }
 
 export const addMake = async (data: MakePayload | FormData) => {
-    const res: AxiosResponse = await postService("/admin/api/makes", data);
+    const res: AxiosResponse = await postService("/api/makes", data);
     return res.data;
 }
 
 export const updateMake = async (data: UpdateMakePayload | FormData) => {
-    const res: AxiosResponse = await putService("/admin/api/makes", data);
+    const res: AxiosResponse = await putService("/api/makes", data);
     return res.data;
 }
 
 export const deleteMake = async (makeId: number) => {
-    const res: AxiosResponse = await deleteService(`/admin/api/makes/${makeId}`);
+    const res: AxiosResponse = await deleteService(`/api/makes/${makeId}`);
     return res.data;
 }
 
 export const getColorsList = async (params: ColorsParams) => {
-    const res: AxiosResponse = await getService("/admin/api/colors", params);
+    const res: AxiosResponse = await getService("/api/colors", params);
     return res.data;
 }
 
 export const addColor = async (data: ColorPayload) => {
-    const res: AxiosResponse = await postService("/admin/api/colors", data);
+    const res: AxiosResponse = await postService("/api/colors", data);
     return res.data;
 }
 
 export const updateColor = async (data: UpdateColorPayload) => {
-    const res: AxiosResponse = await putService("/admin/api/colors", data);
+    const res: AxiosResponse = await putService("/api/colors", data);
     return res.data;
 }
 
 export const deleteColor = async (colorId: number) => {
-    const res: AxiosResponse = await deleteService(`/admin/api/colors/${colorId}`);
+    const res: AxiosResponse = await deleteService(`/api/colors/${colorId}`);
     return res.data;
 }
 
 export const getCategoriesList = async (params: CategoriesParams) => {
-    const res: AxiosResponse = await getService("/admin/api/categories", params);
+    const res: AxiosResponse = await getService("/api/categories", params);
     return res.data;
 }
 
 export const addCategory = async (data: CategoryPayload | FormData) => {
-    const res: AxiosResponse = await postService("/admin/api/categories", data);
+    const res: AxiosResponse = await postService("/api/categories", data);
     return res.data;
 }
 
 export const updateCategory = async (data: UpdateCategoryPayload | FormData) => {
-    const res: AxiosResponse = await putService("/admin/api/categories", data);
+    const res: AxiosResponse = await putService("/api/categories", data);
     return res.data;
 }
 
 export const deleteCategory = async (categoryId: number) => {
-    const res: AxiosResponse = await deleteService(`/admin/api/categories/${categoryId}`);
+    const res: AxiosResponse = await deleteService(`/api/categories/${categoryId}`);
     return res.data;
 }
 

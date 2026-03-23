@@ -37,6 +37,7 @@ interface FilterHeaderProps {
     // Export Dropdown (optional)
     showExport?: boolean;
     exportOptions?: string[];
+    onExport?: (value: string) => void;
 }
 
 export const FilterHeader = ({
@@ -51,7 +52,8 @@ export const FilterHeader = ({
     filterFields,
     actionButtons = [],
     showExport = true,
-    exportOptions = ['PDF', 'Excel', 'CSV']
+    exportOptions = ['PDF', 'Excel', 'CSV'],
+    onExport
 }: FilterHeaderProps) => {
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
@@ -157,6 +159,7 @@ export const FilterHeader = ({
                                                     label=""
                                                     placeholder="Export"
                                                     options={exportOptions}
+                                                    onChangeExternal={onExport}
                                                     className="mb-2 w-full"
                                                 />
                                             </div>

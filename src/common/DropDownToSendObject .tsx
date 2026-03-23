@@ -12,7 +12,9 @@ export interface DropDownToSendObjectProps<T> {
   disabled?: boolean;
   className?: string;
   moreOptions?: string;
+  setFormData?: React.Dispatch<React.SetStateAction<any>>;
   getOptionLabel?: (option: T) => string; 
+  valueExtractor?: (option: T) => any;
 }
 
 export const DropDownToSendObject = <T,>({
@@ -25,12 +27,13 @@ export const DropDownToSendObject = <T,>({
   className,
   moreOptions,
   getOptionLabel,
+  valueExtractor,
+  setFormData
 }: DropDownToSendObjectProps<T>) => {
   const [field, meta] = useField<T | undefined>(name);
   const { setFieldValue, setFieldTouched } = useFormikContext<any>();
   const [isOpen, setIsOpen] = useState(false);
-
-  const hasError = meta.touched && meta.error;
+    const hasError = meta.touched && meta.error;
   const isValid = meta.touched && !meta.error && field.value;
 
   // دالة آمنة لتحويل أي object إلى نص للعرض فقط
@@ -44,12 +47,19 @@ export const DropDownToSendObject = <T,>({
     return '';
   };
 
+  // الحصول على الكائن الفعلي للحصول على label
+  const matchedOption = (valueExtractor && field.value !== undefined && field.value !== null && typeof field.value !== 'object')
+      ? options?.find((opt) => valueExtractor(opt) === field.value)
+      : field.value;
+
   // النص المعروض في الزر الرئيسي
-  const selectedLabel = field.value ? safeDisplay(field.value) : '';
+  const selectedLabel = matchedOption ? safeDisplay(matchedOption as T) : '';
 
   // عند اختيار عنصر
   const handleSelect = (option: T) => {
-    setFieldValue(name, option); // ارسال object كامل
+    console.log(option)
+    setFormData((prev: any) => ({ ...prev, [name]: option }));
+    setFieldValue(name, option); 
     setFieldTouched(name, true, true);
     setIsOpen(false);
   };
