@@ -157,20 +157,6 @@ export default function AddServiceBoy() {
 
                         } catch (error: any) {
                             console.error(error);
-                            const errorData = error?.data;
-                            console.log(errorData)
-                            if (errorData?.status === 'fail' && errorData?.data && typeof errorData.data === 'object') {
-                                Object.values(errorData.data).forEach((messages: any) => {
-                                    console.log(messages)
-                                    if (Array.isArray(messages)) {
-                                        messages.forEach((msg: string) => toast.error(msg));
-                                    } else if (typeof messages === 'string') {
-                                        toast.error(messages);
-                                    }
-                                });
-                            } else {
-                                toast.error(errorData?.message || "Failed to add Service Boy");
-                            }
                         }
                     }}
                 >

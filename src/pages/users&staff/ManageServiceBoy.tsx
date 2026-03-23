@@ -5,7 +5,8 @@ import { manageServiceBoySearchInitialValues } from "../../constants/initialValu
 import { FilterHeader } from "../../common/FilterHeader";
 import { FormDatePicker } from "../../common/FormDatePicker";
 import { CustomTable } from "../../common/CustomTable";
-import { useGetServiceBoys, useDeleteServiceBoy, useUpdateServiceBoyStatus, useExportServiceBoys } from "../../api/features/serviceBoys.hooks";
+import { useGetServiceBoys, useDeleteServiceBoy, useUpdateServiceBoyStatus, useExportServiceBoys, useSetServiceBoyTemporaryOff } from "../../api/features/serviceBoys.hooks";
+import { GenericModal } from "../../common/GenericModal";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { Eye, MapPin, Clock, Trash2, Ban, ArrowUpToLine, CheckCircle } from "lucide-react";
@@ -17,6 +18,11 @@ const ManageServiceBoy = () => {
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
+
+    const [offModalOpen, setOffModalOpen] = useState(false);
+    const [selectedBoyId, setSelectedBoyId] = useState<number | null>(null);
+    const [dateFrom, setDateFrom] = useState("");
+    const [dateTo, setDateTo] = useState("");
 
     const handleSearchSubmit = (values: any) => {
         setSearch(values.search);
@@ -75,14 +81,56 @@ const ManageServiceBoy = () => {
         onError: () => toast.error("Export failed")
     });
 
+    const offMutation = useSetServiceBoyTemporaryOff({
+        onSuccess: () => {
+            toast.success("Temporary off time set successfully");
+            setOffModalOpen(false);
+            setDateFrom("");
+            setDateTo("");
+        },
+        onError: () => toast.error("Failed to set temporary off time")
+    });
+
     const handleDelete = (id: number) => {
-        if (window.confirm("Are you sure?")) {
-            deleteMutation.mutate(id);
-        }
+        toast("Are you sure you want to delete this Service Boy?", {
+            action: {
+                label: "Confirm",
+                onClick: () => deleteMutation.mutate(id)
+            }
+        });
     };
 
     const handleStatusChange = (id: number, currentStatus: number) => {
-        statusMutation.mutate({ id, data: { active_flag: currentStatus === 1 ? 0 : 1 } });
+        const newStatus = currentStatus === 1 ? 0 : 1;
+        const msg = newStatus === 1 ? "Are you sure you want to activate?" : "Are you sure you want to deactivate?";
+        toast(msg, {
+            action: {
+                label: "Confirm",
+                onClick: () => statusMutation.mutate({ id, data: { active_flag: newStatus } })
+            }
+        });
+    };
+
+    const handleOffTimeClick = (id: number) => {
+        setSelectedBoyId(id);
+        setOffModalOpen(true);
+    };
+
+    const handleOffTimeConfirm = () => {
+        if (!selectedBoyId || !dateFrom || !dateTo) {
+            toast.error("Please select both from and to dates");
+            return;
+        }
+
+        const formatDateTime = (dt: string) => dt.includes('T') ? dt.replace('T', ' ') + ':00' : dt;
+
+        offMutation.mutate({
+            id: selectedBoyId,
+            data: {
+                date_from: formatDateTime(dateFrom),
+                date_to: formatDateTime(dateTo)
+            }
+        });
     };
 
     const handleExport = (type: string) => {
@@ -143,7 +191,7 @@ const ManageServiceBoy = () => {
                     </button>
                     <button
                         className="bg-[#FFE0B2] flex items-center gap-2 rounded-[2.75px] text-[#FF9800] border border-[#FF9800] capitalize hover:text-[#FFE0B2] hover:bg-[#FF9800] px-3.5 py-3 font-semibold transition-colors"
-                        onClick={() => alert(`Off Time for ${record.user_id}`)}
+                        onClick={() => handleOffTimeClick(record.user_id)}
                     >
                         <Clock size={18} /> Off Time
                     </button>
@@ -163,7 +211,7 @@ const ManageServiceBoy = () => {
                 </div>
             ),
         }
-    ], [handleDelete, handleStatusChange]);
+    ], [handleDelete, handleStatusChange, handleOffTimeClick]);
 
     return (
         <main>
@@ -226,6 +274,48 @@ const ManageServiceBoy = () => {
                     )}
                 </div>
             </div>
+
+            <GenericModal
+                isOpen={offModalOpen}
+                onClose={() => setOffModalOpen(false)}
+                title="Set Temporary Off Time"
+                subtitle="Select the start and end time for this Service Boy to be offline."
+            >
+                <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-bold text-gray-700">Date & Time From</label>
+                        <input
+                            type="datetime-local"
+                            value={dateFrom}
+                            onChange={(e) => setDateFrom(e.target.value)}
+                            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-black"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-bold text-gray-700">Date & Time To</label>
+                        <input
+                            type="datetime-local"
+                            value={dateTo}
+                            onChange={(e) => setDateTo(e.target.value)}
+                            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-black"
+                        />
+                    </div>
+                </div>
+                <div className="flex justify-end gap-4 mt-8">
+                    <button
+                        className="px-6 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+                        onClick={() => setOffModalOpen(false)}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        className="px-6 py-2 rounded-lg font-bold text-black bg-[#FFC107] hover:bg-yellow-500 transition-colors"
+                        onClick={handleOffTimeConfirm}
+                    >
+                        Confirm Off Time
+                    </button>
+                </div>
+            </GenericModal>
         </main>
     );
 };

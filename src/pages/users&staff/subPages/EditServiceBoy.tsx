@@ -177,18 +177,6 @@ export default function EditServiceBoy() {
 
                         } catch (error: any) {
                             console.error(error);
-                            const errorData = error?.data || error?.response?.data;
-                            if (errorData?.status === 'fail' && errorData?.data && typeof errorData.data === 'object') {
-                                Object.values(errorData.data).forEach((messages: any) => {
-                                    if (Array.isArray(messages)) {
-                                        messages.forEach((msg: string) => toast.error(msg));
-                                    } else if (typeof messages === 'string') {
-                                        toast.error(messages);
-                                    }
-                                });
-                            } else {
-                                toast.error(errorData?.message || "Failed to update Service Boy");
-                            }
                         }
                     }}
                 >

@@ -24,8 +24,9 @@ createRoot(document.getElementById('root')!).render(
               height: '80px',
               fontSize: '18px',
               padding: '16px',
-              borderRadius:"10px"
+              borderRadius:"10px",
             },
+            
           }} />
           <ReactQueryDevtools />
         </QueryClientProvider>
