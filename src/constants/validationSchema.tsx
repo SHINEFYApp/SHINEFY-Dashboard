@@ -269,7 +269,31 @@ export const addSubAdminSchema = Yup.object({
         .matches(/[@$!%*?&]/, 'Password must contain at least one special character'),
     confirmPassword: Yup.string()
         .required('Confirm Password is required')
-        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .oneOf([Yup.ref('password')], 'Passwords must match'),
+    image: Yup.mixed().nullable().notRequired()
+});
+
+export const editSubAdminSchema = Yup.object({
+    name: Yup.string().required('the name is required'),
+    phoneNumber: Yup.string().matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits').required('Phone number is required'),
+    email: Yup.string()
+        .required('Email is required')
+        .email('Invalid email address'),
+    password: Yup.string()
+        .nullable()
+        .notRequired()
+        .transform((value) => (value === '' ? null : value))
+        .min(8, 'Password must be at least 8 characters')
+        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+        .matches(/[0-9]/, 'Password must contain at least one number')
+        .matches(/[@$!%*?&]/, 'Password must contain at least one special character'),
+    confirmPassword: Yup.string()
+        .nullable()
+        .notRequired()
+        .transform((value) => (value === '' ? null : value))
+        .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    image: Yup.mixed().nullable().notRequired()
 });
 
 export const addVehicleSchema = Yup.object({

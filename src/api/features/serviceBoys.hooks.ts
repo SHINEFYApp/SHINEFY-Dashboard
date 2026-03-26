@@ -1,5 +1,5 @@
 // src/api/features/serviceBoys.hooks.ts
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useGet } from "../useGetData";
 import {
@@ -16,6 +16,8 @@ import {
     exportServiceBoysCsv,
     exportServiceBoysExcel,
     exportServiceBoysPdf,
+    getServiceBoyTrack,
+    getServiceBoyBookings,
     type GetServiceBoysParams,
     type AddServiceBoyPayload,
     type UpdateServiceBoyPayload,
@@ -105,5 +107,21 @@ export const useExportServiceBoys = (options?: any) => {
             return exportServiceBoysPdf(params);
         },
         ...options,
+    });
+};
+
+export const useGetServiceBoyTrack = (id: number | string, options?: any) => {
+    return useGet({
+        queryFn: () => getServiceBoyTrack(id),
+        queryKey: ["service-boy-track", id],
+        options: { enabled: !!id, ...options },
+    });
+};
+
+export const useGetServiceBoyBookings = (id: number | string, params?: any, options?: any) => {
+    return useGet({
+        queryFn: () => getServiceBoyBookings(id, params),
+        queryKey: ["service-boy-bookings", id, params],
+        options: { enabled: !!id, ...options },
     });
 };

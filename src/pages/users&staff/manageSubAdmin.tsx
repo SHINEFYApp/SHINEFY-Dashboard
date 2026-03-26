@@ -94,14 +94,13 @@ export default function ManageSubAdmin() {
             render: (_: any, record: any) => (
                 <div className="flex gap-2 items-center text-nowrap">
                     <Link
-                        to={`/users&staff/manage/subAdmin/${record.user_id || record.id}`}
+                        to={`/users&staff/manage/subAdmin/view/${record.user_id || record.id}`}
                         className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] px-3 py-3 font-semibold transition-colors"
                     >
                         <Eye size={18} /> View
                     </Link>
                     <Link
-                        to={`/users&staff/manage/subAdmin/${record.user_id || record.id}`}
-                        state={{ mode: 'edit' }} // Passing state to reuse page or if separate edit page exists
+                        to={`/users&staff/manage/subAdmin/edit/${record.user_id || record.id}`}
                         className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3 py-3 font-semibold transition-colors"
                     >
                         <ArrowUpToLine size={18} /> Update
