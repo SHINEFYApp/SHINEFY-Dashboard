@@ -9,7 +9,7 @@ import { useGetServiceBoys, useDeleteServiceBoy, useUpdateServiceBoyStatus, useE
 import { GenericModal } from "../../common/GenericModal";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { Eye, MapPin, Clock, Trash2, Ban, ArrowUpToLine, CheckCircle } from "lucide-react";
+import { Eye, MapPin, Clock, Trash2, Ban, ArrowUpToLine, CheckCircle, Navigation } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ManageServiceBoy = () => {
@@ -41,7 +41,7 @@ const ManageServiceBoy = () => {
     // Data Fetching
     const { data, isLoading } = useGetServiceBoys({
         limit: pageSize,
-        start: (currentPage - 1) * pageSize,
+        page: currentPage,
         search: search,
         work_status: statusFilter
     });
@@ -49,15 +49,13 @@ const ManageServiceBoy = () => {
 
     // Response structure: { status: "success", data: { data: [...] } }
     // Log showed data.data.data is { data: [...] } so we need one more level.
+    // Assuming response structure is { status: "success", data: { data: [...], pagination: {...} } }
     const serviceBoysRaw = data?.data?.data?.data;
     const serviceBoys = (Array.isArray(serviceBoysRaw) ? serviceBoysRaw : []) as any[];
 
-    // Pagination data seems missing in the provided JSON snippet. 
-    // Assuming we might need to assume a total or check if it's elsewhere.
-    // For now, let's assume total_items is returned or default to length.
-    const pagination = data?.data?.pagination;
-    const totalEntries = pagination?.total_items || serviceBoys.length;
-    const totalPages = pagination?.total_pages || Math.ceil(totalEntries / pageSize);
+    const pagination = data?.data?.data?.pagination;
+    const totalEntries = pagination?.total_items || pagination?.total || serviceBoys.length;
+    const totalPages = pagination?.total_pages || pagination?.last_page || Math.ceil(totalEntries / pageSize);
 
     // Mutations
     const deleteMutation = useDeleteServiceBoy({
@@ -171,10 +169,16 @@ const ManageServiceBoy = () => {
             render: (_: any, record: any) => (
                 <div className="flex gap-2 items-center text-nowrap">
                     <Link
-                        to={`/users&staff/manage/ServiceBoy/${record.user_id}`}
+                        to={`/users&staff/manage/serviceBoy/${record.user_id}`}
                         className="bg-[#D2E3FF] flex items-center gap-2 rounded-[2.75px] text-[#2196F3] border border-[#2196F3] capitalize hover:text-[#D2E3FF] hover:bg-[#2196F3] px-3.5 py-3 font-semibold transition-colors"
                     >
                         <Eye size={18} /> View
+                    </Link>
+                    <Link
+                        to={`/users&staff/manage/serviceBoy/track/${record.user_id}`}
+                        className="bg-[#FFF9C4] flex items-center gap-2 rounded-[2.75px] text-[#FBC02D] border border-[#FBC02D] capitalize hover:text-[#FFF9C4] hover:bg-[#FBC02D] px-3.5 py-3 font-semibold transition-colors"
+                    >
+                        <Navigation size={18} /> track
                     </Link>
                     <Link
                         to={`/users&staff/manage/serviceBoy/edit/${record.user_id}`}
@@ -283,8 +287,9 @@ const ManageServiceBoy = () => {
             >
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-bold text-gray-700">Date & Time From</label>
+                        <label htmlFor="dateFrom" className="text-sm font-bold text-gray-700">Date & Time From</label>
                         <input
+                            id="dateFrom"
                             type="datetime-local"
                             value={dateFrom}
                             onChange={(e) => setDateFrom(e.target.value)}
@@ -292,8 +297,9 @@ const ManageServiceBoy = () => {
                         />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-bold text-gray-700">Date & Time To</label>
+                        <label htmlFor="dateTo" className="text-sm font-bold text-gray-700">Date & Time To</label>
                         <input
+                            id="dateTo"
                             type="datetime-local"
                             value={dateTo}
                             onChange={(e) => setDateTo(e.target.value)}

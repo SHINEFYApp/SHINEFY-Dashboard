@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell } from 'recharts';
-import { Calendar, FileDown } from 'lucide-react';
-import { useGetServiceBoyDetails } from "../../../api/features/serviceBoys.hooks";
+import { Calendar, FileDown, MapPin } from 'lucide-react';
+import { useGetServiceBoyDetails, useGetServiceBoyAreas, useGetServiceBoyBookings } from "../../../api/features/serviceBoys.hooks";
+import { CustomTable } from "../../../common/CustomTable";
+import { useMemo } from 'react';
 
 const chartData = [
   { name: 'Fri', uv: 60, color: '#FF6B4A' },
@@ -42,12 +44,71 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 const ServiceBoyDetails = () => {
     const { id } = useParams();
-    const { data: responseData, isLoading, isError } = useGetServiceBoyDetails(id as string);
+    const [currentPage, setCurrentPage] = useState(1);
     const [activeTab, setActiveTab] = useState('Service Boy Details');
+    const pageSize = 10;
+
+    const { data: responseData, isLoading, isError } = useGetServiceBoyDetails(id as string);
+    const { data: areasResponse, isLoading: isLoadingAreas } = useGetServiceBoyAreas(id as string);
+    const { data: bookingsResponse, isLoading: isLoadingBookings } = useGetServiceBoyBookings(id as string, {
+        page: currentPage,
+        limit: pageSize,
+    });
 
     const tabs = ['Service Boy Details', 'Booking History', 'My Area', 'Daily Report'];
     const serviceBoy = responseData?.data?.data || responseData?.data;
     
+    const bookings = bookingsResponse?.data?.data?.data || [];
+    const pagination = bookingsResponse?.data?.data?.pagination;
+    const totalEntries = pagination?.total || 0;
+    const totalPages = pagination?.last_page || 1;
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const bookingColumns = useMemo(() => [
+        { key: "booking_no", title: "Booking Number" },
+        { key: "customer_name", title: "Customer Name" },
+        { key: "service_name", title: "Service Name" },
+        { key: "total_price", title: "Total Amount(EGP)" },
+        { key: "booking_date", title: "Booking Date" },
+        { key: "booking_time", title: "Booking Time" },
+        {
+            key: "status",
+            title: "Status",
+            render: (status: number) => {
+                const statusStyles: Record<number, string> = {
+                    0: "bg-blue-100 text-blue-800",
+                    1: "bg-green-100 text-green-800",
+                    2: "bg-red-100 text-red-800",
+                };
+                const statusLabels: Record<number, string> = {
+                    0: "Pending",
+                    1: "Completed",
+                    2: "Cancelled",
+                };
+                return (
+                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${statusStyles[status] || "bg-gray-100 text-gray-800"}`}>
+                        {statusLabels[status] || "Unknown"}
+                    </span>
+                );
+            }
+        },
+        { 
+            key: "action", 
+            title: "Action", 
+            render: (_: any, record: any) => (
+                <Link 
+                    to={`/bookings/manage/${record.booking_id}`}
+                    className="text-primary hover:underline font-bold text-sm"
+                >
+                    View Details
+                </Link>
+            )
+        },
+    ], []);
+
     const availableDays = serviceBoy?.available_days || ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Thursday', 'Wednesday', 'Friday'];
 
     if (isLoading) return <div className="p-10 text-center font-bold">Loading records...</div>;
@@ -72,9 +133,12 @@ const ServiceBoyDetails = () => {
                         <p className="text-white text-[16px] font-semibold tracking-wider">{serviceBoy?.phone_number_display || "+000 000 0000 00"}</p>
                     </div>
                 </div>
-                <button className="mt-4 sm:mt-0 bg-[#FFC107] text-black text-[14px] font-bold px-6 py-2.5 rounded-md hover:bg-yellow-500 transition-colors">
+                <Link 
+                    to={`/users&staff/manage/serviceBoy/track/${id}`}
+                    className="mt-4 sm:mt-0 bg-[#FFC107] text-black text-[14px] font-bold px-6 py-2.5 rounded-md hover:bg-yellow-500 transition-colors"
+                >
                     Track Service Boy
-                </button>
+                </Link>
             </div>
 
             {/* Tabs */}
@@ -216,7 +280,51 @@ const ServiceBoyDetails = () => {
                 </div>
             )}
             
-            {activeTab !== 'Service Boy Details' && (
+            {activeTab === 'Booking History' && (
+                <div className="px-6">
+                    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+                        <CustomTable
+                            columns={bookingColumns}
+                            data={bookings}
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            totalEntries={totalEntries}
+                            pageSize={pageSize}
+                            onPageChange={handlePageChange}
+                            isLoading={isLoadingBookings}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {activeTab === 'My Area' && (
+                <div className="px-6 space-y-6">
+                    <h2 className="text-xl font-bold text-gray-800 mb-4">Assigned Areas</h2>
+                    {isLoadingAreas ? (
+                        <div className="py-10 text-center text-gray-500 font-medium">Loading areas...</div>
+                    ) : areasResponse?.data?.data?.areas?.length ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            {areasResponse.data.data.areas.map((area: any) => (
+                                <div key={area.area_id} className="bg-[#F8F9FA] border border-[#E9ECEF] p-4 rounded-xl flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
+                                    <div className="w-10 h-10 bg-[#FFC107]/10 rounded-lg flex items-center justify-center text-[#FFC107]">
+                                        <MapPin size={20} />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Area ID: {area.area_id}</p>
+                                        <p className="text-gray-800 font-bold">{area.area_name}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="py-10 text-center text-gray-500 font-medium bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                            No areas assigned to this service boy.
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {activeTab !== 'Service Boy Details' && activeTab !== 'My Area' && (
                 <div className="py-20 text-center text-gray-500 font-medium">
                     Content for {activeTab}
                 </div>

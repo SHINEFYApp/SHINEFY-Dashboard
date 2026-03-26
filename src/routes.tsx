@@ -36,7 +36,10 @@ import ManageSubAdmin from './pages/users&staff/manageSubAdmin';
 import AddServiceBoy from './pages/users&staff/subPages/AddServiceBoy';
 import EditServiceBoy from './pages/users&staff/subPages/EditServiceBoy';
 import AddSubAdmin from './pages/users&staff/subPages/addSubAdmin';
+import EditSubAdmin from './pages/users&staff/subPages/editSubAdmin';
+import ViewSubAdmin from './pages/users&staff/subPages/viewSubAdmin';
 import ServiceBoyDetails from './pages/users&staff/subPages/ServiceBoyDetails';
+import TrackServiceBoy from './pages/users&staff/subPages/TrackServiceBoy';
 import ManageGroup from './pages/users&staff/subPages/ManageGroup';
 import ContactUs from './pages/technicalSupport/contactUs/contactUs';
 import ManageCompanies from './pages/technicalSupport/Manage Companies/manageCompanies';
@@ -63,9 +66,12 @@ export const RoutesPages = () => {
         <Route path="/users&staff/manage/subAdmin" element={<ManageSubAdmin />} />
         <Route path="/users&staff/manage/serviceBoy" element={<ManageServiceBoy />} />
         <Route path="/users&staff/manage/serviceBoy/:id" element={<ServiceBoyDetails />} />
+        <Route path="/users&staff/manage/serviceBoy/track/:id" element={<TrackServiceBoy />} />
         <Route path="/users&staff/manage/serviceBoy/edit/:id" element={<EditServiceBoy />} />
         <Route path="/users&staff/manage/serviceBoy/addServiceBoy" element={<AddServiceBoy />} />
         <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<AddSubAdmin />} />
+        <Route path="/users&staff/manage/subAdmin/edit/:id" element={<EditSubAdmin />} />
+        <Route path="/users&staff/manage/subAdmin/view/:id" element={<ViewSubAdmin />} />
         <Route path="/users&staff/manage/usersWallet" element={<UsersWallets />} />
         <Route path="/geography&regions/manage/countries" element={<ManageCountries />} />
         <Route path="/geography&regions/manage/regions" element={<ManageRegions />} />

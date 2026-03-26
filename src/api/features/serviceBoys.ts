@@ -32,7 +32,7 @@ export interface ServiceBoyItem {
 
 export interface GetServiceBoysParams {
     limit?: number;
-    start?: number;
+    page?: number;
     search?: string;
     work_status?: string;
 }
@@ -63,6 +63,56 @@ export interface SetTemporaryOffPayload {
 
 export interface UpdateStatusPayload {
     active_flag: number;
+}
+
+export interface ServiceBoyTrackResponse {
+    status: string;
+    data: {
+        user_id: number;
+        name: string;
+        phone_number: number;
+        latitude: string;
+        longitude: string;
+        created_at: string;
+    }
+}
+
+export interface ServiceBoyAreasResponse {
+    status: string;
+    data: {
+        user_id: number;
+        areas: {
+            area_id: number;
+            area_name: string;
+        }[];
+    }
+}
+
+export interface ServiceBoyBookingsResponse {
+    status: string;
+    data: {
+        data: {
+            booking_id: number;
+            booking_no: string;
+            user_id: number;
+            name: string;
+            customer_name: string;
+            service_name: string;
+            total_price: string;
+            booking_date: string;
+            booking_time: string;
+            createtime: string;
+            status: number;
+        }[];
+        pagination: {
+            page: number;
+            per_page: number;
+            total: number;
+            last_page: number;
+            from: number;
+            to: number;
+        }
+    }
 }
 
 // Endpoints
@@ -105,7 +155,7 @@ export const uploadServiceBoyImages = async (id: number | string, formData: Form
 };
 
 // GET /service-boys/{id}/areas
-export const getServiceBoyAreas = async (id: number | string) => {
+export const getServiceBoyAreas = async (id: number | string): Promise<AxiosResponse<ServiceBoyAreasResponse>> => {
     return await getService(`/api/service-boys/${id}/areas`);
 };
 
@@ -133,4 +183,14 @@ export const exportServiceBoysExcel = async (params: any) => {
 // GET /export/service-boys/pdf
 export const exportServiceBoysPdf = async (params: any) => {
     return await getService("/api/export/service-boys/pdf", params);
+};
+
+// GET /service-boys/{id}/track
+export const getServiceBoyTrack = async (id: number | string): Promise<AxiosResponse<ServiceBoyTrackResponse>> => {
+    return await getService(`/api/service-boys/${id}/track`);
+};
+
+// GET /service-boys/{id}/bookings
+export const getServiceBoyBookings = async (id: number | string, params?: any): Promise<AxiosResponse<ServiceBoyBookingsResponse>> => {
+    return await getService(`/api/service-boys/${id}/bookings`, params);
 };

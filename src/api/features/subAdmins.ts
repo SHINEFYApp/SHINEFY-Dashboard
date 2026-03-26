@@ -18,7 +18,8 @@ export interface SubAdminItem {
     // Add other fields as per API response
     // Postman doesn't show response body, assumes standard user fields
     active_flag?: number;
-    // ...
+    previlages?: number[] | string;
+    receive_sms?: number;
 }
 
 export interface GetSubAdminsParams {

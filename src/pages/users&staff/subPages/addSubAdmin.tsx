@@ -3,14 +3,14 @@ import { addSubAdminSchema } from '../../../constants/validationSchema';
 import { addSubAdminInitialValues } from '../../../constants/initialValues';
 import { Button } from '../../../components/ui/button';
 import { FormInput } from '../../../common/FormInput';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import type { smsStatus } from '../../../types/common';
-import type { manageSubadmin } from '../../../types/users&staff';
-import { FormDropdown } from '../../../common/FormDropdown';
 import { useAddSubAdmin, useUploadSubAdminImage } from "../../../api/features/subAdmins.hooks";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from "@tanstack/react-query";
+import DropDownAndSelect from '../../../common/dropDownAndSelect';
+import { menus } from '../../../constants/data';
 
 // Reuse CustomFileUpload from AddServiceBoy or generic
 const CustomFileUpload = ({ name, title, accept = ".jpg,.png,.jpeg" }: { name: string, title: string; accept?: string }) => {
@@ -65,29 +65,11 @@ export default function AddSubAdmin() {
         isSms: false
     });
 
-    const [formData, setFormData] = useState<manageSubadmin>({
-        name: '',
-        phoneNumber: '',
-        isSms: false,
-        email: '',
-        password: '',
-        confirmPassword: '',
-        privileges: []
-    });
+    const [selectedPrivileges, setSelectedPrivileges] = useState<Record<string, string[]>>({});
 
-    useEffect(() => {
-        setFormData(prev => ({ ...prev, isSms: receiveSmsStatus.isSms }));
-    }, [receiveSmsStatus.isSms]);
 
-    // Mapping for privileges: assumes API expects [1, 2, 3] etc.
-    // Map dropdown strings to numbers.
-    // If multiple selection is needed, dropdown might change. Postman shows explicit array.
-    // Currently FormDropdown is single select?
-    const privilegeMap: Record<string, number> = {
-        'Admin': 1,
-        'Editor': 2,
-        'Viewer': 3
-    };
+    // Mapping for privileges: assumes API expects [1, 2, 3] etc. based on menus key
+    // Map selected categories (where any option is selected) to their Keys.
 
     return (
         <main>
@@ -98,17 +80,15 @@ export default function AddSubAdmin() {
                     validationSchema={addSubAdminSchema}
                     onSubmit={async (values) => {
                         try {
-                            const selectedPrivilege = String(values.privileges); // Usually string from dropdown
-                            // Map string to array of number? format: [1, 2, 3]
-                            // The user might want multi-select but UI is single select drop.
-                            // I'll wrap the single mapped value in array.
-                            const privId = privilegeMap[selectedPrivilege] || 1; // Default to 1 if unknown
+                            const privIds = menus
+                                .filter(menu => selectedPrivileges[menu.title] && selectedPrivileges[menu.title].length > 0)
+                                .map(menu => menu.Key);
 
                             const payload = {
                                 name: values.name,
                                 email: values.email,
                                 phone_number: values.phoneNumber,
-                                previlages: [privId], // Wrap in array as per Postman
+                                previlages: privIds, // Array of Keys from menus
                                 receive_sms: receiveSmsStatus.isSms,
                                 password: values.password,
                                 password_confirmation: values.confirmPassword
@@ -183,11 +163,9 @@ export default function AddSubAdmin() {
                                     </div>
                                 </div>
                             </div>
-                            <FormDropdown
-                                name="privileges"
-                                label="Privileges"
-                                placeholder="Select Privileges"
-                                options={['Admin', 'Editor', 'Viewer']}
+                            <DropDownAndSelect
+                                selectedOptions={selectedPrivileges}
+                                setSelectedOptions={setSelectedPrivileges}
                             />
                             <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
                                 <Button
