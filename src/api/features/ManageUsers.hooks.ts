@@ -10,12 +10,15 @@ import {
     getUserLocations,
     getUserWalletHistory,
     getUserPackages,
+    editUserStatus,
+    editOtpStatus,
     type UsersParams,
     type ExportUsersPayload,
     type UserDetailsParams,
     type BookingHistoryParams,
     type WalletHistoryParams,
-    type UserPackagesParams
+    type UserPackagesParams,
+    type StatusUpdateParams
 } from "./ManageUsers.services";
 
 // Get all users
@@ -86,5 +89,21 @@ export const useUserPackages = (params: UserPackagesParams, options?: any) => {
         queryFn: () => getUserPackages(params),
         queryKey: ["user-packages", params],
         options
+    });
+};
+
+// Edit user status (Mutation)
+export const useEditUserStatus = (options?: any) => {
+    return useMutation<any, AxiosError, StatusUpdateParams>({
+        mutationFn: (params: StatusUpdateParams) => editUserStatus(params),
+        ...options
+    });
+};
+
+// Edit OTP status (Mutation)
+export const useEditOtpStatus = (options?: any) => {
+    return useMutation<any, AxiosError, StatusUpdateParams>({
+        mutationFn: (params: StatusUpdateParams) => editOtpStatus(params),
+        ...options
     });
 };

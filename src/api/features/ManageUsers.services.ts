@@ -8,6 +8,7 @@ export interface User {
     group_name: string;
     phone_number: string;
     status: number;
+    otp_status: number;
     createtime: string;
 }
 
@@ -61,6 +62,11 @@ export interface UserPackagesParams {
     search?: string;
 }
 
+export interface StatusUpdateParams {
+    user_id: number | string;
+    status: number;
+}
+
 // GET /api/getUsers
 export const getUsersList = async (params: UsersParams): Promise<GetUsersResponse> => {
     const res: AxiosResponse<GetUsersResponse> = await getService("/api/getUsers", params);
@@ -106,5 +112,17 @@ export const getUserWalletHistory = async (params: WalletHistoryParams) => {
 // GET /api/users/view/user-packages?user_id=242&search=Exterior Package Quarter package
 export const getUserPackages = async (params: UserPackagesParams) => {
     const res: AxiosResponse = await getService("/api/users/view/user-packages", params);
+    return res.data;
+};
+
+// GET /api/users/edit/user-status?user_id=12&status=1
+export const editUserStatus = async (params: StatusUpdateParams) => {
+    const res: AxiosResponse = await postService("/api/users/edit/user-status", params);
+    return res.data;
+};
+
+// GET /api/users/edit/otp-status?user_id=12&status=1
+export const editOtpStatus = async (params: StatusUpdateParams) => {
+    const res: AxiosResponse = await postService("/api/users/edit/otp-status", params);
     return res.data;
 };

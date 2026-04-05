@@ -24,16 +24,17 @@ export default function ManageSubAdmin() {
     // Data Fetching
     const { data, isLoading } = useGetSubAdmins({
         limit: pageSize,
-        start: (currentPage - 1) * pageSize,
+        page: currentPage,
         search: search
     });
 
     const subAdminsRaw = data?.data?.data?.data || data?.data?.data || [];
     const subAdmins = (Array.isArray(subAdminsRaw) ? subAdminsRaw : []) as any[];
 
-    const pagination = data?.data?.pagination;
+    const pagination = data?.data?.data?.pagination;
     const totalEntries = pagination?.total_items || subAdmins.length; // Fallback
     const totalPages = pagination?.total_pages || Math.ceil(totalEntries / pageSize);
+    console.log(data , "subadmins")
 
     // Mutations
     const deleteMutation = useDeleteSubAdmin({

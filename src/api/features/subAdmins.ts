@@ -24,7 +24,7 @@ export interface SubAdminItem {
 
 export interface GetSubAdminsParams {
     limit?: number;
-    start?: number;
+    page?: number;
     search?: string;
 }
 
