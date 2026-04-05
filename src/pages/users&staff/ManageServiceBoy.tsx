@@ -41,7 +41,7 @@ const ManageServiceBoy = () => {
     // Data Fetching
     const { data, isLoading } = useGetServiceBoys({
         limit: pageSize,
-        page: currentPage,
+        start: currentPage,
         search: search,
         work_status: statusFilter
     });

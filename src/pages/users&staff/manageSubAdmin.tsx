@@ -24,7 +24,7 @@ export default function ManageSubAdmin() {
     // Data Fetching
     const { data, isLoading } = useGetSubAdmins({
         limit: pageSize,
-        page: currentPage,
+        start: currentPage,
         search: search
     });
 
@@ -34,7 +34,7 @@ export default function ManageSubAdmin() {
     const pagination = data?.data?.data?.pagination;
     const totalEntries = pagination?.total_items || subAdmins.length; // Fallback
     const totalPages = pagination?.total_pages || Math.ceil(totalEntries / pageSize);
-    console.log(data , "subadmins")
+    console.log(data, "subadmins")
 
     // Mutations
     const deleteMutation = useDeleteSubAdmin({

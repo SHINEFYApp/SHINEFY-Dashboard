@@ -127,14 +127,14 @@ export const getServiceBoyDetails = async (id: number | string) => {
     return await getService(`/api/service-boys/${id}`);
 };
 
-// POST /service-boys
-export const addServiceBoy = async (data: AddServiceBoyPayload) => {
-    return await postService("/api/service-boys", data);
+// POST /service-boys (FormData - includes images)
+export const addServiceBoy = async (formData: FormData) => {
+    return await postService("/api/service-boys", formData);
 };
 
-// PUT /service-boys/{id}
-export const updateServiceBoy = async (id: number | string, data: UpdateServiceBoyPayload) => {
-    return await putService(`/api/service-boys/${id}`, data);
+// POST /service-boys/{id} (FormData - includes images)
+export const updateServiceBoy = async (id: number | string, formData: FormData) => {
+    return await postService(`/api/service-boys/${id}`, formData);
 };
 
 // DELETE /service-boys/{id}
@@ -147,12 +147,6 @@ export const updateServiceBoyStatus = async (id: number | string, data: UpdateSt
     return await patchService(`/api/service-boys/${id}/status`, data);
 };
 
-// POST /service-boys/{id}/images (FormData)
-export const uploadServiceBoyImages = async (id: number | string, formData: FormData) => {
-    // Helper typically handles JSON, for FormData we might need ensuring correct headers if not auto-detected
-    // but usually axios handles FormData correctly if passed directly.
-    return await postService(`/api/service-boys/${id}/images`, formData);
-};
 
 // GET /service-boys/{id}/areas
 export const getServiceBoyAreas = async (id: number | string): Promise<AxiosResponse<ServiceBoyAreasResponse>> => {

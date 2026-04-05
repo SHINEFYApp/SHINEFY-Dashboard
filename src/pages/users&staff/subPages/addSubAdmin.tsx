@@ -5,12 +5,11 @@ import { Button } from '../../../components/ui/button';
 import { FormInput } from '../../../common/FormInput';
 import { useState, useRef } from 'react';
 import type { smsStatus } from '../../../types/common';
-import { useAddSubAdmin, useUploadSubAdminImage } from "../../../api/features/subAdmins.hooks";
+import { useAddSubAdmin, useGetSubAdminPrivileges } from "../../../api/features/subAdmins.hooks";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from "@tanstack/react-query";
 import DropDownAndSelect from '../../../common/dropDownAndSelect';
-import { menus } from '../../../constants/data';
 
 // Reuse CustomFileUpload from AddServiceBoy or generic
 const CustomFileUpload = ({ name, title, accept = ".jpg,.png,.jpeg" }: { name: string, title: string; accept?: string }) => {
@@ -55,21 +54,16 @@ const CustomFileUpload = ({ name, title, accept = ".jpg,.png,.jpeg" }: { name: s
 export default function AddSubAdmin() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const { mutateAsync: addSubAdmin, isPending: isAdding } = useAddSubAdmin();
-    const { mutateAsync: uploadImage, isPending: isUploading } = useUploadSubAdminImage();
-
-    const isSubmitting = isAdding || isUploading;
+    const { mutateAsync: addSubAdmin, isPending: isSubmitting } = useAddSubAdmin();
+    const { data: privilegesResponse } = useGetSubAdminPrivileges();
+    const privileges = privilegesResponse?.data?.data?.data || [];
 
     const [receiveSmsStatus, setReceiveSmsStatus] = useState<smsStatus>({
         status: true,
         isSms: false
     });
 
-    const [selectedPrivileges, setSelectedPrivileges] = useState<Record<string, string[]>>({});
-
-
-    // Mapping for privileges: assumes API expects [1, 2, 3] etc. based on menus key
-    // Map selected categories (where any option is selected) to their Keys.
+    const [selectedPrivilegeIds, setSelectedPrivilegeIds] = useState<number[]>([]);
 
     return (
         <main>
@@ -80,28 +74,21 @@ export default function AddSubAdmin() {
                     validationSchema={addSubAdminSchema}
                     onSubmit={async (values) => {
                         try {
-                            const privIds = menus
-                                .filter(menu => selectedPrivileges[menu.title] && selectedPrivileges[menu.title].length > 0)
-                                .map(menu => menu.Key);
+                            const formData = new FormData();
+                            formData.append('name', values.name);
+                            formData.append('email', values.email);
+                            formData.append('phone_number', values.phoneNumber);
+                            selectedPrivilegeIds.forEach((id: number, index: number) => {
+                                formData.append(`previlages[${index}]`, String(id));
+                            });
+                            formData.append('receive_sms', receiveSmsStatus.isSms ? '1' : '0');
+                            if (values.password) formData.append('password', values.password);
+                            if (values.confirmPassword) formData.append('password_confirmation', values.confirmPassword);
 
-                            const payload = {
-                                name: values.name,
-                                email: values.email,
-                                phone_number: values.phoneNumber,
-                                previlages: privIds, // Array of Keys from menus
-                                receive_sms: receiveSmsStatus.isSms,
-                                password: values.password,
-                                password_confirmation: values.confirmPassword
-                            };
+                            // Image
+                            if (values.image) formData.append('image', values.image);
 
-                            const response = await addSubAdmin(payload);
-                            const newId = response?.data?.id || response?.data?.data?.id;
-
-                            if (newId && values.image) {
-                                const formData = new FormData();
-                                formData.append('image', values.image);
-                                await uploadImage({ id: newId, formData });
-                            }
+                            await addSubAdmin(formData);
 
                             toast.success("Sub Admin added successfully");
                             queryClient.invalidateQueries({ queryKey: ["sub-admins"] });
@@ -164,8 +151,9 @@ export default function AddSubAdmin() {
                                 </div>
                             </div>
                             <DropDownAndSelect
-                                selectedOptions={selectedPrivileges}
-                                setSelectedOptions={setSelectedPrivileges}
+                                privileges={privileges}
+                                selectedIds={selectedPrivilegeIds}
+                                setSelectedIds={setSelectedPrivilegeIds}
                             />
                             <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
                                 <Button

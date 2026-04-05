@@ -6,7 +6,7 @@ import { FormInput } from '../../../common/FormInput';
 import { FormTimePicker } from '../../../common/FormTimePicker';
 import { FormDatePicker } from '../../../common/FormDatePicker';
 import { useRef, useState } from 'react';
-import { useAddServiceBoy, useUploadServiceBoyImages } from "../../../api/features/serviceBoys.hooks";
+import { useAddServiceBoy } from "../../../api/features/serviceBoys.hooks";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from "@tanstack/react-query";
@@ -101,10 +101,7 @@ export default function AddServiceBoy() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const { mutateAsync: addServiceBoy, isPending: isAdding } = useAddServiceBoy();
-    const { mutateAsync: uploadImages, isPending: isUploading } = useUploadServiceBoyImages();
-
-    const isSubmitting = isAdding || isUploading;
+    const { mutateAsync: addServiceBoy, isPending: isSubmitting } = useAddServiceBoy();
 
     return (
         <main>
@@ -115,45 +112,29 @@ export default function AddServiceBoy() {
                     validationSchema={addServiceBoySchema}
                     onSubmit={async (values) => {
                         try {
-                            const payload = {
-                                name: values.name,
-                                phone_number: values.phoneNumber,
-                                address: "Default Address", // UI missing address field? Postman requires it. Assuming default or adding input.
-                                // Actually checking initialValues/Schema might reveal if address exists. 
-                                // Looking at provided code: Form inputs for name, phoneNumber, password, confirmPassword, availableDays, startHour, endHour.
-                                // MISSING: Address, Licence Expiry Date (wait, licenseExpiredDate IS there on line 136).
-                                // Postman also sends: latitude, longitude. UI doesn't have map. 
-                                // I will use dummy values for missing required fields to satisfy API or add fields if critical.
-                                // Address is likely needed. I'll add a hidden default or simple input if space allows.
-                                // Latitude/Longitude: 0.0 for now.
-                                licence_expiery_date: values.licenseExpiredDate,
-                                available_days: values.availableDays || [],
-                                start_hour: values.startHour,
-                                end_hour: values.endHour,
-                                latitude: "0.0",
-                                longitude: "0.0",
-                                password: values.password
-                            };
+                            const formData = new FormData();
+                            formData.append('name', values.name);
+                            formData.append('phone_number', values.phoneNumber);
+                            formData.append('address', 'Default Address');
+                            formData.append('licence_expiery_date', values.licenseExpiredDate);
+                            (values.availableDays || []).forEach((day: string) => {
+                                formData.append('available_days[]', day);
+                            });
+                            formData.append('start_hour', values.startHour);
+                            formData.append('end_hour', values.endHour);
+                            formData.append('latitude', '0.0');
+                            formData.append('longitude', '0.0');
+                            if (values.password) formData.append('password', values.password);
 
-                            // 1. Create Service Boy
-                            const response = await addServiceBoy(payload);
-                            const newId = response?.data?.id || response?.data?.data?.id; // Safely access ID
+                            // Images
+                            if (values.drivingLicense) formData.append('driver_licence', values.drivingLicense);
+                            if (values.idCardImage) formData.append('id_card_image', values.idCardImage);
 
-                            if (!newId) throw new Error("Failed to get ID from response");
-
-                            // 2. Upload Images if present
-                            if (values.drivingLicense || values.idCardImage) {
-                                const formData = new FormData();
-                                if (values.drivingLicense) formData.append('driver_licence', values.drivingLicense);
-                                if (values.idCardImage) formData.append('id_card_image', values.idCardImage);
-                                // Profile image?
-
-                                await uploadImages({ id: newId, formData });
-                            }
+                            await addServiceBoy(formData);
 
                             toast.success("Service Boy added successfully");
                             queryClient.invalidateQueries({ queryKey: ["service-boys"] });
-                            navigate('/users&staff/manage/ServiceBoy'); // Redirect to list
+                            navigate('/users&staff/manage/ServiceBoy');
 
                         } catch (error: any) {
                             console.error(error);

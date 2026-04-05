@@ -9,7 +9,6 @@ import {
     updateServiceBoy,
     deleteServiceBoy,
     updateServiceBoyStatus,
-    uploadServiceBoyImages,
     getServiceBoyAreas,
     updateServiceBoyAreas,
     setServiceBoyTemporaryOff,
@@ -19,8 +18,6 @@ import {
     getServiceBoyTrack,
     getServiceBoyBookings,
     type GetServiceBoysParams,
-    type AddServiceBoyPayload,
-    type UpdateServiceBoyPayload,
     type UpdateStatusPayload,
     type UpdateServiceBoyAreasPayload,
     type SetTemporaryOffPayload,
@@ -43,15 +40,15 @@ export const useGetServiceBoyDetails = (id: number | string, options?: any) => {
 };
 
 export const useAddServiceBoy = (options?: any) => {
-    return useMutation<any, AxiosError, AddServiceBoyPayload>({
-        mutationFn: (data: AddServiceBoyPayload) => addServiceBoy(data),
+    return useMutation<any, AxiosError, FormData>({
+        mutationFn: (formData: FormData) => addServiceBoy(formData),
         ...options,
     });
 };
 
 export const useUpdateServiceBoy = (options?: any) => {
-    return useMutation<any, AxiosError, { id: string | number; data: UpdateServiceBoyPayload }>({
-        mutationFn: ({ id, data }) => updateServiceBoy(id, data),
+    return useMutation<any, AxiosError, { id: string | number; formData: FormData }>({
+        mutationFn: ({ id, formData }) => updateServiceBoy(id, formData),
         ...options,
     });
 };
@@ -70,12 +67,6 @@ export const useUpdateServiceBoyStatus = (options?: any) => {
     });
 };
 
-export const useUploadServiceBoyImages = (options?: any) => {
-    return useMutation<any, AxiosError, { id: string | number; formData: FormData }>({
-        mutationFn: ({ id, formData }) => uploadServiceBoyImages(id, formData),
-        ...options,
-    });
-};
 
 export const useGetServiceBoyAreas = (id: number | string, options?: any) => {
     return useGet({

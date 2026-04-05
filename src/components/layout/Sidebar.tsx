@@ -10,8 +10,11 @@ import logo from '../../assets/logo.svg';
 import { Box, CarFront, HandCoins, Headphones, Map, Settings, Users } from 'lucide-react';
 
 import { Link } from 'react-router';
+import { usePermissions } from '../../hooks/usePermissions';
+import { PRIVILEGES } from '../../constants/permissions';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
+    const { hasPermission } = usePermissions();
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
 
     useEffect(() => {
@@ -34,11 +37,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         }
     }, [currentPath]);
 
-    const menuItems: MenuItem[] = [
+    const allMenuItems: MenuItem[] = [
         {
             icon: <MdDashboard className="w-5 h-5" />,
             label: 'Dashboard',
             path: '/',
+            permissionId: PRIVILEGES.DASHBOARD,
         },
         {
             icon: <BsCalendarEvent className="w-5 h-5" />,
@@ -48,17 +52,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {
                     icon: null,
                     label: 'Create Booking',
-                    path: '/bookings/create'
+                    path: '/bookings/create',
+                    permissionId: PRIVILEGES.MANAGE_CREATE_BOOKING,
                 },
                 {
                     icon: null,
                     label: 'Manage Bookings',
-                    path: '/bookings/manage'
+                    path: '/bookings/manage',
+                    permissionId: PRIVILEGES.MANAGE_BOOKING,
                 },
                 {
                     icon: null,
                     label: 'Manage Slot',
-                    path: '/bookings/slot'
+                    path: '/bookings/slot',
+                    permissionId: PRIVILEGES.MANAGE_SLOT,
                 },
             ],
         },
@@ -70,12 +77,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {
                     icon: null,
                     label: 'Add Vehicle',
-                    path: '/vehicles/add'
+                    path: '/vehicles/add',
+                    permissionId: PRIVILEGES.CREATE_VEHICLE,
                 },
                 {
                     icon: null,
                     label: 'Manage Vehicle',
-                    path: '/vehicles/manage'
+                    path: '/vehicles/manage',
+                    permissionId: PRIVILEGES.MANAGE_CAR_OPTIONS,
                 }
             ],
         },
@@ -87,22 +96,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {
                     icon: null,
                     label: 'Manage Users',
-                    path: '/users&staff/manage/users'
+                    path: '/users&staff/manage/users',
+                    permissionId: PRIVILEGES.MANAGE_USERS,
                 },
                 {
                     icon: null,
                     label: 'Manage Sub Admin',
-                    path: '/users&staff/manage/subAdmin'
+                    path: '/users&staff/manage/subAdmin',
+                    permissionId: PRIVILEGES.MANAGE_SUB_ADMIN,
                 },
                 {
                     icon: null,
                     label: 'Manage Service Boy',
-                    path: '/users&staff/manage/serviceBoy'
+                    path: '/users&staff/manage/serviceBoy',
+                    permissionId: PRIVILEGES.MANAGE_SERVICE_BOY,
                 },
                 {
                     icon: null,
                     label: 'Manage Users Wallet',
-                    path: '/users&staff/manage/usersWallet'
+                    path: '/users&staff/manage/usersWallet',
+                    permissionId: PRIVILEGES.MANAGE_USER_WALLET,
                 }
             ],
         }, {
@@ -113,17 +126,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {
                     icon: null,
                     label: 'Manage Countries',
-                    path: '/geography&regions/manage/countries'
+                    path: '/geography&regions/manage/countries',
+                    permissionId: PRIVILEGES.MANAGE_COUNTRIES,
                 },
                 {
                     icon: null,
                     label: 'Manage Regions',
-                    path: '/geography&regions/manage/regions'
+                    path: '/geography&regions/manage/regions',
+                    permissionId: PRIVILEGES.MANAGE_REGIONS,
                 },
                 {
                     icon: null,
                     label: 'Manage Area',
-                    path: '/geography&regions/manage/area'
+                    path: '/geography&regions/manage/area',
+                    permissionId: PRIVILEGES.MANAGE_AREA,
                 }
             ]
         }, {
@@ -134,22 +150,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {
                     icon: null,
                     label: 'Manage Service',
-                    path: '/services&extra/manage/Service'
+                    path: '/services&extra/manage/Service',
+                    permissionId: PRIVILEGES.MANAGE_SERVICE,
                 },
                 {
                     icon: null,
                     label: 'Manage Extra Service',
-                    path: '/services&extra/manage/ExtreService'
+                    path: '/services&extra/manage/ExtreService',
+                    permissionId: PRIVILEGES.MANAGE_EXTRA_SERVICE,
                 },
                 {
                     icon: null,
                     label: 'Manage Coupon',
-                    path: '/services&extra/manage/Coupon'
+                    path: '/services&extra/manage/Coupon',
+                    permissionId: PRIVILEGES.MANAGE_COUPON,
                 },
                 {
                     icon: null,
                     label: 'Manage Package',
-                    path: '/services&extra/manage/Package'
+                    path: '/services&extra/manage/Package',
+                    permissionId: PRIVILEGES.MANAGE_PACKAGES,
                 }
             ],
         },
@@ -178,22 +198,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {
                     icon: null,
                     label: 'Manage VAT',
-                    path: '/financial&points/manage/Vat'
+                    path: '/financial&points/manage/Vat',
+                    permissionId: PRIVILEGES.MANAGE_VAT,
                 },
                 {
                     icon: null,
                     label: 'Manage Driver Commission',
-                    path: '/financial&points/manage/driverCommission'
+                    path: '/financial&points/manage/driverCommission',
+                    permissionId: PRIVILEGES.DRIVER_COMMISSION,
                 },
                 {
                     icon: null,
                     label: 'Bonus Point',
-                    path: '/financial&points/manage/bonusPoint'
+                    path: '/financial&points/manage/bonusPoint',
+                    permissionId: PRIVILEGES.MANAGE_BONUS_POINT,
                 },
                 {
                     icon: null,
                     label: 'Admin Earning',
-                    path: '/financial&points/manage/adminEarning'
+                    path: '/financial&points/manage/adminEarning',
+                    permissionId: PRIVILEGES.MANAGE_EARNING,
                 }
             ],
         },
@@ -205,31 +229,57 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {
                     icon: null,
                     label: 'Contact Us',
-                    path: '/technicalSupport/contactUs'
+                    path: '/technicalSupport/contactUs',
+                    permissionId: PRIVILEGES.CONTACT_US,
                 },
                 {
                     icon: null,
                     label: 'Manage Companies',
-                    path: '/technicalSupport/manage/companies'
+                    path: '/technicalSupport/manage/companies',
+                    permissionId: PRIVILEGES.MANAGE_COMPANIES,
                 },
                 {
                     icon: null,
                     label: 'Broadcast',
-                    path: '/technicalSupport/broadcast'
+                    path: '/technicalSupport/broadcast',
+                    permissionId: PRIVILEGES.BROADCAST,
                 },
                 {
                     icon: null,
                     label: 'Manage FAQS',
-                    path: '/technicalSupport/manage/faqs'
+                    path: '/technicalSupport/manage/faqs',
+                    permissionId: PRIVILEGES.MANAGE_FAQS,
                 },
                 {
                     icon: null,
                     label: 'Manage Order Questions',
-                    path: '/technicalSupport/manage/orderQuestions'
+                    path: '/technicalSupport/manage/orderQuestions',
+                    permissionId: PRIVILEGES.MANAGE_ORDER_QUESTION,
                 }
             ],
         },
     ];
+
+    // Filter menu items based on user permissions
+    const menuItems: MenuItem[] = allMenuItems
+        .map((item) => {
+            // Top-level item with no sub-items
+            if (!item.subItems) {
+                if (item.permissionId && !hasPermission(item.permissionId)) return null;
+                return item;
+            }
+
+            // Filter sub-items by permission
+            const filteredSubs = item.subItems.filter(
+                (sub) => !sub.permissionId || hasPermission(sub.permissionId)
+            );
+
+            // Hide parent if no sub-items are permitted
+            if (filteredSubs.length === 0) return null;
+
+            return { ...item, subItems: filteredSubs };
+        })
+        .filter(Boolean) as MenuItem[];
 
     const toggleSubmenu = (label: string) => {
         if (isCollapsed) return;

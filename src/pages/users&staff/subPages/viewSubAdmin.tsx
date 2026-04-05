@@ -1,9 +1,8 @@
-import { useGetSubAdminDetails } from "../../../api/features/subAdmins.hooks";
+import { useGetSubAdminDetails, useGetSubAdminPrivileges } from "../../../api/features/subAdmins.hooks";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import type { smsStatus } from '../../../types/common';
 import DropDownAndSelect from '../../../common/dropDownAndSelect';
-import { menus } from '../../../constants/data';
 import { Skeleton } from '../../../components/ui/skeleton';
 import { Button } from '../../../components/ui/button';
 
@@ -11,39 +10,32 @@ export default function ViewSubAdmin() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { data: subAdminResponse, isLoading: isLoadingDetails } = useGetSubAdminDetails(id || "");
+    const { data: privilegesResponse } = useGetSubAdminPrivileges();
+    const privileges = privilegesResponse?.data?.data?.data || [];
 
     const [receiveSmsStatus, setReceiveSmsStatus] = useState<smsStatus>({
         status: true,
         isSms: false
     });
 
-    console.log(subAdminResponse)
-
-    const [selectedPrivileges, setSelectedPrivileges] = useState<Record<string, string[]>>({});
+    const [selectedPrivilegeIds, setSelectedPrivilegeIds] = useState<number[]>([]);
 
     useEffect(() => {
         if (subAdminResponse?.data) {
             const data = subAdminResponse.data;
             setReceiveSmsStatus(prev => ({ ...prev, isSms: !!data.receive_sms }));
-            
-            if (data.previlages) {
-                const mapped: Record<string, string[]> = {};
-                let privArray: any[] = [];
-                
-                if (Array.isArray(data.previlages)) {
-                    privArray = data.previlages;
-                } else if (typeof data.previlages === 'string') {
-                    privArray = data.previlages.split(',').map((s: string) => s.trim()).filter(Boolean);
-                }
 
-                privArray.forEach((priv: any) => {
-                    const privKey = Number(priv);
-                    const menu = menus.find(m => m.Key === privKey);
-                    if (menu) {
-                        mapped[menu.title] = [...menu.options];
-                    }
-                });
-                setSelectedPrivileges(mapped);
+            if (data.previlages) {
+                let privArray: number[] = [];
+                if (Array.isArray(data.previlages)) {
+                    privArray = data.previlages.map((p: any) => {
+                        if (typeof p === 'object' && p !== null && 'id' in p) return Number(p.id);
+                        return Number(p);
+                    }).filter((n: number) => !isNaN(n) && n > 0);
+                } else if (typeof data.previlages === 'string') {
+                    privArray = data.previlages.split(',').map((s: string) => Number(s.trim())).filter((n: number) => !isNaN(n) && n > 0);
+                }
+                setSelectedPrivilegeIds(privArray);
             }
         }
     }, [subAdminResponse]);
@@ -121,12 +113,12 @@ export default function ViewSubAdmin() {
                     </div>
                 </div>
                 
-                <div className="pointer-events-none opacity-80">
-                    <DropDownAndSelect
-                        selectedOptions={selectedPrivileges}
-                        setSelectedOptions={() => {}} // Read-only
-                    />
-                </div>
+                <DropDownAndSelect
+                    privileges={privileges}
+                    selectedIds={selectedPrivilegeIds}
+                    setSelectedIds={setSelectedPrivilegeIds}
+                    disabled
+                />
             </div>
         </main>
     );

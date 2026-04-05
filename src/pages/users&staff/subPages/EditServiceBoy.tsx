@@ -6,7 +6,7 @@ import { FormInput } from '../../../common/FormInput';
 import { FormTimePicker } from '../../../common/FormTimePicker';
 import { FormDatePicker } from '../../../common/FormDatePicker';
 import { useRef, useState, useEffect } from 'react';
-import { useUpdateServiceBoy, useUploadServiceBoyImages, useGetServiceBoyDetails } from "../../../api/features/serviceBoys.hooks";
+import { useUpdateServiceBoy, useGetServiceBoyDetails } from "../../../api/features/serviceBoys.hooks";
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from "@tanstack/react-query";
@@ -104,10 +104,7 @@ export default function EditServiceBoy() {
     const { data: responseData, isLoading: isFetching } = useGetServiceBoyDetails(id as string);
     const serviceBoy = responseData?.data?.data || responseData?.data;
 
-    const { mutateAsync: updateServiceBoy, isPending: isUpdating } = useUpdateServiceBoy();
-    const { mutateAsync: uploadImages, isPending: isUploading } = useUploadServiceBoyImages();
-
-    const isSubmitting = isUpdating || isUploading;
+    const { mutateAsync: updateServiceBoy, isPending: isSubmitting } = useUpdateServiceBoy();
 
     const [formValues, setFormValues] = useState<any>(addServiceBoyInitialValues);
 
@@ -142,33 +139,28 @@ export default function EditServiceBoy() {
                     validationSchema={editServiceBoySchema}
                     onSubmit={async (values) => {
                         try {
-                            const payload: any = {
-                                name: values.name,
-                                phone_number: values.phoneNumber,
-                                address: "Default Address",
-                                licence_expiery_date: values.licenseExpiredDate,
-                                available_days: values.availableDays || [],
-                                start_hour: values.startHour,
-                                end_hour: values.endHour,
-                                latitude: "0.0",
-                                longitude: "0.0",
-                            };
-                            
-                            // Only include password if changed so we don't accidentally blank it
+                            const formData = new FormData();
+                            formData.append('name', values.name);
+                            formData.append('phone_number', values.phoneNumber);
+                            formData.append('address', 'Default Address');
+                            formData.append('licence_expiery_date', values.licenseExpiredDate);
+                            (values.availableDays || []).forEach((day: string) => {
+                                formData.append('available_days[]', day);
+                            });
+                            formData.append('start_hour', values.startHour);
+                            formData.append('end_hour', values.endHour);
+                            formData.append('latitude', '0.0');
+                            formData.append('longitude', '0.0');
+
                             if (values.password && values.password.trim() !== "") {
-                                payload.password = values.password;
+                                formData.append('password', values.password);
                             }
 
-                            await updateServiceBoy({ id: id as string, data: payload });
+                            // Images
+                            if (values.drivingLicense) formData.append('driver_licence', values.drivingLicense);
+                            if (values.idCardImage) formData.append('id_card_image', values.idCardImage);
 
-                            // Upload Images if present
-                            if (values.drivingLicense || values.idCardImage) {
-                                const formData = new FormData();
-                                if (values.drivingLicense) formData.append('driver_licence', values.drivingLicense);
-                                if (values.idCardImage) formData.append('id_card_image', values.idCardImage);
-
-                                await uploadImages({ id: id as string, formData });
-                            }
+                            await updateServiceBoy({ id: id as string, formData });
 
                             toast.success("Service Boy updated successfully");
                             queryClient.invalidateQueries({ queryKey: ["service-boys"] });

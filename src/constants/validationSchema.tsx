@@ -280,19 +280,29 @@ export const editSubAdminSchema = Yup.object({
         .required('Email is required')
         .email('Invalid email address'),
     password: Yup.string()
-        .nullable()
         .notRequired()
-        .transform((value) => (value === '' ? null : value))
-        .min(8, 'Password must be at least 8 characters')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .matches(/[0-9]/, 'Password must contain at least one number')
-        .matches(/[@$!%*?&]/, 'Password must contain at least one special character'),
+        .default('')
+        .test(
+            'password-strength',
+            'Password must be at least 8 characters with uppercase, lowercase, number, and special character (@$!%*?&)',
+            (value) => {
+                if (!value || value === '') return true;
+                return value.length >= 8
+                    && /[A-Z]/.test(value)
+                    && /[a-z]/.test(value)
+                    && /[0-9]/.test(value)
+                    && /[@$!%*?&]/.test(value);
+            }
+        ),
     confirmPassword: Yup.string()
-        .nullable()
         .notRequired()
-        .transform((value) => (value === '' ? null : value))
-        .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+        .default('')
+        .when('password', {
+            is: (val: string) => val && val.length > 0,
+            then: (schema) => schema
+                .required('Confirm password is required when changing password')
+                .oneOf([Yup.ref('password')], 'Passwords must match'),
+        }),
     image: Yup.mixed().nullable().notRequired()
 });
 
