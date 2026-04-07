@@ -74,10 +74,7 @@ const ManageServiceBoy = () => {
         onError: () => toast.error("Failed to update status")
     });
 
-    const exportMutation = useExportServiceBoys({
-        onSuccess: () => toast.success("Export successful"),
-        onError: () => toast.error("Export failed")
-    });
+    const exportMutation = useExportServiceBoys();
 
     const offMutation = useSetServiceBoyTemporaryOff({
         onSuccess: () => {
@@ -133,9 +130,31 @@ const ManageServiceBoy = () => {
 
     const handleExport = (type: string) => {
         const exportType = type.toLowerCase() as 'csv' | 'excel' | 'pdf';
+        toast.info(`Exporting as ${type}...`);
         exportMutation.mutate({
             type: exportType,
             params: { search, work_status: statusFilter }
+        }, {
+            onSuccess: (response: any) => {
+                const blob = response?.data instanceof Blob ? response.data : response;
+                if (blob instanceof Blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    const ext = exportType === 'csv' ? 'csv' : exportType === 'pdf' ? 'pdf' : 'xlsx';
+                    link.setAttribute('download', `ServiceBoys_Export_${new Date().getTime()}.${ext}`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                    toast.success("Export successful! Your download should start shortly.");
+                } else {
+                    toast.error("Export failed: Unexpected response format.");
+                }
+            },
+            onError: (error: any) => {
+                toast.error(`Export failed: ${error?.message || "Unknown error"}`);
+            }
         });
     };
 

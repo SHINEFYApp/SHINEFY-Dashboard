@@ -18,7 +18,13 @@ import {
     type BookingHistoryParams,
     type WalletHistoryParams,
     type UserPackagesParams,
-    type StatusUpdateParams
+    type StatusUpdateParams,
+    addUserLocation,
+    editUserLocation,
+    editUserVehicle,
+    type AddLocationParams,
+    type EditLocationParams,
+    type EditVehicleParams
 } from "./ManageUsers.services";
 
 // Get all users
@@ -104,6 +110,30 @@ export const useEditUserStatus = (options?: any) => {
 export const useEditOtpStatus = (options?: any) => {
     return useMutation<any, AxiosError, StatusUpdateParams>({
         mutationFn: (params: StatusUpdateParams) => editOtpStatus(params),
+        ...options
+    });
+};
+
+// Add user location (Mutation)
+export const useAddUserLocation = (options?: any) => {
+    return useMutation<any, AxiosError, AddLocationParams>({
+        mutationFn: (params: AddLocationParams) => addUserLocation(params),
+        ...options
+    });
+};
+
+// Edit user location (Mutation)
+export const useEditUserLocation = (options?: any) => {
+    return useMutation<any, AxiosError, EditLocationParams>({
+        mutationFn: (params: EditLocationParams) => editUserLocation(params),
+        ...options
+    });
+};
+
+// Edit user vehicle (Mutation)
+export const useEditUserVehicle = (options?: any) => {
+    return useMutation<any, AxiosError, EditVehicleParams>({
+        mutationFn: (params: EditVehicleParams) => editUserVehicle(params),
         ...options
     });
 };

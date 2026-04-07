@@ -41,6 +41,7 @@ import ViewSubAdmin from './pages/users&staff/subPages/viewSubAdmin';
 import ServiceBoyDetails from './pages/users&staff/subPages/ServiceBoyDetails';
 import TrackServiceBoy from './pages/users&staff/subPages/TrackServiceBoy';
 import ManageGroup from './pages/users&staff/subPages/ManageGroup';
+import UserProfile from './pages/users&staff/UserProfile';
 import ContactUs from './pages/technicalSupport/contactUs/contactUs';
 import ManageCompanies from './pages/technicalSupport/Manage Companies/manageCompanies';
 import Broadcast from './pages/technicalSupport/Broadcast/broadcast';
@@ -74,6 +75,7 @@ export const RoutesPages = () => {
 
         {/* Users & Staff */}
         <Route path="/users&staff/manage/users" element={<PermissionGuard permissionId={P.MANAGE_USERS}><ManageUsers /></PermissionGuard>} />
+        <Route path="/users&staff/manage/users/:id" element={<PermissionGuard permissionId={P.MANAGE_USERS}><UserProfile /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/manageGroup" element={<PermissionGuard permissionId={P.MANAGE_GROUP}><ManageGroup /></PermissionGuard>} />
         <Route path="/users&staff/manage/subAdmin" element={<PermissionGuard permissionId={P.MANAGE_SUB_ADMIN}><ManageSubAdmin /></PermissionGuard>} />
         <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<PermissionGuard permissionId={P.MANAGE_SUB_ADMIN}><AddSubAdmin /></PermissionGuard>} />

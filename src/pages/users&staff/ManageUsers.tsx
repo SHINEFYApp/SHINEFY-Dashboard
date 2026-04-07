@@ -86,12 +86,12 @@ export default function ManageUsers() {
             title: "Action",
             render: (_: any, record: any) => (
                 <div className="flex gap-2 items-center">
-                    <button
+                    <Link
+                        to={`/users&staff/manage/users/${record.user_id || record.id}`}
                         className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] p-2 font-semibold transition-colors"
-                        onClick={() => console.log('view item', record)}
                     >
                         <Eye className="w-4 h-4" /> View
-                    </button>
+                    </Link>
                     <button
                         className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] p-2 font-semibold transition-colors"
                         onClick={() => console.log('updated item', record)}

@@ -21,8 +21,8 @@ export default function ViewSubAdmin() {
     const [selectedPrivilegeIds, setSelectedPrivilegeIds] = useState<number[]>([]);
 
     useEffect(() => {
-        if (subAdminResponse?.data) {
-            const data = subAdminResponse.data;
+        if (subAdminResponse?.data?.data) {
+            const data = subAdminResponse.data.data;
             setReceiveSmsStatus(prev => ({ ...prev, isSms: !!data.receive_sms }));
 
             if (data.previlages) {

@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import { getService, postService } from "../service/service-requests";
+import { getService, postService, putService } from "../service/service-requests";
 
 export interface User {
     name: string;
@@ -124,5 +124,50 @@ export const editUserStatus = async (params: StatusUpdateParams) => {
 // GET /api/users/edit/otp-status?user_id=12&status=1
 export const editOtpStatus = async (params: StatusUpdateParams) => {
     const res: AxiosResponse = await postService("/api/users/edit/otp-status", params);
+    return res.data;
+};
+
+// POST /api/users/add/location
+export interface AddLocationParams {
+    user_id: number | string;
+    name: string;
+    location: string;
+    latitude: number;
+    longitude: number;
+}
+
+export const addUserLocation = async (params: AddLocationParams) => {
+    const res: AxiosResponse = await postService("/api/users/add/location", params);
+    return res.data;
+};
+
+// PUT /api/users/edit/location
+export interface EditLocationParams {
+    user_location_id: number;
+    user_id: number | string;
+    name?: string;
+    location?: string;
+    latitude?: number;
+    longitude?: number;
+}
+
+export const editUserLocation = async (params: EditLocationParams) => {
+    const res: AxiosResponse = await putService("/api/users/edit/location", params);
+    return res.data;
+};
+
+// PUT /api/users/edit/vehicle
+export interface EditVehicleParams {
+    vehicle_id: number;
+    user_id: number | string;
+    car_category_id: number;
+    make_id: number;
+    model_id: number;
+    color_id: number;
+    plate_number?: string;
+}
+
+export const editUserVehicle = async (params: EditVehicleParams) => {
+    const res: AxiosResponse = await putService("/api/users/edit/vehicle", params);
     return res.data;
 };

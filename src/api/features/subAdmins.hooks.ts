@@ -9,6 +9,7 @@ import {
     updateSubAdmin,
     deleteSubAdmin,
     getSubAdminPrivileges,
+    toggleSubAdminStatus,
     exportSubAdminsCsv,
     exportSubAdminsExcel,
     exportSubAdminsPdf,
@@ -50,6 +51,13 @@ export const useGetSubAdminPrivileges = (options?: any) => {
         queryFn: () => getSubAdminPrivileges(),
         queryKey: ["sub-admin-privileges"],
         options,
+    });
+};
+
+export const useToggleSubAdminStatus = (options?: any) => {
+    return useMutation<any, AxiosError, { id: string | number; data: { active_flag: number } }>({
+        mutationFn: ({ id, data }) => toggleSubAdminStatus(id, data),
+        ...options,
     });
 };
 

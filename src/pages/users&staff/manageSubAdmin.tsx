@@ -1,12 +1,12 @@
 import { Form, Formik } from "formik";
-import { exportTypes, franchise } from "../../constants/data";
+import { exportTypes } from "../../constants/data";
 import { FormDropdown } from "../../common/FormDropdown";
 import { ArrowUpToLine, Eye, Search, Shield, Trash2, Ban, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CustomTable } from "../../common/CustomTable";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { FormInput } from "../../common/FormInput";
-import { useGetSubAdmins, useDeleteSubAdmin, useExportSubAdmins } from "../../api/features/subAdmins.hooks";
+import { useGetSubAdmins, useDeleteSubAdmin, useExportSubAdmins, useToggleSubAdminStatus } from "../../api/features/subAdmins.hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -45,22 +45,54 @@ export default function ManageSubAdmin() {
         onError: () => toast.error("Failed to delete")
     });
 
-    const exportMutation = useExportSubAdmins({
-        onSuccess: () => toast.success("Export successful"),
-        onError: () => toast.error("Export failed")
+    const exportMutation = useExportSubAdmins();
+
+    const toggleStatusMutation = useToggleSubAdminStatus({
+        onSuccess: () => {
+            toast.success("Status updated successfully");
+            queryClient.invalidateQueries({ queryKey: ["sub-admins"] });
+        },
+        onError: () => toast.error("Failed to update status")
     });
 
-    const handleDelete = (id: number) => {
+    const handleDelete = useCallback((id: number) => {
         if (window.confirm("Are you sure?")) {
             deleteMutation.mutate(id);
         }
-    };
+    }, [deleteMutation]);
+
+    const handleToggleStatus = useCallback((id: number, currentStatus: string) => {
+        const newFlag = currentStatus === "Activated" ? 0 : 1;
+        toggleStatusMutation.mutate({ id, data: { active_flag: newFlag } });
+    }, [toggleStatusMutation]);
 
     const handleExport = (type: string) => {
         const exportType = type.toLowerCase() as 'csv' | 'excel' | 'pdf';
+        toast.info(`Exporting as ${type}...`);
         exportMutation.mutate({
             type: exportType,
             params: { search }
+        }, {
+            onSuccess: (response: any) => {
+                const blob = response?.data instanceof Blob ? response.data : response;
+                if (blob instanceof Blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    const ext = exportType === 'csv' ? 'csv' : exportType === 'pdf' ? 'pdf' : 'xlsx';
+                    link.setAttribute('download', `SubAdmins_Export_${new Date().getTime()}.${ext}`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                    toast.success("Export successful! Your download should start shortly.");
+                } else {
+                    toast.error("Export failed: Unexpected response format.");
+                }
+            },
+            onError: (error: any) => {
+                toast.error(`Export failed: ${error?.message || "Unknown error"}`);
+            }
         });
     };
 
@@ -76,46 +108,60 @@ export default function ManageSubAdmin() {
             )
         },
         { key: "name", title: "Name" },
-        { key: "email", title: "Email" }, // Sub Admin has email
+        { key: "email", title: "Email" },
         { key: "phone_number", title: "Phone Number" },
-        { key: "created_at", title: "Registration On" }, // Verify field
+        { key: "registered_at", title: "Registration On" },
         {
-            key: "active_flag", // Assuming active_flag exists
+            key: "status",
             title: "Status",
-            render: (status: number) => (
-                <span className={`font-bold ${status === 1 ? 'text-green-600' : 'text-red-500'}`}>
-                    {status === 1 ? 'Active' : 'Inactive'}
+            render: (status: string) => (
+                <span className={`font-bold ${status === 'Activated' ? 'text-green-600' : 'text-red-500'}`}>
+                    {status === 'Activated' ? 'Activated' : 'Deactivated'}
                 </span>
             )
         },
         {
             key: "action",
             title: "Action",
-            width: "w-[500px]",
-            render: (_: any, record: any) => (
-                <div className="flex gap-2 items-center text-nowrap">
-                    <Link
-                        to={`/users&staff/manage/subAdmin/view/${record.user_id || record.id}`}
-                        className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] px-3 py-3 font-semibold transition-colors"
-                    >
-                        <Eye size={18} /> View
-                    </Link>
-                    <Link
-                        to={`/users&staff/manage/subAdmin/edit/${record.user_id || record.id}`}
-                        className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3 py-3 font-semibold transition-colors"
-                    >
-                        <ArrowUpToLine size={18} /> Update
-                    </Link>
-                    <button
-                        className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-3 py-3 font-semibold transition-colors"
-                        onClick={() => handleDelete(record.user_id || record.id)}
-                    >
-                        <Trash2 size={18} /> Delete
-                    </button>
-                </div>
-            ),
+            width: "w-[600px]",
+            render: (_: any, record: any) => {
+                const id = record.user_id || record.id;
+                const isActive = record.status === 'Activated';
+                return (
+                    <div className="flex gap-2 items-center text-nowrap">
+                        <Link
+                            to={`/users&staff/manage/subAdmin/view/${id}`}
+                            className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] px-3 py-3 font-semibold transition-colors"
+                        >
+                            <Eye size={18} /> View
+                        </Link>
+                        <Link
+                            to={`/users&staff/manage/subAdmin/edit/${id}`}
+                            className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3 py-3 font-semibold transition-colors"
+                        >
+                            <ArrowUpToLine size={18} /> Update
+                        </Link>
+                        <button
+                            className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-3 py-3 font-semibold transition-colors"
+                            onClick={() => handleDelete(id)}
+                        >
+                            <Trash2 size={18} /> Delete
+                        </button>
+                        <button
+                            className={`flex items-center gap-2 rounded-[2.75px] px-3 py-3 font-semibold transition-colors ${
+                                isActive
+                                    ? 'bg-[#FFF3E0] text-[#FF9800] border border-[#FF9800] hover:text-[#FFF3E0] hover:bg-[#FF9800]'
+                                    : 'bg-[#E8F5E9] text-[#4CAF50] border border-[#4CAF50] hover:text-[#E8F5E9] hover:bg-[#4CAF50]'
+                            }`}
+                            onClick={() => handleToggleStatus(id, record.status)}
+                        >
+                            {isActive ? <><Ban size={18} /> Deactivate</> : <><CheckCircle size={18} /> Activate</>}
+                        </button>
+                    </div>
+                );
+            },
         },
-    ], [handleDelete]);
+    ], [handleDelete, handleToggleStatus]);
 
 
     const handlePageChange = (page: number) => {
@@ -129,7 +175,7 @@ export default function ManageSubAdmin() {
                     <Formik
                         initialValues={{
                             search: '',
-                            franchise: ''
+                      
                         }}
                         onSubmit={handleSubmit}
                     >
@@ -148,9 +194,7 @@ export default function ManageSubAdmin() {
                                                 checkmark={false}
                                             />
                                         </div>
-                                        <div className="w-full md:w-52 lg:w-60 -space-y-2">
-                                            <FormDropdown name="franchise" label="" placeholder="Franchise" options={franchise} className="mb-2" />
-                                        </div>
+                                       
                                         <button
                                             type="submit"
                                             className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"

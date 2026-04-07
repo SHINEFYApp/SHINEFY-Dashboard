@@ -78,9 +78,7 @@ export default function AddSubAdmin() {
                             formData.append('name', values.name);
                             formData.append('email', values.email);
                             formData.append('phone_number', values.phoneNumber);
-                            selectedPrivilegeIds.forEach((id: number, index: number) => {
-                                formData.append(`previlages[${index}]`, String(id));
-                            });
+                            formData.append('previlages', JSON.stringify(selectedPrivilegeIds));
                             formData.append('receive_sms', receiveSmsStatus.isSms ? '1' : '0');
                             if (values.password) formData.append('password', values.password);
                             if (values.confirmPassword) formData.append('password_confirmation', values.confirmPassword);

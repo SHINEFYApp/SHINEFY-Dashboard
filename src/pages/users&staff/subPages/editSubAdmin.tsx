@@ -150,9 +150,7 @@ export default function EditSubAdmin() {
                                 formData.append('name', values.name);
                                 formData.append('email', values.email);
                                 formData.append('phone_number', values.phoneNumber);
-                                selectedPrivilegeIds.forEach((privId: number, index: number) => {
-                                    formData.append(`previlages[${index}]`, String(privId));
-                                });
+                                formData.append('previlages', JSON.stringify(selectedPrivilegeIds));
                                 formData.append('receive_sms', receiveSmsStatus.isSms ? '1' : '0');
 
                                 if (values.password) {

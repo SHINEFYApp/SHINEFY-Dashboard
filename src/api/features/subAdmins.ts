@@ -4,6 +4,7 @@ import {
     postService,
     putService,
     deleteService,
+    patchService,
 } from "../service/service-requests";
 
 // Interfaces
@@ -77,17 +78,22 @@ export const getSubAdminPrivileges = async () => {
     return await getService("/api/get/sub/admin/privileges");
 };
 
+// PATCH /api/sub/admin/{id}/status - Toggle activate/deactivate
+export const toggleSubAdminStatus = async (id: number | string, data: { active_flag: number }) => {
+    return await patchService(`/api/sub/admin/${id}/status`, data);
+};
+
 
 // Export
 
 export const exportSubAdminsCsv = async (params: any) => {
-    return await getService("/api/export/subadmins/csv", params);
+    return await getService("/api/export/sub/admins/csv", { params, responseType: "blob" });
 };
 
 export const exportSubAdminsExcel = async (params: any) => {
-    return await getService("/api/export/sub/admins/excel", params);
+    return await getService("/api/export/sub/admins/excel", { params, responseType: "blob" });
 };
 
 export const exportSubAdminsPdf = async (params: any) => {
-    return await getService("/api/export/sub/admins/pdf", params);
+    return await getService("/api/export/sub/admins/pdf", { params, responseType: "blob" });
 };

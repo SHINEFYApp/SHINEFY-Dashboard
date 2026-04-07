@@ -51,7 +51,7 @@ const ServiceBoyDetails = () => {
     const { data: responseData, isLoading, isError } = useGetServiceBoyDetails(id as string);
     const { data: areasResponse, isLoading: isLoadingAreas } = useGetServiceBoyAreas(id as string);
     const { data: bookingsResponse, isLoading: isLoadingBookings } = useGetServiceBoyBookings(id as string, {
-        page: currentPage,
+        start: currentPage,
         limit: pageSize,
     });
 
@@ -203,10 +203,10 @@ const ServiceBoyDetails = () => {
                     </div>
 
                     {/* Chart & Booking Section Container */}
-                    <div className="bg-[#F5F6F8] rounded-[24px] p-8 mt-12 w-full max-w-full overflow-hidden">
+                    {/* <div className="bg-[#F5F6F8] rounded-[24px] p-8 mt-12 w-full max-w-full overflow-hidden"> */}
                         
                         {/* Filter Bar */}
-                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4 border-b border-gray-200/60 pb-8">
+                        {/* <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4 border-b border-gray-200/60 pb-8">
                             <h2 className="text-[19px] font-extrabold text-[#1C1C1E]">Service Boy Booking</h2>
                             
                             <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
@@ -233,10 +233,10 @@ const ServiceBoyDetails = () => {
                                     Export Details
                                 </button>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Chart Area */}
-                        <div className="bg-transparent">
+                        {/* <div className="bg-transparent">
                             <h3 className="text-[18px] font-extrabold text-[#1C1C1E] mb-6 pt-1">Completed Bookings</h3>
                             
                             <div className="h-[300px] w-full">
@@ -274,9 +274,9 @@ const ServiceBoyDetails = () => {
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
-                        </div>
+                        </div> */}
 
-                    </div>
+                    {/* </div> */}
                 </div>
             )}
             

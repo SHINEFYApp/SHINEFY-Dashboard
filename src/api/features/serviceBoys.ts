@@ -65,15 +65,19 @@ export interface UpdateStatusPayload {
     active_flag: number;
 }
 
+export interface ServiceBoyCoordinate {
+    latitude: string;
+    longitude: string;
+    created_at: string;
+}
+
 export interface ServiceBoyTrackResponse {
     status: string;
     data: {
         user_id: number;
         name: string;
         phone_number: number;
-        latitude: string;
-        longitude: string;
-        created_at: string;
+        coordinates: ServiceBoyCoordinate[];
     }
 }
 
@@ -166,17 +170,17 @@ export const setServiceBoyTemporaryOff = async (id: number | string, data: SetTe
 // Export - using query params pattern as observed in Wallets
 // GET /export/service-boys/csv
 export const exportServiceBoysCsv = async (params: any) => {
-    return await getService("/api/export/service-boys/csv", params);
+    return await getService("/api/export/service-boys/csv", { params, responseType: "blob" });
 };
 
 // GET /export/service-boys/excel
 export const exportServiceBoysExcel = async (params: any) => {
-    return await getService("/api/export/service-boys/excel", params);
+    return await getService("/api/export/service-boys/excel", { params, responseType: "blob" });
 };
 
 // GET /export/service-boys/pdf
 export const exportServiceBoysPdf = async (params: any) => {
-    return await getService("/api/export/service-boys/pdf", params);
+    return await getService("/api/export/service-boys/pdf", { params, responseType: "blob" });
 };
 
 // GET /service-boys/{id}/track
