@@ -19,8 +19,9 @@ export interface WalletItem {
 
 export interface GetWalletsParams {
     search_text?: string;
-    start?: number;
+    page?: number;
     limit?: number;
+    start?: number
 }
 
 export interface GetWalletsResponse {

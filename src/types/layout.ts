@@ -22,6 +22,7 @@ export interface SubItem {
     icon: React.ReactNode;
     label: string;
     path: string;
+    permissionId?: number;
 }
 
 export interface MenuItem {
@@ -30,6 +31,7 @@ export interface MenuItem {
     path?: string;
     subItems?: SubItem[];
     isActive?: boolean;
+    permissionId?: number;
 }
 
 // LAYOUT

@@ -4,12 +4,11 @@ import { Button } from '../../../components/ui/button';
 import { FormInput } from '../../../common/FormInput';
 import { useState, useRef, useEffect } from 'react';
 import type { smsStatus } from '../../../types/common';
-import { useGetSubAdminDetails, useUpdateSubAdmin, useUploadSubAdminImage } from "../../../api/features/subAdmins.hooks";
+import { useGetSubAdminDetails, useUpdateSubAdmin, useGetSubAdminPrivileges } from "../../../api/features/subAdmins.hooks";
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from "@tanstack/react-query";
 import DropDownAndSelect from '../../../common/dropDownAndSelect';
-import { menus } from '../../../constants/data';
 import { Skeleton } from '../../../components/ui/skeleton';
 
 const CustomFileUpload = ({ name, title, accept = ".jpg,.png,.jpeg", initialImage }: { name: string, title: string; accept?: string; initialImage?: string }) => {
@@ -76,44 +75,37 @@ export default function EditSubAdmin() {
     
     const { data: subAdminResponse, isLoading: isLoadingDetails } = useGetSubAdminDetails(id || "");
     const { mutateAsync: updateSubAdmin, isPending: isUpdating } = useUpdateSubAdmin();
-    const { mutateAsync: uploadImage, isPending: isUploading } = useUploadSubAdminImage();
+    const { data: privilegesResponse } = useGetSubAdminPrivileges();
+    const privileges = privilegesResponse?.data?.data?.data || [];
 
     const [receiveSmsStatus, setReceiveSmsStatus] = useState<smsStatus>({
         status: true,
         isSms: false
     });
 
-    const [selectedPrivileges, setSelectedPrivileges] = useState<Record<string, string[]>>({});
+    const [selectedPrivilegeIds, setSelectedPrivilegeIds] = useState<number[]>([]);
 
     useEffect(() => {
-        if (subAdminResponse?.data) {
-            const data = subAdminResponse.data;
+        const data = subAdminResponse?.data?.data;
+        if (data) {
             setReceiveSmsStatus(prev => ({ ...prev, isSms: !!data.receive_sms }));
-            
-            // Map previlages (number[] or string "1,2,3") to selectedPrivileges (Record<string, string[]>)
-            if (data.previlages) {
-                const mapped: Record<string, string[]> = {};
-                let privArray: any[] = [];
-                
-                if (Array.isArray(data.previlages)) {
-                    privArray = data.previlages;
-                } else if (typeof data.previlages === 'string') {
-                    privArray = data.previlages.split(',').map((s: string) => s.trim()).filter(Boolean);
-                }
 
-                privArray.forEach((priv: any) => {
-                    const privKey = Number(priv);
-                    const menu = menus.find(m => m.Key === privKey);
-                    if (menu) {
-                        mapped[menu.title] = [...menu.options];
-                    }
-                });
-                setSelectedPrivileges(mapped);
+            if (data.previlages) {
+                let privArray: number[] = [];
+                if (Array.isArray(data.previlages)) {
+                    privArray = data.previlages.map((p: any) => {
+                        if (typeof p === 'object' && p !== null && 'id' in p) return Number(p.id);
+                        return Number(p);
+                    }).filter((n: number) => !isNaN(n) && n > 0);
+                } else if (typeof data.previlages === 'string') {
+                    privArray = data.previlages.split(',').map((s: string) => Number(s.trim())).filter((n: number) => !isNaN(n) && n > 0);
+                }
+                setSelectedPrivilegeIds(privArray);
             }
         }
     }, [subAdminResponse]);
 
-    const isSubmitting = isUpdating || isUploading;
+    const isSubmitting = isUpdating;
 
     if (isLoadingDetails) {
         return (
@@ -133,11 +125,13 @@ export default function EditSubAdmin() {
         );
     }
 
+    const subAdminData = subAdminResponse?.data?.data;
+
     const initialValues = {
-        name: subAdminResponse?.data?.name || '',
-        phoneNumber: subAdminResponse?.data?.phone_number || '',
-        email: subAdminResponse?.data?.email || '',
-        password: '', // Keep empty for security, only update if provided
+        name: subAdminData?.name || '',
+        phoneNumber: subAdminData?.phone_number || '',
+        email: subAdminData?.email || '',
+        password: '',
         confirmPassword: '',
         image: null
     };
@@ -151,31 +145,23 @@ export default function EditSubAdmin() {
                     validationSchema={editSubAdminSchema}
                     onSubmit={async (values) => {
                         try {
-                            const privIds = menus
-                                .filter(menu => selectedPrivileges[menu.title] && selectedPrivileges[menu.title].length > 0)
-                                .map(menu => menu.Key);
-
-                            const payload: any = {
-                                name: values.name,
-                                email: values.email,
-                                phone_number: values.phoneNumber,
-                                previlages: privIds,
-                                receive_sms: receiveSmsStatus.isSms,
-                            };
-
-                            if (values.password) {
-                                payload.password = values.password;
-                                payload.password_confirmation = values.confirmPassword;
-                            }
-
                             if (id) {
-                                await updateSubAdmin({ id, data: payload });
+                                const formData = new FormData();
+                                formData.append('name', values.name);
+                                formData.append('email', values.email);
+                                formData.append('phone_number', values.phoneNumber);
+                                formData.append('previlages', JSON.stringify(selectedPrivilegeIds));
+                                formData.append('receive_sms', receiveSmsStatus.isSms ? '1' : '0');
 
-                                if (values.image) {
-                                    const formData = new FormData();
-                                    formData.append('image', values.image);
-                                    await uploadImage({ id, formData });
+                                if (values.password) {
+                                    formData.append('password', values.password);
+                                    formData.append('password_confirmation', values.confirmPassword);
                                 }
+
+                                // Image
+                                if (values.image) formData.append('image', values.image);
+
+                                await updateSubAdmin({ id, formData });
 
                                 toast.success("Sub Admin updated successfully");
                                 queryClient.invalidateQueries({ queryKey: ["sub-admins"] });
@@ -188,7 +174,7 @@ export default function EditSubAdmin() {
                         }
                     }}
                 >
-                    {({ isValid, values }) => (
+                    {({ values }) => (
                         <Form>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 grid-flow-dense">
                                 <div className="order-2 md:order-1 grid grid-cols-1 gap-6 mb-8">
@@ -232,24 +218,25 @@ export default function EditSubAdmin() {
                                     <div className=' flex flex-col justify-center items-start'>
                                         <h1 className='font-bold capitalize'>your profile</h1>
                                         <p className='text-[#616161] pb-5'>This will be displayed on your profile.</p>
-                                        <CustomFileUpload 
-                                            name="image" 
-                                            title="Profile Image" 
-                                            initialImage={subAdminResponse?.data?.image_url}
+                                        <CustomFileUpload
+                                            name="image"
+                                            title="Profile Image"
+                                            initialImage={subAdminData?.image_url}
                                         />
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <DropDownAndSelect
-                                selectedOptions={selectedPrivileges}
-                                setSelectedOptions={setSelectedPrivileges}
+                                privileges={privileges}
+                                selectedIds={selectedPrivilegeIds}
+                                setSelectedIds={setSelectedPrivilegeIds}
                             />
 
                             <div className="grid grid-cols-1 md:grid-cols-2 mt-6">
                                 <Button
                                     type="submit"
-                                    disabled={!isValid || isSubmitting}
+                                    disabled={isSubmitting}
                                     className="bg-primary hover:bg-primary-600 text-gray-900 font-bold h-[58px] rounded-xl text-[20px] shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                 >
                                     {isSubmitting ? "Updating..." : "Update"}

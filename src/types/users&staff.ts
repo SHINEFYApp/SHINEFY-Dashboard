@@ -33,6 +33,8 @@ export interface addGroupTypes {
 export interface addGroupProps {
     addGroup : addGroupTypes
     setAddGroup : Dispatch<SetStateAction<addGroupTypes>>
+    editingGroup?: { group_id: number; group_name: string; user_ids: number[] } | null
+    setEditingGroup?: Dispatch<SetStateAction<{ group_id: number; group_name: string; user_ids: number[] } | null>>
 }
 
 export interface filteroptionsProps {

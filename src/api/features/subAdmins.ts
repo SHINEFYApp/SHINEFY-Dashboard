@@ -4,6 +4,7 @@ import {
     postService,
     putService,
     deleteService,
+    patchService,
 } from "../service/service-requests";
 
 // Interfaces
@@ -24,7 +25,7 @@ export interface SubAdminItem {
 
 export interface GetSubAdminsParams {
     limit?: number;
-    start?: number;
+    page?: number;
     search?: string;
 }
 
@@ -52,14 +53,14 @@ export const getSubAdminDetails = async (user_id: number | string) => {
     return await getService("/api/view/sub/admin", { user_id });
 };
 
-// POST /api/add/sub/admin
-export const addSubAdmin = async (data: AddSubAdminPayload) => {
-    return await postService("/api/add/sub/admin", data);
+// POST /api/add/sub/admin (FormData - includes image)
+export const addSubAdmin = async (formData: FormData) => {
+    return await postService("/api/add/sub/admin", formData);
 };
 
-// PUT /api/edit/sub/admin/{id}
-export const updateSubAdmin = async (id: number | string, data: UpdateSubAdminPayload) => {
-    return await putService(`/api/edit/sub/admin/${id}`, data);
+// POST /api/edit/sub/admin/{id} (FormData - includes image)
+export const updateSubAdmin = async (id: number | string, formData: FormData) => {
+    return await postService(`/api/edit/sub/admin/${id}`, formData);
 };
 
 // DELETE /api/delete/sub/admin/{id}
@@ -67,21 +68,32 @@ export const deleteSubAdmin = async (id: number | string) => {
     return await deleteService(`/api/delete/sub/admin/${id}`);
 };
 
-// POST /api/sub/admins/{id}/image
-export const uploadSubAdminImage = async (id: number | string, formData: FormData) => {
-    return await postService(`/api/sub/admins/${id}/image`, formData);
+// GET /api/get/sub/admin/privileges
+export interface PrivilegeItem {
+    id: number;
+    value: string;
+}
+
+export const getSubAdminPrivileges = async () => {
+    return await getService("/api/get/sub/admin/privileges");
 };
+
+// PATCH /api/sub/admin/{id}/status - Toggle activate/deactivate
+export const toggleSubAdminStatus = async (id: number | string, data: { active_flag: number }) => {
+    return await patchService(`/api/sub/admin/${id}/status`, data);
+};
+
 
 // Export
 
 export const exportSubAdminsCsv = async (params: any) => {
-    return await getService("/api/export/subadmins/csv", params);
+    return await getService("/api/export/sub/admins/csv", { params, responseType: "blob" });
 };
 
 export const exportSubAdminsExcel = async (params: any) => {
-    return await getService("/api/export/sub/admins/excel", params);
+    return await getService("/api/export/sub/admins/excel", { params, responseType: "blob" });
 };
 
 export const exportSubAdminsPdf = async (params: any) => {
-    return await getService("/api/export/sub/admins/pdf", params);
+    return await getService("/api/export/sub/admins/pdf", { params, responseType: "blob" });
 };

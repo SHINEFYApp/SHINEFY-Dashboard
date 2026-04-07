@@ -8,13 +8,12 @@ import {
     addSubAdmin,
     updateSubAdmin,
     deleteSubAdmin,
-    uploadSubAdminImage,
+    getSubAdminPrivileges,
+    toggleSubAdminStatus,
     exportSubAdminsCsv,
     exportSubAdminsExcel,
     exportSubAdminsPdf,
     type GetSubAdminsParams,
-    type AddSubAdminPayload,
-    type UpdateSubAdminPayload
 } from "./subAdmins";
 
 export const useGetSubAdmins = (params: GetSubAdminsParams, options?: any) => {
@@ -34,15 +33,30 @@ export const useGetSubAdminDetails = (userId: number | string, options?: any) =>
 };
 
 export const useAddSubAdmin = (options?: any) => {
-    return useMutation<any, AxiosError, AddSubAdminPayload>({
-        mutationFn: (data: AddSubAdminPayload) => addSubAdmin(data),
+    return useMutation<any, AxiosError, FormData>({
+        mutationFn: (formData: FormData) => addSubAdmin(formData),
         ...options,
     });
 };
 
 export const useUpdateSubAdmin = (options?: any) => {
-    return useMutation<any, AxiosError, { id: string | number; data: UpdateSubAdminPayload }>({
-        mutationFn: ({ id, data }) => updateSubAdmin(id, data),
+    return useMutation<any, AxiosError, { id: string | number; formData: FormData }>({
+        mutationFn: ({ id, formData }) => updateSubAdmin(id, formData),
+        ...options,
+    });
+};
+
+export const useGetSubAdminPrivileges = (options?: any) => {
+    return useGet({
+        queryFn: () => getSubAdminPrivileges(),
+        queryKey: ["sub-admin-privileges"],
+        options,
+    });
+};
+
+export const useToggleSubAdminStatus = (options?: any) => {
+    return useMutation<any, AxiosError, { id: string | number; data: { active_flag: number } }>({
+        mutationFn: ({ id, data }) => toggleSubAdminStatus(id, data),
         ...options,
     });
 };
@@ -54,12 +68,6 @@ export const useDeleteSubAdmin = (options?: any) => {
     });
 };
 
-export const useUploadSubAdminImage = (options?: any) => {
-    return useMutation<any, AxiosError, { id: string | number; formData: FormData }>({
-        mutationFn: ({ id, formData }) => uploadSubAdminImage(id, formData),
-        ...options,
-    });
-};
 
 export const useExportSubAdmins = (options?: any) => {
     return useMutation<any, AxiosError, { type: 'csv' | 'excel' | 'pdf', params: any }>({

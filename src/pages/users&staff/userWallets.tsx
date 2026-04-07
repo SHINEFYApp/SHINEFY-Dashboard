@@ -97,16 +97,20 @@ export default function UsersWallets() {
 
     const { data, isLoading } = useGetWallets({
         start: (currentPage - 1) * pageSize,
+        page: currentPage,
         limit: pageSize,
         search_text: search
     });
 
-    const walletsRaw = data?.data?.data?.wallets; // Response -> Body -> Data -> Wallets
+    const responseData = data?.data?.data || data?.data || {};
+    const walletsRaw = responseData?.wallets || responseData?.data;
     const wallets = (Array.isArray(walletsRaw) ? walletsRaw : []) as any[];
-    const pagination = data?.data?.data?.pagination;
+    const pagination = responseData?.pagination || data?.data?.pagination || {};
 
-    const totalEntries = pagination?.total_items || 0;
-    const totalPages = pagination?.total_pages || 0;
+    const totalEntries = pagination?.total_items || pagination?.total || wallets.length;
+    const totalPages = pagination?.total_pages || pagination?.last_page || (totalEntries > 0 ? Math.ceil(totalEntries / pageSize) : 0);
+
+    console.log("Wallets API response:", { raw: data?.data, responseData, pagination, totalEntries, totalPages, walletsCount: wallets.length });
 
 
     const handlePageChange = (page: number) => {
