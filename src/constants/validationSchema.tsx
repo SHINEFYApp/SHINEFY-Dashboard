@@ -262,11 +262,7 @@ export const addSubAdminSchema = Yup.object({
         .email('Invalid email address'),
     password: Yup.string()
         .required('Password is required')
-        .min(8, 'Password must be at least 8 characters')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .matches(/[0-9]/, 'Password must contain at least one number')
-        .matches(/[@$!%*?&]/, 'Password must contain at least one special character'),
+        .min(8, 'Password must be at least 8 characters'),
     confirmPassword: Yup.string()
         .required('Confirm Password is required')
         .oneOf([Yup.ref('password')], 'Passwords must match'),
@@ -307,11 +303,14 @@ export const editSubAdminSchema = Yup.object({
 });
 
 export const addVehicleSchema = Yup.object({
-    user: Yup.string().required('the user is required'),
-    category: Yup.string().required('the category is required'),
-    make: Yup.string().required('the make is required'),
-    model: Yup.string().required('the model is required'),
-    color: Yup.string().required('the color is required'),
+    phoneNumber: Yup.string()
+        .matches(/^[0-9]{10,15}$/, 'Phone number must be 10-15 digits')
+        .required('Phone number is required'),
+    category: Yup.string().required('Category is required'),
+    make: Yup.string().required('Make is required'),
+    model: Yup.string().required('Model is required'),
+    color: Yup.string().required('Color is required'),
+    plateNumber: Yup.string().required('Plate number is required'),
 });
 
 export const addServiceBoySchema = Yup.object({

@@ -13,6 +13,81 @@ interface user_info {
     name: string
 }
 
+export interface PackageServiceDetail {
+    service_id: number;
+    service_name: string;
+    service_image: string;
+    service_price: string;
+    service_label: string;
+    service_time: number;
+    service_description: string;
+    service_name_arabic: string;
+    service_label_arabic: string;
+    service_description_arabic: string;
+    delete_flag: number;
+    createtime: string;
+    updatetime: string;
+    mysqltime: string;
+    service_discount: number;
+    service_price_before_discount: number;
+    apply_add_extra_service: number;
+}
+
+export interface PackageExtraServiceDetail {
+    extra_service_id: number;
+    extra_service_name: string;
+    extra_service_image: string;
+    extra_service_price: string;
+    extra_service_label: string | null;
+    extra_service_time: number;
+    extra_service_description: string;
+    extra_service_name_arabic: string;
+    extra_service_description_arabic: string;
+    delete_flag: number;
+    createtime: string;
+    updatetime: string;
+    mysqltime: string;
+    extra_service_discount: number;
+    extra_service_price_before_discount: number;
+}
+
+export interface UserPackageService {
+    id: number;
+    user_package_id: number;
+    package_id: number;
+    user_id: number;
+    service_id: number | null;
+    extra_service_id: number | null;
+    type: "main" | "extra";
+    status: string;
+    quantity: number;
+    used_quantity: number;
+    remind_quantity: number;
+    main_services?: PackageServiceDetail;
+    extra_services?: PackageExtraServiceDetail;
+}
+
+export interface UserPackage {
+    id: number;
+    user_id: number;
+    package_id: number;
+    status: string;
+    payment_method: string;
+    wallet_amount: number;
+    total_used: number | null;
+    total_price: number;
+    remind_used: number | null;
+    available_from: string;
+    available_to: string;
+    delete_flag: string;
+    vehicle_id: number | null;
+    created_at: string;
+    updated_at: string;
+    package: packageTyps;
+    all_main_services: UserPackageService[];
+    all_extra_services: UserPackageService[];
+}
+
 export interface createServiceBookingPayload {
     booking_date: string,
     booking_time: string,
@@ -117,7 +192,8 @@ export interface BookingFormData {
     serviceBoy: services_boys
     userNote: string;
     adminNotes: string;
-    mainPackage?: packageTyps;
+    mainPackage?: UserPackage;
+    userPackages: UserPackage[];
     coupon?: CouponData
     paymentMethod?: string;
     walletAmount?: string;
@@ -373,6 +449,7 @@ export interface servicesBoysPayload {
     booking_date: string
     booking_time: string
     service_duration: number
+    service_id: number | string
 }
 
 export interface servicesBoysResponse {
@@ -395,7 +472,7 @@ export interface getUserInfoByNumberResponse {
         user_info: UserInfo;
         vehicles: Vehicle[];
         locations: Location[];
-        packages: any[];
+        packages: UserPackage[];
     }
 }
 
@@ -457,4 +534,18 @@ export interface formDataManageBooking{
     search : string ,
     date : string ,
     limit : string
+}
+
+export interface UpdateBookingPayload {
+    status: string;
+    main_service?: number;
+    coupan_amount?: number;
+    wallet_amount?: number;
+    address_loc?: string;
+    lat?: string;
+    lon?: string;
+    booking_admin_note?: string;
+    extra_service_id?: number[];
+    extra_services_quantity?: number[];
+    driver_status?: string;
 }

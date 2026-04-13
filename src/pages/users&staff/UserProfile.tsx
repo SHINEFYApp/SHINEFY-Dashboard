@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Search, Eye, ArrowUpToLine, Trash2, SlidersHorizontal, Plus, Pencil, X } from "lucide-react";
+import { Search, Eye, ArrowUpToLine, Trash2, Plus, Pencil, X } from "lucide-react";
 import { Form, Formik } from "formik";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -36,13 +36,11 @@ export default function UserProfile() {
 
     // Booking History state
     const [bookingPage, setBookingPage] = useState(1);
-    const [bookingSearch, setBookingSearch] = useState("");
     const [bookingDate, setBookingDate] = useState("");
     const bookingPageSize = 10;
 
     // Wallet History state
     const [walletPage, setWalletPage] = useState(1);
-    const [walletSearch, setWalletSearch] = useState("");
     const walletPageSize = 10;
 
     // User Packages state
@@ -65,12 +63,15 @@ export default function UserProfile() {
         user_id: userId,
         limit: bookingPageSize,
         page: bookingPage,
+        date: bookingDate || undefined,
     });
     const { data: vehiclesData, isLoading: isLoadingVehicles } = useUserVehicles({ user_id: userId });
     const { data: locationsData, isLoading: isLoadingLocations } = useUserLocations({ user_id: userId });
     const { data: walletData, isLoading: isLoadingWallet } = useUserWalletHistory({
         user_id: userId,
-        search: walletSearch || "0",
+        search: "0",
+        limit: walletPageSize,
+        page: walletPage,
     });
     const { data: packagesData, isLoading: isLoadingPackages } = useUserPackages({
         user_id: userId,
@@ -285,10 +286,13 @@ export default function UserProfile() {
         {
             key: "action",
             title: "Action",
-            render: () => (
-                <button className="bg-[#D0E8FF] flex items-center gap-1 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] px-2 py-1 text-xs font-semibold transition-colors">
+            render: (_: any, record: any) => (
+                <Link 
+                    to={`/users&staff/manage/users/${userId}/packageDetails/${record.id}`}
+                    className="bg-[#D0E8FF] flex items-center gap-1 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-[#D0E8FF] hover:bg-[#1976D2] px-2 py-1 text-xs font-semibold transition-colors w-fit"
+                >
                     <Eye className="w-3 h-3" /> View
-                </button>
+                </Link>
             ),
         },
     ], [packagesPage]);
@@ -405,9 +409,8 @@ export default function UserProfile() {
                             <h3 className="text-sm text-gray-500 mb-3">Filter</h3>
                             <p className="text-xs text-gray-400 mb-3">Booking History</p>
                             <Formik
-                                initialValues={{ search: "", date: "" }}
+                                initialValues={{ date: "" }}
                                 onSubmit={(values) => {
-                                    setBookingSearch(values.search);
                                     setBookingDate(values.date);
                                     setBookingPage(1);
                                 }}
@@ -415,16 +418,6 @@ export default function UserProfile() {
                                 {() => (
                                     <Form>
                                         <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-                                            <div className="w-full md:w-52">
-                                                <FormInput
-                                                    name="search"
-                                                    label=""
-                                                    placeholder="Search"
-                                                    icon={<Search className="w-5 h-5" />}
-                                                    className="mb-0"
-                                                    checkmark={false}
-                                                />
-                                            </div>
                                             <div className="w-full md:w-52">
                                                 <FormInput
                                                     name="date"
@@ -440,12 +433,6 @@ export default function UserProfile() {
                                                 className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
                                             >
                                                 Search
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="py-3 px-4 rounded-lg bg-[#F4F5FA]"
-                                            >
-                                                <SlidersHorizontal className="w-5 h-5" />
                                             </button>
                                         </div>
                                     </Form>
@@ -511,56 +498,6 @@ export default function UserProfile() {
 
                 {activeTab === "Wallet History" && (
                     <div className="px-6">
-                        <div className="mb-4">
-                            <h3 className="text-sm text-gray-500 mb-3">Filter</h3>
-                            <p className="text-xs text-gray-400 mb-3">Wallet History</p>
-                            <Formik
-                                initialValues={{ search: "", date: "" }}
-                                onSubmit={(values) => {
-                                    setWalletSearch(values.search);
-                                    setWalletPage(1);
-                                }}
-                            >
-                                {() => (
-                                    <Form>
-                                        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-                                            <div className="w-full md:w-52">
-                                                <FormInput
-                                                    name="search"
-                                                    label=""
-                                                    placeholder="Search"
-                                                    icon={<Search className="w-5 h-5" />}
-                                                    className="mb-0"
-                                                    checkmark={false}
-                                                />
-                                            </div>
-                                            <div className="w-full md:w-52">
-                                                <FormInput
-                                                    name="date"
-                                                    label=""
-                                                    placeholder="Date"
-                                                    type="date"
-                                                    className="mb-0"
-                                                    checkmark={false}
-                                                />
-                                            </div>
-                                            <button
-                                                type="submit"
-                                                className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
-                                            >
-                                                Search
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="py-3 px-10 rounded-lg bg-primary text-secondary-900 font-semibold"
-                                            >
-                                                Add Wallet amount
-                                            </button>
-                                        </div>
-                                    </Form>
-                                )}
-                            </Formik>
-                        </div>
                         <CustomTable
                             columns={walletColumns}
                             data={walletHistory}

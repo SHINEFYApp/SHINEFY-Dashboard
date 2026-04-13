@@ -34,15 +34,15 @@ export const mutateBookingPackage = (
     extra_services: { id: string; quantity: number }[]
 ): createPackageBookingPayload => (
     {
-        'user_package_id' : String(formData.userDetails?.user_id),
-        'package_id' : String(formData.mainPackage?.id) ,
+        'user_package_id' : String(formData.mainPackage?.id || ''),
+        'package_id' : String(formData.mainPackage?.package_id || '') ,
         'booking_date' : formData.bookingDate,
         'booking_time' : formData.bookingTime,
         'latitude' : formData.address.latitude,
         'longitude' : formData.address.longitude,
         'address_loc' : formData.address.location,
         'coupon_id' : formData.coupon?.id || 0,
-        'service_id' : 1,
+        'service_id' : Number(formData.mainService || 1),
         'area_id' : 4,
         'vehicle_id' : vehicles_id,
         'free_status' : 0,

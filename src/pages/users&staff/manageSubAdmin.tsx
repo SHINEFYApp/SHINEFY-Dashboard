@@ -62,8 +62,8 @@ export default function ManageSubAdmin() {
     }, [deleteMutation]);
 
     const handleToggleStatus = useCallback((id: number, currentStatus: string) => {
-        const newFlag = currentStatus === "Activated" ? 0 : 1;
-        toggleStatusMutation.mutate({ id, data: { active_flag: newFlag } });
+        const newStatus = currentStatus === "Activated" ? 0 : 1;
+        toggleStatusMutation.mutate({ user_id: id, status: newStatus });
     }, [toggleStatusMutation]);
 
     const handleExport = (type: string) => {

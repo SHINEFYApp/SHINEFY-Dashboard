@@ -7,6 +7,7 @@ import ManageSlot from './pages/bookings/bookings_slot/ManageSlots';
 import AddVehicles from './pages/vehicles/addVehicles';
 import UsersWallets from './pages/users&staff/userWallets';
 import CreateBookingsSlot from './pages/bookings/bookings_slot/CreateBookingsSlot';
+import EditSpecificSlot from './pages/bookings/bookings_slot/EditSpecificSlot';
 import ManageCountries from './pages/Geography&Regions/manageCountries';
 import ManageRegions from './pages/Geography&Regions/manageRegions';
 import ManageAreas from './pages/Geography&Regions/manageAreas';
@@ -43,6 +44,7 @@ import TrackServiceBoy from './pages/users&staff/subPages/TrackServiceBoy';
 import ManageGroup from './pages/users&staff/subPages/ManageGroup';
 import UserProfile from './pages/users&staff/UserProfile';
 import ContactUs from './pages/technicalSupport/contactUs/contactUs';
+import UserPackageDetails from './pages/users&staff/subPages/UserPackageDetails';
 import ManageCompanies from './pages/technicalSupport/Manage Companies/manageCompanies';
 import Broadcast from './pages/technicalSupport/Broadcast/broadcast';
 import SendBroadcast from './pages/technicalSupport/Broadcast/sendBroadcast';
@@ -68,6 +70,7 @@ export const RoutesPages = () => {
         <Route path="/bookings/manage/:id" element={<PermissionGuard permissionId={P.MANAGE_BOOKING}><ManageBookingDetails /></PermissionGuard>} />
         <Route path="/bookings/slot" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><ManageSlot /></PermissionGuard>} />
         <Route path="/bookings/slot/create" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><CreateBookingsSlot /></PermissionGuard>} />
+        <Route path="/bookings/slot/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><EditSpecificSlot /></PermissionGuard>} />
 
         {/* Vehicles */}
         <Route path="/vehicles/add" element={<PermissionGuard permissionId={P.CREATE_VEHICLE}><AddVehicles /></PermissionGuard>} />
@@ -76,6 +79,7 @@ export const RoutesPages = () => {
         {/* Users & Staff */}
         <Route path="/users&staff/manage/users" element={<PermissionGuard permissionId={P.MANAGE_USERS}><ManageUsers /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/:id" element={<PermissionGuard permissionId={P.MANAGE_USERS}><UserProfile /></PermissionGuard>} />
+        <Route path="/users&staff/manage/users/:userId/packageDetails/:packageId" element={<PermissionGuard permissionId={P.MANAGE_USERS}><UserPackageDetails /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/manageGroup" element={<PermissionGuard permissionId={P.MANAGE_GROUP}><ManageGroup /></PermissionGuard>} />
         <Route path="/users&staff/manage/subAdmin" element={<PermissionGuard permissionId={P.MANAGE_SUB_ADMIN}><ManageSubAdmin /></PermissionGuard>} />
         <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<PermissionGuard permissionId={P.MANAGE_SUB_ADMIN}><AddSubAdmin /></PermissionGuard>} />

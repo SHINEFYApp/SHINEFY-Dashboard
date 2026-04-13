@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { manageSlotSchema } from '../../../constants/validationSchema';
-import { manageSlotInitialValues } from '../../../constants/initialValues';
 import { Calendar, Clock, MapPin, User } from 'lucide-react';
 import { FormDatePicker } from '../../../common/FormDatePicker';
 import { FormTimePicker } from '../../../common/FormTimePicker';
 import { FormDropdown } from '../../../common/FormDropdown';
 import { Button } from '../../ui/button';
-
 import { calculateDuration } from '../../../utils/utils';
+import { useGetDailySlot, useUpdateDailySlot } from '../../../api/features/slots.hooks';
+import type { UpdateDailySlotPayload } from '../../../types/slots';
+import { toast } from 'sonner';
 
-const DurationListener = ({ values, setDuration }: { values: typeof manageSlotInitialValues, setDuration: (d: string) => void; }) => {
+const DurationListener = ({ values, setDuration }: { values: any, setDuration: (d: string) => void; }) => {
     useEffect(() => {
         const dur = calculateDuration(
             values.startDate,
@@ -27,17 +28,55 @@ const DurationListener = ({ values, setDuration }: { values: typeof manageSlotIn
 const ManageDailySlot = () => {
     const [duration, setDuration] = useState<string>('');
 
+    const { data: dailySlotData, isLoading } = useGetDailySlot();
+    const updateMutation = useUpdateDailySlot();
+
+    const slotData = dailySlotData?.data?.data;
+
+    const initialValues = {
+        startDate: slotData?.start_date ?? '',
+        startTime: slotData?.start_time ?? '',
+        endDate: slotData?.end_date ?? '',
+        endTime: slotData?.end_time ?? '',
+        city: slotData?.city ?? '',
+        area: slotData?.area ?? '',
+        slotStatus: slotData?.slot_status ?? '',
+        slotType: slotData?.slot_type ?? '',
+    };
+
+    const handleSubmit = (values: typeof initialValues) => {
+        const payload: UpdateDailySlotPayload = {
+            start_date: values.startDate,
+            start_time: values.startTime,
+            end_date: values.endDate,
+            end_time: values.endTime,
+            city: values.city,
+            area: values.area,
+            slot_status: values.slotStatus,
+            slot_type: values.slotType,
+        };
+
+        updateMutation.mutate(payload, {
+            onSuccess: () => {
+                toast.success('Daily slot updated successfully');
+            },
+            onError: () => {
+                toast.error('Failed to update daily slot');
+            },
+        });
+    };
+
+    if (isLoading) {
+        return <div className="flex justify-center items-center p-10">Loading...</div>;
+    }
+
     return (
         <div className="w-full max-w-6xl mx-auto p-6">
-
             <Formik
-                initialValues={manageSlotInitialValues}
+                initialValues={initialValues}
                 validationSchema={manageSlotSchema}
-                onSubmit={(values) => {
-                    console.log('Free Booking values:', values);
-                    console.log('Duration:', duration);
-                    // Handle submission
-                }}
+                enableReinitialize
+                onSubmit={handleSubmit}
             >
                 {({ values, isValid }) => {
                     return (
@@ -156,10 +195,10 @@ const ManageDailySlot = () => {
                             <div className="flex justify-start pt-4">
                                 <Button
                                     type="submit"
-                                    disabled={!isValid}
+                                    disabled={!isValid || updateMutation.isPending}
                                     className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                 >
-                                    Add Daily Slot
+                                    {updateMutation.isPending ? 'Updating...' : 'Update Daily Slot'}
                                 </Button>
                             </div>
                         </Form>

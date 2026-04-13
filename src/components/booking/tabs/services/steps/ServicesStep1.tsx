@@ -57,7 +57,11 @@ export default function ServicesStep1({
 
     useEffect(() => {
         if (data?.data.user_info) {
-            setFormData({ ...formData, userDetails: data.data.user_info });
+            setFormData({ 
+                ...formData, 
+                userDetails: data.data.user_info,
+                userPackages: data.data.packages || []
+            });
             setClientNotFound(false);
         }
     }, [data]);

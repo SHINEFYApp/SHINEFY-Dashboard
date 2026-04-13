@@ -57,7 +57,7 @@ export default function ManageBooking() {
     };
 
     // Fetch data
-    const { data, isLoading, isError, isSuccess, error, refetch } = useGet({
+    const { data, isLoading, isError, isSuccess, error } = useGet({
         queryFn: () => manageBookings(route, params),
         queryKey: ["bookings", currentPage, formData.search, formData.date, formData.limit],
         options: { staleTime: 1000 * 10 },
@@ -75,47 +75,43 @@ export default function ManageBooking() {
         }
     }, [isSuccess]);
 
-    const bookings = data?.data.bookings || [];
-    const pagination = data?.data.pagination || { total_entries: 0, limit: 25 };
+    const bookings = data?.data?.bookings || [];
+    const pagination = data?.data?.pagination;
+    const totalItems = pagination?.total_items ?? 0;
+    const totalPages = pagination?.total_pages ?? Math.ceil(totalItems / (Number(formData.limit) || 25));
 
     // Reset form
     const handleReset = () => {
         setFormData({ search: "", date: "", limit: "25" });
         setSearchParams({}, { replace: true });
         setCurrentPage(1);
-        refetch();
     };
 
     // Handle Formik submit
     const handleSubmit = (values: any) => {
-        const convertToISODate = (dateStr: string) => {
-            const [day, month, year] = dateStr.split(".");
-            return `${year}-${month}-${day}`;
-        };
-        const formattedDate = values.date ? convertToISODate(values.date) : "";
+        // FormDatePicker already outputs yyyy-MM-dd, use it directly
+        const formattedDate = values.date || "";
 
-        // Update state
+        // Update state — queryKey depends on formData so react-query refetches automatically
         setFormData({ search: values.search, date: formattedDate, limit: values.limit });
 
         // Update URL
-        const params = new URLSearchParams();
-        if (values.search) params.set("search", values.search);
-        if (values.date) params.set("date", formattedDate);
-        if (values.limit) params.set("limit", values.limit);
-        setSearchParams(params, { replace: true });
+        const urlParams = new URLSearchParams();
+        if (values.search) urlParams.set("search", values.search);
+        if (formattedDate) urlParams.set("date", formattedDate);
+        if (values.limit) urlParams.set("limit", values.limit);
+        setSearchParams(urlParams, { replace: true });
 
         setCurrentPage(1);
-        refetch();
     };
 
     // Handle Limit change on dropdown directly (onChange)
     const handleLimitChange = (newLimit: string) => {
         setFormData((prev) => ({ ...prev, limit: newLimit }));
-        const params = new URLSearchParams(searchParams);
-        params.set("limit", newLimit);
-        setSearchParams(params, { replace: true });
+        const urlParams = new URLSearchParams(searchParams);
+        urlParams.set("limit", newLimit);
+        setSearchParams(urlParams, { replace: true });
         setCurrentPage(1);
-        refetch();
     };
 
     return (
@@ -170,9 +166,9 @@ export default function ManageBooking() {
                         columns={columns}
                         data={bookings}
                         currentPage={currentPage}
-                        totalPages={Math.ceil(pagination.total_entries / Number(formData.limit))}
-                        totalEntries={pagination.total_entries}
-                        pageSize={Number(formData.limit)}
+                        totalPages={totalPages}
+                        totalEntries={totalItems}
+                        pageSize={Number(formData.limit) || 25}
                         onPageChange={handlePageChange}
                     />
                 )}
