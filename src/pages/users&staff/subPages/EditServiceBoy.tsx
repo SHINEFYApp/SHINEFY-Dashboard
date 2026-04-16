@@ -95,6 +95,66 @@ const CustomFileUpload = ({ name, title }: { name: string, title: string; }) => 
         </div>
     );
 };
+// Profile Image Upload Component
+const ProfileImageUpload = ({ name, initialImage }: { name: string, initialImage?: string }) => {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [, meta, helpers] = useField(name);
+    const [preview, setPreview] = useState<string>("");
+
+    useEffect(() => {
+        if (initialImage) {
+            setPreview(initialImage);
+        }
+    }, [initialImage]);
+
+    const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.length) {
+            const file = e.target.files[0];
+            helpers.setValue(file);
+            setPreview(URL.createObjectURL(file));
+        }
+    };
+
+    const handleDelete = () => {
+        helpers.setValue(null);
+        setPreview("");
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
+    return (
+        <div className='flex flex-col justify-center items-start mb-8'>
+            <h1 className='font-bold capitalize'>Profile Image</h1>
+            <p className='text-[#616161] pb-5'>Current avatar displayed on profile.</p>
+            <div className='w-60 h-60 bg-[#B0B0B0] rounded-md overflow-hidden relative group'>
+                {preview ? (
+                    <img src={preview} alt="Profile Preview" className="w-full h-full object-cover" />
+                ) : null}
+                <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`absolute inset-0 bg-black/40 flex items-center justify-center ${preview ? 'opacity-0' : 'opacity-100'} group-hover:opacity-100 transition-opacity cursor-pointer`}
+                >
+                    <span className="text-white text-sm font-medium">{preview ? 'Change Photo' : 'Upload Photo'}</span>
+                </div>
+            </div>
+            <div className='flex w-60 items-center py-5 gap-5'>
+                <button type="button" onClick={handleDelete} className='text-[#B0B0B0]'>Delete</button>
+                <button type="button" onClick={() => fileInputRef.current?.click()} className='text-[#FFC107]'>Update</button>
+            </div>
+            <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handleSelect}
+                className="hidden"
+                accept=".jpg,.png,.jpeg"
+            />
+            {meta.touched && meta.error && (
+                <p className="text-xs text-red-500">{meta.error}</p>
+            )}
+        </div>
+    );
+};
 
 export default function EditServiceBoy() {
     const navigate = useNavigate();
@@ -121,6 +181,7 @@ export default function EditServiceBoy() {
                 licenseExpiredDate: serviceBoy.licence_expiery_date || '',
                 drivingLicense: null,
                 idCardImage: null,
+                image: null,
             });
         }
     }, [serviceBoy]);
@@ -159,6 +220,7 @@ export default function EditServiceBoy() {
                             // Images
                             if (values.drivingLicense) formData.append('driver_licence', values.drivingLicense);
                             if (values.idCardImage) formData.append('id_card_image', values.idCardImage);
+                            if (values.image) formData.append('image', values.image);
 
                             await updateServiceBoy({ id: id as string, formData });
 
@@ -190,15 +252,7 @@ export default function EditServiceBoy() {
 
                                 {/* Right Side - Profile Image and Documents */}
                                 <div className="order-1 md:order-2 h-fit w-full flex flex-col items-center">
-                                    <div className='flex flex-col justify-center items-start mb-8'>
-                                        <h1 className='font-bold capitalize'>Profile Image</h1>
-                                        <p className='text-[#616161] pb-5'>Current avatar displayed on profile.</p>
-                                        <div className='w-60 h-60 bg-[#B0B0B0] rounded-md overflow-hidden'>
-                                            {serviceBoy?.image_url ? (
-                                                <img src={serviceBoy.image_url} alt="Profile" className="w-full h-full object-cover"/>
-                                            ) : null}
-                                        </div>
-                                    </div>
+                                    <ProfileImageUpload name="image" initialImage={serviceBoy?.image_url} />
 
                                     {/* Documents Section */}
                                     <div className="w-full max-w-md space-y-6 pt-4 border-t border-gray-100">

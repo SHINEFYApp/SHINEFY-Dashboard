@@ -55,8 +55,8 @@ export const useGetSubAdminPrivileges = (options?: any) => {
 };
 
 export const useToggleSubAdminStatus = (options?: any) => {
-    return useMutation<any, AxiosError, { id: string | number; data: { active_flag: number } }>({
-        mutationFn: ({ id, data }) => toggleSubAdminStatus(id, data),
+    return useMutation<any, AxiosError, { user_id: number | string; status: number }>({
+        mutationFn: (data) => toggleSubAdminStatus(data),
         ...options,
     });
 };

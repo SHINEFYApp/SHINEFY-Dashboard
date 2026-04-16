@@ -5,7 +5,8 @@ import { manageServiceBoySearchInitialValues } from "../../constants/initialValu
 import { FilterHeader } from "../../common/FilterHeader";
 import { FormDatePicker } from "../../common/FormDatePicker";
 import { CustomTable } from "../../common/CustomTable";
-import { useGetServiceBoys, useDeleteServiceBoy, useUpdateServiceBoyStatus, useExportServiceBoys, useSetServiceBoyTemporaryOff } from "../../api/features/serviceBoys.hooks";
+import { useGetServiceBoys, useDeleteServiceBoy, useUpdateServiceBoyStatus, useExportServiceBoys, useSetServiceBoyTemporaryOff, useGetServiceBoyAreas, useUpdateServiceBoyAreas } from "../../api/features/serviceBoys.hooks";
+import { useGetSubAreas } from "../../api/features/areas.hooks";
 import { GenericModal } from "../../common/GenericModal";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,7 +21,10 @@ const ManageServiceBoy = () => {
     const pageSize = 10;
 
     const [offModalOpen, setOffModalOpen] = useState(false);
+    const [areasModalOpen, setAreasModalOpen] = useState(false);
+    const [areasEditMode, setAreasEditMode] = useState(false);
     const [selectedBoyId, setSelectedBoyId] = useState<number | null>(null);
+    const [selectedAreas, setSelectedAreas] = useState<number[]>([]);
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
 
@@ -57,6 +61,19 @@ const ManageServiceBoy = () => {
     const totalEntries = pagination?.total_items || pagination?.total || serviceBoys.length;
     const totalPages = pagination?.total_pages || pagination?.last_page || Math.ceil(totalEntries / pageSize);
 
+    // Fetch service boy's current areas when modal is open
+    const { data: areasData, isLoading: areasLoading } = useGetServiceBoyAreas(selectedBoyId!, {
+        enabled: !!selectedBoyId && areasModalOpen,
+    });
+    const serviceBoyAreas = (areasData?.data?.data?.areas || areasData?.data?.areas || []) as { area_id: number; area_name: string }[];
+
+    // Fetch all available sub areas for edit mode
+    const { data: allAreasData, isLoading: allAreasLoading } = useGetSubAreas({
+        limit: 100,
+    });
+    const allSubAreasRaw = allAreasData?.data?.data?.data || allAreasData?.data?.data || [];
+    const allSubAreas = (Array.isArray(allSubAreasRaw) ? allSubAreasRaw : []) as { id: number; area_name: string }[];
+
     // Mutations
     const deleteMutation = useDeleteServiceBoy({
         onSuccess: () => {
@@ -86,6 +103,15 @@ const ManageServiceBoy = () => {
         onError: () => toast.error("Failed to set temporary off time")
     });
 
+    const updateAreasMutation = useUpdateServiceBoyAreas({
+        onSuccess: () => {
+            toast.success("Areas updated successfully");
+            setAreasEditMode(false);
+            queryClient.invalidateQueries({ queryKey: ["service-boy-areas", selectedBoyId] });
+        },
+        onError: () => toast.error("Failed to update areas")
+    });
+
     const handleDelete = (id: number) => {
         toast("Are you sure you want to delete this Service Boy?", {
             action: {
@@ -103,6 +129,34 @@ const ManageServiceBoy = () => {
                 label: "Confirm",
                 onClick: () => statusMutation.mutate({ id, data: { active_flag: newStatus } })
             }
+        });
+    };
+
+    const handleEditAreasClick = (id: number) => {
+        setSelectedBoyId(id);
+        setAreasEditMode(false);
+        setSelectedAreas([]);
+        setAreasModalOpen(true);
+    };
+
+    const handleEnterEditMode = () => {
+        setSelectedAreas(serviceBoyAreas.map(a => a.area_id));
+        setAreasEditMode(true);
+    };
+
+    const handleAreaToggle = (areaId: number) => {
+        setSelectedAreas(prev =>
+            prev.includes(areaId)
+                ? prev.filter(id => id !== areaId)
+                : [...prev, areaId]
+        );
+    };
+
+    const handleAreasConfirm = () => {
+        if (!selectedBoyId) return;
+        updateAreasMutation.mutate({
+            id: selectedBoyId,
+            data: { service_boy_areas: selectedAreas }
         });
     };
 
@@ -208,7 +262,7 @@ const ManageServiceBoy = () => {
                     </Link>
                     <button
                         className="bg-[#E1BEE7] flex items-center gap-2 rounded-[2.75px] text-[#9C27B0] border border-[#9C27B0] capitalize hover:text-[#E1BEE7] hover:bg-[#9C27B0] px-3.5 py-3 font-semibold transition-colors"
-                        onClick={() => alert(`Edit Areas for ${record.user_id}`)}
+                        onClick={() => handleEditAreasClick(record.user_id)}
                     >
                         <MapPin size={18} /> Edit Areas
                     </button>
@@ -234,7 +288,7 @@ const ManageServiceBoy = () => {
                 </div>
             ),
         }
-    ], [handleDelete, handleStatusChange, handleOffTimeClick]);
+    ], [handleDelete, handleStatusChange, handleOffTimeClick, handleEditAreasClick]);
 
     return (
         <main>
@@ -340,6 +394,102 @@ const ManageServiceBoy = () => {
                         Confirm Off Time
                     </button>
                 </div>
+            </GenericModal>
+
+            {/* Edit Areas Modal */}
+            <GenericModal
+                isOpen={areasModalOpen}
+                onClose={() => { setAreasModalOpen(false); setAreasEditMode(false); }}
+                title={areasEditMode ? "Edit Areas" : "Service Boy Areas"}
+                subtitle={areasEditMode ? "Select the areas to assign to this Service Boy." : "Currently assigned areas."}
+            >
+                {areasLoading ? (
+                    <div className="text-center py-8 text-gray-500">Loading areas...</div>
+                ) : !areasEditMode ? (
+                    /* View Mode — show current areas */
+                    <>
+                        {serviceBoyAreas.length === 0 ? (
+                            <div className="text-center py-8 text-gray-400">No areas assigned yet.</div>
+                        ) : (
+                            <div className="flex flex-col gap-3">
+                                {serviceBoyAreas.map(area => (
+                                    <div
+                                        key={area.area_id}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 bg-gray-50"
+                                    >
+                                        <MapPin size={16} className="text-[#9C27B0]" />
+                                        <span className="font-medium text-gray-800">{area.area_name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        <div className="flex justify-end gap-4 mt-8">
+                            <button
+                                className="px-6 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+                                onClick={() => setAreasModalOpen(false)}
+                            >
+                                Close
+                            </button>
+                            <button
+                                className="px-6 py-2 rounded-lg font-bold text-white bg-[#9C27B0] hover:bg-[#7B1FA2] transition-colors"
+                                onClick={handleEnterEditMode}
+                            >
+                                Edit Areas
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    /* Edit Mode — checkboxes for all sub areas */
+                    <>
+                        {allAreasLoading ? (
+                            <div className="text-center py-8 text-gray-500">Loading all areas...</div>
+                        ) : allSubAreas.length === 0 ? (
+                            <div className="text-center py-8 text-gray-400">No areas available.</div>
+                        ) : (
+                            <div className="flex flex-col gap-3">
+                                {allSubAreas.map(area => (
+                                    <label
+                                        key={area.id}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
+                                            selectedAreas.includes(area.id)
+                                                ? "border-[#9C27B0] bg-[#F3E5F5]"
+                                                : "border-gray-200 bg-white hover:bg-gray-50"
+                                        }`}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedAreas.includes(area.id)}
+                                            onChange={() => handleAreaToggle(area.id)}
+                                            className="w-5 h-5 accent-[#9C27B0]"
+                                        />
+                                        <MapPin size={16} className="text-[#9C27B0]" />
+                                        <span className="font-medium text-gray-800">{area.area_name}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        )}
+                        <div className="flex justify-between items-center mt-8">
+                            <span className="text-sm text-gray-500">
+                                {selectedAreas.length} area{selectedAreas.length !== 1 ? "s" : ""} selected
+                            </span>
+                            <div className="flex gap-4">
+                                <button
+                                    className="px-6 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+                                    onClick={() => setAreasEditMode(false)}
+                                >
+                                    Back
+                                </button>
+                                <button
+                                    className="px-6 py-2 rounded-lg font-bold text-white bg-[#9C27B0] hover:bg-[#7B1FA2] transition-colors disabled:opacity-50"
+                                    onClick={handleAreasConfirm}
+                                    disabled={updateAreasMutation.isPending}
+                                >
+                                    {updateAreasMutation.isPending ? "Saving..." : "Save Areas"}
+                                </button>
+                            </div>
+                        </div>
+                    </>
+                )}
             </GenericModal>
         </main>
     );

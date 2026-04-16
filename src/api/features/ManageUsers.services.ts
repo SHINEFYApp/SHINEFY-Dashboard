@@ -50,11 +50,14 @@ export interface BookingHistoryParams {
     user_id: number | string;
     limit?: number;
     page?: number;
+    date?: string;
 }
 
 export interface WalletHistoryParams {
     user_id: number | string;
     search?: string | number;
+    limit?: number;
+    page?: number;
 }
 
 export interface UserPackagesParams {
@@ -112,6 +115,12 @@ export const getUserWalletHistory = async (params: WalletHistoryParams) => {
 // GET /api/users/view/user-packages?user_id=242&search=Exterior Package Quarter package
 export const getUserPackages = async (params: UserPackagesParams) => {
     const res: AxiosResponse = await getService("/api/users/view/user-packages", params);
+    return res.data;
+};
+
+// GET /api/users/view/user-package-details?user_id=12&user_package_id=5
+export const getUserPackageDetails = async (params: { user_id: number | string; user_package_id: number | string }) => {
+    const res: AxiosResponse = await getService(`/api/users/view/user-package-details`, params);
     return res.data;
 };
 

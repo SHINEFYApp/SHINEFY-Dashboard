@@ -10,6 +10,7 @@ import {
     getUserLocations,
     getUserWalletHistory,
     getUserPackages,
+    getUserPackageDetails,
     editUserStatus,
     editOtpStatus,
     type UsersParams,
@@ -94,6 +95,15 @@ export const useUserPackages = (params: UserPackagesParams, options?: any) => {
     return useGet({
         queryFn: () => getUserPackages(params),
         queryKey: ["user-packages", params],
+        options
+    });
+};
+
+// Get user package details
+export const useUserPackageDetails = (params: { user_id: number | string; user_package_id: number | string }, options?: any) => {
+    return useGet({
+        queryFn: () => getUserPackageDetails(params),
+        queryKey: ["user-package-details", params.user_id, params.user_package_id],
         options
     });
 };

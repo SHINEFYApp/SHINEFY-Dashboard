@@ -4,7 +4,6 @@ import {
     postService,
     putService,
     deleteService,
-    patchService,
 } from "../service/service-requests";
 
 // Interfaces
@@ -78,9 +77,9 @@ export const getSubAdminPrivileges = async () => {
     return await getService("/api/get/sub/admin/privileges");
 };
 
-// PATCH /api/sub/admin/{id}/status - Toggle activate/deactivate
-export const toggleSubAdminStatus = async (id: number | string, data: { active_flag: number }) => {
-    return await patchService(`/api/sub/admin/${id}/status`, data);
+// POST /api/edit/sub/admin/status - Toggle activate/deactivate
+export const toggleSubAdminStatus = async (data: { user_id: number | string; status: number }) => {
+    return await postService("/api/edit/sub/admin/status", data);
 };
 
 

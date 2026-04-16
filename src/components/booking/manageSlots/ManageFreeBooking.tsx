@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
-
 import { manageSlotSchema } from '../../../constants/validationSchema';
 import { manageSlotInitialValues } from '../../../constants/initialValues';
 import { Calendar, Clock, MapPin, User } from 'lucide-react';
@@ -9,6 +8,9 @@ import { FormTimePicker } from '../../../common/FormTimePicker';
 import { FormDropdown } from '../../../common/FormDropdown';
 import { Button } from '../../ui/button';
 import { calculateDuration } from '../../../utils/utils';
+import { useAddSpecificSlot } from '../../../api/features/slots.hooks';
+import type { AddSpecificSlotPayload } from '../../../types/slots';
+import { toast } from 'sonner';
 
 const DurationListener = ({ values, setDuration }: { values: typeof manageSlotInitialValues, setDuration: (d: string) => void; }) => {
     useEffect(() => {
@@ -26,21 +28,37 @@ const DurationListener = ({ values, setDuration }: { values: typeof manageSlotIn
 
 const ManageFreeBooking = () => {
     const [duration, setDuration] = useState<string>('');
+    const addMutation = useAddSpecificSlot();
 
+    const handleSubmit = (values: typeof manageSlotInitialValues, { resetForm }: any) => {
+        const payload: AddSpecificSlotPayload = {
+            start_date: values.startDate,
+            start_time: values.startTime,
+            end_date: values.endDate,
+            end_time: values.endTime,
+            city: values.city,
+            area: values.area,
+            slot_status: values.slotStatus,
+            slot_type: values.slotType,
+        };
 
-
-
+        addMutation.mutate(payload, {
+            onSuccess: () => {
+                toast.success('Specific slot added successfully');
+                resetForm();
+            },
+            onError: () => {
+                toast.error('Failed to add specific slot');
+            },
+        });
+    };
 
     return (
         <div className="w-full max-w-6xl mx-auto p-6">
             <Formik
                 initialValues={manageSlotInitialValues}
                 validationSchema={manageSlotSchema}
-                onSubmit={(values) => {
-                    console.log('Free Booking values:', values);
-                    console.log('Duration:', duration);
-                    // Handle submission
-                }}
+                onSubmit={handleSubmit}
             >
                 {({ values, isValid }) => {
                     return (
@@ -159,10 +177,10 @@ const ManageFreeBooking = () => {
                             <div className="flex justify-start pt-4">
                                 <Button
                                     type="submit"
-                                    disabled={!isValid}
+                                    disabled={!isValid || addMutation.isPending}
                                     className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                 >
-                                    Add Free Booking
+                                    {addMutation.isPending ? 'Adding...' : 'Add Specific Slot'}
                                 </Button>
                             </div>
                         </Form>

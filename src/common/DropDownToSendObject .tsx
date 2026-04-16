@@ -58,8 +58,9 @@ export const DropDownToSendObject = <T,>({
   // عند اختيار عنصر
   const handleSelect = (option: T) => {
     console.log(option)
-    setFormData((prev: any) => ({ ...prev, [name]: option }));
-    setFieldValue(name, option); 
+    const valueToSet = valueExtractor ? valueExtractor(option) : option;
+    setFormData?.((prev: any) => ({ ...prev, [name]: valueToSet }));
+    setFieldValue(name, valueToSet);
     setFieldTouched(name, true, true);
     setIsOpen(false);
   };

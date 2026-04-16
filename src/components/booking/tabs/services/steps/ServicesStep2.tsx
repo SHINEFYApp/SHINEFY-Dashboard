@@ -55,20 +55,53 @@ export default function ServicesStep2({
     });
 
     useEffect(() => {
-        if (!formData.address) return;
+        if (!formData.address || !formData.mainService) return;
+        const serviceId = String((formData.mainService as any)?.service_id ?? formData.mainService ?? '');
         getServicesBoys.mutate({
             latitude: formData.address.latitude,
             longitude: formData.address.longitude,
             booking_date: formData.bookingDate,
             booking_time: formData.bookingTime,
             service_duration: 60,
+            service_id: serviceId
         } as servicesBoysPayload);
-    }, [formData.address]);
+    }, [formData.address, formData.mainService]);
 
     const available_service_boys = getServicesBoys.data?.data.available_service_boys;
-    const packages = getPackages.data?.packages;
-    const allServices: ApiMainService[] = getServicesQuery.data?.all_service_arr?.sorted_main_services ?? [];
-    const allExtras: ApiExtraService[] = getServicesQuery.data?.all_service_arr?.sorted_extra_services ?? [];
+    
+    // For package tab, use packages from formData (fetched in step 1)
+    const userPackages = formData.userPackages || [];
+    
+    // Transform package main services to match ApiMainService structure
+    const packageMainServices: any[] = formData.mainPackage?.all_main_services?.filter(s => s.remind_quantity > 0).map(s => ({
+        service_id: s.service_id || 0,
+        service_name: [s.main_services?.service_name || '', s.main_services?.service_name_arabic || ''],
+        service_image: s.main_services?.service_image,
+        service_price: s.main_services?.service_price,
+        service_time: s.main_services?.service_time,
+        service_description: [s.main_services?.service_description || '', s.main_services?.service_description_arabic || ''],
+        apply_add_extra_service: s.main_services?.apply_add_extra_service,
+        remind_quantity: s.remind_quantity
+    })) || [];
+
+    // Transform package extra services to match ApiExtraService structure
+    const packageExtraServices: ApiExtraService[] = formData.mainPackage?.all_extra_services?.filter(s => s.remind_quantity > 0).map(s => ({
+        extra_service_id: s.extra_service_id || 0,
+        extra_service_name: [s.extra_services?.extra_service_name || '', s.extra_services?.extra_service_name_arabic || ''],
+        extra_service_image: s.extra_services?.extra_service_image,
+        extra_service_price: s.extra_services?.extra_service_price,
+        extra_service_time: s.extra_services?.extra_service_time,
+        extra_service_description: [s.extra_services?.extra_service_description || '', s.extra_services?.extra_service_description_arabic || ''],
+    })) || [];
+
+    const allServices: ApiMainService[] = userPackageInput 
+        ? packageMainServices 
+        : (getServicesQuery.data?.all_service_arr?.sorted_main_services ?? []);
+        
+    const allExtras: ApiExtraService[] = userPackageInput
+        ? packageExtraServices
+        : (getServicesQuery.data?.all_service_arr?.sorted_extra_services ?? []);
+
     console.log(allExtras)
     // Derive the extra services available for the currently selected main service
     // formData.mainService is now an object due to DropDownToSendObject sending the full object
@@ -125,13 +158,40 @@ export default function ServicesStep2({
                         {/* ── Main service / package selection ── */}
                         <div className={`mb-8 ${userPackageInput ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : 'md:w-1/2 w-full'}`}>
                             {userPackageInput ? (
-                                <DropDownToSendObject
-                                    name="mainPackage"
-                                    label="User Packages"
-                                    placeholder="Select User Package"
-                                    icon={<Package className="w-5 h-5" />}
-                                    options={packages}
-                                />
+                                <>
+                                    <DropDownToSendObject
+                                        name="mainPackage"
+                                        label="User Packages"
+                                        placeholder="Select User Package"
+                                        icon={<Package className="w-5 h-5" />}
+                                        options={userPackages}
+                                        getOptionLabel={(opt: any) => {
+                                            const name = opt.package?.name || 'Unknown Package';
+                                            const isExpired = opt.available_to && new Date(opt.available_to) < new Date();
+                                            const isInactive = opt.status !== 'active';
+                                            const isExhausted = opt.remind_used !== null && opt.remind_used <= 0;
+                                            
+                                            let statusLabel = '';
+                                            if (isInactive) statusLabel = '(Inactive)';
+                                            else if (isExpired) statusLabel = '(Expired)';
+                                            else if (isExhausted) statusLabel = '(Exhausted)';
+                                            
+                                            return `${name} ${statusLabel}`.trim();
+                                        }}
+                                        setFormData={setFormData}
+                                    />
+                                    <DropDownToSendObject
+                                        name="mainService"
+                                        label="Service"
+                                        placeholder="Select Service from Package"
+                                        icon={<Package className="w-5 h-5" />}
+                                        options={allServices}
+                                        setFormData={setFormData}
+                                        getOptionLabel={(opt: any) => `${opt.service_name?.[0] || 'Unknown Service'} ${opt.remind_quantity !== undefined ? `(${opt.remind_quantity} left)` : ''}`}
+                                        valueExtractor={(opt: any) => String(opt.service_id)}
+                                        disabled={!formData.mainPackage?.id}
+                                    />
+                                </>
                             ) : (
                                 <DropDownToSendObject
                                     name="mainService"
@@ -146,49 +206,47 @@ export default function ServicesStep2({
                             )}
                         </div>
 
-                        {/* ── Extra Services (services tab only) ── */}
-                        {!userPackageInput && (
-                            <div className="mb-8">
-                                <label className="text-sm font-medium text-gray-700 block mb-3">
-                                    Extra Services
-                                </label>
+                        {/* ── Extra Services ── */}
+                        <div className="mb-8">
+                            <label className="text-sm font-medium text-gray-700 block mb-3">
+                                Extra Services
+                            </label>
 
-                                {/* Selected extras chips */}
-                                {formData.extraServices.length > 0 && (
-                                    <div className="flex flex-wrap gap-3 mb-4">
-                                        {formData.extraServices.map((s) => (
-                                            <div
-                                                key={s.id}
-                                                className="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-green-400 bg-green-50 text-sm font-medium text-gray-800 animate-slide-up"
+                            {/* Selected extras chips */}
+                            {formData.extraServices.length > 0 && (
+                                <div className="flex flex-wrap gap-3 mb-4">
+                                    {formData.extraServices.map((s) => (
+                                        <div
+                                            key={s.id}
+                                            className="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-green-400 bg-green-50 text-sm font-medium text-gray-800 animate-slide-up"
+                                        >
+                                            <span>{s.name}</span>
+                                            <span className="text-xs text-green-600 font-semibold">×{s.quantity}</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveExtra(s.id)}
+                                                className="ml-1 text-red-400 hover:text-red-600 transition-colors"
                                             >
-                                                <span>{s.name}</span>
-                                                <span className="text-xs text-green-600 font-semibold">×{s.quantity}</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleRemoveExtra(s.id)}
-                                                    className="ml-1 text-red-400 hover:text-red-600 transition-colors"
-                                                >
-                                                    <X className="w-3.5 h-3.5" />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                                <X className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
-                                {/* Add button */}
-                                <button
-                                    type="button"
-                                    onClick={() => setIsExtraModalOpen(true)}
-                                    disabled={availableExtras.length === 0}
-                                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                                >
-                                    <Plus className="w-4 h-4" />
-                                    {availableExtras.length === 0
-                                        ? 'Select a service first'
-                                        : 'Add Extra Service'}
-                                </button>
-                            </div>
-                        )}
+                            {/* Add button */}
+                            <button
+                                type="button"
+                                onClick={() => setIsExtraModalOpen(true)}
+                                disabled={availableExtras.length === 0}
+                                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                            >
+                                <Plus className="w-4 h-4" />
+                                {availableExtras.length === 0
+                                    ? (userPackageInput && !formData.mainPackage?.id ? 'Select a package first' : 'Select a service first')
+                                    : 'Add Extra Service'}
+                            </button>
+                        </div>
 
                         {/* ── Service Boy ── */}
                         <div className="mb-8 md:w-1/2 w-full">
