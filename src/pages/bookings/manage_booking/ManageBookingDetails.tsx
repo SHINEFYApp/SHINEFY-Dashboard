@@ -25,11 +25,10 @@ import { ExtraServiceModal } from "../../../components/booking/tabs/services/Ext
 /* ─── Status Maps ─── */
 const BOOKING_STATUS: Record<string, { label: string; color: string }> = {
     "0": { label: "Pending", color: "bg-yellow-50 text-yellow-700 border-yellow-300" },
-    "1": { label: "Confirmed", color: "bg-blue-50 text-blue-700 border-blue-300" },
-    "2": { label: "In Progress", color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
-    "3": { label: "Completed", color: "bg-green-50 text-green-700 border-green-300" },
-    "4": { label: "Canceled", color: "bg-red-50 text-red-700 border-red-300" },
-    "5": { label: "Rejected", color: "bg-gray-100 text-gray-700 border-gray-300" },
+    "1": { label: "In Progress", color: "bg-blue-50 text-blue-700 border-blue-300" },
+    "2": { label: "Completed", color: "bg-green-50 text-green-700 border-green-300" },
+    "3": { label: "Canceled", color: "bg-red-50 text-red-700 border-red-300" },
+    "4": { label: "Confirmed", color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
 };
 
 const DRIVER_STATUS: Record<string, { label: string; color: string }> = {
@@ -47,11 +46,10 @@ const DRIVER_STATUS: Record<string, { label: string; color: string }> = {
  */
 const STATUS_LABEL_TO_CODE: Record<string, string> = {
     "pending": "0",
-    "confirmed": "1",
-    "in progress": "2",
-    "completed": "3",
-    "canceled": "4",
-    "rejected": "5",
+    "in progress": "1",
+    "completed": "2",
+    "canceled": "3",
+    "confirmed": "4",
 };
 
 const DRIVER_LABEL_TO_CODE: Record<string, string> = {
@@ -75,7 +73,7 @@ const resolveStatusCode = (value: any, map: Record<string, string>): string => {
 /* ─── Form State ─── */
 interface EditFormState {
     status: string;
-    driver_status: string;
+    driver_status?: string;
     main_service: number | null;
     address_loc: string;
     lat: string;
@@ -83,6 +81,7 @@ interface EditFormState {
     coupan_amount: string;
     wallet_amount: string;
     booking_admin_note: string;
+    note?: string;
     extra_services: ExtraService[];
 }
 
@@ -144,6 +143,7 @@ const ManageBookingDetails = () => {
         coupan_amount: "",
         wallet_amount: "",
         booking_admin_note: "",
+        note: "",
         extra_services: [],
     });
 
@@ -188,7 +188,6 @@ const ManageBookingDetails = () => {
 
         const initial: EditFormState = {
             status: resolveStatusCode(booking.status, STATUS_LABEL_TO_CODE),
-            driver_status: resolveStatusCode(booking.driver_status, DRIVER_LABEL_TO_CODE),
             main_service: matchedServiceId,
             address_loc: booking.address_loc ?? "",
             lat: String(booking.lat ?? booking.latitude ?? ""),
@@ -196,6 +195,7 @@ const ManageBookingDetails = () => {
             coupan_amount: String(booking.coupan_amount ?? ""),
             wallet_amount: String(booking.wallet_amount ?? ""),
             booking_admin_note: booking.booking_admin_note ?? "",
+            note: booking.note ?? "",
             extra_services: existingExtras,
         };
         setForm(initial);
@@ -215,6 +215,7 @@ const ManageBookingDetails = () => {
             form.coupan_amount !== initialForm.coupan_amount ||
             form.wallet_amount !== initialForm.wallet_amount ||
             form.booking_admin_note !== initialForm.booking_admin_note ||
+            form.note !== initialForm.note ||
             JSON.stringify(form.extra_services) !== JSON.stringify(initialForm.extra_services);
         setHasChanges(changed);
     }, [form, initialForm]);
@@ -273,6 +274,7 @@ const ManageBookingDetails = () => {
         if (form.coupan_amount) payload.coupan_amount = Number(form.coupan_amount);
         if (form.wallet_amount) payload.wallet_amount = Number(form.wallet_amount);
         if (form.booking_admin_note) payload.booking_admin_note = form.booking_admin_note;
+        if (form.note) payload.note = form.note;
         if (form.driver_status) payload.driver_status = form.driver_status; // "1"-"5"
 
         if (form.extra_services.length > 0) {
@@ -404,7 +406,7 @@ const ManageBookingDetails = () => {
                                 ))}
                             </div>
                         </div>
-                        <div>
+                        {/* <div>
                             <label className="text-sm font-medium text-gray-600 mb-2 block">
                                 Driver Status
                                 {form.driver_status && (
@@ -430,7 +432,7 @@ const ManageBookingDetails = () => {
                                     </button>
                                 ))}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </SectionCard>
 
@@ -681,6 +683,15 @@ const ManageBookingDetails = () => {
                             className="border-gray-200 bg-gray-50 rounded-xl resize-none min-h-[120px]"
                         />
                     </div>
+                    <div>
+                        <label className="text-sm font-medium text-gray-600 mb-1.5 block">Note</label>
+                        <Textarea
+                            value={form.note}
+                            onChange={(e) => updateField("note", e.target.value)}
+                            placeholder="Add notes for this booking..."
+                            className="border-gray-200 bg-gray-50 rounded-xl resize-none min-h-[120px]"
+                        />
+                    </div>
                 </SectionCard>
             </div>
 
@@ -696,7 +707,7 @@ const ManageBookingDetails = () => {
                         totalPages={1}
                         totalEntries={1}
                         pageSize={10}
-                        onPageChange={() => {}}
+                        onPageChange={() => { }}
                         isLoading={false}
                     />
                 </SectionCard>
@@ -712,7 +723,7 @@ const ManageBookingDetails = () => {
                         totalPages={1}
                         totalEntries={userVehicles.length}
                         pageSize={10}
-                        onPageChange={() => {}}
+                        onPageChange={() => { }}
                         isLoading={isLoadingVehicles}
                     />
                 </SectionCard>
@@ -728,7 +739,7 @@ const ManageBookingDetails = () => {
                         totalPages={1}
                         totalEntries={1}
                         pageSize={10}
-                        onPageChange={() => {}}
+                        onPageChange={() => { }}
                         isLoading={false}
                     />
                 </SectionCard>

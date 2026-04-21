@@ -545,6 +545,7 @@ export interface UpdateBookingPayload {
     lat?: string;
     lon?: string;
     booking_admin_note?: string;
+    note?: string;
     extra_service_id?: number[];
     extra_services_quantity?: number[];
     driver_status?: string;

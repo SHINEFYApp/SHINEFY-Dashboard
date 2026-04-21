@@ -93,14 +93,14 @@ export const RoutesPages = () => {
         <Route path="/users&staff/manage/usersWallet" element={<PermissionGuard permissionId={P.MANAGE_USER_WALLET}><UsersWallets /></PermissionGuard>} />
 
         {/* Geography & Regions */}
-        <Route path="/geography&regions/manage/countries" element={<PermissionGuard permissionId={P.MANAGE_COUNTRIES}><ManageCountries /></PermissionGuard>} />
+        {/* <Route path="/geography&regions/manage/countries" element={<PermissionGuard permissionId={P.MANAGE_COUNTRIES}><ManageCountries /></PermissionGuard>} />
         <Route path="/geography&regions/manage/regions" element={<PermissionGuard permissionId={P.MANAGE_REGIONS}><ManageRegions /></PermissionGuard>} />
         <Route path="/geography&regions/manage/area" element={<PermissionGuard permissionId={P.MANAGE_AREA}><ManageAreas /></PermissionGuard>} />
         <Route path="/geography&regions/manage/area/add/mainArea" element={<PermissionGuard permissionId={P.MANAGE_AREA}><AddMainArea /></PermissionGuard>} />
-        <Route path="/geography&regions/manage/area/add/subArea" element={<PermissionGuard permissionId={P.MANAGE_AREA}><AddSubArea /></PermissionGuard>} />
+        <Route path="/geography&regions/manage/area/add/subArea" element={<PermissionGuard permissionId={P.MANAGE_AREA}><AddSubArea /></PermissionGuard>} /> */}
 
         {/* Services & Extra */}
-        <Route path="/services&extra/manage/Service" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><ManageService /></PermissionGuard>} />
+        {/* <Route path="/services&extra/manage/Service" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><ManageService /></PermissionGuard>} />
         <Route path="/services&extra/manage/Service/addService" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><AddService /></PermissionGuard>} />
         <Route path="/services&extra/manage/ExtreService" element={<PermissionGuard permissionId={P.MANAGE_EXTRA_SERVICE}><ManageExtraService /></PermissionGuard>} />
         <Route path="/services&extra/manage/extreService/addExtraService" element={<PermissionGuard permissionId={P.MANAGE_EXTRA_SERVICE}><AddExtraService /></PermissionGuard>} />
@@ -108,29 +108,29 @@ export const RoutesPages = () => {
         <Route path="/services&extra/manage/coupon/addCoupon" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><AddCoupon /></PermissionGuard>} />
         <Route path="/services&extra/manage/package" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><ManagePackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/addPackage" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><AddNewPackage /></PermissionGuard>} />
-        <Route path="/services&extra/manage/Package/updatePackage/:id" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><UpdatePackage /></PermissionGuard>} />
+        <Route path="/services&extra/manage/Package/updatePackage/:id" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><UpdatePackage /></PermissionGuard>} /> */}
 
         {/* Products & Orders (no specific privilege mapping yet) */}
-        <Route path="/products&orders/manage/Products" element={<ManageProducts />} />
+        {/* <Route path="/products&orders/manage/Products" element={<ManageProducts />} />
         <Route path="/products&orders/manage/Products/addProduct" element={<AddProduct />} />
         <Route path="/products&orders/manage/Products/addGategory" element={<AddCategory />} />
-        <Route path="/products&orders/manage/Orders" element={<ManageOrders />} />
+        <Route path="/products&orders/manage/Orders" element={<ManageOrders />} /> */}
 
         {/* Financial & Points */}
-        <Route path="/financial&points/manage/Vat" element={<PermissionGuard permissionId={P.MANAGE_VAT}><ManageVat /></PermissionGuard>} />
+        {/* <Route path="/financial&points/manage/Vat" element={<PermissionGuard permissionId={P.MANAGE_VAT}><ManageVat /></PermissionGuard>} />
         <Route path="/financial&points/manage/driverCommission" element={<PermissionGuard permissionId={P.DRIVER_COMMISSION}><ManageDriverCommission /></PermissionGuard>} />
         <Route path="/financial&points/manage/bonusPoint" element={<PermissionGuard permissionId={P.MANAGE_BONUS_POINT}><ManageBonusPoint /></PermissionGuard>} />
-        <Route path="/financial&points/manage/adminEarning" element={<PermissionGuard permissionId={P.MANAGE_EARNING}><ManageAdminEarning /></PermissionGuard>} />
+        <Route path="/financial&points/manage/adminEarning" element={<PermissionGuard permissionId={P.MANAGE_EARNING}><ManageAdminEarning /></PermissionGuard>} /> */}
 
         {/* Technical Support */}
-        <Route path="/technicalSupport/contactUs" element={<PermissionGuard permissionId={P.CONTACT_US}><ContactUs /></PermissionGuard>} />
+        {/* <Route path="/technicalSupport/contactUs" element={<PermissionGuard permissionId={P.CONTACT_US}><ContactUs /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/companies" element={<PermissionGuard permissionId={P.MANAGE_COMPANIES}><ManageCompanies /></PermissionGuard>} />
         <Route path="/technicalSupport/broadcast" element={<PermissionGuard permissionId={P.BROADCAST}><Broadcast /></PermissionGuard>} />
         <Route path="/technicalSupport/broadcast/SendBroadcast" element={<PermissionGuard permissionId={P.BROADCAST}><SendBroadcast /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/faqs" element={<PermissionGuard permissionId={P.MANAGE_FAQS}><Managefaqs /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/faqs/addFqs" element={<PermissionGuard permissionId={P.MANAGE_FAQS}><AddFqs /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/orderQuestions" element={<PermissionGuard permissionId={P.MANAGE_ORDER_QUESTION}><ManageOrdersQuestions /></PermissionGuard>} />
-        <Route path="/technicalSupport/manage/orderQuestions/addOrdersQuestions" element={<PermissionGuard permissionId={P.MANAGE_ORDER_QUESTION}><AddOrdersQuestions /></PermissionGuard>} />
+        <Route path="/technicalSupport/manage/orderQuestions/addOrdersQuestions" element={<PermissionGuard permissionId={P.MANAGE_ORDER_QUESTION}><AddOrdersQuestions /></PermissionGuard>} /> */}
       </Routes>
     </>
   );
