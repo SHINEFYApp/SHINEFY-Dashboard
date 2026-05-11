@@ -14,15 +14,70 @@ import { useSearchParams } from "react-router";
 import { FormDropdown } from "../../../common/FormDropdown";
 import BookingFilterOptions from "./BookingFilterOptions";
 import type { BookingFilterState } from "../../../types/bookings";
+import { cn } from "../../../utils/utils";
+
+const STATUS_MAP: Record<string, { label: string; color: string }> = {
+    "0": { label: "Pending", color: "bg-yellow-100 text-yellow-800" },
+    "1": { label: "In Progress", color: "bg-blue-100 text-blue-800" },
+    "2": { label: "Completed", color: "bg-green-100 text-green-800" },
+    "3": { label: "Canceled", color: "bg-red-100 text-red-800" },
+    "4": { label: "Confirmed", color: "bg-indigo-100 text-indigo-800" },
+};
+
+function formatDate(dateStr: string) {
+    if (!dateStr) return "—";
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
 
 const columns = [
-    { key: "booking_no", title: "Booking Number" },
-    { key: "customer_name", title: "Customer Name" },
-    { key: "service_boy_name", title: "Service Boy Name" },
-    { key: "service_name", title: "Service Name" },
-    { key: "payment_option", title: "Payment Method" },
-    { key: "total_price", title: "Total Amount(EGP)" },
-    { key: "action", title: "Action", dynmincPage: "single_booking_details" },
+    { key: "booking_no", title: "Booking No" },
+    { key: "customer_name", title: "Customer" },
+    {
+        key: "booking_date",
+        title: "Booking Date",
+        render: (value: string) => (
+            <span className="text-gray-700 font-medium text-xs whitespace-nowrap">
+                {formatDate(value)}
+            </span>
+        ),
+    },
+    {
+        key: "status",
+        title: "Status",
+        render: (value: string) => {
+            const status = STATUS_MAP[value];
+            if (!status) return <span className="text-gray-500">—</span>;
+            return (
+                <span className={cn("inline-block px-2.5 py-1 rounded-full text-xs font-semibold", status.color)}>
+                    {status.label}
+                </span>
+            );
+        },
+    },
+    { key: "service_boy_name", title: "Service Boy" },
+    { key: "service_name", title: "Service" },
+    {
+        key: "payment_option",
+        title: "Payment",
+        render: (value: string) => {
+            if (!value) return <span className="text-gray-400">—</span>;
+            const colors: Record<string, string> = {
+                cash: "bg-emerald-50 text-emerald-700",
+                credit: "bg-purple-50 text-purple-700",
+                free: "bg-gray-100 text-gray-600",
+                wallet: "bg-amber-50 text-amber-700",
+            };
+            return (
+                <span className={cn("inline-block px-2.5 py-1 rounded-full text-xs font-semibold capitalize", colors[value.toLowerCase()] || "bg-gray-100 text-gray-600")}>
+                    {value}
+                </span>
+            );
+        },
+    },
+    { key: "total_price", title: "Amount (EGP)" },
+    { key: "action", title: "", dynmincPage: "single_booking_details" },
 ];
 
 export default function ManageBooking() {

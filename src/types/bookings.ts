@@ -506,6 +506,8 @@ export interface GetServiceResponse {
 export interface Booking {
     booking_id: number;
     booking_no: string;
+    booking_date: string;
+    status: string;
     total_price: string;
     customer_name: string;
     service_boy_name: string | null;
