@@ -1,79 +1,56 @@
 import { Formik, Form, FieldArray } from 'formik';
-import { Calendar, Clock, ListChecks, Plus, Trash2 } from 'lucide-react';
-import { FormDatePicker } from '../../../common/FormDatePicker';
+import { Clock, Plus, X } from 'lucide-react';
 import { FormTimePicker } from '../../../common/FormTimePicker';
-import { FormDropdown } from '../../../common/FormDropdown';
-import { Button } from '../../ui/button';
-import { useAddSpecificSlot } from '../../../api/features/slots.hooks';
+import { Button } from '../../../components/ui/button';
+import { useGetDailySlotSettings, useUpdateDailySlotSettings } from '../../../api/features/slots.hooks';
+import type { DailySlotSettingsFormValues } from '../../../types/slots';
 import { toast } from 'sonner';
 
-const initialValues = {
-    slot_date: '',
-    start_time: '',
-    end_time: '',
-    status: '',
-    out_of_service_hours: [] as { start_time: string; end_time: string }[],
-};
+const DailySlotSettings = () => {
+    const { data: dailySlotData, isLoading } = useGetDailySlotSettings();
+    const updateMutation = useUpdateDailySlotSettings();
 
-const ManageDailySlot = () => {
-    const addMutation = useAddSpecificSlot();
+    const slotData = dailySlotData?.data?.data;
 
-    const handleSubmit = (values: typeof initialValues, { resetForm }: any) => {
-        const payload = {
-            slot_date: values.slot_date,
-            start_time: values.start_time,
-            end_time: values.end_time,
-            status: Number(values.status),
-            out_of_service_hours: values.out_of_service_hours.filter(
-                (h: any) => h.start_time && h.end_time
-            ),
-        };
-
-        addMutation.mutate(payload, {
-            onSuccess: () => {
-                toast.success('Specific slot added successfully');
-                resetForm();
-            },
-            onError: () => {
-                toast.error('Failed to add specific slot');
-            },
-        });
+    const initialValues: DailySlotSettingsFormValues = {
+        start_time: slotData?.start_time ?? '',
+        end_time: slotData?.end_time ?? '',
+        out_of_service_hours: slotData?.out_of_service_hours
+            ? Object.values(slotData.out_of_service_hours)
+            : [],
     };
+
+    const handleSubmit = (values: DailySlotSettingsFormValues) => {
+        updateMutation.mutate(
+            {
+                start_time: values.start_time,
+                end_time: values.end_time,
+                out_of_service_hours: values.out_of_service_hours,
+            },
+            {
+                onSuccess: () => {
+                    toast.success('Daily slot settings updated successfully');
+                },
+                onError: () => {
+                    toast.error('Failed to update daily slot settings');
+                },
+            }
+        );
+    };
+
+    if (isLoading) {
+        return <div className="flex justify-center items-center p-10">Loading...</div>;
+    }
 
     return (
         <div className="w-full max-w-6xl mx-auto p-6">
             <Formik
                 initialValues={initialValues}
+                enableReinitialize
                 onSubmit={handleSubmit}
             >
                 {({ values, isValid }) => (
                     <Form className="space-y-8">
-                        {/* Slot Details */}
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                Slot Details
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <FormDatePicker
-                                    name="slot_date"
-                                    label="Select Slot Date"
-                                    placeholder="Select date"
-                                    icon={<Calendar className="size-5" />}
-                                    checkmark={true}
-                                />
-                                <FormDropdown
-                                    name="status"
-                                    label="Select Status"
-                                    placeholder="Select Status"
-                                    icon={<ListChecks className="size-5" />}
-                                    options={[
-                                        { label: 'Open', value: '0' },
-                                    ]}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Working Hours */}
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">
                                 Working Hours
@@ -92,17 +69,25 @@ const ManageDailySlot = () => {
                             </div>
                         </div>
 
-                        {/* Out of Service Hours */}
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                Out of Service Hours
-                            </h3>
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-semibold text-gray-900">
+                                    Out of Service Hours
+                                </h3>
+                            </div>
                             <FieldArray name="out_of_service_hours">
                                 {({ push, remove }) => (
                                     <div className="space-y-4">
                                         {values.out_of_service_hours.map((_, index) => (
-                                            <div key={index} className="flex items-start gap-3">
-                                                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-xl bg-gray-50">
+                                            <div key={index} className="relative p-4 border border-gray-200 rounded-xl bg-gray-50">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => remove(index)}
+                                                    className="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500 transition-colors"
+                                                >
+                                                    <X className="size-4" />
+                                                </button>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     <FormTimePicker
                                                         name={`out_of_service_hours.${index}.start_time`}
                                                         label="Start Time"
@@ -114,14 +99,6 @@ const ManageDailySlot = () => {
                                                         icon={<Clock className="size-5" />}
                                                     />
                                                 </div>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => remove(index)}
-                                                    className="mt-4 p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                                    title="Remove"
-                                                >
-                                                    <Trash2 className="size-5" />
-                                                </button>
                                             </div>
                                         ))}
                                         <button
@@ -137,14 +114,13 @@ const ManageDailySlot = () => {
                             </FieldArray>
                         </div>
 
-                        {/* Submit Button */}
                         <div className="flex justify-start pt-4">
                             <Button
                                 type="submit"
-                                disabled={!isValid || addMutation.isPending}
+                                disabled={!isValid || updateMutation.isPending}
                                 className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                             >
-                                {addMutation.isPending ? 'Adding...' : 'Add Specific Slot'}
+                                {updateMutation.isPending ? 'Updating...' : 'Update Daily Slot Settings'}
                             </Button>
                         </div>
                     </Form>
@@ -154,4 +130,4 @@ const ManageDailySlot = () => {
     );
 };
 
-export default ManageDailySlot;
+export default DailySlotSettings;

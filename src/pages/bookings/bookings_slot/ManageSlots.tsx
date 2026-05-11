@@ -13,28 +13,28 @@ import { toast } from "sonner";
 
 const columns = [
     {
-        key: "slot_date",
+        key: "slot_id",
+        title: "ID",
+    },
+    {
+        key: "slot_date_formatted",
         title: "Slot Date",
     },
     {
-        key: "create_date",
-        title: "Create Date & Time",
-    },
-    {
-        key: "type",
-        title: "Type",
-    },
-    {
-        key: "start_time",
+        key: "start_time_formatted",
         title: "Start Time",
     },
     {
-        key: "end_time",
+        key: "end_time_formatted",
         title: "End Time",
     },
     {
-        key: "status",
+        key: "status_label",
         title: "Status",
+    },
+    {
+        key: "created_at",
+        title: "Created At",
     },
 ];
 
@@ -52,9 +52,8 @@ export default function ManageSlot() {
     const deleteMutation = useDeleteSpecificSlot();
 
     const slotsData = data?.data?.data?.slots ?? [];
-    const pagination = data?.data?.data?.pagination;
-    const totalEntries = pagination?.total_items ?? 0;
-    const totalPages = pagination?.total_pages ?? 1;
+    const totalEntries = data?.data?.data?.total ?? 0;
+    const totalPages = Math.ceil(totalEntries / pageSize) || 1;
 
     const handleSubmit = (values: FilterFormValuesManageSlots) => {
         setFilters({
@@ -94,13 +93,13 @@ export default function ManageSlot() {
                 <div className="flex gap-2 items-center">
                     <button
                         className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3.5 py-3 font-semibold transition-colors"
-                        onClick={() => navigate(`/bookings/slot/edit/${row.id}`)}
+                        onClick={() => navigate(`/bookings/slot/edit/${row.slot_id}`)}
                     >
                         <ArrowUpToLine /> update
                     </button>
                     <button
                         className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-3.5 py-3 font-semibold transition-colors"
-                        onClick={() => handleDelete(row.id)}
+                        onClick={() => handleDelete(row.slot_id)}
                         disabled={deleteMutation.isPending}
                     >
                         <Trash2 /> delete
@@ -167,6 +166,12 @@ export default function ManageSlot() {
                                             className="w-full lg:w-[94px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
                                         >
                                             Add Slot
+                                        </Link>
+                                        <Link
+                                            to={"/bookings/slot/daily-slot"}
+                                            className="w-full lg:w-[180px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
+                                        >
+                                            Manage Daily Slots
                                         </Link>
                                     </div>
                                 </div>

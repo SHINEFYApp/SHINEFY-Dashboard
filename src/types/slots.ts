@@ -1,15 +1,14 @@
 // ============ Daily Slot ============
 
-export interface DailySlotData {
-    id: number;
-    start_date: string;
+export interface OutOfServiceHour {
     start_time: string;
-    end_date: string;
     end_time: string;
-    city: string;
-    area: string;
-    slot_status: string;
-    slot_type: string;
+}
+
+export interface DailySlotData {
+    start_time: string;
+    end_time: string;
+    out_of_service_hours: Record<string, OutOfServiceHour>;
 }
 
 export interface GetDailySlotResponse {
@@ -18,40 +17,52 @@ export interface GetDailySlotResponse {
 }
 
 export interface UpdateDailySlotPayload {
-    start_date: string;
     start_time: string;
-    end_date: string;
     end_time: string;
-    city: string;
-    area: string;
-    slot_status: string;
-    slot_type: string;
+    out_of_service_hours: OutOfServiceHour[];
+}
+
+// ============ Daily Slot Settings ============
+
+export interface DailySlotSettings {
+    start_time: string;
+    end_time: string;
+    out_of_service_hours: Record<string, OutOfServiceHour>;
+}
+
+export interface UpdateDailySlotSettingsPayload {
+    start_time: string;
+    end_time: string;
+    out_of_service_hours: OutOfServiceHour[];
+}
+
+export interface DailySlotSettingsFormValues {
+    start_time: string;
+    end_time: string;
+    out_of_service_hours: OutOfServiceHour[];
 }
 
 // ============ Specific Slots ============
 
 export interface SpecificSlot {
-    id: number;
+    slot_id: number;
     slot_date: string;
-    create_date: string;
-    type: string;
+    slot_date_formatted: string;
     start_time: string;
+    start_time_formatted: string;
     end_time: string;
-    status: string;
-}
-
-export interface SpecificSlotsPagination {
-    current_page: number;
-    total_pages: number;
-    total_items: number;
-    limit: number;
+    end_time_formatted: string;
+    status: number;
+    status_label: string;
+    out_of_service_hours: OutOfServiceHour[];
+    created_at: string;
 }
 
 export interface GetSpecificSlotsResponse {
-    status: string;
+    success: boolean;
     data: {
         slots: SpecificSlot[];
-        pagination: SpecificSlotsPagination;
+        total: number;
     };
 }
 
@@ -64,7 +75,7 @@ export interface GetSpecificSlotsParams {
 }
 
 export interface ViewSpecificSlotResponse {
-    status: string;
+    success: boolean;
     data: SpecificSlot;
 }
 
@@ -80,12 +91,56 @@ export interface AddSpecificSlotPayload {
 }
 
 export interface UpdateSpecificSlotPayload {
-    start_date: string;
-    start_time: string;
-    end_date: string;
-    end_time: string;
-    city: string;
-    area: string;
-    slot_status: string;
-    slot_type: string;
+    slot_date?: string;
+    start_time?: string | null;
+    end_time?: string | null;
+    status?: number;
+    out_of_service_hours?: OutOfServiceHour[];
+}
+
+// ============ Admin Slots ============
+
+export interface AdminSlotBoy {
+    user_id: number;
+    name: string;
+    image: string;
+    phone: string;
+    work_status: string;
+}
+
+export interface AdminSlotAvailableBoy extends AdminSlotBoy {
+    work_status: "available";
+}
+
+export interface AdminSlotBusyBoy extends AdminSlotBoy {
+    work_status: "busy";
+    booking_id: number;
+    booking_no: string;
+    booking_time: string;
+    end_slot_time: string;
+}
+
+export interface AdminSlotOffShiftBoy extends AdminSlotBoy {
+    work_status: "off_shift";
+    reason: string;
+}
+
+export interface AdminSlot {
+    time: string;
+    available_count: number;
+    busy_count: number;
+    available_boys: AdminSlotAvailableBoy[];
+    busy_boys: AdminSlotBusyBoy[];
+    off_shift_boys: AdminSlotOffShiftBoy[];
+}
+
+export interface GetAdminSlotsParams {
+    date: string;
+    area_id?: number;
+    service_time?: number;
+}
+
+export interface GetAdminSlotsResponse {
+    status: string;
+    data: AdminSlot[];
 }

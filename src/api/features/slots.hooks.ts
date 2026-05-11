@@ -3,17 +3,22 @@ import type { AxiosError } from "axios";
 import {
     getDailySlot,
     updateDailySlot,
+    getDailySlotSettings,
+    updateDailySlotSettings,
     getSpecificSlots,
     viewSpecificSlot,
     addSpecificSlot,
     updateSpecificSlot,
     deleteSpecificSlot,
+    getAdminSlots,
 } from "./slots";
 import type {
     UpdateDailySlotPayload,
     GetSpecificSlotsParams,
     AddSpecificSlotPayload,
     UpdateSpecificSlotPayload,
+    GetAdminSlotsParams,
+    UpdateDailySlotSettingsPayload,
 } from "../../types/slots";
 
 // Query Keys
@@ -21,6 +26,7 @@ export const slotsKeys = {
     daily: ["daily-slot"] as const,
     specificAll: ["specific-slots"] as const,
     specificOne: (id: number) => ["specific-slot", id] as const,
+    adminSlots: ["admin-slots"] as const,
 };
 
 // ============ Daily Slot ============
@@ -37,6 +43,24 @@ export const useUpdateDailySlot = () => {
 
     return useMutation<any, AxiosError, UpdateDailySlotPayload>({
         mutationFn: updateDailySlot,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: slotsKeys.daily });
+        },
+    });
+};
+
+export const useGetDailySlotSettings = () => {
+    return useQuery({
+        queryKey: [...slotsKeys.daily, "settings"],
+        queryFn: getDailySlotSettings,
+    });
+};
+
+export const useUpdateDailySlotSettings = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<any, AxiosError, UpdateDailySlotSettingsPayload>({
+        mutationFn: updateDailySlotSettings,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: slotsKeys.daily });
         },
@@ -91,5 +115,15 @@ export const useDeleteSpecificSlot = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: slotsKeys.specificAll });
         },
+    });
+};
+
+// ============ Admin Slots ============
+
+export const useGetAdminSlots = (params: GetAdminSlotsParams) => {
+    return useQuery({
+        queryKey: [...slotsKeys.adminSlots, params],
+        queryFn: () => getAdminSlots(params),
+        enabled: !!params.date,
     });
 };

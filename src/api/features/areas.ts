@@ -28,6 +28,7 @@ export interface GetAreasParams {
     limit?: number;
     page?: number;
     search_text?: string;
+    main_area_id?: number;
 }
 
 export interface Coordinates {

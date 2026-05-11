@@ -4,10 +4,12 @@ import CreateBookings from './pages/bookings/CreateBookings';
 import ManageBooking from './pages/bookings/manage_booking/ManageBooking';
 import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingDetails';
 import ManageSlot from './pages/bookings/bookings_slot/ManageSlots';
+import AdminSlots from './pages/bookings/bookings_slot/AdminSlots';
 import AddVehicles from './pages/vehicles/addVehicles';
 import UsersWallets from './pages/users&staff/userWallets';
 import CreateBookingsSlot from './pages/bookings/bookings_slot/CreateBookingsSlot';
 import EditSpecificSlot from './pages/bookings/bookings_slot/EditSpecificSlot';
+import DailySlotSettings from './pages/bookings/bookings_slot/DailySlotSettings';
 import ManageCountries from './pages/Geography&Regions/manageCountries';
 import ManageRegions from './pages/Geography&Regions/manageRegions';
 import ManageAreas from './pages/Geography&Regions/manageAreas';
@@ -69,7 +71,9 @@ export const RoutesPages = () => {
         <Route path="/bookings/manage" element={<PermissionGuard permissionId={P.MANAGE_BOOKING}><ManageBooking /></PermissionGuard>} />
         <Route path="/bookings/manage/:id" element={<PermissionGuard permissionId={P.MANAGE_BOOKING}><ManageBookingDetails /></PermissionGuard>} />
         <Route path="/bookings/slot" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><ManageSlot /></PermissionGuard>} />
+        <Route path="/bookings/slot/admin-slots" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><AdminSlots /></PermissionGuard>} />
         <Route path="/bookings/slot/create" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><CreateBookingsSlot /></PermissionGuard>} />
+        <Route path="/bookings/slot/daily-slot" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><DailySlotSettings /></PermissionGuard>} />
         <Route path="/bookings/slot/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><EditSpecificSlot /></PermissionGuard>} />
 
         {/* Vehicles */}
@@ -93,12 +97,11 @@ export const RoutesPages = () => {
         <Route path="/users&staff/manage/usersWallet" element={<PermissionGuard permissionId={P.MANAGE_USER_WALLET}><UsersWallets /></PermissionGuard>} />
 
         {/* Geography & Regions */}
-        {/* <Route path="/geography&regions/manage/countries" element={<PermissionGuard permissionId={P.MANAGE_COUNTRIES}><ManageCountries /></PermissionGuard>} />
+        <Route path="/geography&regions/manage/countries" element={<PermissionGuard permissionId={P.MANAGE_COUNTRIES}><ManageCountries /></PermissionGuard>} />
         <Route path="/geography&regions/manage/regions" element={<PermissionGuard permissionId={P.MANAGE_REGIONS}><ManageRegions /></PermissionGuard>} />
         <Route path="/geography&regions/manage/area" element={<PermissionGuard permissionId={P.MANAGE_AREA}><ManageAreas /></PermissionGuard>} />
         <Route path="/geography&regions/manage/area/add/mainArea" element={<PermissionGuard permissionId={P.MANAGE_AREA}><AddMainArea /></PermissionGuard>} />
-        <Route path="/geography&regions/manage/area/add/subArea" element={<PermissionGuard permissionId={P.MANAGE_AREA}><AddSubArea /></PermissionGuard>} /> */}
-
+        <Route path="/geography&regions/manage/area/add/subArea" element={<PermissionGuard permissionId={P.MANAGE_AREA}><AddSubArea /></PermissionGuard>} /> 
         {/* Services & Extra */}
         {/* <Route path="/services&extra/manage/Service" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><ManageService /></PermissionGuard>} />
         <Route path="/services&extra/manage/Service/addService" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><AddService /></PermissionGuard>} />

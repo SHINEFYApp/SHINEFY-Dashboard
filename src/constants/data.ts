@@ -32,6 +32,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Slot']
     },
+    '/bookings/slot/admin-slots': {
+        title: 'Bookings',
+        breadcrumbs: ['Bookings', 'Admin Slots']
+    },
     '/vehicles/add': {
         title: 'Vehicles',
         breadcrumbs: ['Vehicles', 'Add']
@@ -215,6 +219,10 @@ export const sidebarMenuItems = [
             {
                 label: 'Manage Slot',
                 path: '/bookings/slot'
+            },
+            {
+                label: 'Admin Slots',
+                path: '/bookings/slot/admin-slots'
             },
         ],
     },
@@ -2287,7 +2295,7 @@ export const dummyVehicles: any[] = [
 
 export const manageSlotsTabs = [
     { id: 'manageDailySlot', label: 'Manage Daily Slot' },
-    { id: 'manageFreeBooking', label: 'Manage Free Booking' },
+    // { id: 'manageFreeBooking', label: 'Manage Free Booking' },
 ];
 
 export const franchise = ['Franchise one', 'Franchise two', 'Franchise three'];
