@@ -89,6 +89,7 @@ export interface UserPackage {
 }
 
 export interface createServiceBookingPayload {
+    booking_type: number,
     booking_date: string,
     booking_time: string,
     latitude: string,
@@ -113,6 +114,7 @@ export interface createServiceBookingPayload {
 }
 
 export interface createPackageBookingPayload {
+    booking_type: number,
     user_package_id: string,
     package_id: string,
     booking_date: string,
@@ -175,6 +177,7 @@ export interface packageTyps {
 }
 
 export interface BookingFormData {
+    booking_type: number;
     userDetails: user_info ;
     phoneNumber: string;
     address: {
@@ -513,6 +516,7 @@ export interface Booking {
     service_boy_name: string | null;
     service_name: string;
     payment_option: string;
+    booking_type?: number;
 }
 export interface Pagination {
     current_page: number;
@@ -534,13 +538,15 @@ export interface ApiResponse {
 
 export interface formDataManageBooking{
     search : string ,
-    date : string ,
+    dateFrom : string ,
+    dateTo : string ,
     limit : string
 }
 
 export interface BookingFilterValues {
     status: string;
     booking_type: string;
+    paymentMethod: string;
 }
 
 export interface BookingFilterState {
@@ -550,6 +556,7 @@ export interface BookingFilterState {
 
 export interface UpdateBookingPayload {
     status: string;
+    booking_type?: number;
     main_service?: number;
     coupan_amount?: number;
     wallet_amount?: number;

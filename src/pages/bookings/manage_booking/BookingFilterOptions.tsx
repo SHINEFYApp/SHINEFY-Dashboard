@@ -41,6 +41,17 @@ export default function BookingFilterOptions({ filterOptions, setFilterOptions }
                     { value: '1', label: 'Waiting' },
                 ]}
             />
+            <FormDropdown
+                name="paymentMethod"
+                label="Payment Method"
+                placeholder="Select Payment Method"
+                options={[
+                    { value: '0', label: 'Cash' },
+                    { value: '1', label: 'Credit' },
+                    { value: '2', label: 'Free' },
+                    { value: '3', label: 'Package' },
+                ]}
+            />
         </GenericFilterModal>
     );
 }

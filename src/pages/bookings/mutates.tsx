@@ -6,6 +6,7 @@ export const mutateBookingService = (
     extra_services: { id: string; quantity: number }[]
 ): createServiceBookingPayload => (
     {
+        "booking_type": formData.booking_type,
         "booking_date": formData.bookingDate,
         "booking_time": formData.bookingTime,
         "latitude": formData.address.latitude,
@@ -34,6 +35,7 @@ export const mutateBookingPackage = (
     extra_services: { id: string; quantity: number }[]
 ): createPackageBookingPayload => (
     {
+        'booking_type' : formData.booking_type,
         'user_package_id' : String(formData.mainPackage?.id || ''),
         'package_id' : String(formData.mainPackage?.package_id || '') ,
         'booking_date' : formData.bookingDate,

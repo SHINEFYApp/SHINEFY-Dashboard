@@ -13,6 +13,7 @@ export const manageSlotInitialValues = {
 
 //form data to booking service & package
 export const formDataInitialValues: BookingFormData = {
+    booking_type: 0,
     userDetails:{
         user_id : 0,
         name: '' 
@@ -219,6 +220,7 @@ export const manageServiceBoySearchInitialValues = { search: '', franchise: '', 
 export const bookingFilterInitialValues = {
     status: '',
     booking_type: '',
+    paymentMethod: '',
 };
 
 export const addServiceBoyInitialValues = {
@@ -283,11 +285,12 @@ export interface managePackageAddPackageFormValues {
 
 export const manageUsersInitioalValue = {
     groupName : '',
-    companyName : '',
-    areaName : '',
-    deviceType : '',
-    registrationStart : '',
-    registrationEnd : '',
+    activeFlag : '',
+    otpVerify : '',
+    loginType : '',
+    companyId : '',
+    createtimeFrom : '',
+    createtimeTo : '',
 }
 
 export interface LoginFormInitialValues {

@@ -28,18 +28,39 @@ export interface GetUsersResponse {
 export interface UsersParams {
     limit?: number;
     page?: number;
-    group_name?: string;
     search_text?: string;
+    group_name?: string;
+    active_flag?: number;
+    otp_verify?: number;
+    login_type?: number;
+    company_id?: number;
+    createtime_from?: string;
+    createtime_to?: string;
 }
 
 export interface ExportUsersPayload {
     limit?: number;
     page?: number;
-    group_name?: string;
     search_text?: string;
-    search_with_area?: string;
-    createtime?: string;
-    device_type?: string;
+    group_name?: string;
+    active_flag?: number;
+    otp_verify?: number;
+    login_type?: number;
+    company_id?: number;
+    createtime_from?: string;
+    createtime_to?: string;
+}
+
+export interface Company {
+    id: number;
+    name: string;
+}
+
+export interface GetCompaniesResponse {
+    success: boolean;
+    data: {
+        companies: Company[];
+    };
 }
 
 export interface UserDetailsParams {
@@ -79,6 +100,12 @@ export const getUsersList = async (params: UsersParams): Promise<GetUsersRespons
 // POST /api/users/ExportUsers
 export const exportUsers = async (data: ExportUsersPayload) => {
     const res: AxiosResponse = await postService("/api/users/ExportUsers", data, { responseType: "blob" });
+    return res.data;
+};
+
+// GET /api/getCompanies
+export const getCompanies = async (): Promise<GetCompaniesResponse> => {
+    const res: AxiosResponse<GetCompaniesResponse> = await getService("/api/getCompanies");
     return res.data;
 };
 

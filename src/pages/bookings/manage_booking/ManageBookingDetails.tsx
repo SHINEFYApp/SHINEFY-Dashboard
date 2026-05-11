@@ -31,6 +31,11 @@ const BOOKING_STATUS: Record<string, { label: string; color: string }> = {
     "4": { label: "Confirmed", color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
 };
 
+const BOOKING_TYPE: Record<number, { label: string; color: string }> = {
+    0: { label: "Suchdegle", color: "bg-purple-50 text-purple-700 border-purple-300" },
+    1: { label: "Waiting", color: "bg-orange-50 text-orange-700 border-orange-300" },
+};
+
 const DRIVER_STATUS: Record<string, { label: string; color: string }> = {
     "1": { label: "Assigned", color: "bg-blue-50 text-blue-700 border-blue-300" },
     "2": { label: "On the Way", color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
@@ -73,6 +78,7 @@ const resolveStatusCode = (value: any, map: Record<string, string>): string => {
 /* ─── Form State ─── */
 interface EditFormState {
     status: string;
+    booking_type: number;
     driver_status?: string;
     main_service: number | null;
     address_loc: string;
@@ -135,6 +141,7 @@ const ManageBookingDetails = () => {
     /* ─── Form state ─── */
     const [form, setForm] = useState<EditFormState>({
         status: "",
+        booking_type: 0,
         driver_status: "",
         main_service: null,
         address_loc: "",
@@ -188,6 +195,7 @@ const ManageBookingDetails = () => {
 
         const initial: EditFormState = {
             status: resolveStatusCode(booking.status, STATUS_LABEL_TO_CODE),
+            booking_type: booking.booking_type ?? 0,
             main_service: matchedServiceId,
             address_loc: booking.address_loc ?? "",
             lat: String(booking.lat ?? booking.latitude ?? ""),
@@ -207,6 +215,7 @@ const ManageBookingDetails = () => {
         if (!initialForm) return;
         const changed =
             form.status !== initialForm.status ||
+            form.booking_type !== initialForm.booking_type ||
             form.driver_status !== initialForm.driver_status ||
             form.main_service !== initialForm.main_service ||
             form.address_loc !== initialForm.address_loc ||
@@ -265,6 +274,7 @@ const ManageBookingDetails = () => {
     const handleSave = () => {
         const payload: UpdateBookingPayload = {
             status: form.status, // "0"-"5"
+            booking_type: form.booking_type,
         };
 
         if (form.main_service) payload.main_service = form.main_service;
@@ -370,6 +380,7 @@ const ManageBookingDetails = () => {
                     <InfoCard label="Order Type" value={booking.order_pay_type || "—"} />
                     <InfoCard label="Current Service" value={selectedServiceName} />
                     <InfoCard label="Collect Status" value={booking.payment_collect_status || "—"} />
+                    <InfoCard label="Booking Type" value={BOOKING_TYPE[booking.booking_type]?.label || "—"} />
                 </div>
             </div>
 
@@ -406,6 +417,35 @@ const ManageBookingDetails = () => {
                                 ))}
                             </div>
                         </div>
+                        {/* Booking Type */}
+                        <div>
+                            <label className="text-sm font-medium text-gray-600 mb-2 block">
+                                Booking Type
+                                {BOOKING_TYPE[form.booking_type] && (
+                                    <span className={cn("ml-2 text-xs px-2 py-0.5 rounded-md border", BOOKING_TYPE[form.booking_type]?.color)}>
+                                        {BOOKING_TYPE[form.booking_type]?.label}
+                                    </span>
+                                )}
+                            </label>
+                            <div className="flex flex-wrap gap-2">
+                                {Object.entries(BOOKING_TYPE).map(([key, { label, color }]) => (
+                                    <button
+                                        key={key}
+                                        type="button"
+                                        onClick={() => updateField("booking_type", Number(key))}
+                                        className={cn(
+                                            "px-4 py-2 rounded-lg border text-sm font-medium transition-all",
+                                            form.booking_type === Number(key)
+                                                ? `${color} ring-2 ring-offset-1 ring-current`
+                                                : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100"
+                                        )}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
                         {/* <div>
                             <label className="text-sm font-medium text-gray-600 mb-2 block">
                                 Driver Status

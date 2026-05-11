@@ -13,6 +13,7 @@ import {
     getUserPackageDetails,
     editUserStatus,
     editOtpStatus,
+    getCompanies,
     type UsersParams,
     type ExportUsersPayload,
     type UserDetailsParams,
@@ -20,9 +21,6 @@ import {
     type WalletHistoryParams,
     type UserPackagesParams,
     type StatusUpdateParams,
-    addUserLocation,
-    editUserLocation,
-    editUserVehicle,
     type AddLocationParams,
     type EditLocationParams,
     type EditVehicleParams
@@ -145,5 +143,14 @@ export const useEditUserVehicle = (options?: any) => {
     return useMutation<any, AxiosError, EditVehicleParams>({
         mutationFn: (params: EditVehicleParams) => editUserVehicle(params),
         ...options
+    });
+};
+
+// Get companies
+export const useGetCompanies = (options?: any) => {
+    return useGet({
+        queryFn: () => getCompanies(),
+        queryKey: ["companies"],
+        options
     });
 };
