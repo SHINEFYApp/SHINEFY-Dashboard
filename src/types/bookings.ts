@@ -536,6 +536,16 @@ export interface formDataManageBooking{
     limit : string
 }
 
+export interface BookingFilterValues {
+    status: string;
+    booking_type: string;
+}
+
+export interface BookingFilterState {
+    state: boolean;
+    data: BookingFilterValues;
+}
+
 export interface UpdateBookingPayload {
     status: string;
     main_service?: number;

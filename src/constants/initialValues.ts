@@ -218,16 +218,7 @@ export const manageServiceBoySearchInitialValues = { search: '', franchise: '', 
 
 export const bookingFilterInitialValues = {
     status: '',
-    service_boy: '',
-    address: '',
-    bookingNumber: '',
-    customerName: '',
-    serviceBoyName: '',
-    paymentMethod: '',
-    date: '',
-    time: '',
-    dateFrom: '',
-    dateTo: '',
+    booking_type: '',
 };
 
 export const addServiceBoyInitialValues = {

@@ -4,14 +4,16 @@ import { Form, Formik } from "formik";
 import { FormInput } from "../../../common/FormInput";
 import { Calendar, Search, SlidersHorizontal } from "lucide-react";
 import { FormDatePicker } from "../../../common/FormDatePicker";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CustomTable } from "../../../common/CustomTable";
 import { useGet } from "../../../api/useGetData";
 import { toast } from "sonner";
 import { manageBookings } from "../../../api/features/bookings";
 import { TableLoading } from "../../../common/loader";
-import { useLocation, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { FormDropdown } from "../../../common/FormDropdown";
+import BookingFilterOptions from "./BookingFilterOptions";
+import type { BookingFilterState } from "../../../types/bookings";
 
 const columns = [
     { key: "booking_no", title: "Booking Number" },
@@ -24,23 +26,38 @@ const columns = [
 ];
 
 export default function ManageBooking() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [formData, setFormData] = useState({
-        search: "",
-        date: "",
-        limit: "25",
-    });
-
-    const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // Sync URL params with state on page load or URL change
+    const [currentPage, setCurrentPage] = useState(() => Number(searchParams.get("page")) || 1);
+    const [formData, setFormData] = useState(() => ({
+        search: searchParams.get("search") || "",
+        date: searchParams.get("date") || "",
+        limit: searchParams.get("limit") || "25",
+    }));
+    const [filterOptions, setFilterOptions] = useState<BookingFilterState>(() => ({
+        state: false,
+        data: {
+            status: searchParams.get("status") || "",
+            booking_type: searchParams.get("booking_type") || "",
+        },
+    }));
+
+    const isFirstRender = useRef(true);
+
     useEffect(() => {
-        const search = searchParams.get("search") || "";
-        const date = searchParams.get("date") || "";
-        const limit = searchParams.get("limit") || "25";
-        setFormData({ search, date, limit });
-    }, [location.search]);
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        const urlParams = new URLSearchParams();
+        if (formData.search) urlParams.set("search", formData.search);
+        if (formData.date) urlParams.set("date", formData.date);
+        if (formData.limit && formData.limit !== "25") urlParams.set("limit", formData.limit);
+        if (currentPage > 1) urlParams.set("page", String(currentPage));
+        if (filterOptions.data.status) urlParams.set("status", filterOptions.data.status);
+        if (filterOptions.data.booking_type) urlParams.set("booking_type", filterOptions.data.booking_type);
+        setSearchParams(urlParams, { replace: true });
+    }, [formData.search, formData.date, formData.limit, currentPage, filterOptions.data.status, filterOptions.data.booking_type, setSearchParams]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -54,12 +71,14 @@ export default function ManageBooking() {
         limit: Number(formData.limit) || 25,
         booking_date: formData.date,
         search: formData.search,
+        status: filterOptions.data.status || undefined,
+        booking_type: filterOptions.data.booking_type || undefined,
     };
 
     // Fetch data
     const { data, isLoading, isError, isSuccess, error } = useGet({
         queryFn: () => manageBookings(route, params),
-        queryKey: ["bookings", currentPage, formData.search, formData.date, formData.limit],
+        queryKey: ["bookings", currentPage, formData.search, formData.date, formData.limit, filterOptions.data.status, filterOptions.data.booking_type],
         options: { staleTime: 1000 * 10 },
     });
 
@@ -83,34 +102,20 @@ export default function ManageBooking() {
     // Reset form
     const handleReset = () => {
         setFormData({ search: "", date: "", limit: "25" });
-        setSearchParams({}, { replace: true });
+        setFilterOptions({ state: false, data: { status: "", booking_type: "" } });
         setCurrentPage(1);
     };
 
     // Handle Formik submit
     const handleSubmit = (values: any) => {
-        // FormDatePicker already outputs yyyy-MM-dd, use it directly
         const formattedDate = values.date || "";
-
-        // Update state — queryKey depends on formData so react-query refetches automatically
         setFormData({ search: values.search, date: formattedDate, limit: values.limit });
-
-        // Update URL
-        const urlParams = new URLSearchParams();
-        if (values.search) urlParams.set("search", values.search);
-        if (formattedDate) urlParams.set("date", formattedDate);
-        if (values.limit) urlParams.set("limit", values.limit);
-        setSearchParams(urlParams, { replace: true });
-
         setCurrentPage(1);
     };
 
     // Handle Limit change on dropdown directly (onChange)
     const handleLimitChange = (newLimit: string) => {
         setFormData((prev) => ({ ...prev, limit: newLimit }));
-        const urlParams = new URLSearchParams(searchParams);
-        urlParams.set("limit", newLimit);
-        setSearchParams(urlParams, { replace: true });
         setCurrentPage(1);
     };
 
@@ -149,7 +154,7 @@ export default function ManageBooking() {
                                                 onChangeExternal={(val) => handleLimitChange(val)} label={""}
                                             />
                                         </div>
-                                        <button type="button" className="py-4 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0 self-end lg:self-auto">
+                                        <button type="button" onClick={() => setFilterOptions({ ...filterOptions, state: true })} className="py-4 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0 self-end lg:self-auto">
                                             <SlidersHorizontal className="w-5 h-5 text-secondary-700" />
                                         </button>
                                     </div>
@@ -176,6 +181,7 @@ export default function ManageBooking() {
 
             <CompletedBookingChart />
             <RatedReportsChart />
+            <BookingFilterOptions filterOptions={filterOptions} setFilterOptions={setFilterOptions} />
         </main>
     );
 }
