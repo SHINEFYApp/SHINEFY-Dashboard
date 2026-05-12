@@ -124,18 +124,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             label: 'Geography & Regions',
             isActive: currentPath?.startsWith('/geography&regions/manage'),
             subItems: [
-                {
-                    icon: null,
-                    label: 'Manage Countries',
-                    path: '/geography&regions/manage/countries',
-                    permissionId: PRIVILEGES.MANAGE_COUNTRIES,
-                },
-                {
-                    icon: null,
-                    label: 'Manage Regions',
-                    path: '/geography&regions/manage/regions',
-                    permissionId: PRIVILEGES.MANAGE_REGIONS,
-                },
+                // {
+                //     icon: null,
+                //     label: 'Manage Countries',
+                //     path: '/geography&regions/manage/countries',
+                //     permissionId: PRIVILEGES.MANAGE_COUNTRIES,
+                // },
+                // {
+                //     icon: null,
+                //     label: 'Manage Regions',
+                //     path: '/geography&regions/manage/regions',
+                //     permissionId: PRIVILEGES.MANAGE_REGIONS,
+                // },
                 {
                     icon: null,
                     label: 'Manage Area',

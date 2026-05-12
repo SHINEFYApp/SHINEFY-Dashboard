@@ -76,11 +76,12 @@ export const useDeleteArea = (options?: any) => {
 };
 
 // GET Nearest Areas
-export const useGetNearestAreas = (id: number) => {
+export const useGetNearestAreas = (id: number, options?: any) => {
     return useQuery({
         queryKey: areasKeys.nearest(id),
         queryFn: () => getNearestAreas(id),
         enabled: !!id,
+        ...options,
     });
 };
 
