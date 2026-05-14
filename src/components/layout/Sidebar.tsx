@@ -32,6 +32,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Products & Orders');
         }else if (currentPath.startsWith('/financial&points/manage')) {
             setExpandedMenu('Financial & Points');
+        } else if (currentPath.startsWith('/compounds')) {
+            setExpandedMenu('Compounds System');
         } else if (currentPath.startsWith('/technicalSupport')) {
             setExpandedMenu('Technical Support');
         }
@@ -172,6 +174,43 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     path: '/services&extra/manage/Package',
                     permissionId: PRIVILEGES.MANAGE_PACKAGES,
                 }
+            ],
+        },
+        {
+            icon: <Map className="w-5 h-5" />,
+            label: 'Compounds System',
+            isActive: currentPath?.startsWith('/compounds'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Compounds',
+                    path: '/compounds/manage',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUNDS,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Packages',
+                    path: '/compounds/packages',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_PACKAGES,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Subscriptions',
+                    path: '/compounds/subscriptions',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_SUBSCRIPTIONS,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Bookings',
+                    path: '/compounds/bookings',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
+                },
+                {
+                    icon: null,
+                    label: 'Today Summary',
+                    path: '/compounds/today-summary',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
+                },
             ],
         },
         {

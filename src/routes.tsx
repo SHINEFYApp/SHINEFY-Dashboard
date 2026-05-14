@@ -54,6 +54,18 @@ import Managefaqs from './pages/technicalSupport/managefaqs/managefaqs';
 import AddFqs from './pages/technicalSupport/managefaqs/addFqs';
 import ManageOrdersQuestions from './pages/technicalSupport/manage orders questions/manageOrdersQuestions';
 import AddOrdersQuestions from './pages/technicalSupport/manage orders questions/addOrdersQuestions';
+import ManageCompounds from './pages/compounds/manageCompounds';
+import AddCompound from './pages/compounds/addCompound';
+import EditCompound from './pages/compounds/editCompound';
+import ManageCompoundPackages from './pages/compounds/managePackages';
+import AddCompoundPackage from './pages/compounds/addPackage';
+import EditCompoundPackage from './pages/compounds/editPackage';
+import ManageCompoundSubscriptions from './pages/compounds/manageSubscriptions';
+import AddCompoundSubscription from './pages/compounds/addSubscription';
+import CompoundSubscriptionDetails from './pages/compounds/subscriptionDetails';
+import ManageCompoundBookings from './pages/compounds/manageBookings';
+import CompoundBookingDetails from './pages/compounds/bookingDetails';
+import CompoundTodaySummary from './pages/compounds/todaySummary';
 import { PermissionGuard } from './components/PermissionGuard';
 import { PRIVILEGES } from './constants/permissions';
 
@@ -118,6 +130,20 @@ export const RoutesPages = () => {
         <Route path="/products&orders/manage/Products/addProduct" element={<AddProduct />} />
         <Route path="/products&orders/manage/Products/addGategory" element={<AddCategory />} />
         <Route path="/products&orders/manage/Orders" element={<ManageOrders />} />
+
+        {/* Compounds System */}
+        <Route path="/compounds/manage" element={<PermissionGuard permissionId={P.MANAGE_COMPOUNDS}><ManageCompounds /></PermissionGuard>} />
+        <Route path="/compounds/manage/add" element={<PermissionGuard permissionId={P.MANAGE_COMPOUNDS}><AddCompound /></PermissionGuard>} />
+        <Route path="/compounds/manage/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_COMPOUNDS}><EditCompound /></PermissionGuard>} />
+        <Route path="/compounds/packages" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_PACKAGES}><ManageCompoundPackages /></PermissionGuard>} />
+        <Route path="/compounds/packages/add" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_PACKAGES}><AddCompoundPackage /></PermissionGuard>} />
+        <Route path="/compounds/packages/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_PACKAGES}><EditCompoundPackage /></PermissionGuard>} />
+        <Route path="/compounds/subscriptions" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_SUBSCRIPTIONS}><ManageCompoundSubscriptions /></PermissionGuard>} />
+        <Route path="/compounds/subscriptions/add" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_SUBSCRIPTIONS}><AddCompoundSubscription /></PermissionGuard>} />
+        <Route path="/compounds/subscriptions/:id" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_SUBSCRIPTIONS}><CompoundSubscriptionDetails /></PermissionGuard>} />
+        <Route path="/compounds/bookings" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_BOOKINGS}><ManageCompoundBookings /></PermissionGuard>} />
+        <Route path="/compounds/bookings/:id" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_BOOKINGS}><CompoundBookingDetails /></PermissionGuard>} />
+        <Route path="/compounds/today-summary" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_BOOKINGS}><CompoundTodaySummary /></PermissionGuard>} />
 
         {/* Financial & Points */}
         <Route path="/financial&points/manage/Vat" element={<PermissionGuard permissionId={P.MANAGE_VAT}><ManageVat /></PermissionGuard>} />

@@ -191,6 +191,56 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/technicalSupport/manage/orderQuestions/addOrdersQuestions': {
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage Order Questions' , 'Add Orders Questions']
+    },
+
+    // Compounds System
+    '/compounds/manage': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Compounds']
+    },
+    '/compounds/manage/add': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Compounds', 'Add Compound']
+    },
+    '/compounds/manage/edit/:id': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Compounds', 'Edit Compound']
+    },
+    '/compounds/packages': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Packages']
+    },
+    '/compounds/packages/add': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Packages', 'Add Package']
+    },
+    '/compounds/packages/edit/:id': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Packages', 'Edit Package']
+    },
+    '/compounds/subscriptions': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Subscriptions']
+    },
+    '/compounds/subscriptions/add': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Subscriptions', 'Add Subscription']
+    },
+    '/compounds/subscriptions/:id': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Subscriptions', 'Subscription Details']
+    },
+    '/compounds/bookings': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Bookings']
+    },
+    '/compounds/bookings/:id': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Bookings', 'Booking Details']
+    },
+    '/compounds/today-summary': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Today Summary']
     }
 };
 

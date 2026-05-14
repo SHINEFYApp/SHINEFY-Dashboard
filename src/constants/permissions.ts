@@ -43,6 +43,10 @@ export const PRIVILEGES = {
     USERS_NEGATIVE_WALLETS: 36,
     MANAGE_COMPANIES: 37,
     MANAGE_CITY_AREA: 38,
+    MANAGE_COMPOUNDS: 39,
+    MANAGE_COMPOUND_PACKAGES: 40,
+    MANAGE_COMPOUND_SUBSCRIPTIONS: 41,
+    MANAGE_COMPOUND_BOOKINGS: 42,
 } as const;
 
 /**
@@ -90,6 +94,12 @@ export const ROUTE_PERMISSIONS: Record<string, number> = {
     "/financial&points/manage/driverCommission": PRIVILEGES.DRIVER_COMMISSION,
     "/financial&points/manage/bonusPoint": PRIVILEGES.MANAGE_BONUS_POINT,
     "/financial&points/manage/adminEarning": PRIVILEGES.MANAGE_EARNING,
+
+    // Compounds System
+    "/compounds/manage": PRIVILEGES.MANAGE_COMPOUNDS,
+    "/compounds/packages": PRIVILEGES.MANAGE_COMPOUND_PACKAGES,
+    "/compounds/subscriptions": PRIVILEGES.MANAGE_COMPOUND_SUBSCRIPTIONS,
+    "/compounds/bookings": PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
 
     // Technical Support
     "/technicalSupport/contactUs": PRIVILEGES.CONTACT_US,
