@@ -55,15 +55,23 @@ describe('Service Boy API Scenarios', () => {
     // 2-update service boy data each one and all
     it('Scenario 2: should update individual and all service boy data', async () => {
         const id = 123;
+
+        const buildFormData = (payload: Record<string, any>) => {
+            const fd = new FormData();
+            Object.entries(payload).forEach(([key, val]) => {
+                if (Array.isArray(val)) val.forEach(v => fd.append(`${key}[]`, v));
+                else fd.append(key, String(val));
+            });
+            fd.append('_method', 'PUT');
+            return fd;
+        };
+
+        (api.post as any).mockResolvedValue({ data: { status: 'success' } });
+
         const updatePayload = { name: 'John Updated' };
-        
-        (api.put as any).mockResolvedValue({ data: { status: 'success' } });
+        await updateServiceBoy(id, buildFormData(updatePayload));
+        expect(api.post).toHaveBeenCalledWith(`/api/service-boys/${id}`, expect.any(FormData), expect.any(Object));
 
-        // Update one field
-        await updateServiceBoy(id, updatePayload);
-        expect(api.put).toHaveBeenCalledWith(`/api/service-boys/${id}`, updatePayload, expect.any(Object));
-
-        // Update all fields (using the same payload type)
         const fullPayload = {
             name: 'John Full Update',
             phone_number: '0987654321',
@@ -75,8 +83,8 @@ describe('Service Boy API Scenarios', () => {
             latitude: '31.0',
             longitude: '32.0',
         };
-        await updateServiceBoy(id, fullPayload);
-        expect(api.put).toHaveBeenCalledWith(`/api/service-boys/${id}`, fullPayload, expect.any(Object));
+        await updateServiceBoy(id, buildFormData(fullPayload));
+        expect(api.post).toHaveBeenCalledWith(`/api/service-boys/${id}`, expect.any(FormData), expect.any(Object));
     });
 
     // 3-make service boy deactivate

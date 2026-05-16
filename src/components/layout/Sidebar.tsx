@@ -32,6 +32,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             setExpandedMenu('Products & Orders');
         }else if (currentPath.startsWith('/financial&points/manage')) {
             setExpandedMenu('Financial & Points');
+        } else if (currentPath.startsWith('/compounds')) {
+            setExpandedMenu('Compounds System');
         } else if (currentPath.startsWith('/technicalSupport')) {
             setExpandedMenu('Technical Support');
         }
@@ -119,146 +121,189 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 }
             ],
         },
-        //  {
-        //     icon: <Map className="w-5 h-5" />,
-        //     label: 'Geography & Regions',
-        //     isActive: currentPath?.startsWith('/geography&regions/manage'),
-        //     subItems: [
-        //         {
-        //             icon: null,
-        //             label: 'Manage Countries',
-        //             path: '/geography&regions/manage/countries',
-        //             permissionId: PRIVILEGES.MANAGE_COUNTRIES,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Regions',
-        //             path: '/geography&regions/manage/regions',
-        //             permissionId: PRIVILEGES.MANAGE_REGIONS,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Area',
-        //             path: '/geography&regions/manage/area',
-        //             permissionId: PRIVILEGES.MANAGE_AREA,
-        //         }
-        //     ]
-        // }, {
-        //     icon: <Settings className="w-5 h-5" />,
-        //     label: 'Services & Extra',
-        //     isActive: currentPath?.startsWith('/services&extra/manage'),
-        //     subItems: [
-        //         {
-        //             icon: null,
-        //             label: 'Manage Service',
-        //             path: '/services&extra/manage/Service',
-        //             permissionId: PRIVILEGES.MANAGE_SERVICE,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Extra Service',
-        //             path: '/services&extra/manage/ExtreService',
-        //             permissionId: PRIVILEGES.MANAGE_EXTRA_SERVICE,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Coupon',
-        //             path: '/services&extra/manage/Coupon',
-        //             permissionId: PRIVILEGES.MANAGE_COUPON,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Package',
-        //             path: '/services&extra/manage/Package',
-        //             permissionId: PRIVILEGES.MANAGE_PACKAGES,
-        //         }
-        //     ],
-        // },
-        // {
-        //     icon: <Box className="w-5 h-5" />,
-        //     label: 'Products & Orders',
-        //     isActive: currentPath?.startsWith('/products&orders/manage'),
-        //     subItems: [
-        //         {
-        //             icon: null,
-        //             label: 'Manage Products',
-        //             path: '/products&orders/manage/Products'
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Orders',
-        //             path: '/products&orders/manage/Orders'
-        //         }
-        //     ],
-        // },
-        // {
-        //     icon: <HandCoins className="w-5 h-5" />,
-        //     label: 'Financial & Points',
-        //     isActive: currentPath?.startsWith('/financial&points/manage'),
-        //     subItems: [
-        //         {
-        //             icon: null,
-        //             label: 'Manage VAT',
-        //             path: '/financial&points/manage/Vat',
-        //             permissionId: PRIVILEGES.MANAGE_VAT,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Driver Commission',
-        //             path: '/financial&points/manage/driverCommission',
-        //             permissionId: PRIVILEGES.DRIVER_COMMISSION,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Bonus Point',
-        //             path: '/financial&points/manage/bonusPoint',
-        //             permissionId: PRIVILEGES.MANAGE_BONUS_POINT,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Admin Earning',
-        //             path: '/financial&points/manage/adminEarning',
-        //             permissionId: PRIVILEGES.MANAGE_EARNING,
-        //         }
-        //     ],
-        // },
-        // {
-        //     icon: <Headphones className="w-5 h-5" />,
-        //     label: 'Technical Support',
-        //     isActive: currentPath?.startsWith('/technicalSupport'),
-        //     subItems: [
-        //         {
-        //             icon: null,
-        //             label: 'Contact Us',
-        //             path: '/technicalSupport/contactUs',
-        //             permissionId: PRIVILEGES.CONTACT_US,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Companies',
-        //             path: '/technicalSupport/manage/companies',
-        //             permissionId: PRIVILEGES.MANAGE_COMPANIES,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Broadcast',
-        //             path: '/technicalSupport/broadcast',
-        //             permissionId: PRIVILEGES.BROADCAST,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage FAQS',
-        //             path: '/technicalSupport/manage/faqs',
-        //             permissionId: PRIVILEGES.MANAGE_FAQS,
-        //         },
-        //         {
-        //             icon: null,
-        //             label: 'Manage Order Questions',
-        //             path: '/technicalSupport/manage/orderQuestions',
-        //             permissionId: PRIVILEGES.MANAGE_ORDER_QUESTION,
-        //         }
-        //     ],
-        // },
+         {
+            icon: <Map className="w-5 h-5" />,
+            label: 'Geography & Regions',
+            isActive: currentPath?.startsWith('/geography&regions/manage'),
+            subItems: [
+                // {
+                //     icon: null,
+                //     label: 'Manage Countries',
+                //     path: '/geography&regions/manage/countries',
+                //     permissionId: PRIVILEGES.MANAGE_COUNTRIES,
+                // },
+                // {
+                //     icon: null,
+                //     label: 'Manage Regions',
+                //     path: '/geography&regions/manage/regions',
+                //     permissionId: PRIVILEGES.MANAGE_REGIONS,
+                // },
+                {
+                    icon: null,
+                    label: 'Manage Area',
+                    path: '/geography&regions/manage/area',
+                    permissionId: PRIVILEGES.MANAGE_AREA,
+                }
+            ]
+        }, {
+            icon: <Settings className="w-5 h-5" />,
+            label: 'Services & Extra',
+            isActive: currentPath?.startsWith('/services&extra/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Service',
+                    path: '/services&extra/manage/Service',
+                    permissionId: PRIVILEGES.MANAGE_SERVICE,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Extra Service',
+                    path: '/services&extra/manage/ExtreService',
+                    permissionId: PRIVILEGES.MANAGE_EXTRA_SERVICE,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Special Service',
+                    path: '/services&extra/manage/SpecialService',
+                    permissionId: PRIVILEGES.MANAGE_SPECIAL_SERVICE,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Coupon',
+                    path: '/services&extra/manage/Coupon',
+                    permissionId: PRIVILEGES.MANAGE_COUPON,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Package',
+                    path: '/services&extra/manage/Package',
+                    permissionId: PRIVILEGES.MANAGE_PACKAGES,
+                }
+            ],
+        },
+        {
+            icon: <Map className="w-5 h-5" />,
+            label: 'Compounds System',
+            isActive: currentPath?.startsWith('/compounds'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Compounds',
+                    path: '/compounds/manage',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUNDS,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Packages',
+                    path: '/compounds/packages',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_PACKAGES,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Subscriptions',
+                    path: '/compounds/subscriptions',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_SUBSCRIPTIONS,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Bookings',
+                    path: '/compounds/bookings',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
+                },
+                {
+                    icon: null,
+                    label: 'Today Summary',
+                    path: '/compounds/today-summary',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
+                },
+            ],
+        },
+        {
+            icon: <Box className="w-5 h-5" />,
+            label: 'Products & Orders',
+            isActive: currentPath?.startsWith('/products&orders/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Products',
+                    path: '/products&orders/manage/Products'
+                },
+                {
+                    icon: null,
+                    label: 'Manage Orders',
+                    path: '/products&orders/manage/Orders'
+                }
+            ],
+        },
+        {
+            icon: <HandCoins className="w-5 h-5" />,
+            label: 'Financial & Points',
+            isActive: currentPath?.startsWith('/financial&points/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage VAT',
+                    path: '/financial&points/manage/Vat',
+                    permissionId: PRIVILEGES.MANAGE_VAT,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Driver Commission',
+                    path: '/financial&points/manage/driverCommission',
+                    permissionId: PRIVILEGES.DRIVER_COMMISSION,
+                },
+                {
+                    icon: null,
+                    label: 'Bonus Point',
+                    path: '/financial&points/manage/bonusPoint',
+                    permissionId: PRIVILEGES.MANAGE_BONUS_POINT,
+                },
+                // {
+                //     icon: null,
+                //     label: 'Admin Earning',
+                //     path: '/financial&points/manage/adminEarning',
+                //     permissionId: PRIVILEGES.MANAGE_EARNING,
+                // }
+            ],
+        },
+        {
+            icon: <Headphones className="w-5 h-5" />,
+            label: 'Technical Support',
+            isActive: currentPath?.startsWith('/technicalSupport'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Contact Us',
+                    path: '/technicalSupport/contactUs',
+                    permissionId: PRIVILEGES.CONTACT_US,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Companies',
+                    path: '/technicalSupport/manage/companies',
+                    permissionId: PRIVILEGES.MANAGE_COMPANIES,
+                },
+                {
+                    icon: null,
+                    label: 'Broadcast',
+                    path: '/technicalSupport/broadcast',
+                    permissionId: PRIVILEGES.BROADCAST,
+                },
+                {
+                    icon: null,
+                    label: 'Manage FAQS',
+                    path: '/technicalSupport/manage/faqs',
+                    permissionId: PRIVILEGES.MANAGE_FAQS,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Order Questions',
+                    path: '/technicalSupport/manage/orderQuestions',
+                    permissionId: PRIVILEGES.MANAGE_ORDER_QUESTION,
+                }
+            ],
+        },
     ];
 
     // Filter menu items based on user permissions

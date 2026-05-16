@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Formik, Form } from 'formik';
 import { servicesStep3Schema } from '../../../../../constants/validationSchema';
 import { Button } from '../../../../ui/button';
 import { IoWalletOutline } from 'react-icons/io5';
 import { cn } from '../../../../../utils/utils';
 import type { stepsProps } from '../../../../../types/bookings';
+import type { CouponData } from '../../../../../types/common';
 import { paymentMethods } from '../../../../../constants/data';
 import { getCoupons } from '../../../../../api/features/bookings';
 import { useGet } from '../../../../../api/useGetData';
@@ -48,7 +49,14 @@ const ServicesStep3 = ({
         }
     }, [isSuccess]);
 
-    const coupons = data?.data.data
+    const coupons = useMemo(() => {
+        if (!data?.data.data) return [];
+        const now = new Date();
+        return (data.data.data as CouponData[]).filter((c) => {
+            if (!c.end_at) return true;
+            return new Date(c.end_at) > now;
+        });
+    }, [data]);
 
     return (
         <main className=' relative'>
@@ -88,6 +96,8 @@ const ServicesStep3 = ({
                                 placeholder="Select Coupon"
                                 icon={<TicketSlash className="w-5 h-5" />}
                                 options={coupons}
+                                setFormData={setFormData}
+                                searchable
                             />
                         </div>
 

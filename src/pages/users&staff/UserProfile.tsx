@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Search, Eye, ArrowUpToLine, Trash2, Plus, Pencil, X } from "lucide-react";
+import { Search, Eye, ArrowUpToLine, Trash2, Plus, Pencil, X, Calendar } from "lucide-react";
 import { Form, Formik } from "formik";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -14,10 +14,12 @@ import {
     useAddUserLocation,
     useEditUserLocation,
     useEditUserVehicle,
+    useEditUserProfile,
 } from "../../api/features/ManageUsers.hooks";
 import { CustomTable } from "../../common/CustomTable";
 import { FormInput } from "../../common/FormInput";
 import { FormDropdown } from "../../common/FormDropdown";
+import { FormDateRangePicker } from "../../common/FormDateRangePicker";
 
 const tabs = [
     "User Details",
@@ -36,7 +38,8 @@ export default function UserProfile() {
 
     // Booking History state
     const [bookingPage, setBookingPage] = useState(1);
-    const [bookingDate, setBookingDate] = useState("");
+    const [bookingFromDate, setBookingFromDate] = useState("");
+    const [bookingToDate, setBookingToDate] = useState("");
     const bookingPageSize = 10;
 
     // Wallet History state
@@ -46,6 +49,8 @@ export default function UserProfile() {
     // User Packages state
     const [packagesPage, setPackagesPage] = useState(1);
     const [packagesSearch, setPackagesSearch] = useState("");
+    const [packagesFromDate, setPackagesFromDate] = useState("");
+    const [packagesToDate, setPackagesToDate] = useState("");
     const packagesPageSize = 10;
 
     // Modal states
@@ -56,15 +61,30 @@ export default function UserProfile() {
     const [vehicleModal, setVehicleModal] = useState<{ open: boolean; data?: any }>({
         open: false,
     });
+    const [profileModal, setProfileModal] = useState<{ open: boolean; data?: any }>({
+        open: false,
+    });
 
     // API calls
     const { data: userDetailsData, isLoading: isLoadingDetails } = useUserDetails({ user_id: userId });
-    const { data: bookingData, isLoading: isLoadingBookings } = useUserBookingHistory({
-        user_id: userId,
-        limit: bookingPageSize,
-        page: bookingPage,
-        date: bookingDate || undefined,
-    });
+    const bookingParams = useMemo(() => {
+        const params: BookingHistoryParams = {
+            user_id: userId,
+            limit: bookingPageSize,
+            page: bookingPage,
+        };
+        if (bookingFromDate && bookingToDate) {
+            if (bookingFromDate === bookingToDate) {
+                params.date = bookingFromDate;
+            } else {
+                params.from_date = bookingFromDate;
+                params.to_date = bookingToDate;
+            }
+        }
+        return params;
+    }, [userId, bookingPage, bookingFromDate, bookingToDate]);
+
+    const { data: bookingData, isLoading: isLoadingBookings } = useUserBookingHistory(bookingParams);
     const { data: vehiclesData, isLoading: isLoadingVehicles } = useUserVehicles({ user_id: userId });
     const { data: locationsData, isLoading: isLoadingLocations } = useUserLocations({ user_id: userId });
     const { data: walletData, isLoading: isLoadingWallet } = useUserWalletHistory({
@@ -76,6 +96,10 @@ export default function UserProfile() {
     const { data: packagesData, isLoading: isLoadingPackages } = useUserPackages({
         user_id: userId,
         search: packagesSearch || undefined,
+        limit: packagesPageSize,
+        page: packagesPage,
+        from_date: packagesFromDate || undefined,
+        to_date: packagesToDate || undefined,
     });
 
     // Mutations
@@ -109,6 +133,16 @@ export default function UserProfile() {
         },
         onError: (error: any) => {
             toast.error(error?.response?.data?.message || "Failed to update vehicle");
+        },
+    });
+
+    const { mutate: editProfile, isPending: isEditingProfile } = useEditUserProfile({
+        onSuccess: () => {
+            toast.success("Profile updated successfully");
+            queryClient.invalidateQueries({ queryKey: ["user-details", userId] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || "Failed to update profile");
         },
     });
 
@@ -203,6 +237,7 @@ export default function UserProfile() {
         },
         { key: "location", title: "Location" },
         { key: "createtime", title: "Create Date & Time" },
+        { key: "user_address_name", title: "name" },
         {
             key: "action",
             title: "Action",
@@ -260,7 +295,11 @@ export default function UserProfile() {
             title: "S.No",
             render: (_: any, __: any, index: number) => ((packagesPage - 1) * packagesPageSize) + index + 1,
         },
-        { key: "package_name", title: "Package Name" },
+        {
+            key: "package_name",
+            title: "Package Name",
+            render: (_: any, record: any) => record?.package?.name || "-",
+        },
         {
             key: "status",
             title: "Status",
@@ -398,6 +437,16 @@ export default function UserProfile() {
                                         {statusText}
                                     </span>
                                 </div>
+                                
+                                <div className="text-[#848484] font-bold self-center"></div>
+                                <div>
+                                    <button
+                                        onClick={() => setProfileModal({ open: true, data: user })}
+                                        className="bg-[#1976D2] text-white px-4 py-2 rounded-md inline-block font-medium hover:bg-[#1565C0] transition-colors"
+                                    >
+                                        Edit Profile
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -409,23 +458,22 @@ export default function UserProfile() {
                             <h3 className="text-sm text-gray-500 mb-3">Filter</h3>
                             <p className="text-xs text-gray-400 mb-3">Booking History</p>
                             <Formik
-                                initialValues={{ date: "" }}
+                                initialValues={{ from_date: bookingFromDate, to_date: bookingToDate }}
                                 onSubmit={(values) => {
-                                    setBookingDate(values.date);
+                                    setBookingFromDate(values.from_date);
+                                    setBookingToDate(values.to_date);
                                     setBookingPage(1);
                                 }}
                             >
-                                {() => (
+                                {({ resetForm }) => (
                                     <Form>
-                                        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-                                            <div className="w-full md:w-52">
-                                                <FormInput
-                                                    name="date"
-                                                    label=""
-                                                    placeholder="Date"
-                                                    type="date"
-                                                    className="mb-0"
-                                                    checkmark={false}
+                                        <div className="flex flex-col md:flex-row md:items-end gap-3 md:gap-4">
+                                            <div className="w-full md:w-64">
+                                                <FormDateRangePicker
+                                                    fromName="from_date"
+                                                    toName="to_date"
+                                                    placeholder="Select date or date range"
+                                                    icon={<Calendar className="w-5 h-5" />}
                                                 />
                                             </div>
                                             <button
@@ -433,6 +481,18 @@ export default function UserProfile() {
                                                 className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
                                             >
                                                 Search
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    resetForm();
+                                                    setBookingFromDate("");
+                                                    setBookingToDate("");
+                                                    setBookingPage(1);
+                                                }}
+                                                className="w-full md:w-[108px] py-3 bg-gray-200 rounded-lg text-gray-700 font-semibold transition-all hover:bg-gray-300 shadow-sm hover:shadow-md whitespace-nowrap"
+                                            >
+                                                Reset
                                             </button>
                                         </div>
                                     </Form>
@@ -515,15 +575,17 @@ export default function UserProfile() {
                     <div className="px-6">
                         <div className="mb-4">
                             <Formik
-                                initialValues={{ search: "", date: "" }}
+                                initialValues={{ search: packagesSearch, from_date: packagesFromDate, to_date: packagesToDate }}
                                 onSubmit={(values) => {
                                     setPackagesSearch(values.search);
+                                    setPackagesFromDate(values.from_date);
+                                    setPackagesToDate(values.to_date);
                                     setPackagesPage(1);
                                 }}
                             >
-                                {() => (
+                                {({ resetForm }) => (
                                     <Form>
-                                        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+                                        <div className="flex flex-col md:flex-row md:items-end gap-3 md:gap-4">
                                             <div className="w-full md:w-52">
                                                 <FormInput
                                                     name="search"
@@ -534,14 +596,12 @@ export default function UserProfile() {
                                                     checkmark={false}
                                                 />
                                             </div>
-                                            <div className="w-full md:w-52">
-                                                <FormInput
-                                                    name="date"
-                                                    label=""
-                                                    placeholder="Date"
-                                                    type="date"
-                                                    className="mb-0"
-                                                    checkmark={false}
+                                            <div className="w-full md:w-64">
+                                                <FormDateRangePicker
+                                                    fromName="from_date"
+                                                    toName="to_date"
+                                                    placeholder="Select date or date range"
+                                                    icon={<Calendar className="w-5 h-5" />}
                                                 />
                                             </div>
                                             <button
@@ -549,6 +609,19 @@ export default function UserProfile() {
                                                 className="w-full md:w-[108px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap"
                                             >
                                                 Search
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    resetForm();
+                                                    setPackagesSearch("");
+                                                    setPackagesFromDate("");
+                                                    setPackagesToDate("");
+                                                    setPackagesPage(1);
+                                                }}
+                                                className="w-full md:w-[108px] py-3 bg-gray-200 rounded-lg text-gray-700 font-semibold transition-all hover:bg-gray-300 shadow-sm hover:shadow-md whitespace-nowrap"
+                                            >
+                                                Reset
                                             </button>
                                         </div>
                                     </Form>
@@ -568,6 +641,89 @@ export default function UserProfile() {
                     </div>
                 )}
             </div>
+
+            {/* Edit Profile Modal */}
+            <section
+                className={`fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/30 backdrop-blur-xs transition-all duration-300 ${
+                    profileModal.open ? "opacity-100 visible z-50" : "opacity-0 invisible z-[-1]"
+                }`}
+            >
+                <div className={`w-[678px] relative px-10 py-8 bg-white rounded-xl transition-transform duration-300 ${
+                    profileModal.open ? "scale-100" : "scale-95"
+                }`}>
+                    <div className="flex items-center justify-between mb-6">
+                        <h1 className="text-[#242731] text-[20px] font-bold">Edit Profile</h1>
+                        <button
+                            onClick={() => setProfileModal({ open: false })}
+                            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+                    <Formik
+                        enableReinitialize
+                        initialValues={{
+                            email: profileModal.data?.email || "",
+                            phone_number: profileModal.data?.contact_number || "",
+                            hide_phone_number: profileModal.data?.hide_phone_number === 1 ? 1 : 0,
+                        }}
+                        onSubmit={(values) => {
+                            editProfile({
+                                user_id: userId,
+                                email: values.email || undefined,
+                                phone_number: values.phone_number || undefined,
+                                hide_phone_number: values.hide_phone_number,
+                            });
+                        }}
+                    >
+                        {({ isValid }) => (
+                            <Form className="space-y-4">
+                                <FormInput
+                                    name="email"
+                                    label="Email"
+                                    placeholder="Email"
+                                    type="email"
+                                    checkmark={false}
+                                />
+                                <FormInput
+                                    name="phone_number"
+                                    label="Phone Number"
+                                    placeholder="Phone number"
+                                    type="text"
+                                    checkmark={false}
+                                />
+                                <div className="flex items-center gap-3">
+                                    <FormDropdown
+                                        name="hide_phone_number"
+                                        label="Hide Phone Number"
+                                        options={[
+                                            { label: "No", value: 0 },
+                                            { label: "Yes", value: 1 }
+                                        ]}
+                                        className="mb-0"
+                                    />
+                                </div>
+                                <div className="flex justify-between items-center pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setProfileModal({ open: false })}
+                                        className="w-[168px] border text-[16px] py-3 border-black rounded-[10px]"
+                                    >
+                                        Back
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isEditingProfile}
+                                        className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-10 py-3 rounded-xl text-[16px] shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {isEditingProfile ? "Saving..." : "Submit"}
+                                    </button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+            </section>
 
             {/* Add/Edit Location Modal */}
             <section

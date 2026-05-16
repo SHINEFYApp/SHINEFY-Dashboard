@@ -1,27 +1,58 @@
 import { Form, Formik } from "formik"
-import { FormDatePicker } from "../../../common/FormDatePicker"
-import { FormTimePicker } from "../../../common/FormTimePicker"
 import { FormInput } from "../../../common/FormInput"
-import { Calendar, Clock } from "lucide-react"
 import { TextArea } from "../../../common/textArea"
 import { addExtraServiceValidationSchema } from "../../../constants/validationSchema"
 import { addExtraServiceInitialValues } from "../../../constants/initialValues"
+import { useNavigate } from "react-router"
+import { toast } from "sonner"
+import { useAddExtraService } from "../../../api/features/extraServices.hooks"
+import FileUploader from "../../../common/fileUploader"
 
+export default function AddExtraService() {
+    const navigate = useNavigate()
 
-export default function AddExtraService(){
-    return(
-        <main className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
+    const { mutate: addExtraService, isPending } = useAddExtraService({
+        onSuccess: () => {
+            toast.success("Extra service added successfully")
+            navigate("/services&extra/manage/ExtreService")
+        },
+        onError: (err: any) => {
+            toast.error(err?.response?.data?.message || "Failed to add extra service")
+        },
+    })
+
+    return (
+        <main className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen">
             <h1 className="text-[20px] font-bold mb-8">Add Extra Service</h1>
             <Formik
-                initialValues={addExtraServiceInitialValues}
+                initialValues={{
+                    ...addExtraServiceInitialValues,
+                    image: null,
+                }}
                 validationSchema={addExtraServiceValidationSchema}
                 onSubmit={(values) => {
-                    console.log(values)
+                    const formData = new FormData()
+                    formData.append("extra_service_name", values.extraServiceNameEnglish)
+                    formData.append("extra_service_description", values.englishServiceDescription)
+                    formData.append("extra_service_name_arabic", values.serviceNameArabic)
+                    formData.append("extra_service_description_arabic", values.extraArabicServiceDescription)
+                    formData.append("extra_service_price", String(values.extarServicePrice))
+                    formData.append("extra_service_time", String(values.extarServiceTime))
+                    if (values.extraServiceDiscount !== "") {
+                        formData.append("extra_service_discount", String(values.extraServiceDiscount ?? 0))
+                    }
+
+                    const files = values.image
+                    if (files && files.length > 0 && files[0] instanceof File) {
+                        formData.append("image", files[0])
+                    }
+
+                    addExtraService(formData)
                 }}
             >
-                {({ isValid }) => (
+                {({ isValid, values }) => (
                     <Form>
-                        <div className=" grid grid-cols-3 gap-5 border-b border-[#E9EAEC] pb-10">
+                        <div className="grid grid-cols-3 gap-5 border-b border-[#E9EAEC] pb-10">
                             <div className="grid grid-cols-1 gap-5">
                                 <FormInput
                                     name="extraServiceNameEnglish"
@@ -48,18 +79,15 @@ export default function AddExtraService(){
                                     label="Extra Service Discount"
                                     placeholder="Extra Service Discount"
                                     type="text"
-                                    moreOptions='%'
+                                    moreOptions="%"
                                 />
                             </div>
                             <div className="grid grid-cols-1 ps-20 gap-2">
                                 <h2>Service Image</h2>
-                                <div className="w-[117px] h-[117px] bg-black/20 rounded-[5px]">
-                                    {/* <img src={''} alt="" /> */}
-                                </div>
-                                <div className=" flex gap-5">
-                                    <button type="button" className="text-[#B0B0B0] text-[14px]">Delete</button>
-                                    <button type="button" className="text-[#FFC107] text-[14px]">Update</button>
-                                </div>
+                                <FileUploader
+                                    name="image"
+                                    title="Service Image"
+                                />
                             </div>
                             <div className="grid grid-cols-1">
                                 <FormInput
@@ -67,21 +95,16 @@ export default function AddExtraService(){
                                     label="Extra Service Time"
                                     placeholder="Extra Service Time"
                                     type="text"
-                                    moreOptions='m'
+                                    moreOptions="m"
                                 />
                             </div>
                         </div>
-                        <div className=" grid grid-cols-3 gap-5 mt-5 pb-10">
+                        <div className="grid grid-cols-3 gap-5 mt-5 pb-10">
                             <div className="grid grid-cols-1 gap-5">
                                 <TextArea
                                     name="englishServiceDescription"
                                     label="Service Description (In English)"
                                     placeholder="Service Description (In English)"
-                                />
-                                <FormDatePicker
-                                    name="Date"
-                                    label="Create Extra Service Date"
-                                    icon={<Calendar className="size-5" />} checkmark={false} 
                                 />
                             </div>
                             <div className="grid grid-cols-1 gap-5">
@@ -90,19 +113,19 @@ export default function AddExtraService(){
                                     label="Extra Service Description (In Arabic)"
                                     placeholder="Extra Service Description (In Arabic)"
                                 />
-                                <FormTimePicker
-                                    name="Time"
-                                    label="Create Extar Service Time"
-                                    icon={<Clock className="size-5" />}
-                                />
                             </div>
                         </div>
                         <div className="grid grid-cols-3 mb-10">
-                            <button disabled={!isValid} type="submit" className="h-12 text-[20px] font-bold bg-[#FFC107] rounded-[10px]">Submit</button>
+                            <button
+                                disabled={!isValid || isPending}
+                                type="submit"
+                                className="h-12 text-[20px] font-bold bg-[#FFC107] rounded-[10px] disabled:opacity-50"
+                            >
+                                {isPending ? "Submitting..." : "Submit"}
+                            </button>
                         </div>
                     </Form>
                 )}
-
             </Formik>
         </main>
     )

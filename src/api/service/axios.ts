@@ -16,6 +16,8 @@ api.interceptors.request.use(
     }
 
     config.headers["app-type"] = "dashboard";
+    config.headers["user-type"] = "admin";
+    config.headers["app-version"] = "1.0.0";
 
     return config;
   },

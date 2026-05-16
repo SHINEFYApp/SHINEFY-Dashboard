@@ -21,7 +21,7 @@ const CreateBookingsSlot = () => {
                 />
             </div>
             {activeTab === 'manageDailySlot' && <ManageDailySlot />}
-            {activeTab === 'manageFreeBooking' && <ManageFreeBooking />}
+            {/* {activeTab === 'manageFreeBooking' && <ManageFreeBooking />} */}
         </div>
     );
 };

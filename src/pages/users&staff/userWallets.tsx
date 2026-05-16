@@ -4,14 +4,12 @@ import { Button } from "../../components/ui/button";
 import { userWalletSchema } from "../../constants/validationSchema";
 import { userWalletInitialValues } from "../../constants/initialValues";
 import { FormInput } from "../../common/FormInput";
-import { FormDropdown } from "../../common/FormDropdown";
 import { CustomTable } from "../../common/CustomTable";
 import type { FilterFormValuesOnlySearch } from "../../types/bookings";
 import { Search } from "lucide-react";
 import { useGetWallets, useAddWallet, useExportWallets } from "../../api/features/wallets.hooks";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useGetUsers } from "../../api/features/ManageUsers.hooks";
 
 const columns = [
     {
@@ -49,13 +47,6 @@ export default function UsersWallets() {
     const [openWindowAddAmount, setOpenWindowAddAmount] = useState<boolean>();
     const [currentBayMethod, setCurrentBayMethod] = useState<string>('Credit');
     const queryClient = useQueryClient();
-
-    // Fetch users for dropdown
-    const { data: usersData } = useGetUsers({ page: 1, limit: 100 }); // Adjust limit or add search if needed
-    const userOptions = usersData?.data?.users?.map((u: any) => ({
-        label: u.name || `User ${u.id}`,
-        value: u.id
-    })) || [];
 
     const { mutate: addWallet, isPending: isAdding } = useAddWallet({
         onSuccess: () => {
@@ -210,28 +201,21 @@ export default function UsersWallets() {
                             initialValues={userWalletInitialValues}
                             validationSchema={userWalletSchema}
                             onSubmit={(values) => {
-                                // Map form values to API payload
-                                // Request says: user_type=0, optradio=0, bonus_percentage=1 (defaults?)
-                                // Form has: user, amount, payMethod (via state currentBayMethod)
-                                const payload = {
-                                    user_type: 0,
-                                    users: values.user ? [Number(values.user)] : [], // Assuming user is ID
-                                    optradio: 0, // 0 for amount?
+                                addWallet({
+                                    phone: values.phone,
+                                    type: currentBayMethod.toLowerCase(),
                                     amount: Number(values.amount),
-                                    bonus_percentage: 1, // Default from request
-                                    // Add logic for payMethod if API supports it? API doesn't seem to show payMethod in POST /addWallet params provided
-                                };
-                                addWallet(payload);
+                                });
                             }}
                         >
                             {({ isValid }) => (
                                 <Form>
                                     <div className="w-[376px]">
-                                        <FormDropdown
-                                            name="user"
-                                            label="Select User"
-                                            placeholder="Select User"
-                                            options={userOptions as any}
+                                        <FormInput
+                                            name="phone"
+                                            label="Phone Number"
+                                            placeholder="Enter phone number"
+                                            type="text"
                                         />
                                     </div>
                                     <div className="w-[376px] flex items-center justify-center gap-5 py-10">

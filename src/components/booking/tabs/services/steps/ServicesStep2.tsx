@@ -1,23 +1,37 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Formik, Form } from 'formik';
 import { servicesBookingSchema, packageBookingSchema } from '../../../../../constants/validationSchema';
-import { Package, PersonStanding, Plus, X } from 'lucide-react';
+import { Clock, Package, PersonStanding, Plus, X } from 'lucide-react';
 import { Button } from '../../../../ui/button';
 import type {
     ApiMainService,
     ApiExtraService,
     GetServiceResponse,
-    servicesBoysPayload,
-    servicesBoysResponse,
     stepsProps,
 } from '../../../../../types/bookings';
-import { usePost } from '../../../../../api/usePostData';
-import { toast } from 'sonner';
+import type { AdminSlot } from '../../../../../types/slots';
+import { useGetAdminSlots } from '../../../../../api/features/slots.hooks';
 import { SkeletonDemo } from '../../../../../common/loader';
 import { DropDownToSendObject } from '../../../../../common/DropDownToSendObject ';
 import { getPackage, getServices } from '../../../../../api/features/bookings';
 import { useGet } from '../../../../../api/useGetData.tsx';
 import { ExtraServiceModal } from '../ExtraServiceModal';
+import { FormTimeSlots } from '../../../../../common/FormTimeSlots';
+
+const extractAvailableBoys = (data: any): { user_id: number; name: string }[] => {
+    const slots: AdminSlot[] = Array.isArray(data?.data?.data?.slots) ? data.data.data.slots : [];
+    const seen = new Set<number>();
+    const boys: { user_id: number; name: string }[] = [];
+    for (const slot of slots) {
+        for (const boy of slot.available_boys || []) {
+            if (!seen.has(boy.user_id)) {
+                seen.add(boy.user_id);
+                boys.push({ user_id: boy.user_id, name: boy.name });
+            }
+        }
+    }
+    return boys;
+};
 
 export default function ServicesStep2({
     onNext,
@@ -29,16 +43,6 @@ export default function ServicesStep2({
   
     const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
     const baseURL = import.meta.env.VITE_API_URL;
-
-    // Fetch available service boys
-    const getServicesBoys = usePost<servicesBoysResponse, servicesBoysPayload>({
-        route: `${baseURL}/api/book/available-service-boys`,
-        options: {
-            onError: (err: any) => {
-                toast.error(err.response?.data?.message ?? err.message);
-            },
-        },
-    });
 
     // Fetch packages (for package tab)
     const getPackages = useGet({
@@ -53,24 +57,17 @@ export default function ServicesStep2({
         queryKey: ['services'],
         options: { staleTime: 1000 * 30, enabled: !userPackageInput },
     });
-
-    useEffect(() => {
-        if (!formData.address || !formData.mainService) return;
-        const serviceId = String((formData.mainService as any)?.service_id ?? formData.mainService ?? '');
-        getServicesBoys.mutate({
-            latitude: formData.address.latitude,
-            longitude: formData.address.longitude,
-            booking_date: formData.bookingDate,
-            booking_time: formData.bookingTime,
-            service_duration: 60,
-            service_id: serviceId
-        } as servicesBoysPayload);
-    }, [formData.address, formData.mainService]);
-
-    const available_service_boys = getServicesBoys.data?.data.available_service_boys;
     
     // For package tab, use packages from formData (fetched in step 1)
-    const userPackages = formData.userPackages || [];
+    const userPackages = useMemo(() => {
+        const pkgs = formData.userPackages || [];
+        return pkgs.filter((pkg) => {
+            const isExpired = pkg.available_to && new Date(pkg.available_to) < new Date();
+            const isInactive = pkg.status !== 'active';
+            const isExhausted = pkg.remind_used !== null && pkg.remind_used <= 0;
+            return !isExpired && !isInactive && !isExhausted;
+        });
+    }, [formData.userPackages]);
     
     // Transform package main services to match ApiMainService structure
     const packageMainServices: any[] = formData.mainPackage?.all_main_services?.filter(s => s.remind_quantity > 0).map(s => ({
@@ -128,7 +125,28 @@ export default function ServicesStep2({
         }));
     };
 
-    const isPending = getServicesBoys.isPending || getPackages.isPending || getServicesQuery.isLoading;
+    const selectedServiceIdForTime = String((formData.mainService as any)?.service_id ?? formData.mainService ?? '');
+    const mainSvcObj = allServices.find((s) => String(s.service_id) === selectedServiceIdForTime);
+    const totalServiceTime = useMemo(() => {
+        const mainTime = mainSvcObj?.service_time || 0;
+        const extrasTime = formData.extraServices.reduce((sum, es) => {
+            const found = allExtras.find((e) => String(e.extra_service_id) === es.id);
+            return sum + (found?.extra_service_time || 0) * (es.quantity || 1);
+        }, 0);
+        return mainTime + extrasTime;
+    }, [mainSvcObj, formData.extraServices, allExtras]);
+
+    const { data: slotsData, isLoading: slotsLoading } = useGetAdminSlots({
+        date: formData.bookingDate || '',
+        service_time: totalServiceTime > 0 ? totalServiceTime : undefined,
+    });
+
+    const available_service_boys = useMemo(
+        () => extractAvailableBoys(slotsData),
+        [slotsData]
+    );
+
+    const isPending = getPackages.isPending || getServicesQuery.isLoading || slotsLoading;
 
     return (
         <main className="relative">
@@ -145,6 +163,7 @@ export default function ServicesStep2({
                     mainPackage: formData.mainPackage,
                     mainService: formData.mainService ?? '',
                     serviceBoy: formData.serviceBoy,
+                    bookingTime: formData.bookingTime || '',
                 }}
                 validationSchema={userPackageInput ? packageBookingSchema : servicesBookingSchema}
                 enableReinitialize
@@ -246,6 +265,20 @@ export default function ServicesStep2({
                                     ? (userPackageInput && !formData.mainPackage?.id ? 'Select a package first' : 'Select a service first')
                                     : 'Add Extra Service'}
                             </button>
+                        </div>
+
+                        {/* ── Time Slot Selection ── */}
+                        <div className="mb-8">
+                            <FormTimeSlots
+                                name="bookingTime"
+                                label="Select Booking Time"
+                                icon={<Clock className="size-5" />}
+                                date={formData.bookingDate}
+                                serviceTime={totalServiceTime}
+                                onSelect={(time) => {
+                                    setFormData((prev) => ({ ...prev, bookingTime: time }));
+                                }}
+                            />
                         </div>
 
                         {/* ── Service Boy ── */}

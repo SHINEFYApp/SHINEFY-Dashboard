@@ -16,6 +16,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getServices, singleBookingDetails } from "../../../api/features/bookings";
 import { useUpdateBooking } from "../../../api/features/bookings.hooks";
 import { useUserLocations, useUserVehicles } from "../../../api/features/ManageUsers.hooks";
+import { useGetAdminSlots } from "../../../api/features/slots.hooks";
+import type { AdminSlot } from "../../../types/slots";
 import { SkeletonDemo } from "../../../common/loader";
 import { cn } from "../../../utils/utils";
 import { Input } from "../../../components/ui/input";
@@ -25,10 +27,15 @@ import { ExtraServiceModal } from "../../../components/booking/tabs/services/Ext
 /* ─── Status Maps ─── */
 const BOOKING_STATUS: Record<string, { label: string; color: string }> = {
     "0": { label: "Pending", color: "bg-yellow-50 text-yellow-700 border-yellow-300" },
-    "1": { label: "In Progress", color: "bg-blue-50 text-blue-700 border-blue-300" },
+    "1": { label: "In-Progress", color: "bg-blue-50 text-blue-700 border-blue-300" },
     "2": { label: "Completed", color: "bg-green-50 text-green-700 border-green-300" },
     "3": { label: "Canceled", color: "bg-red-50 text-red-700 border-red-300" },
     "4": { label: "Confirmed", color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
+};
+
+const BOOKING_TYPE: Record<number, { label: string; color: string }> = {
+    0: { label: "Suchdegle", color: "bg-purple-50 text-purple-700 border-purple-300" },
+    1: { label: "Waiting", color: "bg-orange-50 text-orange-700 border-orange-300" },
 };
 
 const DRIVER_STATUS: Record<string, { label: string; color: string }> = {
@@ -46,7 +53,7 @@ const DRIVER_STATUS: Record<string, { label: string; color: string }> = {
  */
 const STATUS_LABEL_TO_CODE: Record<string, string> = {
     "pending": "0",
-    "in progress": "1",
+    "in-progress": "1",
     "completed": "2",
     "canceled": "3",
     "confirmed": "4",
@@ -73,6 +80,10 @@ const resolveStatusCode = (value: any, map: Record<string, string>): string => {
 /* ─── Form State ─── */
 interface EditFormState {
     status: string;
+    booking_type: number;
+    booking_date: string;
+    booking_time: string;
+    service_boy_id: number | null;
     driver_status?: string;
     main_service: number | null;
     address_loc: string;
@@ -104,8 +115,6 @@ const ManageBookingDetails = () => {
 
     const booking = data?.data?.booking;
     const bookingExtraServices = data?.data?.extra_services;
-    const service_boys = data?.data?.service_boys;
-
     /* ─── Fetch all services (same endpoint as create booking) ─── */
     const getServicesQuery = useGet<GetServiceResponse>({
         queryFn: () => getServices(`${baseURL}/api/get_service/`),
@@ -135,6 +144,7 @@ const ManageBookingDetails = () => {
     /* ─── Form state ─── */
     const [form, setForm] = useState<EditFormState>({
         status: "",
+        booking_type: 0,
         driver_status: "",
         main_service: null,
         address_loc: "",
@@ -152,7 +162,8 @@ const ManageBookingDetails = () => {
     const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
     const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
     const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
-
+    const [isServiceBoyDropdownOpen, setIsServiceBoyDropdownOpen] = useState(false);
+    
     /*
      * ─── Match initial main_service from the booking ───
      * The API doesn't return a service_id directly on the booking object.
@@ -186,8 +197,16 @@ const ManageBookingDetails = () => {
 
         const matchedServiceId = resolveMainServiceId();
 
+        // Resolve status to a code "0"-"5" regardless of whether the value is already a code or a label
+        const resolvedStatus = resolveStatusCode(booking.status, STATUS_LABEL_TO_CODE);
+      
+        
         const initial: EditFormState = {
-            status: resolveStatusCode(booking.status, STATUS_LABEL_TO_CODE),
+            status: String(resolvedStatus),
+            booking_type: booking.booking_type ?? 0,
+            booking_date: booking.booking_date ?? "",
+            booking_time: booking.booking_time ?? "",
+            service_boy_id: booking.service_boy?.service_boy_id ?? null,
             main_service: matchedServiceId,
             address_loc: booking.address_loc ?? "",
             lat: String(booking.lat ?? booking.latitude ?? ""),
@@ -202,11 +221,16 @@ const ManageBookingDetails = () => {
         setInitialForm(initial);
     }, [data, allServices]);
 
+    
     /* ─── Track changes ─── */
     useEffect(() => {
         if (!initialForm) return;
         const changed =
             form.status !== initialForm.status ||
+            form.booking_type !== initialForm.booking_type ||
+            form.booking_date !== initialForm.booking_date ||
+            form.booking_time !== initialForm.booking_time ||
+            form.service_boy_id !== initialForm.service_boy_id ||
             form.driver_status !== initialForm.driver_status ||
             form.main_service !== initialForm.main_service ||
             form.address_loc !== initialForm.address_loc ||
@@ -239,6 +263,46 @@ const ManageBookingDetails = () => {
         [selectedServiceObj, allExtras]
     );
 
+    const serviceTime = useMemo(() => {
+        const mainTime = selectedServiceObj?.service_time || 0;
+        const extrasTime = form.extra_services.reduce((sum, es) => {
+            const found = allExtras.find((e) => String(e.extra_service_id) === es.id);
+            return sum + (found?.extra_service_time || 0) * (es.quantity || 1);
+        }, 0);
+        return mainTime + extrasTime;
+    }, [selectedServiceObj, form.extra_services, allExtras]);
+
+    const { data: slotsData, isLoading: slotsLoading } = useGetAdminSlots({
+        date: form.booking_date || '',
+        service_time: serviceTime > 0 ? serviceTime : undefined,
+    });
+
+    const slots: AdminSlot[] = Array.isArray(slotsData?.data?.data?.slots)
+        ? slotsData.data.data.slots
+        : [];
+
+    const availableServiceBoys = useMemo(() => {
+        if (!form.booking_time) return [];
+        const seen = new Set<number>();
+        const boys: { user_id: number; name: string }[] = [];
+        const targetSlot = slots.find((s) => s.time === form.booking_time);
+        if (!targetSlot) return [];
+        for (const boy of targetSlot.available_boys || []) {
+            if (!seen.has(boy.user_id)) {
+                seen.add(boy.user_id);
+                boys.push({ user_id: boy.user_id, name: boy.name });
+            }
+        }
+        const currentBoy = booking?.service_boy;
+        if (currentBoy?.service_boy_id && !seen.has(currentBoy.service_boy_id)) {
+            boys.unshift({
+                user_id: currentBoy.service_boy_id,
+                name: currentBoy.service_boy_name ?? `Boy #${currentBoy.service_boy_id}`,
+            });
+        }
+        return boys;
+    }, [slotsData, booking, form.booking_time]);
+
     /* ─── Clear extras when main service changes (skip first render) ─── */
     const prevServiceRef = useRef<number | null>(null);
     const isFirstServiceSet = useRef(true);
@@ -265,9 +329,13 @@ const ManageBookingDetails = () => {
     const handleSave = () => {
         const payload: UpdateBookingPayload = {
             status: form.status, // "0"-"5"
+            booking_type: form.booking_type,
         };
 
+        if (form.booking_date) payload.booking_date = form.booking_date;
+        if (form.booking_time) payload.booking_time = form.booking_time;
         if (form.main_service) payload.main_service = form.main_service;
+        if (form.service_boy_id) payload.service_boy_id = form.service_boy_id;
         if (form.address_loc) payload.address_loc = form.address_loc;
         if (form.lat) payload.lat = form.lat;
         if (form.lon) payload.lon = form.lon;
@@ -324,6 +392,8 @@ const ManageBookingDetails = () => {
         { key: "service_boy_id ", title: "ID" },
     ];
 
+    
+
     /* ═══════════════════════════════════════════════════════ */
     /*                         RENDER                         */
     /* ═══════════════════════════════════════════════════════ */
@@ -370,11 +440,139 @@ const ManageBookingDetails = () => {
                     <InfoCard label="Order Type" value={booking.order_pay_type || "—"} />
                     <InfoCard label="Current Service" value={selectedServiceName} />
                     <InfoCard label="Collect Status" value={booking.payment_collect_status || "—"} />
+                    <InfoCard label="Booking Type" value={BOOKING_TYPE[booking.booking_type]?.label || "—"} />
                 </div>
             </div>
 
             {/* ══════════════ Editable Sections ══════════════ */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                {/* ── Date & Time ── */}
+                <SectionCard title="Date & Time" icon={<History className="size-5" />}>
+                    <div className="space-y-5">
+                        <div>
+                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">
+                                Booking Date
+                            </label>
+                            <input
+                                type="date"
+                                value={form.booking_date}
+                                onChange={(e) => updateField("booking_date", e.target.value)}
+                                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">
+                                Booking Time
+                                {!form.booking_date && (
+                                    <span className="ml-2 text-xs text-gray-400 font-normal">Select a date first</span>
+                                )}
+                            </label>
+                            {!form.booking_date ? (
+                                <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center text-sm text-gray-400">
+                                    Select a date to see available time slots
+                                </div>
+                            ) : slotsLoading ? (
+                                <div className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-8 text-center text-sm text-gray-400">
+                                    <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
+                                    Loading available slots...
+                                </div>
+                            ) : slots.length === 0 ? (
+                                <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center text-sm text-gray-400">
+                                    No available slots for this date
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                    {slots.map((slot, i) => {
+                                        const isSelected = form.booking_time === slot.time;
+                                        const isDisabled = slot.available_count === 0;
+                                        return (
+                                            <button
+                                                key={i}
+                                                type="button"
+                                                disabled={isDisabled}
+                                                onClick={() => updateField("booking_time", slot.time)}
+                                                className={cn(
+                                                    "flex flex-col items-center gap-1 rounded-xl border-2 px-3 py-3 text-sm font-medium transition-all duration-200",
+                                                    isSelected
+                                                        ? "border-primary bg-primary/5 text-primary"
+                                                        : isDisabled
+                                                            ? "border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed"
+                                                            : "border-gray-200 bg-white text-gray-700 hover:border-primary/50 hover:bg-primary/5"
+                                                )}
+                                            >
+                                                <span className="font-semibold">{slot.time}</span>
+                                                <span className={cn("text-xs", isSelected ? "text-primary/70" : "text-gray-400")}>
+                                                    {slot.available_count} available
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                            {form.booking_time && (
+                                <p className="text-xs text-green-600 mt-2">
+                                    Selected: {form.booking_date} at {form.booking_time}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* ── Service Boy ── */}
+                        <div>
+                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">
+                                Service Boy
+                                {!form.booking_time && (
+                                    <span className="ml-2 text-xs text-gray-400 font-normal">Select a time slot first</span>
+                                )}
+                            </label>
+                            <div className="relative">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsServiceBoyDropdownOpen(!isServiceBoyDropdownOpen)}
+                                    disabled={!form.booking_time}
+                                    className="w-full flex justify-between items-center rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed enabled:cursor-pointer enabled:hover:bg-gray-100"
+                                >
+                                    <span className={cn("truncate", form.service_boy_id ? "text-gray-800" : "text-gray-400")}>
+                                        {form.service_boy_id
+                                            ? (availableServiceBoys.find((b) => b.user_id === form.service_boy_id)?.name ?? `Boy #${form.service_boy_id}`)
+                                            : "Select a service boy"
+                                        }
+                                    </span>
+                                    <ChevronDown className={cn("size-4 text-gray-400 transition-transform", isServiceBoyDropdownOpen && "rotate-180")} />
+                                </button>
+                                {isServiceBoyDropdownOpen && (
+                                    <>
+                                        {availableServiceBoys.length === 0 ? (
+                                            <div className="absolute z-50 w-full mt-1 rounded-xl border bg-white shadow-lg p-4 text-center text-sm text-gray-400">
+                                                {slotsLoading ? "Loading available service boys..." : "No available service boys for this time slot"}
+                                            </div>
+                                        ) : (
+                                            <div className="absolute z-50 w-full mt-1 rounded-xl border bg-white shadow-lg max-h-60 overflow-auto">
+                                                {availableServiceBoys.map((boy, idx) => (
+                                                    <button
+                                                        key={idx}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            updateField("service_boy_id", boy.user_id);
+                                                            setIsServiceBoyDropdownOpen(false);
+                                                        }}
+                                                        className={cn(
+                                                            "w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors text-sm",
+                                                            form.service_boy_id === boy.user_id && "bg-green-50 text-green-700 font-medium"
+                                                        )}
+                                                    >
+                                                        {boy.name}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </SectionCard>
 
                 {/* ── Status ── */}
                 <SectionCard title="Status" icon={<Truck className="size-5" />}>
@@ -406,6 +604,35 @@ const ManageBookingDetails = () => {
                                 ))}
                             </div>
                         </div>
+                        {/* Booking Type */}
+                        <div>
+                            <label className="text-sm font-medium text-gray-600 mb-2 block">
+                                Booking Type
+                                {BOOKING_TYPE[form.booking_type] && (
+                                    <span className={cn("ml-2 text-xs px-2 py-0.5 rounded-md border", BOOKING_TYPE[form.booking_type]?.color)}>
+                                        {BOOKING_TYPE[form.booking_type]?.label}
+                                    </span>
+                                )}
+                            </label>
+                            <div className="flex flex-wrap gap-2">
+                                {Object.entries(BOOKING_TYPE).map(([key, { label, color }]) => (
+                                    <button
+                                        key={key}
+                                        type="button"
+                                        onClick={() => updateField("booking_type", Number(key))}
+                                        className={cn(
+                                            "px-4 py-2 rounded-lg border text-sm font-medium transition-all",
+                                            form.booking_type === Number(key)
+                                                ? `${color} ring-2 ring-offset-1 ring-current`
+                                                : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100"
+                                        )}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
                         {/* <div>
                             <label className="text-sm font-medium text-gray-600 mb-2 block">
                                 Driver Status

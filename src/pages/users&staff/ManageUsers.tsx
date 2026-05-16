@@ -1,11 +1,11 @@
 import { Form, Formik } from "formik";
-import { ArrowUpToLine, Eye, Key, Search, Shield, ShieldCheck, SlidersHorizontal } from "lucide-react";
-import { useState } from "react";
+import { ArrowUpToLine, Eye, Key, Search, Shield, ShieldCheck, SlidersHorizontal, X } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { useGetUsers, useExportUsers, useEditUserStatus, useEditOtpStatus } from "../../api/features/ManageUsers.hooks";
+import { useGetUsers, useExportUsers, useEditUserStatus, useEditOtpStatus, useGetCompanies, useEditUserProfile } from "../../api/features/ManageUsers.hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormInput } from "../../common/FormInput";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { FormDropdown } from "../../common/FormDropdown";
 import { CustomTable } from "../../common/CustomTable";
 import { exportTypes } from "../../constants/data";
@@ -32,6 +32,16 @@ export default function ManageUsers() {
         },
         onError: (error: any) => {
             toast.error(error?.response?.data?.message || "Failed to update OTP status");
+        }
+    });
+
+    const { mutate: editProfile } = useEditUserProfile({
+        onSuccess: () => {
+            toast.success("User profile updated successfully");
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || "Failed to update user profile");
         }
     });
 
@@ -94,7 +104,7 @@ export default function ManageUsers() {
                     </Link>
                     <button
                         className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] p-2 font-semibold transition-colors"
-                        onClick={() => console.log('updated item', record)}
+                        onClick={() => setProfileModal({ open: true, data: record })}
                     >
                         <ArrowUpToLine className="w-4 h-4" /> update
                     </button>
@@ -137,38 +147,76 @@ export default function ManageUsers() {
         },
     ]
 
-    const [filterOptions, setFilterOptions] = useState<filterOptionsTypes>({
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const [filterOptions, setFilterOptions] = useState<filterOptionsTypes>(() => ({
         state: false,
         data: {
-            groupName: "",
-            companyName: "",
-            areaName: "",
-            deviceType: "",
-            registrationStart: "",
-            registrationEnd: ""
+            groupName: searchParams.get("filterGroupName") || "",
+            activeFlag: searchParams.get("activeFlag") || "",
+            otpVerify: searchParams.get("otpVerify") || "",
+            loginType: searchParams.get("loginType") || "",
+            companyId: searchParams.get("companyId") || "",
+            createtimeFrom: searchParams.get("createtimeFrom") || "",
+            createtimeTo: searchParams.get("createtimeTo") || "",
         }
-    })
+    }))
 
-    console.log(filterOptions.data)
-    const [filterData, setFilterData] = useState({
-        search: "",
-        groupName: ""
+    const [filterData, setFilterData] = useState(() => ({
+        search: searchParams.get("search") || "",
+        groupName: searchParams.get("topGroupName") || ""
+    }));
+
+    const [profileModal, setProfileModal] = useState<{ open: boolean; data?: any }>({
+        open: false,
     });
 
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(() => Number(searchParams.get("page")) || 1);
     const pageSize = 10;
 
-    // Combine top search and modal filter options
+    const { data: companiesData } = useGetCompanies();
+    const companies = companiesData?.data?.companies;
+
+    const isFirstRender = useRef(true);
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        const urlParams = new URLSearchParams();
+        if (filterData.search) urlParams.set("search", filterData.search);
+        if (filterData.groupName) urlParams.set("topGroupName", filterData.groupName);
+        if (filterOptions.data.activeFlag) urlParams.set("activeFlag", filterOptions.data.activeFlag);
+        if (filterOptions.data.otpVerify) urlParams.set("otpVerify", filterOptions.data.otpVerify);
+        if (filterOptions.data.loginType) urlParams.set("loginType", filterOptions.data.loginType);
+        if (filterOptions.data.companyId) urlParams.set("companyId", filterOptions.data.companyId);
+        if (filterOptions.data.createtimeFrom) urlParams.set("createtimeFrom", filterOptions.data.createtimeFrom);
+        if (filterOptions.data.createtimeTo) urlParams.set("createtimeTo", filterOptions.data.createtimeTo);
+        if (filterOptions.data.groupName) urlParams.set("filterGroupName", filterOptions.data.groupName);
+        if (currentPage > 1) urlParams.set("page", String(currentPage));
+        setSearchParams(urlParams, { replace: true });
+    }, [
+        filterData.search, filterData.groupName,
+        filterOptions.data.activeFlag, filterOptions.data.otpVerify,
+        filterOptions.data.loginType, filterOptions.data.companyId,
+        filterOptions.data.createtimeFrom, filterOptions.data.createtimeTo,
+        filterOptions.data.groupName,
+        currentPage, setSearchParams
+    ]);
+
+    const toInt = (v: string) => v ? Number(v) : undefined;
+
     const { data, isLoading, isError, error } = useGetUsers({
         page: currentPage,
         limit: pageSize,
-        search_text: filterData.search,
-        group_name: filterData.groupName || filterOptions.data.groupName,
-        // Add other filters if supported by the API
-        // area_name: filterOptions.data.areaName,
-        // device_type: filterOptions.data.deviceType,
-        // date_from: filterOptions.data.registrationStart,
-        // date_to: filterOptions.data.registrationEnd,
+        search_text: filterData.search || undefined,
+        group_name: filterData.groupName || filterOptions.data.groupName || undefined,
+        active_flag: toInt(filterOptions.data.activeFlag),
+        otp_verify: toInt(filterOptions.data.otpVerify),
+        login_type: toInt(filterOptions.data.loginType),
+        company_id: toInt(filterOptions.data.companyId),
+        createtime_from: filterOptions.data.createtimeFrom || undefined,
+        createtime_to: filterOptions.data.createtimeTo || undefined,
     });
 
     const { mutate: exportMutation } = useExportUsers();
@@ -178,8 +226,14 @@ export default function ManageUsers() {
         exportMutation({
             limit: 100,
             page: 1,
-            group_name: filterData.groupName || filterOptions.data.groupName,
-            search_text: filterData.search,
+            search_text: filterData.search || undefined,
+            group_name: filterData.groupName || filterOptions.data.groupName || undefined,
+            active_flag: toInt(filterOptions.data.activeFlag),
+            otp_verify: toInt(filterOptions.data.otpVerify),
+            login_type: toInt(filterOptions.data.loginType),
+            company_id: toInt(filterOptions.data.companyId),
+            createtime_from: filterOptions.data.createtimeFrom || undefined,
+            createtime_to: filterOptions.data.createtimeTo || undefined,
         }, {
             onSuccess: (data: any) => {
                 if (data instanceof Blob) {
@@ -207,7 +261,7 @@ export default function ManageUsers() {
             search: values.search,
             groupName: values.groupName
         });
-        setCurrentPage(1); // Reset to first page on search
+        setCurrentPage(1);
     };
 
     const users = data?.data?.users || [];
@@ -225,16 +279,16 @@ export default function ManageUsers() {
                     <div className="mb-6">
                         <Formik
                             initialValues={{
-                                search: '',
-                                groupName: ''
+                                search: filterData.search,
+                                groupName: filterData.groupName
                             }}
                             onSubmit={handleSubmit}
+                            enableReinitialize
                         >
                             {() => (
                                 <Form>
                                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
                                         <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
-                                            {/* left side  */}
                                             <div className="grid grid-cols-2 gap-2">
                                                 <FormInput
                                                     name="search"
@@ -259,7 +313,6 @@ export default function ManageUsers() {
                                                 Search
                                             </button>
                                         </div>
-                                        {/* right side  */}
                                         <div className="flex flex-col lg:flex-row items-center gap-5">
                                             <div className="flex flex-col lg:flex-row items-center gap-5">
                                                 <Link
@@ -293,7 +346,6 @@ export default function ManageUsers() {
                             )}
                         </Formik>
                     </div>
-                    {/* table  */}
                     {isLoading ? (
                         <div className="flex justify-center py-10">Loading...</div>
                     ) : isError ? (
@@ -311,7 +363,91 @@ export default function ManageUsers() {
                     )}
                 </div>
             </main>
-            <FillterOptions filterOptions={filterOptions} setFilterOptions={setFilterOptions} />
+            
+            {/* Edit Profile Modal */}
+            <section
+                className={`fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/30 backdrop-blur-xs transition-all duration-300 ${
+                    profileModal.open ? "opacity-100 visible z-50" : "opacity-0 invisible z-[-1]"
+                }`}
+            >
+                <div className={`w-[678px] relative px-10 py-8 bg-white rounded-xl transition-transform duration-300 ${
+                    profileModal.open ? "scale-100" : "scale-95"
+                }`}>
+                    <div className="flex items-center justify-between mb-6">
+                        <h1 className="text-[#242731] text-[20px] font-bold">Edit Profile</h1>
+                        <button
+                            onClick={() => setProfileModal({ open: false })}
+                            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+                    <Formik
+                        enableReinitialize
+                        initialValues={{
+                            email: profileModal.data?.email || "",
+                            phone_number: profileModal.data?.phone_number || "",
+                            hide_phone_number: profileModal.data?.hide_phone_number || 0,
+                        }}
+                        onSubmit={(values) => {
+                            editProfile({
+                                user_id: profileModal.data?.user_id || profileModal.data?.id,
+                                email: values.email || undefined,
+                                phone_number: values.phone_number || undefined,
+                                hide_phone_number: Number(values.hide_phone_number),
+                            });
+                            setProfileModal({ open: false });
+                        }}
+                    >
+                        {({ isValid }) => (
+                            <Form className="space-y-4">
+                                <FormInput
+                                    name="email"
+                                    label="Email"
+                                    placeholder="Email"
+                                    type="email"
+                                    checkmark={false}
+                                />
+                                <FormInput
+                                    name="phone_number"
+                                    label="Phone Number"
+                                    placeholder="Phone number"
+                                    type="text"
+                                    checkmark={false}
+                                />
+                                <div className="flex items-center gap-3">
+                                    <label className="text-sm font-medium text-gray-700">Hide Phone Number</label>
+                                    <FormDropdown
+                                        name="hide_phone_number"
+                                        options={[
+                                            { label: "No", value: 0 },
+                                            { label: "Yes", value: 1 }
+                                        ]}
+                                        className="mb-0"
+                                    />
+                                </div>
+                                <div className="flex justify-between items-center pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setProfileModal({ open: false })}
+                                        className="w-[168px] border text-[16px] py-3 border-black rounded-[10px]"
+                                    >
+                                        Back
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-10 py-3 rounded-xl text-[16px] shadow-md hover:shadow-lg transition-all duration-200"
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+            </section>
+            
+            <FillterOptions filterOptions={filterOptions} setFilterOptions={setFilterOptions} companies={companies} />
         </>
     )
 }

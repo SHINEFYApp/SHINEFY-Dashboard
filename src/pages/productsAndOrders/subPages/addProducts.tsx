@@ -5,9 +5,17 @@ import { useState } from "react"
 import { TextArea } from "../../../common/textArea"
 import { addProductInitialValues } from "../../../constants/initialValues"
 import { addProductValidationSchema } from "../../../constants/validationSchema"
-
+import { useGetCategories } from "../../../api/features/products.hooks"
+import { useTranslation } from "react-i18next"
 
 export default function AddProduct(){
+    const { i18n } = useTranslation();
+    const { data: categoriesData } = useGetCategories({
+        lang: i18n.language as "en" | "ar",
+    });
+
+    const categories = categoriesData?.data ?? [];
+
     const [formData , setFormData] = useState({
         category : '',
         englishName : '',
@@ -38,11 +46,7 @@ export default function AddProduct(){
                                     name="category"
                                     label="Select Category"
                                     placeholder="Select Category"
-                                    options={[
-                                        'Category one',
-                                        'Category two',
-                                        'Category three'
-                                    ]}
+                                    options={categories.map((c) => c.name)}
                                 />
                             </div>
                             <div className="grid grid-cols-2">

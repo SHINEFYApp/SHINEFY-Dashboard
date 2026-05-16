@@ -4,19 +4,33 @@ import { FormInput } from "../../../common/FormInput";
 import { ArrowUpToLine, Eye, Search, Trash2 } from "lucide-react";
 import { Link } from "react-router";
 import { FormDropdown } from "../../../common/FormDropdown";
-import { dummyProducts, exportTypes } from "../../../constants/data";
+import { exportTypes } from "../../../constants/data";
 import { CustomTable } from "../../../common/CustomTable";
+import { useGetProducts } from "../../../api/features/products.hooks";
+import { useTranslation } from "react-i18next";
 
 export default function ProductsTable(){
+    const { i18n } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState("");
     const pageSize = 10;
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
+
+    const { data: productsData, isLoading } = useGetProducts({
+        lang: i18n.language as "en" | "ar",
+        per_page: pageSize,
+        q: search || undefined,
+    });
+
+    const products = productsData?.data ?? [];
+    const totalEntries = productsData?.meta?.total ?? 0;
+    const totalPages = productsData?.meta?.last_page ?? 1;
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
-    const handleSubmit = (values : {search : string , export: string}) => {
-        console.log(`Search values: ${values.search} | Export File Extantion: ${values.export} `);
+
+    const handleSubmit = (values: { search: string; export: string }) => {
+        setSearch(values.search);
     };
 
     const columns = [
@@ -25,16 +39,15 @@ export default function ProductsTable(){
             title: "#",
         },
         {
-            key: "englishName",
-            title: "English Name",
-        },
-        {
-            key: "arabicName",
-            title: "Arabic Name",
+            key: "name",
+            title: "Name",
         },
         {
             key: "category",
             title: "Category",
+            render: (_: unknown, row: Record<string, unknown>) => (
+                <span>{(row.category as { name: string })?.name ?? "-"}</span>
+            ),
         },
         {
             key: "price",
@@ -45,8 +58,8 @@ export default function ProductsTable(){
             title: "Status",
         },
         {
-            key: "createDateAndTime",
-            title: "Create Date & Time",
+            key: "created_at",
+            title: "Created At",
         },
         {
             key: "action",
@@ -74,7 +87,18 @@ export default function ProductsTable(){
                 </div>
             ),
         },
-    ]
+    ];
+
+    const mappedData = products.map((product, index) => ({
+        hash: ((currentPage - 1) * pageSize) + index + 1,
+        name: product.name,
+        category: product.category,
+        price: product.price,
+        status: product.active ? "Active" : "Inactive",
+        created_at: product.created_at,
+        image_url: product.image_url,
+    }));
+
     return(
         <main className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
             <div className="mb-6">
@@ -87,7 +111,7 @@ export default function ProductsTable(){
                         handleSubmit(values)
                     }}
                 >
-                    {({}) => (
+                    {() => (
                         <Form>
                             <div className="flex justify-between">
                                 <div className="flex items-center gap-2">
@@ -129,12 +153,13 @@ export default function ProductsTable(){
             </div>
             <CustomTable
                 columns={columns}
-                data={dummyProducts}
+                data={mappedData}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}
                 pageSize={pageSize}
                 onPageChange={handlePageChange}
+                isLoading={isLoading}
             />
         </main>
     )

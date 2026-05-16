@@ -80,6 +80,8 @@ export const GenericFilterModal = ({
                                         type="button"
                                         onClick={() => {
                                             resetForm();
+                                            onSubmit(initialValues);
+                                            onClose();
                                         }}
                                         className="px-6 py-3 bg-[#EFEFEF] text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors w-[40%]"
                                     >

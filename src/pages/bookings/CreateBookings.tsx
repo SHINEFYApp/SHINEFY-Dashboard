@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatedTabs } from '../../components/booking/AnimatedTabs';
 import { ProgressSteps } from '../../components/booking/ProgressSteps';
+import BookingSummary from '../../components/booking/BookingSummary';
 import type { BookingFormData, BookingPayload, BookingResponse } from '../../types/bookings';
 import { createBackageBookingSteps, createBookingSteps, createBookingTabs } from '../../constants/data';
 import StepsRender from './bookingSteps';
@@ -172,39 +173,45 @@ const CreateBookings = () => {
                     />
                 </div>
 
-                {activeTab === 'services' && (
-                    <ProgressSteps
-                        steps={createBookingSteps}
-                        currentStep={currentStep}
-                        completedSteps={completedSteps}
-                        validatedSteps={validatedSteps}
-                        onStepClick={handleStepClick}
-                    />
-                )}
+                <div className="flex gap-6">
+                    <div className="flex-1 min-w-0">
+                        {activeTab === 'services' && (
+                            <ProgressSteps
+                                steps={createBookingSteps}
+                                currentStep={currentStep}
+                                completedSteps={completedSteps}
+                                validatedSteps={validatedSteps}
+                                onStepClick={handleStepClick}
+                            />
+                        )}
 
-                {activeTab === 'package' && (
-                    <ProgressSteps
-                        steps={createBackageBookingSteps}
-                        currentStep={currentStep}
-                        completedSteps={completedSteps}
-                        validatedSteps={validatedSteps}
-                        onStepClick={handleStepClick}
-                    />
-                )}
+                        {activeTab === 'package' && (
+                            <ProgressSteps
+                                steps={createBackageBookingSteps}
+                                currentStep={currentStep}
+                                completedSteps={completedSteps}
+                                validatedSteps={validatedSteps}
+                                onStepClick={handleStepClick}
+                            />
+                        )}
 
-                <div className="mt-8 ">
-                    <StepsRender
-                        onNext={handleNextStep}
-                        onBack={handlePreviousStep}
-                        onSubmit={handleSubmit}
-                        formData={formData}
-                        setFormData={setFormData}
-                        registerValidation={registerStepValidation}
-                        onValidationChange={(isValid: boolean) => updateStepValidation(currentStep, isValid)}
-                        userPackageInput={activeTab !== 'services'}
-                        activeTab={activeTab}
-                        currentStep={currentStep}
-                    />
+                        <div className="mt-8 ">
+                            <StepsRender
+                                onNext={handleNextStep}
+                                onBack={handlePreviousStep}
+                                onSubmit={handleSubmit}
+                                formData={formData}
+                                setFormData={setFormData}
+                                registerValidation={registerStepValidation}
+                                onValidationChange={(isValid: boolean) => updateStepValidation(currentStep, isValid)}
+                                userPackageInput={activeTab !== 'services'}
+                                activeTab={activeTab}
+                                currentStep={currentStep}
+                            />
+                        </div>
+                    </div>
+
+                    <BookingSummary formData={formData} />
                 </div>
             </div>
         </main>

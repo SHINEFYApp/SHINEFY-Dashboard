@@ -28,18 +28,39 @@ export interface GetUsersResponse {
 export interface UsersParams {
     limit?: number;
     page?: number;
-    group_name?: string;
     search_text?: string;
+    group_name?: string;
+    active_flag?: number;
+    otp_verify?: number;
+    login_type?: number;
+    company_id?: number;
+    createtime_from?: string;
+    createtime_to?: string;
 }
 
 export interface ExportUsersPayload {
     limit?: number;
     page?: number;
-    group_name?: string;
     search_text?: string;
-    search_with_area?: string;
-    createtime?: string;
-    device_type?: string;
+    group_name?: string;
+    active_flag?: number;
+    otp_verify?: number;
+    login_type?: number;
+    company_id?: number;
+    createtime_from?: string;
+    createtime_to?: string;
+}
+
+export interface Company {
+    id: number;
+    name: string;
+}
+
+export interface GetCompaniesResponse {
+    success: boolean;
+    data: {
+        companies: Company[];
+    };
 }
 
 export interface UserDetailsParams {
@@ -51,6 +72,8 @@ export interface BookingHistoryParams {
     limit?: number;
     page?: number;
     date?: string;
+    from_date?: string;
+    to_date?: string;
 }
 
 export interface WalletHistoryParams {
@@ -63,6 +86,10 @@ export interface WalletHistoryParams {
 export interface UserPackagesParams {
     user_id: number | string;
     search?: string;
+    page?: number;
+    limit?: number;
+    from_date?: string;
+    to_date?: string;
 }
 
 export interface StatusUpdateParams {
@@ -79,6 +106,12 @@ export const getUsersList = async (params: UsersParams): Promise<GetUsersRespons
 // POST /api/users/ExportUsers
 export const exportUsers = async (data: ExportUsersPayload) => {
     const res: AxiosResponse = await postService("/api/users/ExportUsers", data, { responseType: "blob" });
+    return res.data;
+};
+
+// GET /api/getCompanies
+export const getCompanies = async (): Promise<GetCompaniesResponse> => {
+    const res: AxiosResponse<GetCompaniesResponse> = await getService("/api/getCompanies");
     return res.data;
 };
 
@@ -178,5 +211,18 @@ export interface EditVehicleParams {
 
 export const editUserVehicle = async (params: EditVehicleParams) => {
     const res: AxiosResponse = await putService("/api/users/edit/vehicle", params);
+    return res.data;
+};
+
+// PUT /api/users/edit/profile
+export interface EditProfileParams {
+    user_id: number | string;
+    email?: string;
+    phone_number?: string;
+    hide_phone_number?: number; // 0 or 1
+}
+
+export const editUserProfile = async (params: EditProfileParams) => {
+    const res: AxiosResponse = await putService("/api/users/edit/profile", params);
     return res.data;
 };

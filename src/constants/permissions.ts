@@ -43,6 +43,11 @@ export const PRIVILEGES = {
     USERS_NEGATIVE_WALLETS: 36,
     MANAGE_COMPANIES: 37,
     MANAGE_CITY_AREA: 38,
+    MANAGE_COMPOUNDS: 39,
+    MANAGE_COMPOUND_PACKAGES: 40,
+    MANAGE_COMPOUND_SUBSCRIPTIONS: 41,
+    MANAGE_COMPOUND_BOOKINGS: 42,
+    MANAGE_SPECIAL_SERVICE: 43,
 } as const;
 
 /**
@@ -77,6 +82,7 @@ export const ROUTE_PERMISSIONS: Record<string, number> = {
     // Services & Extra
     "/services&extra/manage/Service": PRIVILEGES.MANAGE_SERVICE,
     "/services&extra/manage/ExtreService": PRIVILEGES.MANAGE_EXTRA_SERVICE,
+    "/services&extra/manage/SpecialService": PRIVILEGES.MANAGE_SPECIAL_SERVICE,
     "/services&extra/manage/coupon": PRIVILEGES.MANAGE_COUPON,
     "/services&extra/manage/package": PRIVILEGES.MANAGE_PACKAGES,
     "/services&extra/manage/Package": PRIVILEGES.MANAGE_PACKAGES,
@@ -90,6 +96,12 @@ export const ROUTE_PERMISSIONS: Record<string, number> = {
     "/financial&points/manage/driverCommission": PRIVILEGES.DRIVER_COMMISSION,
     "/financial&points/manage/bonusPoint": PRIVILEGES.MANAGE_BONUS_POINT,
     "/financial&points/manage/adminEarning": PRIVILEGES.MANAGE_EARNING,
+
+    // Compounds System
+    "/compounds/manage": PRIVILEGES.MANAGE_COMPOUNDS,
+    "/compounds/packages": PRIVILEGES.MANAGE_COMPOUND_PACKAGES,
+    "/compounds/subscriptions": PRIVILEGES.MANAGE_COMPOUND_SUBSCRIPTIONS,
+    "/compounds/bookings": PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
 
     // Technical Support
     "/technicalSupport/contactUs": PRIVILEGES.CONTACT_US,

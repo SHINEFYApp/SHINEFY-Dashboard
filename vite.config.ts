@@ -17,6 +17,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/admin': {
+        target: 'https://mobile.shinefy.co',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   test: {

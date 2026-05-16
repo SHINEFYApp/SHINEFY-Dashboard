@@ -14,23 +14,23 @@ export function CustomTable<T extends Record<string, any>>({
     pageSize,
     onPageChange,
     isLoading = false,
+    onRowClick,
 }: TableProps<T>) {
 
 
     return (
-        <div className="w-full bg-white rounded-lg border border-[#cfcfcf] overflow-hidden">
+        <div className="w-full bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
             {/* Table Container */}
             <div className="overflow-x-auto">
                 <table className="w-full">
                     {/* Table Header */}
                     <thead>
-                        <tr className="border-b border-[#cfcfcf] bg-[#f0f0f0]">
+                        <tr className="bg-gray-50 border-b border-gray-200">
                             {columns.map((column, index) => (
                                 <th
                                     key={column.key}
                                     className={cn(
-                                        "px-6 py-4 text-left text-nowrap text-sm font-semibold text-gray-700",
-                                        index !== columns.length - 1 && "border-r border-[#cfcfcf]",
+                                        "px-5 py-3.5 text-left text-nowrap text-xs font-semibold text-gray-500 uppercase tracking-wider",
                                         column.width
                                     )}
                                 >
@@ -46,7 +46,7 @@ export function CustomTable<T extends Record<string, any>>({
                             <tr>
                                 <td
                                     colSpan={columns.length}
-                                    className="px-6 py-12 text-center text-gray-500"
+                                    className="px-5 py-16 text-center text-gray-400 text-sm"
                                 >
                                     Loading...
                                 </td>
@@ -55,7 +55,7 @@ export function CustomTable<T extends Record<string, any>>({
                             <tr>
                                 <td
                                     colSpan={columns.length}
-                                    className="px-6 py-12 text-center text-gray-500"
+                                    className="px-5 py-16 text-center text-gray-400 text-sm"
                                 >
                                     No data available
                                 </td>
@@ -64,61 +64,67 @@ export function CustomTable<T extends Record<string, any>>({
                             data.map((row, rowIndex) => (
                                 <tr
                                     key={rowIndex}
-                                    className="border-b border-[#cfcfcf] hover:bg-gray-50 transition-colors"
+                                    onClick={() => onRowClick?.(row)}
+                                    className={cn(
+                                        "border-b border-gray-100 transition-colors",
+                                        rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50/40",
+                                        "hover:bg-blue-50/40",
+                                        onRowClick && "cursor-pointer"
+                                    )}
                                 >
                                     {columns.map((column, colIndex) => (
                                         <td
                                             key={column.key}
                                             className={cn(
-                                                "px-6 py-4 text-sm text-gray-600",
+                                                "px-5 py-3.5 text-sm text-gray-600",
                                               (row[column.key] === 'Close' || row[column.key] === 'Deactivated' || row[column.key] === 'false') && 'text-red-600 font-bold text-[15px]' ,
                                               (row[column.key] === 'Open' || row[column.key] === 'Activated' || row[column.key] === 'true') && 'text-green-600 font-bold text-[15px]' ,
                                               (column.key === 'users') && 'max-w-[550px] overflow-hidden' ,
                                               (row[column.key] === 'Open' || row[column.key] === 'Activated' || row[column.key] === 'true' || row[column.key] === 'All') && 'text-green-600 font-bold text-[15px]' ,
                                               (row[column.key] === 'Pending') && 'text-[#FFC107] font-bold text-[15px]' ,
-                                              (column.key === 'customers') && 'max-w-[300px] overflow-hidden' ,
-                                                colIndex !== columns.length - 1 && "border-r border-[#cfcfcf]"
+                                              (column.key === 'customers') && 'max-w-[300px] overflow-hidden'
                                             )}
                                         >
-                                            {/* {column.render ? column.render( row[column.key], row, rowIndex) : row[column.key]} */}
                                             {column.render 
                                                 ? column.render(row[column.key], row, rowIndex) 
                                                 : column.key.toLowerCase() === "image" || column.key.toLowerCase() === "flag" || column.key.toLowerCase() === "countries" || column.key.toLowerCase() === "mainareaname" || column.key.toLowerCase() === "customer" ? 
-                                                    <div className="flex items-center gap-5">
-                                                        <div className="w-[36.4px] h-[26px] bg-black/30 rounded-[5.2px] overflow-hidden">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-[36px] h-[26px] bg-gray-200 rounded-md overflow-hidden shrink-0">
                                                             {row[column.key] &&
-                                                                <img src={column.key.toLowerCase() === "flag" ? row[column.key] : column.key.toLowerCase() === "customer" ? row[column.key]?.image : row[column.key]?.flag} alt="flag" />
+                                                                <img src={column.key.toLowerCase() === "flag" ? row[column.key] : column.key.toLowerCase() === "customer" ? row[column.key]?.image : row[column.key]?.flag} alt="flag" className="w-full h-full object-cover" />
                                                             }
                                                         </div>
                                                         
                                                         {row[column.key]?.title || row[column.key]?.name &&
-                                                            <p>{row[column.key].title || row[column.key]?.name}</p>
+                                                            <p className="text-sm font-medium text-gray-700">{row[column.key].title || row[column.key]?.name}</p>
                                                         }
                                                     </div>
                                                     :
                                                     Array.isArray(row[column.key]) ?
-                                                        <div className=" flex items-center gap-5">
+                                                        <div className="flex items-center gap-2 flex-wrap">
                                                             {row[column.key].map((el : string , idx : number) => {
                                                                 return(
-                                                                    <div key={idx} className="p-2 flex gap-1 items-center rounded-2xl bg-[#FFF5D9]">
+                                                                    <div key={idx} className="px-3 py-1 flex gap-1 items-center rounded-full bg-amber-50 text-amber-700 text-xs font-medium">
                                                                         {el === 'Eid Fathy' ? 
                                                                         <>
-                                                                            <img src={KsaMan} alt="" className="w-5 h-5 rounded-2xl" />
-                                                                            <p className="w-20">{el}</p>
+                                                                            <img src={KsaMan} alt="" className="w-4 h-4 rounded-full" />
+                                                                            <span>{el}</span>
                                                                         </>
-                                                                        : el}
+                                                                        : <span>{el}</span>}
                                                                     </div>
                                                                 )
                                                             })}
                                                         </div>
                                                         :
                                                         column.dynmincPage === 'single_booking_details' ? 
-                                                            <Link to={`/bookings/manage/${row.booking_id}`} className="text-primary">View Details</Link>
+                                                            <Link to={`/bookings/manage/${row.booking_id}`} className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-primary bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors">
+                                                                View Details
+                                                            </Link>
                                                             :
                                                             column.key === 'car_category_image'?
-                                                                <img src={KsaMan} alt="" className="w-20 h-20 rounded-2xl" />
+                                                                <img src={KsaMan} alt="" className="w-16 h-16 rounded-xl object-cover" />
                                                                 :
-                                                                row[column.key]
+                                                                <span className="text-gray-700">{row[column.key]}</span>
                                             }
                                         </td>
                                     ))}
@@ -131,6 +137,7 @@ export function CustomTable<T extends Record<string, any>>({
 
             {/* Pagination */}
             {!isLoading && data.length > 0 && (
+                <div className="border-t border-gray-200">
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
@@ -138,8 +145,8 @@ export function CustomTable<T extends Record<string, any>>({
                         pageSize={pageSize}
                         onPageChange={onPageChange}
                     />
-                )
-            }
+                </div>
+            )}
         </div>
     );
 }

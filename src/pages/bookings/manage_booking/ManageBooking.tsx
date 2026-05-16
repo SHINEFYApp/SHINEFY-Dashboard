@@ -3,44 +3,138 @@ import RatedReportsChart from "../../../components/booking/manageBooking/RatedRe
 import { Form, Formik } from "formik";
 import { FormInput } from "../../../common/FormInput";
 import { Calendar, Search, SlidersHorizontal } from "lucide-react";
-import { FormDatePicker } from "../../../common/FormDatePicker";
-import { useEffect, useState } from "react";
+import { FormDateRangePicker } from "../../../common/FormDateRangePicker";
+import { useEffect, useRef, useState } from "react";
 import { CustomTable } from "../../../common/CustomTable";
 import { useGet } from "../../../api/useGetData";
 import { toast } from "sonner";
 import { manageBookings } from "../../../api/features/bookings";
 import { TableLoading } from "../../../common/loader";
-import { useLocation, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { FormDropdown } from "../../../common/FormDropdown";
+import BookingFilterOptions from "./BookingFilterOptions";
+import type { BookingFilterState } from "../../../types/bookings";
+import { cn } from "../../../utils/utils";
+
+const STATUS_MAP: Record<string, { label: string; color: string }> = {
+    "0": { label: "Pending", color: "bg-yellow-100 text-yellow-800" },
+    "1": { label: "In Progress", color: "bg-blue-100 text-blue-800" },
+    "2": { label: "Completed", color: "bg-green-100 text-green-800" },
+    "3": { label: "Canceled", color: "bg-red-100 text-red-800" },
+    "4": { label: "Confirmed", color: "bg-indigo-100 text-indigo-800" },
+};
+
+const BOOKING_TYPE_MAP: Record<number, { label: string; color: string }> = {
+    0: { label: "Suchdegle", color: "bg-purple-100 text-purple-800" },
+    1: { label: "Waiting", color: "bg-orange-100 text-orange-800" },
+};
+
+function formatDate(dateStr: string) {
+    if (!dateStr) return "—";
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
 
 const columns = [
-    { key: "booking_no", title: "Booking Number" },
-    { key: "customer_name", title: "Customer Name" },
-    { key: "service_boy_name", title: "Service Boy Name" },
-    { key: "service_name", title: "Service Name" },
-    { key: "payment_option", title: "Payment Method" },
-    { key: "total_price", title: "Total Amount(EGP)" },
-    { key: "action", title: "Action", dynmincPage: "single_booking_details" },
+    { key: "booking_no", title: "Booking No" },
+    { key: "customer_name", title: "Customer" },
+    {
+        key: "booking_date",
+        title: "Booking Date",
+        render: (value: string) => (
+            <span className="text-gray-700 font-medium text-xs whitespace-nowrap">
+                {formatDate(value)}
+            </span>
+        ),
+    },
+    {
+        key: "status",
+        title: "Status",
+        render: (value: string) => {
+            const status = STATUS_MAP[value];
+            if (!status) return <span className="text-gray-500">—</span>;
+            return (
+                <span className={cn("inline-block px-2.5 py-1 rounded-full text-xs font-semibold", status.color)}>
+                    {status.label}
+                </span>
+            );
+        },
+    },
+    {
+        key: "booking_type",
+        title: "Type",
+        render: (value: number) => {
+            const bt = BOOKING_TYPE_MAP[value];
+            if (!bt) return <span className="text-gray-500">—</span>;
+            return (
+                <span className={cn("inline-block px-2.5 py-1 rounded-full text-xs font-semibold", bt.color)}>
+                    {bt.label}
+                </span>
+            );
+        },
+    },
+    { key: "service_boy_name", title: "Service Boy" },
+    { key: "service_name", title: "Service" },
+    {
+        key: "payment_option",
+        title: "Payment",
+        render: (value: string) => {
+            if (!value) return <span className="text-gray-400">—</span>;
+            const colors: Record<string, string> = {
+                cash: "bg-emerald-50 text-emerald-700",
+                credit: "bg-purple-50 text-purple-700",
+                free: "bg-gray-100 text-gray-600",
+                wallet: "bg-amber-50 text-amber-700",
+            };
+            return (
+                <span className={cn("inline-block px-2.5 py-1 rounded-full text-xs font-semibold capitalize", colors[value.toLowerCase()] || "bg-gray-100 text-gray-600")}>
+                    {value}
+                </span>
+            );
+        },
+    },
+    { key: "total_price", title: "Amount (EGP)" },
+    { key: "action", title: "", dynmincPage: "single_booking_details" },
 ];
 
 export default function ManageBooking() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [formData, setFormData] = useState({
-        search: "",
-        date: "",
-        limit: "25",
-    });
-
-    const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // Sync URL params with state on page load or URL change
+    const [currentPage, setCurrentPage] = useState(() => Number(searchParams.get("page")) || 1);
+    const [formData, setFormData] = useState(() => ({
+        search: searchParams.get("search") || "",
+        dateFrom: searchParams.get("dateFrom") || "",
+        dateTo: searchParams.get("dateTo") || "",
+        limit: searchParams.get("limit") || "25",
+    }));
+    const [filterOptions, setFilterOptions] = useState<BookingFilterState>(() => ({
+        state: false,
+        data: {
+            status: searchParams.get("status") || "",
+            booking_type: searchParams.get("booking_type") || "",
+            paymentMethod: searchParams.get("paymentMethod") || "",
+        },
+    }));
+
+    const isFirstRender = useRef(true);
+
     useEffect(() => {
-        const search = searchParams.get("search") || "";
-        const date = searchParams.get("date") || "";
-        const limit = searchParams.get("limit") || "25";
-        setFormData({ search, date, limit });
-    }, [location.search]);
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        const urlParams = new URLSearchParams();
+        if (formData.search) urlParams.set("search", formData.search);
+        if (formData.dateFrom) urlParams.set("dateFrom", formData.dateFrom);
+        if (formData.dateTo) urlParams.set("dateTo", formData.dateTo);
+        if (formData.limit && formData.limit !== "25") urlParams.set("limit", formData.limit);
+        if (currentPage > 1) urlParams.set("page", String(currentPage));
+        if (filterOptions.data.status) urlParams.set("status", filterOptions.data.status);
+        if (filterOptions.data.booking_type) urlParams.set("booking_type", filterOptions.data.booking_type);
+        if (filterOptions.data.paymentMethod) urlParams.set("paymentMethod", filterOptions.data.paymentMethod);
+        setSearchParams(urlParams, { replace: true });
+    }, [formData.search, formData.dateFrom, formData.dateTo, formData.limit, currentPage, filterOptions.data.status, filterOptions.data.booking_type, filterOptions.data.paymentMethod, setSearchParams]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -52,14 +146,18 @@ export default function ManageBooking() {
     const params = {
         page: currentPage,
         limit: Number(formData.limit) || 25,
-        booking_date: formData.date,
+        booking_date_from: formData.dateFrom || undefined,
+        booking_date_to: formData.dateTo || undefined,
         search: formData.search,
+        status: filterOptions.data.status || undefined,
+        booking_type: filterOptions.data.booking_type || undefined,
+        payment_method: filterOptions.data.paymentMethod || undefined,
     };
 
     // Fetch data
     const { data, isLoading, isError, isSuccess, error } = useGet({
         queryFn: () => manageBookings(route, params),
-        queryKey: ["bookings", currentPage, formData.search, formData.date, formData.limit],
+        queryKey: ["bookings", currentPage, formData.search, formData.dateFrom, formData.dateTo, formData.limit, filterOptions.data.status, filterOptions.data.booking_type, filterOptions.data.paymentMethod],
         options: { staleTime: 1000 * 10 },
     });
 
@@ -82,35 +180,20 @@ export default function ManageBooking() {
 
     // Reset form
     const handleReset = () => {
-        setFormData({ search: "", date: "", limit: "25" });
-        setSearchParams({}, { replace: true });
+        setFormData({ search: "", dateFrom: "", dateTo: "", limit: "25" });
+        setFilterOptions({ state: false, data: { status: "", booking_type: "", paymentMethod: "" } });
         setCurrentPage(1);
     };
 
     // Handle Formik submit
     const handleSubmit = (values: any) => {
-        // FormDatePicker already outputs yyyy-MM-dd, use it directly
-        const formattedDate = values.date || "";
-
-        // Update state — queryKey depends on formData so react-query refetches automatically
-        setFormData({ search: values.search, date: formattedDate, limit: values.limit });
-
-        // Update URL
-        const urlParams = new URLSearchParams();
-        if (values.search) urlParams.set("search", values.search);
-        if (formattedDate) urlParams.set("date", formattedDate);
-        if (values.limit) urlParams.set("limit", values.limit);
-        setSearchParams(urlParams, { replace: true });
-
+        setFormData({ search: values.search, dateFrom: values.dateFrom || "", dateTo: values.dateTo || "", limit: values.limit });
         setCurrentPage(1);
     };
 
     // Handle Limit change on dropdown directly (onChange)
     const handleLimitChange = (newLimit: string) => {
         setFormData((prev) => ({ ...prev, limit: newLimit }));
-        const urlParams = new URLSearchParams(searchParams);
-        urlParams.set("limit", newLimit);
-        setSearchParams(urlParams, { replace: true });
         setCurrentPage(1);
     };
 
@@ -132,8 +215,8 @@ export default function ManageBooking() {
                                             <FormInput name="search" placeholder="Search" icon={<Search className="w-5 h-5" />} checkmark={false} label={""} />
                                         </div>
 
-                                        <div className="w-full md:w-48 lg:w-56 -space-y-2">
-                                            <FormDatePicker name="date" placeholder="Date" icon={<Calendar className="w-5 h-5" />} checkmark={false} label={""} />
+                                        <div className="w-full md:w-56 lg:w-64">
+                                            <FormDateRangePicker fromName="dateFrom" toName="dateTo" placeholder="Select date range" icon={<Calendar className="w-5 h-5" />} />
                                         </div>
 
                                         <button type="submit" className="px-6 lg:px-8 py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap">Search</button>
@@ -149,7 +232,7 @@ export default function ManageBooking() {
                                                 onChangeExternal={(val) => handleLimitChange(val)} label={""}
                                             />
                                         </div>
-                                        <button type="button" className="py-4 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0 self-end lg:self-auto">
+                                        <button type="button" onClick={() => setFilterOptions({ ...filterOptions, state: true })} className="py-4 px-10 border border-gray-200 rounded-lg bg-[#F4F5FA] transition-colors hover:bg-gray-100 shrink-0 self-end lg:self-auto">
                                             <SlidersHorizontal className="w-5 h-5 text-secondary-700" />
                                         </button>
                                     </div>
@@ -174,8 +257,9 @@ export default function ManageBooking() {
                 )}
             </div>
 
-            <CompletedBookingChart />
-            <RatedReportsChart />
+            {/* <CompletedBookingChart /> */}
+            {/* <RatedReportsChart /> */}
+            <BookingFilterOptions filterOptions={filterOptions} setFilterOptions={setFilterOptions} />
         </main>
     );
 }

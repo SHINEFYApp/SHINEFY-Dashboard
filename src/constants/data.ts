@@ -32,6 +32,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Slot']
     },
+    '/bookings/slot/admin-slots': {
+        title: 'Bookings',
+        breadcrumbs: ['Bookings', 'Admin Slots']
+    },
     '/vehicles/add': {
         title: 'Vehicles',
         breadcrumbs: ['Vehicles', 'Add']
@@ -100,13 +104,45 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Services & Extra',
         breadcrumbs: ['Services & Extra', 'Manage Service', 'Add Service']
     },
+    '/services&extra/manage/Service/editService/:id': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Service', 'Edit Service']
+    },
+    '/services&extra/manage/Service/viewService/:id': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Service', 'View Service']
+    },
     '/services&extra/manage/ExtreService': {
         title: 'Services & Extra',
         breadcrumbs: ['Services & Extra', 'Manage Extra Service']
     },
+    '/services&extra/manage/SpecialService': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Special Service']
+    },
+    '/services&extra/manage/SpecialService/addSpecialService': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Special Service', 'Add Special Service']
+    },
+    '/services&extra/manage/SpecialService/editSpecialService/:id': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Special Service', 'Edit Special Service']
+    },
+    '/services&extra/manage/SpecialService/viewSpecialService/:id': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Special Service', 'View Special Service']
+    },
     '/services&extra/manage/extreService/addExtraService': {
         title: 'Services & Extra',
         breadcrumbs: ['Services & Extra', 'Manage Extra Service', 'Add Extra Service']
+    },
+    '/services&extra/manage/ExtreService/editExtraService/:id': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Extra Service', 'Edit Extra Service']
+    },
+    '/services&extra/manage/ExtreService/viewExtraService/:id': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Extra Service', 'View Extra Service']
     },
     '/services&extra/manage/Coupon': {
         title: 'Services & Extra',
@@ -164,6 +200,18 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage Companies']
     },
+    '/technicalSupport/manage/companies/add': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Companies', 'Add Company']
+    },
+    '/technicalSupport/manage/companies/edit/:id': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Companies', 'Edit Company']
+    },
+    '/technicalSupport/manage/companies/view/:id': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Companies', 'View Company']
+    },
     '/technicalSupport/broadcast': {
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Broadcast']
@@ -171,6 +219,14 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/technicalSupport/broadcast/SendBroadcast': {
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Broadcast' , 'Send Broadcast']
+    },
+    '/technicalSupport/broadcast/common-messages': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Broadcast', 'Common Messages']
+    },
+    '/technicalSupport/broadcast/:id': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Broadcast', 'Broadcast Detail']
     },
     '/technicalSupport/manage/faqs': {
         title: 'Technical Support',
@@ -180,6 +236,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage FAQs' , 'Add Fqs']
     },
+    '/technicalSupport/manage/faqs/edit/:id': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage FAQs' , 'Edit Fqs']
+    },
     '/technicalSupport/manage/orderQuestions': {
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage Order Questions']
@@ -187,6 +247,64 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/technicalSupport/manage/orderQuestions/addOrdersQuestions': {
         title: 'Technical Support',
         breadcrumbs: ['Technical Support', 'Manage Order Questions' , 'Add Orders Questions']
+    },
+    '/technicalSupport/manage/orderQuestions/edit/:id': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Order Questions' , 'Edit Orders Questions']
+    },
+    '/technicalSupport/manage/orderQuestions/view/:id': {
+        title: 'Technical Support',
+        breadcrumbs: ['Technical Support', 'Manage Order Questions' , 'View Orders Questions']
+    },
+
+    // Compounds System
+    '/compounds/manage': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Compounds']
+    },
+    '/compounds/manage/add': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Compounds', 'Add Compound']
+    },
+    '/compounds/manage/edit/:id': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Compounds', 'Edit Compound']
+    },
+    '/compounds/packages': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Packages']
+    },
+    '/compounds/packages/add': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Packages', 'Add Package']
+    },
+    '/compounds/packages/edit/:id': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Packages', 'Edit Package']
+    },
+    '/compounds/subscriptions': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Subscriptions']
+    },
+    '/compounds/subscriptions/add': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Subscriptions', 'Add Subscription']
+    },
+    '/compounds/subscriptions/:id': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Subscriptions', 'Subscription Details']
+    },
+    '/compounds/bookings': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Bookings']
+    },
+    '/compounds/bookings/:id': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Manage Bookings', 'Booking Details']
+    },
+    '/compounds/today-summary': {
+        title: 'Compounds System',
+        breadcrumbs: ['Compounds System', 'Today Summary']
     }
 };
 
@@ -215,6 +333,10 @@ export const sidebarMenuItems = [
             {
                 label: 'Manage Slot',
                 path: '/bookings/slot'
+            },
+            {
+                label: 'Admin Slots',
+                path: '/bookings/slot/admin-slots'
             },
         ],
     },
@@ -286,6 +408,14 @@ export const manageAreaTabs = [
     { id: 'mainArea', label: 'Manage Main Area' },
     { id: 'subArea', label: 'Manage Sub Area' },
 ];
+export const broadcastTabs = [
+    { id: 'allUsers', label: 'All Users' },
+    { id: 'selectUsers', label: 'Select Users' },
+    { id: 'allTemples', label: 'All Temples' },
+    { id: 'selectTemples', label: 'Select Temples' },
+    { id: 'group', label: 'Group' },
+];
+
 export const sendBroadcast = [
     { id: 'sendUser', label: 'Send User' },
     { id: 'sendServiceBoy', label: 'Send Service Boy' },
@@ -2287,7 +2417,7 @@ export const dummyVehicles: any[] = [
 
 export const manageSlotsTabs = [
     { id: 'manageDailySlot', label: 'Manage Daily Slot' },
-    { id: 'manageFreeBooking', label: 'Manage Free Booking' },
+    // { id: 'manageFreeBooking', label: 'Manage Free Booking' },
 ];
 
 export const franchise = ['Franchise one', 'Franchise two', 'Franchise three'];

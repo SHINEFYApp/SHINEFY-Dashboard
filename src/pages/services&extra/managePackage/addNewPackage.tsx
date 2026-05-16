@@ -7,15 +7,9 @@ import { TextArea } from "../../../common/textArea";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { useAddPackage } from "../../../api/features/packages.hooks";
-import { availableExtraServices } from "../../../constants/data";
+import { useGetServices } from "../../../api/features/services.hooks";
+import { useGetExtraServices } from "../../../api/features/extraServices.hooks";
 import { addPackageSchema } from "../../../constants/validationSchema";
-
-// Mock services for Main Services (since no API available)
-const availableMainServices = [
-    { id: 16, name: "Service one" },
-    { id: 17, name: "Service two" },
-    { id: 18, name: "Service three" },
-];
 
 const mapServiceId = (name: string, list: any[]) => {
     const found = list.find(item => item.name === name);
@@ -68,6 +62,16 @@ export default function AddNewPackage() {
     const [extraPackageServices, setExtraPackageServices] = useState<number>(1);
     const initialValues: managePackageAddPackageFormValues = {};
     const navigate = useNavigate();
+
+    const { data: mainServicesData } = useGetServices({ start: 0, length: 100 });
+    const { data: extraServicesData } = useGetExtraServices({ start: 0, length: 100 });
+
+    const availableMainServices = (mainServicesData?.data?.services || []).map(
+        (s: any) => ({ id: s.service_id, name: s.service_name })
+    );
+    const availableExtraServices = (extraServicesData?.data?.services || []).map(
+        (s: any) => ({ id: s.extra_service_id, name: s.extra_service_name })
+    );
 
     const { mutate: addPackage, isPending } = useAddPackage({
         onSuccess: () => {

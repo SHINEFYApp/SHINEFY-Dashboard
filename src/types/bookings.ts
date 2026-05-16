@@ -89,6 +89,7 @@ export interface UserPackage {
 }
 
 export interface createServiceBookingPayload {
+    booking_type: number,
     booking_date: string,
     booking_time: string,
     latitude: string,
@@ -113,6 +114,7 @@ export interface createServiceBookingPayload {
 }
 
 export interface createPackageBookingPayload {
+    booking_type: number,
     user_package_id: string,
     package_id: string,
     booking_date: string,
@@ -175,6 +177,7 @@ export interface packageTyps {
 }
 
 export interface BookingFormData {
+    booking_type: number;
     userDetails: user_info ;
     phoneNumber: string;
     address: {
@@ -447,7 +450,7 @@ export interface servicesBoysPayload {
     latitude: string
     longitude: string
     booking_date: string
-    booking_time: string
+    booking_time?: string
     service_duration: number
     service_id: number | string
 }
@@ -506,11 +509,14 @@ export interface GetServiceResponse {
 export interface Booking {
     booking_id: number;
     booking_no: string;
+    booking_date: string;
+    status: string;
     total_price: string;
     customer_name: string;
     service_boy_name: string | null;
     service_name: string;
     payment_option: string;
+    booking_type?: number;
 }
 export interface Pagination {
     current_page: number;
@@ -532,13 +538,29 @@ export interface ApiResponse {
 
 export interface formDataManageBooking{
     search : string ,
-    date : string ,
+    dateFrom : string ,
+    dateTo : string ,
     limit : string
+}
+
+export interface BookingFilterValues {
+    status: string;
+    booking_type: string;
+    paymentMethod: string;
+}
+
+export interface BookingFilterState {
+    state: boolean;
+    data: BookingFilterValues;
 }
 
 export interface UpdateBookingPayload {
     status: string;
+    booking_type?: number;
+    booking_date?: string;
+    booking_time?: string;
     main_service?: number;
+    service_boy_id?: number;
     coupan_amount?: number;
     wallet_amount?: number;
     address_loc?: string;

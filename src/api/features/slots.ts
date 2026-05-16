@@ -9,6 +9,8 @@ import type {
     GetSpecificSlotsParams,
     AddSpecificSlotPayload,
     UpdateSpecificSlotPayload,
+    GetAdminSlotsParams,
+    UpdateDailySlotSettingsPayload,
 } from "../../types/slots";
 
 // ============ Daily Slot ============
@@ -18,6 +20,14 @@ export const getDailySlot = async () => {
 };
 
 export const updateDailySlot = async (data: UpdateDailySlotPayload) => {
+    return await putService("/api/slots/updateDailySlot", data);
+};
+
+export const getDailySlotSettings = async () => {
+    return await getService("/api/slots/getDailySlot");
+};
+
+export const updateDailySlotSettings = async (data: UpdateDailySlotSettingsPayload) => {
     return await putService("/api/slots/updateDailySlot", data);
 };
 
@@ -41,4 +51,10 @@ export const updateSpecificSlot = async (id: number, data: UpdateSpecificSlotPay
 
 export const deleteSpecificSlot = async (id: number) => {
     return await deleteService(`/api/slots/deleteSpecificSlot/${id}`);
+};
+
+// ============ Admin Slots ============
+
+export const getAdminSlots = async (params: GetAdminSlotsParams) => {
+    return await getService("/api/slots/admin-slots", params);
 };

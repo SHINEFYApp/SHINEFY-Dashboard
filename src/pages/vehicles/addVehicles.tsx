@@ -1,7 +1,7 @@
 import { Formik, Form } from 'formik';
 import { addVehicleSchema } from '../../constants/validationSchema';
 import { addVehicleInitialValues } from '../../constants/initialValues';
-import { FormDropdown } from '../../common/FormDropdown';
+import { SearchableFormDropdown } from '../../common/SearchableFormDropdown';
 import { FormInput } from '../../common/FormInput';
 import { CarFront, Hash, LayoutGrid, ScrollText, SprayCan, User, UserX } from 'lucide-react';
 import { IoCallOutline } from 'react-icons/io5';
@@ -209,14 +209,14 @@ export default function AddVehicles() {
 
                                 {/* Category & Make */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                    <FormDropdown
+                                    <SearchableFormDropdown
                                         name="category"
                                         label="Category"
                                         placeholder="Select Category"
                                         icon={<LayoutGrid className="w-5 h-5" />}
                                         options={categoryOptions}
                                     />
-                                    <FormDropdown
+                                    <SearchableFormDropdown
                                         name="make"
                                         label="Make"
                                         placeholder="Select Make"
@@ -227,7 +227,7 @@ export default function AddVehicles() {
 
                                 {/* Model & Color */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                    <FormDropdown
+                                    <SearchableFormDropdown
                                         name="model"
                                         label="Model"
                                         placeholder={values.make ? "Select Model" : "Select Make first"}
@@ -235,7 +235,7 @@ export default function AddVehicles() {
                                         options={modelOptions}
                                         disabled={!values.make}
                                     />
-                                    <FormDropdown
+                                    <SearchableFormDropdown
                                         name="color"
                                         label="Color"
                                         placeholder="Select Color"

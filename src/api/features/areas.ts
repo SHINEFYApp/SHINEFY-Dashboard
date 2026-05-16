@@ -28,6 +28,7 @@ export interface GetAreasParams {
     limit?: number;
     page?: number;
     search_text?: string;
+    main_area_id?: number;
 }
 
 export interface Coordinates {
@@ -77,27 +78,17 @@ export const getAreaCoordinates = async (id: number, area_type: 'main_area' | 's
 
 // ADD Area (Main or Sub)
 export const addArea = async (data: AddAreaPayload) => {
-    // Postman shows params in URL query for POST? 
-    // "raw": ".../api/areas/add/?country_id=1..."
-    // But typically we send body. I will use postService with query params if needed, 
-    // but usually service-requests handles body. 
-    // If the API strictly requires query params for POST, we might need a workaround or pass them as params object 
-    // if getService/postService supports it.
-    // Assuming standard body for now, but keeping in mind the unusual Postman collection.
-    // If it fails, I'll switch to sending params in URL.
-    // Based on user feedback for wallets, 'params' were nested. 
-    // Here, I'll assume standard POST body unless proven otherwise.
-    return await postService("/api/areas/add/", null, data);
+    return await postService("/api/areas/add/", data);
 };
 
 // EDIT Area
 export const editArea = async (data: EditAreaPayload) => {
-    return await postService("/api/areas/edit/", null, data);
+    return await postService("/api/areas/edit/", data);
 };
 
 // DELETE Area
 export const deleteArea = async (data: DeleteAreaPayload) => {
-    return await postService("/api/areas/delete", null, data);
+    return await postService("/api/areas/delete", data);
 };
 
 // GET Nearest Areas

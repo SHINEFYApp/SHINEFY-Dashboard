@@ -5,9 +5,10 @@ import { FormDropdown } from "../../common/FormDropdown";
 import { exportTypes, manageAreaTabs } from "../../constants/data";
 import { Link, useSearchParams } from "react-router-dom";
 import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
-import { ArrowUpToLine, Search, Trash2 } from "lucide-react";
+import { ArrowUpToLine, Navigation, Search, Trash2 } from "lucide-react";
 import { CustomTable } from "../../common/CustomTable";
-import { useGetMainAreas, useGetSubAreas, useDeleteArea } from "../../api/features/areas.hooks";
+import { useGetMainAreas, useGetSubAreas, useDeleteArea, useGetNearestAreas, useUpdateNearestAreas } from "../../api/features/areas.hooks";
+import { GenericModal } from "../../common/GenericModal";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -24,6 +25,9 @@ export default function ManageAreas() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [search, setSearch] = useState("");
+    const [nearestModalOpen, setNearestModalOpen] = useState(false);
+    const [selectedSubAreaId, setSelectedSubAreaId] = useState<number | null>(null);
+    const [selectedNearest, setSelectedNearest] = useState<number[]>([]);
     const pageSize = 10;
 
     useEffect(() => {
@@ -84,6 +88,54 @@ export default function ManageAreas() {
         },
         onError: () => toast.error("Failed to delete")
     });
+
+    // Nearest Areas
+    const { data: nearestData, isLoading: nearestLoading } = useGetNearestAreas(selectedSubAreaId!, {
+        enabled: !!selectedSubAreaId && nearestModalOpen,
+    });
+
+    const nearestResponse = nearestData?.data?.data || nearestData?.data || {};
+    const currentNearestIds: number[] = nearestResponse?.nearest_areas || [];
+    const allAreasList: { id: number; name: string }[] = nearestResponse?.all_areas || [];
+
+    const updateNearestMutation = useUpdateNearestAreas({
+        onSuccess: () => {
+            toast.success("Nearest areas updated successfully");
+            setNearestModalOpen(false);
+            setSelectedSubAreaId(null);
+            queryClient.invalidateQueries({ queryKey: ["nearest-areas", selectedSubAreaId] });
+        },
+        onError: () => toast.error("Failed to update nearest areas")
+    });
+
+    const handleNearestClick = (id: number) => {
+        setSelectedSubAreaId(id);
+        setSelectedNearest([]);
+        setNearestModalOpen(true);
+    };
+
+    // Initialize selectedNearest when nearest data loads
+    useEffect(() => {
+        if (nearestModalOpen && currentNearestIds.length > 0 && selectedNearest.length === 0) {
+            setSelectedNearest(currentNearestIds);
+        }
+    }, [currentNearestIds, nearestModalOpen, selectedNearest.length]);
+
+    const handleNearestToggle = (areaId: number) => {
+        setSelectedNearest(prev =>
+            prev.includes(areaId)
+                ? prev.filter(id => id !== areaId)
+                : [...prev, areaId]
+        );
+    };
+
+    const handleNearestConfirm = () => {
+        if (!selectedSubAreaId) return;
+        updateNearestMutation.mutate({
+            id: selectedSubAreaId,
+            nearest_areas: selectedNearest,
+        });
+    };
 
     const handleDelete = (id: number) => {
         if (window.confirm("Are you sure?")) {
@@ -149,6 +201,12 @@ export default function ManageAreas() {
                 title: "Action",
                 render: (_: any, record: any) => (
                     <div className="flex gap-2 items-center text-nowrap">
+                        <button
+                            className="bg-[#E8F5E9] flex items-center gap-2 rounded-[2.75px] text-[#2E7D32] border border-[#2E7D32] capitalize hover:text-[#E8F5E9] hover:bg-[#2E7D32] px-3.5 py-3 font-semibold transition-colors"
+                            onClick={() => handleNearestClick(record.id)}
+                        >
+                            <Navigation size={18} /> nearest
+                        </button>
                         <Link
                             to={`/geography&regions/manage/area/edit/sub/${record.id}`}
                             className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3.5 py-3 font-semibold transition-colors"
@@ -165,7 +223,7 @@ export default function ManageAreas() {
                 ),
             },
         ]
-    }), [handleDelete]);
+    }), [handleDelete, handleNearestClick]);
 
     return (
         <>
@@ -243,6 +301,65 @@ export default function ManageAreas() {
                         />
                     )}
                 </div>
+
+                {/* Nearest Areas Modal */}
+                <GenericModal
+                    isOpen={nearestModalOpen}
+                    onClose={() => { setNearestModalOpen(false); setSelectedSubAreaId(null); }}
+                    title="Nearest Areas"
+                    subtitle="Select the nearest areas for this sub area."
+                >
+                    {nearestLoading ? (
+                        <div className="text-center py-8 text-gray-500">Loading areas...</div>
+                    ) : allAreasList.length === 0 ? (
+                        <div className="text-center py-8 text-gray-400">No areas available.</div>
+                    ) : (
+                        <>
+                            <div className="flex flex-col gap-3">
+                                {allAreasList
+                                    .filter(area => area.id !== selectedSubAreaId)
+                                    .map(area => (
+                                        <label
+                                            key={area.id}
+                                            className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${selectedNearest.includes(area.id)
+                                                    ? "border-[#2E7D32] bg-[#E8F5E9]"
+                                                    : "border-gray-200 bg-white hover:bg-gray-50"
+                                                }`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedNearest.includes(area.id)}
+                                                onChange={() => handleNearestToggle(area.id)}
+                                                className="w-5 h-5 accent-[#2E7D32]"
+                                            />
+                                            <Navigation size={16} className="text-[#2E7D32]" />
+                                            <span className="font-medium text-gray-800">{area.name}</span>
+                                        </label>
+                                    ))}
+                            </div>
+                            <div className="flex justify-between items-center mt-8">
+                                <span className="text-sm text-gray-500">
+                                    {selectedNearest.length} area{selectedNearest.length !== 1 ? "s" : ""} selected
+                                </span>
+                                <div className="flex gap-4">
+                                    <button
+                                        className="px-6 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+                                        onClick={() => { setNearestModalOpen(false); setSelectedSubAreaId(null); }}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className="px-6 py-2 rounded-lg font-bold text-white bg-[#2E7D32] hover:bg-[#1B5E20] transition-colors disabled:opacity-50"
+                                        onClick={handleNearestConfirm}
+                                        disabled={updateNearestMutation.isPending}
+                                    >
+                                        {updateNearestMutation.isPending ? "Saving..." : "Save"}
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </GenericModal>
             </main>
         </>
     )

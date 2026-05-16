@@ -14,11 +14,12 @@ export interface filterOptionsTypes {
     state : boolean ,
     data : {
         groupName : string,
-        companyName : string,
-        areaName : string,
-        deviceType : string,
-        registrationStart : string,
-        registrationEnd : string,
+        activeFlag : string,
+        otpVerify : string,
+        loginType : string,
+        companyId : string,
+        createtimeFrom : string,
+        createtimeTo : string,
     }
 }
 
