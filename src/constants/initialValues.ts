@@ -132,7 +132,7 @@ export const servicesStep4InitialValues = {
 };
 
 export const userWalletInitialValues = {
-    user: '',
+    phone: '',
     amount: '',
 };
 
@@ -207,6 +207,45 @@ export const SendBroadcastInitialValues = {
   timeScheduleNotification: null,
 };
 
+export const BroadcastAllUsersInitialValues = {
+  all_user_title: '',
+  all_user_message: '',
+  welcome_message: '',
+  dateScheduleNotification: null,
+  timeScheduleNotification: null,
+};
+
+export const BroadcastSelectUsersInitialValues = {
+  user_title: '',
+  user_message: '',
+  search_user: [] as number[],
+  dateScheduleNotification: null,
+  timeScheduleNotification: null,
+};
+
+export const BroadcastAllTemplesInitialValues = {
+  all_temple_title: '',
+  all_temple_message: '',
+  dateScheduleNotification: null,
+  timeScheduleNotification: null,
+};
+
+export const BroadcastSelectTemplesInitialValues = {
+  temple_title: '',
+  temple_message: '',
+  search_temple: [] as number[],
+  dateScheduleNotification: null,
+  timeScheduleNotification: null,
+};
+
+export const BroadcastGroupInitialValues = {
+  temple_title: '',
+  temple_message: '',
+  search_group: '',
+  dateScheduleNotification: null,
+  timeScheduleNotification: null,
+};
+
 
 export const manageSlotsSearchInitialValues = { type: "", status: "", date: "" };
 
@@ -214,7 +253,7 @@ export const manageBookingSearchInitialValues = { search: "", date: "" };
 
 export const manageSubAdminSearchInitialValues = { search: '', franchise: '' };
 
-export const manageServiceBoySearchInitialValues = { search: '', franchise: '', status: '', export: '' };
+export const manageServiceBoySearchInitialValues = { search: '', active_flag: '', date_from: '', date_to: '' };
 
 
 export const bookingFilterInitialValues = {
@@ -246,6 +285,16 @@ export const addExtraServiceInitialValues = {
     extraArabicServiceDescription: "",
     Date: "",
     Time: "",
+}
+
+export const addSpecialServiceInitialValues = {
+    nameEnglish: "",
+    nameArabic: "",
+    price: "",
+    descriptionEnglish: "",
+    descriptionArabic: "",
+    label: "",
+    photo: null,
 }
 
 export const addCouponInitialValues = {
@@ -298,3 +347,18 @@ export interface LoginFormInitialValues {
   password: string;
   remember : boolean
 }
+
+export const addCompanyInitialValues = {
+    name: "",
+    email_extension: "",
+    code: "",
+    num_of_users: "",
+    percentage: "",
+    company_benefit_percentage: "",
+    apply_on_services: "",
+    apply_on_extra_services: "",
+    start_date: "",
+    end_date: "",
+    services_ids: [] as number[],
+    extra_services_ids: [] as number[],
+};

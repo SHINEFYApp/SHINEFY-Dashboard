@@ -47,6 +47,7 @@ export const PRIVILEGES = {
     MANAGE_COMPOUND_PACKAGES: 40,
     MANAGE_COMPOUND_SUBSCRIPTIONS: 41,
     MANAGE_COMPOUND_BOOKINGS: 42,
+    MANAGE_SPECIAL_SERVICE: 43,
 } as const;
 
 /**
@@ -81,6 +82,7 @@ export const ROUTE_PERMISSIONS: Record<string, number> = {
     // Services & Extra
     "/services&extra/manage/Service": PRIVILEGES.MANAGE_SERVICE,
     "/services&extra/manage/ExtreService": PRIVILEGES.MANAGE_EXTRA_SERVICE,
+    "/services&extra/manage/SpecialService": PRIVILEGES.MANAGE_SPECIAL_SERVICE,
     "/services&extra/manage/coupon": PRIVILEGES.MANAGE_COUPON,
     "/services&extra/manage/package": PRIVILEGES.MANAGE_PACKAGES,
     "/services&extra/manage/Package": PRIVILEGES.MANAGE_PACKAGES,

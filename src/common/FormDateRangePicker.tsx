@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import { Calendar } from '../components/ui/calendar';
+import { Button } from '../components/ui/button';
 import type { DateRange } from 'react-day-picker';
 
 interface FormDateRangePickerProps {
@@ -114,6 +115,22 @@ export const FormDateRangePicker = ({
                             )
                         }}
                     />
+                    <div className="flex items-center justify-end border-t p-3">
+                        <Button
+                            type="button"
+                            size="sm"
+                            disabled={!tempRange?.from}
+                            onClick={() => {
+                                if (tempRange?.from) {
+                                    fromHelpers.setValue(format(tempRange.from, 'yyyy-MM-dd'));
+                                    toHelpers.setValue(format(tempRange.to || tempRange.from, 'yyyy-MM-dd'));
+                                    setOpen(false);
+                                }
+                            }}
+                        >
+                            Apply
+                        </Button>
+                    </div>
                 </PopoverContent>
             </Popover>
         </div>

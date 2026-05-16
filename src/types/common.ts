@@ -149,6 +149,7 @@ export interface TableProps<T> {
     pageSize?: number;
     onPageChange?: (page: number) => void;
     isLoading?: boolean;
+    onRowClick?: (row: T) => void;
 }
 
 export interface FormDataListProps {

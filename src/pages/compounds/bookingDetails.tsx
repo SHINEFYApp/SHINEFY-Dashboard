@@ -5,9 +5,10 @@ import { FormInput } from "../../common/FormInput";
 import { FormDropdown } from "../../common/FormDropdown";
 import { FormDatePicker } from "../../common/FormDatePicker";
 import { useGetBooking, useUpdateBooking } from "../../api/features/compounds.hooks";
+import { useGetServiceBoys } from "../../api/features/serviceBoys.hooks";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Search, User, X, Check } from "lucide-react";
 import { Button } from "../../components/ui/button";
 
 const statusOptions = [
@@ -24,14 +25,25 @@ const CompoundBookingDetails = () => {
     const queryClient = useQueryClient();
     const bookingId = Number(id);
     const [editMode, setEditMode] = useState(false);
+    const [driverSearch, setDriverSearch] = useState("");
+    const [selectedDriver, setSelectedDriver] = useState<{ user_id: number; name: string } | null>(null);
+    const [showDriverResults, setShowDriverResults] = useState(false);
 
     const { data, isLoading } = useGetBooking(bookingId);
     const booking = data?.data?.data;
+
+    const { data: serviceBoysData, isFetching: isSearchingBoys } = useGetServiceBoys(
+        { search: driverSearch || undefined, limit: 10 },
+        { enabled: driverSearch.length > 1 }
+    );
+    const driverResults = (serviceBoysData?.data?.data?.data || []) as any[];
 
     const updateMutation = useUpdateBooking({
         onSuccess: () => {
             toast.success("Booking updated successfully");
             setEditMode(false);
+            setSelectedDriver(null);
+            setDriverSearch("");
             queryClient.invalidateQueries({ queryKey: ["compound-booking", bookingId] });
         },
         onError: () => toast.error("Failed to update booking"),
@@ -49,7 +61,7 @@ const CompoundBookingDetails = () => {
                 longitude: Number(values.longitude),
                 address: values.address,
                 notes: values.notes || undefined,
-                service_boy_id: values.service_boy_id ? Number(values.service_boy_id) : undefined,
+                service_boy_id: selectedDriver ? Number(selectedDriver.user_id) : undefined,
             },
         });
     };
@@ -107,11 +119,10 @@ const CompoundBookingDetails = () => {
                             longitude: booking.longitude || "",
                             address: booking.address || "",
                             notes: booking.notes || "",
-                            service_boy_id: booking.service_boy?.id || "",
                         }}
                         onSubmit={handleSubmit}
                     >
-                        {({ isSubmitting }) => (
+                        {() => (
                             <Form>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <FormDropdown name="status" label="Status *" placeholder="Select Status" options={statusOptions} />
@@ -126,12 +137,78 @@ const CompoundBookingDetails = () => {
                                     <div className="md:col-span-2">
                                         <FormInput name="notes" label="Notes" placeholder="Admin notes" />
                                     </div>
-                                    <FormInput name="service_boy_id" label="Service Boy ID" type="number" placeholder="Assign driver" />
+
+                                    <div className="md:col-span-2 space-y-2 relative">
+                                        <label className="text-sm font-medium text-gray-700">Driver</label>
+                                        <div className="relative">
+                                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                                            <input
+                                                type="text"
+                                                value={selectedDriver ? selectedDriver.name : driverSearch}
+                                                placeholder="Search driver by name..."
+                                                onChange={(e) => {
+                                                    setDriverSearch(e.target.value);
+                                                    setSelectedDriver(null);
+                                                    setShowDriverResults(true);
+                                                }}
+                                                onFocus={() => setShowDriverResults(true)}
+                                                className="w-full rounded-xl border border-gray-200 bg-gray-50 pl-12 pr-4 py-3.5 text-sm font-medium focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                            />
+                                            {selectedDriver && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { setSelectedDriver(null); setDriverSearch(""); }}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
+                                                >
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        {showDriverResults && !selectedDriver && driverSearch.length > 1 && (
+                                            <div className="absolute z-50 w-full mt-1 rounded-xl border border-gray-200 bg-white shadow-lg max-h-48 overflow-auto">
+                                                {isSearchingBoys ? (
+                                                    <div className="px-4 py-3 text-sm text-gray-400">Searching...</div>
+                                                ) : driverResults.length > 0 ? (
+                                                    driverResults.map((boy: any) => (
+                                                        <button
+                                                            key={boy.user_id}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setSelectedDriver({ user_id: boy.user_id, name: boy.name });
+                                                                setShowDriverResults(false);
+                                                                setDriverSearch("");
+                                                            }}
+                                                            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-3"
+                                                        >
+                                                            <User className="w-4 h-4 text-gray-400 shrink-0" />
+                                                            <span className="font-medium">{boy.name}</span>
+                                                        </button>
+                                                    ))
+                                                ) : (
+                                                    <div className="px-4 py-3 text-sm text-gray-400">No drivers found</div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {selectedDriver && (
+                                            <div className="rounded-xl border border-green-200 bg-green-50 p-3 flex items-center gap-3">
+                                                <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
+                                                    <Check className="w-4 h-4 text-green-600" />
+                                                </div>
+                                                <p className="text-sm font-medium text-gray-800">{selectedDriver.name}</p>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="flex justify-end gap-4 mt-8">
-                                    <Button type="button" variant="outline" onClick={() => setEditMode(false)}>Cancel</Button>
-                                    <Button type="submit" className="bg-primary text-secondary-900 hover:bg-primary-600" disabled={isSubmitting}>
-                                        {isSubmitting ? "Saving..." : "Save Changes"}
+                                    <Button type="button" variant="outline" onClick={() => {
+                                        setEditMode(false);
+                                        setSelectedDriver(null);
+                                        setDriverSearch("");
+                                    }}>Cancel</Button>
+                                    <Button type="submit" className="bg-primary text-secondary-900 hover:bg-primary-600" disabled={updateMutation.isPending}>
+                                        {updateMutation.isPending ? "Saving..." : "Save Changes"}
                                     </Button>
                                 </div>
                             </Form>

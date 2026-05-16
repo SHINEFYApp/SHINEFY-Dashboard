@@ -32,9 +32,11 @@ export interface ServiceBoyItem {
 
 export interface GetServiceBoysParams {
     limit?: number;
-    page?: number;
+    start?: number;
     search?: string;
-    work_status?: string;
+    active_flag?: 0 | 1;
+    date_from?: string;
+    date_to?: string;
 }
 
 export interface AddServiceBoyPayload {
@@ -50,7 +52,7 @@ export interface AddServiceBoyPayload {
     password?: string;
 }
 
-export interface UpdateServiceBoyPayload extends Partial<AddServiceBoyPayload> { }
+export type UpdateServiceBoyPayload = Partial<AddServiceBoyPayload>;
 
 export interface UpdateServiceBoyAreasPayload {
     service_boy_areas: number[];
@@ -137,7 +139,9 @@ export const addServiceBoy = async (formData: FormData) => {
 };
 
 // POST /service-boys/{id} (FormData - includes images)
+// Note: Using POST + _method=PUT because PHP can't parse multipart/form-data with PUT method
 export const updateServiceBoy = async (id: number | string, formData: FormData) => {
+    formData.append('_method', 'PUT');
     return await postService(`/api/service-boys/${id}`, formData);
 };
 

@@ -138,9 +138,12 @@ export interface GetAdminSlotsParams {
     date: string;
     area_id?: number;
     service_time?: number;
+    service_boy_id?: number;
 }
 
 export interface GetAdminSlotsResponse {
     status: string;
-    data: AdminSlot[];
+    data: {
+        slots: AdminSlot[];
+    };
 }

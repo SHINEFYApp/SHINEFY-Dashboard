@@ -15,9 +15,19 @@ import ManageRegions from './pages/Geography&Regions/manageRegions';
 import ManageAreas from './pages/Geography&Regions/manageAreas';
 import ManageService from './pages/services&extra/manageService/manageService';
 import AddService from './pages/services&extra/manageService/addService';
+import EditService from './pages/services&extra/manageService/editService';
+import ViewService from './pages/services&extra/manageService/viewService';
 import ManageExtraService from './pages/services&extra/manageExtraService/manageExtraService';
 import AddExtraService from './pages/services&extra/manageExtraService/addExtraService';
+import EditExtraService from './pages/services&extra/manageExtraService/editExtraService';
+import ViewExtraService from './pages/services&extra/manageExtraService/viewExtraService';
+import ManageSpecialService from './pages/services&extra/manageSpecialService/manageSpecialService';
+import AddSpecialService from './pages/services&extra/manageSpecialService/addSpecialService';
+import EditSpecialService from './pages/services&extra/manageSpecialService/editSpecialService';
+import ViewSpecialService from './pages/services&extra/manageSpecialService/viewSpecialService';
 import ManageCoupon from './pages/services&extra/manageCoupon/manageCoupon';
+import ViewCoupon from './pages/services&extra/manageCoupon/viewCoupon';
+import EditCoupon from './pages/services&extra/manageCoupon/editCoupon';
 import ManageVehicles from './pages/vehicles/ManageVehicles';
 import ManageUsers from './pages/users&staff/ManageUsers';
 import ManageServiceBoy from './pages/users&staff/ManageServiceBoy';
@@ -28,6 +38,8 @@ import AddCategory from './pages/productsAndOrders/subPages/addCategory';
 import ManageOrders from './pages/productsAndOrders/manageOrders';
 import AddMainArea from './pages/Geography&Regions/subPagesAddAreas/addMainArea';
 import AddSubArea from './pages/Geography&Regions/subPagesAddAreas/addSubArea';
+import EditMainArea from './pages/Geography&Regions/subPagesAddAreas/editMainArea';
+import EditSubArea from './pages/Geography&Regions/subPagesAddAreas/editSubArea';
 import ManagePackage from './pages/services&extra/managePackage/managePackage';
 import AddNewPackage from './pages/services&extra/managePackage/addNewPackage';
 import UpdatePackage from './pages/services&extra/managePackage/updatePackage';
@@ -48,12 +60,20 @@ import UserProfile from './pages/users&staff/UserProfile';
 import ContactUs from './pages/technicalSupport/contactUs/contactUs';
 import UserPackageDetails from './pages/users&staff/subPages/UserPackageDetails';
 import ManageCompanies from './pages/technicalSupport/Manage Companies/manageCompanies';
+import AddCompany from './pages/technicalSupport/Manage Companies/addCompany';
+import EditCompany from './pages/technicalSupport/Manage Companies/editCompany';
+import ViewCompany from './pages/technicalSupport/Manage Companies/viewCompany';
 import Broadcast from './pages/technicalSupport/Broadcast/broadcast';
 import SendBroadcast from './pages/technicalSupport/Broadcast/sendBroadcast';
+import BroadcastDetail from './pages/technicalSupport/Broadcast/broadcastDetail';
+import ManageCommonMessages from './pages/technicalSupport/Broadcast/manageCommonMessages';
 import Managefaqs from './pages/technicalSupport/managefaqs/managefaqs';
 import AddFqs from './pages/technicalSupport/managefaqs/addFqs';
+import EditFaqs from './pages/technicalSupport/managefaqs/editFaqs';
 import ManageOrdersQuestions from './pages/technicalSupport/manage orders questions/manageOrdersQuestions';
 import AddOrdersQuestions from './pages/technicalSupport/manage orders questions/addOrdersQuestions';
+import EditOrdersQuestions from './pages/technicalSupport/manage orders questions/editOrdersQuestions';
+import ViewOrdersQuestions from './pages/technicalSupport/manage orders questions/viewOrdersQuestions';
 import ManageCompounds from './pages/compounds/manageCompounds';
 import AddCompound from './pages/compounds/addCompound';
 import EditCompound from './pages/compounds/editCompound';
@@ -114,13 +134,25 @@ export const RoutesPages = () => {
         <Route path="/geography&regions/manage/area" element={<PermissionGuard permissionId={P.MANAGE_AREA}><ManageAreas /></PermissionGuard>} />
         <Route path="/geography&regions/manage/area/add/mainArea" element={<PermissionGuard permissionId={P.MANAGE_AREA}><AddMainArea /></PermissionGuard>} />
         <Route path="/geography&regions/manage/area/add/subArea" element={<PermissionGuard permissionId={P.MANAGE_AREA}><AddSubArea /></PermissionGuard>} /> 
+        <Route path="/geography&regions/manage/area/edit/main/:id" element={<PermissionGuard permissionId={P.MANAGE_AREA}><EditMainArea /></PermissionGuard>} />
+        <Route path="/geography&regions/manage/area/edit/sub/:id" element={<PermissionGuard permissionId={P.MANAGE_AREA}><EditSubArea /></PermissionGuard>} />
         {/* Services & Extra */}
         <Route path="/services&extra/manage/Service" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><ManageService /></PermissionGuard>} />
         <Route path="/services&extra/manage/Service/addService" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><AddService /></PermissionGuard>} />
+        <Route path="/services&extra/manage/Service/editService/:id" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><EditService /></PermissionGuard>} />
+        <Route path="/services&extra/manage/Service/viewService/:id" element={<PermissionGuard permissionId={P.MANAGE_SERVICE}><ViewService /></PermissionGuard>} />
         <Route path="/services&extra/manage/ExtreService" element={<PermissionGuard permissionId={P.MANAGE_EXTRA_SERVICE}><ManageExtraService /></PermissionGuard>} />
         <Route path="/services&extra/manage/extreService/addExtraService" element={<PermissionGuard permissionId={P.MANAGE_EXTRA_SERVICE}><AddExtraService /></PermissionGuard>} />
+        <Route path="/services&extra/manage/ExtreService/editExtraService/:id" element={<PermissionGuard permissionId={P.MANAGE_EXTRA_SERVICE}><EditExtraService /></PermissionGuard>} />
+        <Route path="/services&extra/manage/ExtreService/viewExtraService/:id" element={<PermissionGuard permissionId={P.MANAGE_EXTRA_SERVICE}><ViewExtraService /></PermissionGuard>} />
+        <Route path="/services&extra/manage/SpecialService" element={<PermissionGuard permissionId={P.MANAGE_SPECIAL_SERVICE}><ManageSpecialService /></PermissionGuard>} />
+        <Route path="/services&extra/manage/SpecialService/addSpecialService" element={<PermissionGuard permissionId={P.MANAGE_SPECIAL_SERVICE}><AddSpecialService /></PermissionGuard>} />
+        <Route path="/services&extra/manage/SpecialService/editSpecialService/:id" element={<PermissionGuard permissionId={P.MANAGE_SPECIAL_SERVICE}><EditSpecialService /></PermissionGuard>} />
+        <Route path="/services&extra/manage/SpecialService/viewSpecialService/:id" element={<PermissionGuard permissionId={P.MANAGE_SPECIAL_SERVICE}><ViewSpecialService /></PermissionGuard>} />
         <Route path="/services&extra/manage/coupon" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><ManageCoupon /></PermissionGuard>} />
         <Route path="/services&extra/manage/coupon/addCoupon" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><AddCoupon /></PermissionGuard>} />
+        <Route path="/services&extra/manage/coupon/view/:id" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><ViewCoupon /></PermissionGuard>} />
+        <Route path="/services&extra/manage/coupon/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><EditCoupon /></PermissionGuard>} />
         <Route path="/services&extra/manage/package" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><ManagePackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/addPackage" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><AddNewPackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/updatePackage/:id" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><UpdatePackage /></PermissionGuard>} />
@@ -149,17 +181,25 @@ export const RoutesPages = () => {
         <Route path="/financial&points/manage/Vat" element={<PermissionGuard permissionId={P.MANAGE_VAT}><ManageVat /></PermissionGuard>} />
         <Route path="/financial&points/manage/driverCommission" element={<PermissionGuard permissionId={P.DRIVER_COMMISSION}><ManageDriverCommission /></PermissionGuard>} />
         <Route path="/financial&points/manage/bonusPoint" element={<PermissionGuard permissionId={P.MANAGE_BONUS_POINT}><ManageBonusPoint /></PermissionGuard>} />
-        <Route path="/financial&points/manage/adminEarning" element={<PermissionGuard permissionId={P.MANAGE_EARNING}><ManageAdminEarning /></PermissionGuard>} />
+        {/* <Route path="/financial&points/manage/adminEarning" element={<PermissionGuard permissionId={P.MANAGE_EARNING}><ManageAdminEarning /></PermissionGuard>} /> */}
 
         {/* Technical Support */}
         <Route path="/technicalSupport/contactUs" element={<PermissionGuard permissionId={P.CONTACT_US}><ContactUs /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/companies" element={<PermissionGuard permissionId={P.MANAGE_COMPANIES}><ManageCompanies /></PermissionGuard>} />
+        <Route path="/technicalSupport/manage/companies/add" element={<PermissionGuard permissionId={P.MANAGE_COMPANIES}><AddCompany /></PermissionGuard>} />
+        <Route path="/technicalSupport/manage/companies/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_COMPANIES}><EditCompany /></PermissionGuard>} />
+        <Route path="/technicalSupport/manage/companies/view/:id" element={<PermissionGuard permissionId={P.MANAGE_COMPANIES}><ViewCompany /></PermissionGuard>} />
         <Route path="/technicalSupport/broadcast" element={<PermissionGuard permissionId={P.BROADCAST}><Broadcast /></PermissionGuard>} />
         <Route path="/technicalSupport/broadcast/SendBroadcast" element={<PermissionGuard permissionId={P.BROADCAST}><SendBroadcast /></PermissionGuard>} />
+        <Route path="/technicalSupport/broadcast/:id" element={<PermissionGuard permissionId={P.BROADCAST}><BroadcastDetail /></PermissionGuard>} />
+        <Route path="/technicalSupport/broadcast/common-messages" element={<PermissionGuard permissionId={P.BROADCAST}><ManageCommonMessages /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/faqs" element={<PermissionGuard permissionId={P.MANAGE_FAQS}><Managefaqs /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/faqs/addFqs" element={<PermissionGuard permissionId={P.MANAGE_FAQS}><AddFqs /></PermissionGuard>} />
+        <Route path="/technicalSupport/manage/faqs/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_FAQS}><EditFaqs /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/orderQuestions" element={<PermissionGuard permissionId={P.MANAGE_ORDER_QUESTION}><ManageOrdersQuestions /></PermissionGuard>} />
         <Route path="/technicalSupport/manage/orderQuestions/addOrdersQuestions" element={<PermissionGuard permissionId={P.MANAGE_ORDER_QUESTION}><AddOrdersQuestions /></PermissionGuard>} />
+        <Route path="/technicalSupport/manage/orderQuestions/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_ORDER_QUESTION}><EditOrdersQuestions /></PermissionGuard>} />
+        <Route path="/technicalSupport/manage/orderQuestions/view/:id" element={<PermissionGuard permissionId={P.MANAGE_ORDER_QUESTION}><ViewOrdersQuestions /></PermissionGuard>} />
       </Routes>
     </>
   );

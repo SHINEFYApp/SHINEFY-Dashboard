@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { IoCallOutline, IoLocationOutline } from 'react-icons/io5';
-import { Calendar, Clock, User, Hash, MapPin, Car, UserX } from 'lucide-react';
+import { Calendar, User, Hash, MapPin, Car, UserX } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { servicesStep1Schema } from '../../../../../constants/validationSchema';
 import { FormInput } from '../../../../../common/FormInput';
 import { FormDatePicker } from '../../../../../common/FormDatePicker';
-import { FormTimePicker } from '../../../../../common/FormTimePicker';
+
 import { Button } from '../../../../ui/button';
 import { FormSelectedVehicles } from '../SelectedVehicles';
 import { VehicleSelectionModal } from '../VehicleSelectionModal';
@@ -188,6 +188,7 @@ export default function ServicesStep1({
                                         placeholder="Select Address"
                                         icon={<IoLocationOutline className="w-5 h-5" />}
                                         options={locations}
+                                        extraKey='user_address_name'
                                     />
                                 </div>
                             </div>
@@ -217,12 +218,6 @@ export default function ServicesStep1({
                                     label="Select Booking Date"
                                     icon={<Calendar className="size-5" />}
                                     checkmark={false}
-                                />
-
-                                <FormTimePicker
-                                    name="bookingTime"
-                                    label="Select Booking Time"
-                                    icon={<Clock className="size-5" />}
                                 />
                             </div>
 

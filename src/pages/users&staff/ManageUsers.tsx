@@ -1,8 +1,8 @@
 import { Form, Formik } from "formik";
-import { ArrowUpToLine, Eye, Key, Search, Shield, ShieldCheck, SlidersHorizontal } from "lucide-react";
+import { ArrowUpToLine, Eye, Key, Search, Shield, ShieldCheck, SlidersHorizontal, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { useGetUsers, useExportUsers, useEditUserStatus, useEditOtpStatus, useGetCompanies } from "../../api/features/ManageUsers.hooks";
+import { useGetUsers, useExportUsers, useEditUserStatus, useEditOtpStatus, useGetCompanies, useEditUserProfile } from "../../api/features/ManageUsers.hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormInput } from "../../common/FormInput";
 import { Link, useSearchParams } from "react-router";
@@ -32,6 +32,16 @@ export default function ManageUsers() {
         },
         onError: (error: any) => {
             toast.error(error?.response?.data?.message || "Failed to update OTP status");
+        }
+    });
+
+    const { mutate: editProfile } = useEditUserProfile({
+        onSuccess: () => {
+            toast.success("User profile updated successfully");
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || "Failed to update user profile");
         }
     });
 
@@ -94,7 +104,7 @@ export default function ManageUsers() {
                     </Link>
                     <button
                         className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] p-2 font-semibold transition-colors"
-                        onClick={() => console.log('updated item', record)}
+                        onClick={() => setProfileModal({ open: true, data: record })}
                     >
                         <ArrowUpToLine className="w-4 h-4" /> update
                     </button>
@@ -156,6 +166,10 @@ export default function ManageUsers() {
         search: searchParams.get("search") || "",
         groupName: searchParams.get("topGroupName") || ""
     }));
+
+    const [profileModal, setProfileModal] = useState<{ open: boolean; data?: any }>({
+        open: false,
+    });
 
     const [currentPage, setCurrentPage] = useState(() => Number(searchParams.get("page")) || 1);
     const pageSize = 10;
@@ -349,6 +363,90 @@ export default function ManageUsers() {
                     )}
                 </div>
             </main>
+            
+            {/* Edit Profile Modal */}
+            <section
+                className={`fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/30 backdrop-blur-xs transition-all duration-300 ${
+                    profileModal.open ? "opacity-100 visible z-50" : "opacity-0 invisible z-[-1]"
+                }`}
+            >
+                <div className={`w-[678px] relative px-10 py-8 bg-white rounded-xl transition-transform duration-300 ${
+                    profileModal.open ? "scale-100" : "scale-95"
+                }`}>
+                    <div className="flex items-center justify-between mb-6">
+                        <h1 className="text-[#242731] text-[20px] font-bold">Edit Profile</h1>
+                        <button
+                            onClick={() => setProfileModal({ open: false })}
+                            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+                    <Formik
+                        enableReinitialize
+                        initialValues={{
+                            email: profileModal.data?.email || "",
+                            phone_number: profileModal.data?.phone_number || "",
+                            hide_phone_number: profileModal.data?.hide_phone_number || 0,
+                        }}
+                        onSubmit={(values) => {
+                            editProfile({
+                                user_id: profileModal.data?.user_id || profileModal.data?.id,
+                                email: values.email || undefined,
+                                phone_number: values.phone_number || undefined,
+                                hide_phone_number: Number(values.hide_phone_number),
+                            });
+                            setProfileModal({ open: false });
+                        }}
+                    >
+                        {({ isValid }) => (
+                            <Form className="space-y-4">
+                                <FormInput
+                                    name="email"
+                                    label="Email"
+                                    placeholder="Email"
+                                    type="email"
+                                    checkmark={false}
+                                />
+                                <FormInput
+                                    name="phone_number"
+                                    label="Phone Number"
+                                    placeholder="Phone number"
+                                    type="text"
+                                    checkmark={false}
+                                />
+                                <div className="flex items-center gap-3">
+                                    <label className="text-sm font-medium text-gray-700">Hide Phone Number</label>
+                                    <FormDropdown
+                                        name="hide_phone_number"
+                                        options={[
+                                            { label: "No", value: 0 },
+                                            { label: "Yes", value: 1 }
+                                        ]}
+                                        className="mb-0"
+                                    />
+                                </div>
+                                <div className="flex justify-between items-center pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setProfileModal({ open: false })}
+                                        className="w-[168px] border text-[16px] py-3 border-black rounded-[10px]"
+                                    >
+                                        Back
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-10 py-3 rounded-xl text-[16px] shadow-md hover:shadow-lg transition-all duration-200"
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+            </section>
+            
             <FillterOptions filterOptions={filterOptions} setFilterOptions={setFilterOptions} companies={companies} />
         </>
     )

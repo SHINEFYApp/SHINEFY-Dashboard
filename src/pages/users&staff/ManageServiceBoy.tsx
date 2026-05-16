@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { FormDropdown } from "../../common/FormDropdown";
-import { exportTypes, franchise } from "../../constants/data";
+import { exportTypes } from "../../constants/data";
 import { manageServiceBoySearchInitialValues } from "../../constants/initialValues";
 import { FilterHeader } from "../../common/FilterHeader";
 import { FormDatePicker } from "../../common/FormDatePicker";
@@ -15,8 +15,10 @@ import { Link } from "react-router-dom";
 
 const ManageServiceBoy = () => {
     const queryClient = useQueryClient();
-    const [statusFilter, setStatusFilter] = useState("");
+    const [activeFlag, setActiveFlag] = useState("");
     const [search, setSearch] = useState("");
+    const [dateFromFilter, setDateFromFilter] = useState("");
+    const [dateToFilter, setDateToFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
 
@@ -27,6 +29,7 @@ const ManageServiceBoy = () => {
     const [selectedAreas, setSelectedAreas] = useState<number[]>([]);
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
+    const hasSyncedAreas = useRef(false);
 
     const handleSearchSubmit = (values: any) => {
         setSearch(values.search);
@@ -34,7 +37,9 @@ const ManageServiceBoy = () => {
     };
 
     const handleFilterSubmit = (values: any) => {
-        setStatusFilter(values.status || "");
+        setActiveFlag(values.active_flag || "");
+        setDateFromFilter(values.date_from || "");
+        setDateToFilter(values.date_to || "");
         setCurrentPage(1);
     };
 
@@ -47,13 +52,13 @@ const ManageServiceBoy = () => {
         limit: pageSize,
         start: currentPage,
         search: search,
-        work_status: statusFilter
+        active_flag: activeFlag ? (Number(activeFlag) as 0 | 1) : undefined,
+        date_from: dateFromFilter || undefined,
+        date_to: dateToFilter || undefined,
     });
 
 
-    // Response structure: { status: "success", data: { data: [...] } }
-    // Log showed data.data.data is { data: [...] } so we need one more level.
-    // Assuming response structure is { status: "success", data: { data: [...], pagination: {...} } }
+    // Response structure: { status: "success", data: { data: [...], pagination: {...} } }
     const serviceBoysRaw = data?.data?.data?.data;
     const serviceBoys = (Array.isArray(serviceBoysRaw) ? serviceBoysRaw : []) as any[];
 
@@ -71,8 +76,8 @@ const ManageServiceBoy = () => {
     const { data: allAreasData, isLoading: allAreasLoading } = useGetSubAreas({
         limit: 100,
     });
-    const allSubAreasRaw = allAreasData?.data?.data?.data || allAreasData?.data?.data || [];
-    const allSubAreas = (Array.isArray(allSubAreasRaw) ? allSubAreasRaw : []) as { id: number; area_name: string }[];
+    const allSubAreas = (allAreasData?.data?.data?.sub_areas || []) as { id: number; area_name: string }[];
+    console.log(allSubAreas)
 
     // Mutations
     const deleteMutation = useDeleteServiceBoy({
@@ -106,6 +111,7 @@ const ManageServiceBoy = () => {
     const updateAreasMutation = useUpdateServiceBoyAreas({
         onSuccess: () => {
             toast.success("Areas updated successfully");
+            setAreasModalOpen(false);
             setAreasEditMode(false);
             queryClient.invalidateQueries({ queryKey: ["service-boy-areas", selectedBoyId] });
         },
@@ -134,15 +140,18 @@ const ManageServiceBoy = () => {
 
     const handleEditAreasClick = (id: number) => {
         setSelectedBoyId(id);
-        setAreasEditMode(false);
         setSelectedAreas([]);
+        setAreasEditMode(true);
         setAreasModalOpen(true);
+        hasSyncedAreas.current = false;
     };
 
-    const handleEnterEditMode = () => {
-        setSelectedAreas(serviceBoyAreas.map(a => a.area_id));
-        setAreasEditMode(true);
-    };
+    useEffect(() => {
+        if (areasEditMode && serviceBoyAreas.length > 0 && !hasSyncedAreas.current && !areasLoading) {
+            setSelectedAreas(serviceBoyAreas.map(a => a.area_id));
+            hasSyncedAreas.current = true;
+        }
+    }, [areasEditMode, serviceBoyAreas, areasLoading]);
 
     const handleAreaToggle = (areaId: number) => {
         setSelectedAreas(prev =>
@@ -187,7 +196,12 @@ const ManageServiceBoy = () => {
         toast.info(`Exporting as ${type}...`);
         exportMutation.mutate({
             type: exportType,
-            params: { search, work_status: statusFilter }
+            params: {
+                search,
+                active_flag: activeFlag ? Number(activeFlag) : undefined,
+                date_from: dateFromFilter || undefined,
+                date_to: dateToFilter || undefined,
+            }
         }, {
             onSuccess: (response: any) => {
                 const blob = response?.data instanceof Blob ? response.data : response;
@@ -305,21 +319,21 @@ const ManageServiceBoy = () => {
                     filterFields={
                         <>
                             <FormDropdown
-                                name="status"
-                                label="Status"
+                                name="active_flag"
+                                label="Active Status"
                                 placeholder="Choose Status"
-                                options={['Pending', 'Confirmed', 'Completed', 'Cancelled']}
-                            />
-                            <FormDropdown
-                                name="franchise"
-                                label="Franchise"
-                                placeholder="Choose Franchise"
-                                options={franchise}
+                                options={[{ value: '1', label: 'Active' }, { value: '0', label: 'Inactive' }]}
                             />
                             <FormDatePicker
-                                name="date"
-                                label="Date"
-                                placeholder="Select Date"
+                                name="date_from"
+                                label="Date From"
+                                placeholder="Start Date"
+                                checkmark={false}
+                            />
+                            <FormDatePicker
+                                name="date_to"
+                                label="Date To"
+                                placeholder="End Date"
                                 checkmark={false}
                             />
                         </>
@@ -400,96 +414,56 @@ const ManageServiceBoy = () => {
             <GenericModal
                 isOpen={areasModalOpen}
                 onClose={() => { setAreasModalOpen(false); setAreasEditMode(false); }}
-                title={areasEditMode ? "Edit Areas" : "Service Boy Areas"}
-                subtitle={areasEditMode ? "Select the areas to assign to this Service Boy." : "Currently assigned areas."}
+                title="Edit Areas"
+                subtitle="Select the areas to assign to this Service Boy."
             >
-                {areasLoading ? (
-                    <div className="text-center py-8 text-gray-500">Loading areas...</div>
-                ) : !areasEditMode ? (
-                    /* View Mode — show current areas */
-                    <>
-                        {serviceBoyAreas.length === 0 ? (
-                            <div className="text-center py-8 text-gray-400">No areas assigned yet.</div>
-                        ) : (
-                            <div className="flex flex-col gap-3">
-                                {serviceBoyAreas.map(area => (
-                                    <div
-                                        key={area.area_id}
-                                        className="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 bg-gray-50"
-                                    >
-                                        <MapPin size={16} className="text-[#9C27B0]" />
-                                        <span className="font-medium text-gray-800">{area.area_name}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        <div className="flex justify-end gap-4 mt-8">
-                            <button
-                                className="px-6 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
-                                onClick={() => setAreasModalOpen(false)}
-                            >
-                                Close
-                            </button>
-                            <button
-                                className="px-6 py-2 rounded-lg font-bold text-white bg-[#9C27B0] hover:bg-[#7B1FA2] transition-colors"
-                                onClick={handleEnterEditMode}
-                            >
-                                Edit Areas
-                            </button>
-                        </div>
-                    </>
+                {allAreasLoading ? (
+                    <div className="text-center py-8 text-gray-500">Loading all areas...</div>
+                ) : allSubAreas.length === 0 ? (
+                    <div className="text-center py-8 text-gray-400">No areas available.</div>
                 ) : (
-                    /* Edit Mode — checkboxes for all sub areas */
-                    <>
-                        {allAreasLoading ? (
-                            <div className="text-center py-8 text-gray-500">Loading all areas...</div>
-                        ) : allSubAreas.length === 0 ? (
-                            <div className="text-center py-8 text-gray-400">No areas available.</div>
-                        ) : (
-                            <div className="flex flex-col gap-3">
-                                {allSubAreas.map(area => (
-                                    <label
-                                        key={area.id}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
-                                            selectedAreas.includes(area.id)
-                                                ? "border-[#9C27B0] bg-[#F3E5F5]"
-                                                : "border-gray-200 bg-white hover:bg-gray-50"
-                                        }`}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedAreas.includes(area.id)}
-                                            onChange={() => handleAreaToggle(area.id)}
-                                            className="w-5 h-5 accent-[#9C27B0]"
-                                        />
-                                        <MapPin size={16} className="text-[#9C27B0]" />
-                                        <span className="font-medium text-gray-800">{area.area_name}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        )}
-                        <div className="flex justify-between items-center mt-8">
-                            <span className="text-sm text-gray-500">
-                                {selectedAreas.length} area{selectedAreas.length !== 1 ? "s" : ""} selected
-                            </span>
-                            <div className="flex gap-4">
-                                <button
-                                    className="px-6 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
-                                    onClick={() => setAreasEditMode(false)}
-                                >
-                                    Back
-                                </button>
-                                <button
-                                    className="px-6 py-2 rounded-lg font-bold text-white bg-[#9C27B0] hover:bg-[#7B1FA2] transition-colors disabled:opacity-50"
-                                    onClick={handleAreasConfirm}
-                                    disabled={updateAreasMutation.isPending}
-                                >
-                                    {updateAreasMutation.isPending ? "Saving..." : "Save Areas"}
-                                </button>
-                            </div>
-                        </div>
-                    </>
+                    <div className="flex flex-col gap-3">
+                        {allSubAreas.map(area => (
+                            <label
+                                key={area.id}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
+                                    selectedAreas.includes(area.id)
+                                        ? "border-[#9C27B0] bg-[#F3E5F5]"
+                                        : "border-gray-200 bg-white hover:bg-gray-50"
+                                }`}
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={selectedAreas.includes(area.id)}
+                                    onChange={() => handleAreaToggle(area.id)}
+                                    className="w-5 h-5 accent-[#9C27B0]"
+                                />
+                                <MapPin size={16} className="text-[#9C27B0]" />
+                                <span className="font-medium text-gray-800">{area.area_name}</span>
+                            </label>
+                        ))}
+                    </div>
                 )}
+                <div className="flex justify-between items-center mt-8">
+                    <span className="text-sm text-gray-500">
+                        {selectedAreas.length} area{selectedAreas.length !== 1 ? "s" : ""} selected
+                    </span>
+                    <div className="flex gap-4">
+                        <button
+                            className="px-6 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+                            onClick={() => { setAreasModalOpen(false); setAreasEditMode(false); }}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="px-6 py-2 rounded-lg font-bold text-white bg-[#9C27B0] hover:bg-[#7B1FA2] transition-colors disabled:opacity-50"
+                            onClick={handleAreasConfirm}
+                            disabled={updateAreasMutation.isPending}
+                        >
+                            {updateAreasMutation.isPending ? "Saving..." : "Save Areas"}
+                        </button>
+                    </div>
+                </div>
             </GenericModal>
         </main>
     );

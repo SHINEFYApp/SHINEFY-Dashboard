@@ -72,6 +72,8 @@ export interface BookingHistoryParams {
     limit?: number;
     page?: number;
     date?: string;
+    from_date?: string;
+    to_date?: string;
 }
 
 export interface WalletHistoryParams {
@@ -84,6 +86,10 @@ export interface WalletHistoryParams {
 export interface UserPackagesParams {
     user_id: number | string;
     search?: string;
+    page?: number;
+    limit?: number;
+    from_date?: string;
+    to_date?: string;
 }
 
 export interface StatusUpdateParams {
@@ -205,5 +211,18 @@ export interface EditVehicleParams {
 
 export const editUserVehicle = async (params: EditVehicleParams) => {
     const res: AxiosResponse = await putService("/api/users/edit/vehicle", params);
+    return res.data;
+};
+
+// PUT /api/users/edit/profile
+export interface EditProfileParams {
+    user_id: number | string;
+    email?: string;
+    phone_number?: string;
+    hide_phone_number?: number; // 0 or 1
+}
+
+export const editUserProfile = async (params: EditProfileParams) => {
+    const res: AxiosResponse = await putService("/api/users/edit/profile", params);
     return res.data;
 };

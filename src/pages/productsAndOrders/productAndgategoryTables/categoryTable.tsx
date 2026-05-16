@@ -4,18 +4,28 @@ import { FormInput } from "../../../common/FormInput";
 import { ArrowUpToLine, Eye, Search, Trash2 } from "lucide-react";
 import { Link } from "react-router";
 import { FormDropdown } from "../../../common/FormDropdown";
-import { dummyCategory , exportTypes } from "../../../constants/data";
+import { exportTypes } from "../../../constants/data";
 import { CustomTable } from "../../../common/CustomTable";
+import { useGetCategories } from "../../../api/features/products.hooks";
+import { useTranslation } from "react-i18next";
 
 export default function CategoryTable(){
+    const { i18n } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
+    const totalEntries = 0;
+    const totalPages = 1;
+
+    const { data: categoriesData, isLoading } = useGetCategories({
+        lang: i18n.language as "en" | "ar",
+    });
+
+    const categories = categoriesData?.data ?? [];
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
-    const handleSubmit = (values : {search : string , export: string}) => {
+    const handleSubmit = (values: { search: string; export: string }) => {
         console.log(`Search values: ${values.search} | Export File Extantion: ${values.export} `);
     };
 
@@ -25,20 +35,12 @@ export default function CategoryTable(){
             title: "#",
         },
         {
-            key: "categoryEnglishName",
-            title: "Category English Name",
-        },
-        {
-            key: "categoryArabicName",
-            title: "Category Arabic Name",
+            key: "name",
+            title: "Category Name",
         },
         {
             key: "status",
             title: "Status",
-        },
-        {
-            key: "createDateAndTime",
-            title: "Create Date & Time",
         },
         {
             key: "action",
@@ -66,7 +68,14 @@ export default function CategoryTable(){
                 </div>
             ),
         },
-    ]
+    ];
+
+    const mappedData = categories.map((cat, index) => ({
+        hash: index + 1,
+        name: cat.name,
+        status: cat.active ? "Active" : "Inactive",
+    }));
+
     return(
         <main className={`w-full mt-10 bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
             <div className="mb-6">
@@ -79,7 +88,7 @@ export default function CategoryTable(){
                         handleSubmit(values)
                     }}
                 >
-                    {({}) => (
+                    {() => (
                         <Form>
                             <div className="flex justify-between">
                                 <div className="flex items-center gap-2">
@@ -121,12 +130,13 @@ export default function CategoryTable(){
             </div>
             <CustomTable
                 columns={columns}
-                data={dummyCategory}
+                data={mappedData}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}
                 pageSize={pageSize}
                 onPageChange={handlePageChange}
+                isLoading={isLoading}
             />
         </main>
     )

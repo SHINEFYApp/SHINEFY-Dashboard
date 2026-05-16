@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useField, useFormikContext } from 'formik';
-import { IoCheckmarkCircle, IoChevronDown } from 'react-icons/io5';
+import { IoCheckmarkCircle, IoChevronDown, IoSearch } from 'react-icons/io5';
 import { cn } from '../utils/utils';
 
 export interface DropDownToSendObjectProps<T> {
@@ -15,6 +15,8 @@ export interface DropDownToSendObjectProps<T> {
   setFormData?: React.Dispatch<React.SetStateAction<any>>;
   getOptionLabel?: (option: T) => string; 
   valueExtractor?: (option: T) => any;
+  extraKey?: string;
+  searchable?: boolean;
 }
 
 export const DropDownToSendObject = <T,>({
@@ -28,15 +30,15 @@ export const DropDownToSendObject = <T,>({
   moreOptions,
   getOptionLabel,
   valueExtractor,
-  setFormData
+  setFormData,
+  extraKey,
+  searchable
 }: DropDownToSendObjectProps<T>) => {
   const [field, meta] = useField<T | undefined>(name);
   const { setFieldValue, setFieldTouched } = useFormikContext<any>();
   const [isOpen, setIsOpen] = useState(false);
-    const hasError = meta.touched && meta.error;
-  const isValid = meta.touched && !meta.error && field.value;
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // دالة آمنة لتحويل أي object إلى نص للعرض فقط
   const safeDisplay = (option: T): string => {
     if (getOptionLabel) return String(getOptionLabel(option));
     if (!option || typeof option !== 'object') return '';
@@ -47,15 +49,29 @@ export const DropDownToSendObject = <T,>({
     return '';
   };
 
-  // الحصول على الكائن الفعلي للحصول على label
+  const filteredOptions = useMemo(() => {
+    if (!options || !searchable || !searchQuery) return options;
+    const q = searchQuery.toLowerCase();
+    return options.filter((opt) => {
+      const label = getOptionLabel ? String(getOptionLabel(opt)) : safeDisplay(opt);
+      return label.toLowerCase().includes(q);
+    });
+  }, [options, searchQuery, searchable, getOptionLabel]);
+
+  const handleToggle = () => {
+    if (!isOpen) setSearchQuery('');
+    setIsOpen(!isOpen);
+  };
+
+  const hasError = meta.touched && meta.error;
+  const isValid = meta.touched && !meta.error && field.value;
+
   const matchedOption = (valueExtractor && field.value !== undefined && field.value !== null && typeof field.value !== 'object')
       ? options?.find((opt) => valueExtractor(opt) === field.value)
       : field.value;
 
-  // النص المعروض في الزر الرئيسي
   const selectedLabel = matchedOption ? safeDisplay(matchedOption as T) : '';
 
-  // عند اختيار عنصر
   const handleSelect = (option: T) => {
     console.log(option)
     const valueToSet = valueExtractor ? valueExtractor(option) : option;
@@ -63,6 +79,7 @@ export const DropDownToSendObject = <T,>({
     setFieldValue(name, valueToSet);
     setFieldTouched(name, true, true);
     setIsOpen(false);
+    setSearchQuery('');
   };
 
   return (
@@ -72,7 +89,7 @@ export const DropDownToSendObject = <T,>({
       <button
         type="button"
         disabled={disabled}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className={cn(
           'w-full flex justify-between items-center rounded-xl border px-4 py-3.5 text-sm font-medium cursor-pointer',
           moreOptions === 'packageService'
@@ -97,29 +114,42 @@ export const DropDownToSendObject = <T,>({
         )}
       </button>
 
-      {/* Dropdown options */}
       {isOpen && !disabled && (
         <div className="absolute z-50 w-full mt-1 rounded-xl border bg-white shadow-lg max-h-60 overflow-auto">
-          {options?.length === 0 ? (
-            <div className="w-full h-50 flex justify-center items-center text-gray-300">
+          {searchable && (
+            <div className="sticky top-0 bg-white border-b border-gray-100 px-3 py-2">
+              <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2">
+                <IoSearch className="w-4 h-4 text-gray-400 shrink-0" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+                  autoFocus
+                />
+              </div>
+            </div>
+          )}
+          {(filteredOptions?.length === 0) ? (
+            <div className="w-full h-20 flex justify-center items-center text-gray-300 text-sm">
               No Options Available
             </div>
           ) : (
-            options?.map((option, index) => (
+            filteredOptions?.map((option, index) => (
               <button
                 key={index}
                 type="button"
                 onClick={() => handleSelect(option)}
                 className="w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors"
               >
-                {safeDisplay(option)}
+                {safeDisplay(option)} {extraKey && `(${option[extraKey as keyof T]})`}
               </button>
             ))
           )}
         </div>
       )}
 
-      {/* Error message */}
       {hasError && (
         <p className="text-xs text-red-500 pl-1 mt-1">{meta.error}</p>
       )}

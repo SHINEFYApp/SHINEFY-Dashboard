@@ -1,4 +1,10 @@
 import type { BookingFormData, createPackageBookingPayload, createServiceBookingPayload } from "../../types/bookings";
+import type { CouponData } from "../../types/common";
+
+const isCouponExpired = (coupon: CouponData | undefined): boolean => {
+    if (!coupon || !coupon.end_at) return true;
+    return new Date(coupon.end_at) <= new Date();
+};
 
 export const mutateBookingService = (
     formData: BookingFormData,
@@ -12,9 +18,8 @@ export const mutateBookingService = (
         "latitude": formData.address.latitude,
         "longitude": formData.address.longitude,
         "address_loc": formData.address.location,
-        // "coupon_id": formData.coupon?.id || undefined,
-        "coupon_id": undefined,
-        "service_id": 1,
+        "coupon_id": isCouponExpired(formData.coupon) ? undefined : formData.coupon.id,
+        "service_id": Number(formData.mainService || 1),
         "area_id": 3,
         "vehicle_id": vehicles_id,
         "free_status": 0,
@@ -43,7 +48,7 @@ export const mutateBookingPackage = (
         'latitude' : formData.address.latitude,
         'longitude' : formData.address.longitude,
         'address_loc' : formData.address.location,
-        'coupon_id' : formData.coupon?.id || 0,
+        'coupon_id' : isCouponExpired(formData.coupon) ? 0 : formData.coupon.id,
         'service_id' : Number(formData.mainService || 1),
         'area_id' : 4,
         'vehicle_id' : vehicles_id,

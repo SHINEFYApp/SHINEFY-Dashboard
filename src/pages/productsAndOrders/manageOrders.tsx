@@ -2,33 +2,42 @@ import { Form, Formik } from "formik";
 import { FormInput } from "../../common/FormInput";
 import { ArrowUpToLine, Eye, Search, Trash2 } from "lucide-react";
 import { FormDropdown } from "../../common/FormDropdown";
-import { dummyOrders, exportTypes } from "../../constants/data";
+import { exportTypes } from "../../constants/data";
 import { CustomTable } from "../../common/CustomTable";
 import { useState } from "react";
+import { useGetOrders } from "../../api/features/products.hooks";
 
 export default function ManageOrders(){
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
+
+    const { data: ordersData, isLoading } = useGetOrders({
+        per_page: pageSize,
+    });
+
+    const orders = ordersData?.data ?? [];
+    const totalEntries = ordersData?.meta?.total ?? 0;
+    const totalPages = ordersData?.meta?.last_page ?? 1;
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
 
-    const handleSubmit = (values : {search : string , export: string}) => {
+    const handleSubmit = (values: { search: string; export: string }) => {
         console.log(`Search values: ${values.search} | Export File Extantion: ${values.export} `);
     };
-     const columns = [
+
+    const columns = [
         {
             key: "hash",
             title: "#",
         },
         {
-            key: "orderId",
+            key: "id",
             title: "Order Id",
         },
         {
-            key: "items",
+            key: "items_count",
             title: "Items",
         },
         {
@@ -40,8 +49,8 @@ export default function ManageOrders(){
             title: "Status",
         },
         {
-            key: "createDateAndTime",
-            title: "Create Date & Time",
+            key: "created_at",
+            title: "Created At",
         },
         {
             key: "action",
@@ -69,7 +78,18 @@ export default function ManageOrders(){
                 </div>
             ),
         },
-    ]
+    ];
+
+    const mappedData = orders.map((order, index) => ({
+        hash: ((currentPage - 1) * pageSize) + index + 1,
+        id: order.id,
+        user_id: order.user_id,
+        items_count: order.items_count,
+        total: order.total,
+        status: order.status,
+        created_at: order.created_at,
+    }));
+
     return(
         <main className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen }`}>
             <div className="mb-10">
@@ -82,7 +102,7 @@ export default function ManageOrders(){
                         handleSubmit(values)
                     }}
                 >
-                    {({}) => (
+                    {() => (
                         <Form>
                             <div className="flex justify-between">
                                 <div className="flex items-center gap-2">
@@ -115,12 +135,13 @@ export default function ManageOrders(){
             </div>
             <CustomTable
                 columns={columns}
-                data={dummyOrders}
+                data={mappedData}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalEntries={totalEntries}
                 pageSize={pageSize}
                 onPageChange={handlePageChange}
+                isLoading={isLoading}
             />
         </main>
     )

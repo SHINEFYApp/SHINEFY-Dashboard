@@ -1,76 +1,125 @@
 import { Form, Formik } from "formik";
 import { FormInput } from "../../../common/FormInput";
-import { ArrowUpToLine, Eye, Search, Trash2 } from "lucide-react";
-import type { FilterFormValuesOnlySearch } from "../../../types/bookings";
-import { useState } from "react";
+import { ArrowUpToLine, Search, Trash2 } from "lucide-react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router";
 import { FormDropdown } from "../../../common/FormDropdown";
 import { CustomTable } from "../../../common/CustomTable";
-import { dummyManageFqs, exportTypes } from "../../../constants/data";
+import { exportTypes } from "../../../constants/data";
+import {
+    useGetFaqs,
+    useDeleteFaq,
+} from "../../../api/features/faqs.hooks";
+import { exportFaqs } from "../../../api/features/faqs";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
-
-const columns = [
-    {
-        key: "questionEnglish",
-        title: "Question (English)",
-    },
-    {
-        key: "answerEnglish",
-        title: "Answer (English)",
-    },
-    {
-        key: "questionArabic",
-        title: "Question (Arabic)",
-    },
-    {
-        key: "answerArabic",
-        title: "Answer (Arabic)",
-    },
-    {
-        key: "action",
-        title: "Action",
-        render: () => (
-            <div className="flex gap-2 items-center">
-                <button
-                    className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] p-2 font-semibold transition-colors"
-                    onClick={() => alert('updated item')}
-                >
-                    <ArrowUpToLine /> update
-                </button>
-                <button
-                    className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] p-2 font-semibold transition-colors"
-                    onClick={() => alert('deleted item')}
-                >
-                    <Trash2 /> delete
-                </button>
-            </div>
-        ),
-    },
-]
-
-export default function Managefaqs(){
-    const handleSubmit = (values: FilterFormValuesOnlySearch) => {
-        console.log("Search values:", values);
-    };
-
+export default function Managefaqs() {
+    const queryClient = useQueryClient();
+    const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
-    
 
-    const totalEntries = 205;
-    const totalPages = Math.ceil(totalEntries / pageSize);
+    const { data, isLoading } = useGetFaqs({
+        page: currentPage - 1,
+        limit: pageSize,
+        search,
+    });
 
+    const deleteMutation = useDeleteFaq({
+        onSuccess: () => {
+            toast.success("FAQ deleted successfully");
+            queryClient.invalidateQueries({ queryKey: ["faqs"] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.data?.message || "Failed to delete FAQ");
+        },
+    });
 
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+    const handleDelete = useCallback((id: number) => {
+        if (window.confirm("Delete this FAQ?")) {
+            deleteMutation.mutate(id);
+        }
+    }, [deleteMutation]);
+
+    const faqs = data?.data?.faqs || [];
+    const total = data?.data?.total || 0;
+    const totalPages = Math.ceil(total / pageSize);
+
+    const handleExport = async (type: string) => {
+        if (!type) return;
+        try {
+            const blob = await exportFaqs(type.toLowerCase() as "csv" | "excel" | "pdf", search);
+            const ext = type.toLowerCase();
+            const filename = `Shinefy Manage FAQs.${ext === "excel" ? "xlsx" : ext}`;
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch {
+            toast.error("Failed to export FAQs");
+        }
     };
-    return(
+
+    const handleSubmit = (values: { search: string; export: string }) => {
+        setSearch(values.search);
+        setCurrentPage(1);
+        if (values.export) {
+            handleExport(values.export);
+        }
+    };
+
+    const columns = [
+        {
+            key: "question_in_english",
+            title: "Question (English)",
+        },
+        {
+            key: "answer_in_english",
+            title: "Answer (English)",
+        },
+        {
+            key: "question_in_arabic",
+            title: "Question (Arabic)",
+        },
+        {
+            key: "answer_in_arabic",
+            title: "Answer (Arabic)",
+        },
+        {
+            key: "action",
+            title: "Action",
+            render: (_value: any, row: any) => (
+                <div className="flex gap-2 items-center">
+                    <Link
+                        to={`/technicalSupport/manage/faqs/edit/${row.faq_id}`}
+                        className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] p-2 font-semibold transition-colors"
+                    >
+                        <ArrowUpToLine /> update
+                    </Link>
+                    <button
+                        className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] p-2 font-semibold transition-colors"
+                        onClick={() => handleDelete(row.faq_id)}
+                    >
+                        <Trash2 /> delete
+                    </button>
+                </div>
+            ),
+        },
+    ];
+
+    return (
         <main>
             <div className={`w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen`}>
                 <div className="mb-6">
                     <Formik
                         initialValues={{
-                            search : ''
+                            search: "",
+                            export: "",
                         }}
                         onSubmit={handleSubmit}
                     >
@@ -78,16 +127,15 @@ export default function Managefaqs(){
                             <Form>
                                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
                                     <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
-                                    {/* left side  */}
-                                    <div className="w-full md:w-52 lg:w-[446px] mb-2 -space-y-2">
-                                        <FormInput
-                                            name="search"
-                                            label=""
-                                            placeholder="Search"
-                                            icon={<Search className="w-5 h-5" />}
-                                            className="mb-0"
-                                            checkmark={false}
-                                        />
+                                        <div className="w-full md:w-52 lg:w-[446px] mb-2 -space-y-2">
+                                            <FormInput
+                                                name="search"
+                                                label=""
+                                                placeholder="Search"
+                                                icon={<Search className="w-5 h-5" />}
+                                                className="mb-0"
+                                                checkmark={false}
+                                            />
                                         </div>
                                         <button
                                             type="submit"
@@ -96,7 +144,6 @@ export default function Managefaqs(){
                                             Search
                                         </button>
                                     </div>
-                                    {/* right side  */}
                                     <div className="flex flex-col lg:flex-row items-center gap-5">
                                         <div className="flex flex-col lg:flex-row items-center gap-5">
                                             <Link
@@ -107,7 +154,7 @@ export default function Managefaqs(){
                                             </Link>
                                             <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                                             <div className="w-full lg:w-[135px]">
-                                                <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2" />
+                                                <FormDropdown name="export" label="" placeholder={"Export"} options={exportTypes} className="mb-2" />
                                             </div>
                                         </div>
                                     </div>
@@ -116,17 +163,17 @@ export default function Managefaqs(){
                         )}
                     </Formik>
                 </div>
-                {/* table  */}
                 <CustomTable
                     columns={columns}
-                    data={dummyManageFqs}
+                    data={faqs}
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    totalEntries={totalEntries}
+                    totalEntries={total}
                     pageSize={pageSize}
-                    onPageChange={handlePageChange}
+                    onPageChange={setCurrentPage}
+                    isLoading={isLoading}
                 />
             </div>
         </main>
-    )
+    );
 }

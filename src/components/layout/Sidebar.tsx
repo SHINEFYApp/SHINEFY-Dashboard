@@ -164,6 +164,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 },
                 {
                     icon: null,
+                    label: 'Manage Special Service',
+                    path: '/services&extra/manage/SpecialService',
+                    permissionId: PRIVILEGES.MANAGE_SPECIAL_SERVICE,
+                },
+                {
+                    icon: null,
                     label: 'Manage Coupon',
                     path: '/services&extra/manage/Coupon',
                     permissionId: PRIVILEGES.MANAGE_COUPON,
@@ -253,12 +259,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     path: '/financial&points/manage/bonusPoint',
                     permissionId: PRIVILEGES.MANAGE_BONUS_POINT,
                 },
-                {
-                    icon: null,
-                    label: 'Admin Earning',
-                    path: '/financial&points/manage/adminEarning',
-                    permissionId: PRIVILEGES.MANAGE_EARNING,
-                }
+                // {
+                //     icon: null,
+                //     label: 'Admin Earning',
+                //     path: '/financial&points/manage/adminEarning',
+                //     permissionId: PRIVILEGES.MANAGE_EARNING,
+                // }
             ],
         },
         {

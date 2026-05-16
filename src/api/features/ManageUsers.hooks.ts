@@ -14,6 +14,7 @@ import {
     editUserStatus,
     editOtpStatus,
     getCompanies,
+    editUserProfile,
     type UsersParams,
     type ExportUsersPayload,
     type UserDetailsParams,
@@ -23,7 +24,8 @@ import {
     type StatusUpdateParams,
     type AddLocationParams,
     type EditLocationParams,
-    type EditVehicleParams
+    type EditVehicleParams,
+    type EditProfileParams
 } from "./ManageUsers.services";
 
 // Get all users
@@ -142,6 +144,14 @@ export const useEditUserLocation = (options?: any) => {
 export const useEditUserVehicle = (options?: any) => {
     return useMutation<any, AxiosError, EditVehicleParams>({
         mutationFn: (params: EditVehicleParams) => editUserVehicle(params),
+        ...options
+    });
+};
+
+// Edit user profile (Mutation)
+export const useEditUserProfile = (options?: any) => {
+    return useMutation<any, AxiosError, EditProfileParams>({
+        mutationFn: (params: EditProfileParams) => editUserProfile(params),
         ...options
     });
 };

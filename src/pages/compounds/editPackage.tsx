@@ -1,10 +1,23 @@
+import { useEffect, useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import { FormInput } from "../../common/FormInput";
+import { FormDropdown } from "../../common/FormDropdown";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetPackage, useUpdatePackage } from "../../api/features/compounds.hooks";
+import { useGetServices } from "../../api/features/services.hooks";
+import { useGetExtraServices } from "../../api/features/extraServices.hooks";
+import { useGetSpecialServices } from "../../api/features/specialServices.hooks";
 import { Button } from "../../components/ui/button";
 import { Trash2, Plus } from "lucide-react";
+
+const mapServiceId = (name: string, list: any[]) => {
+    const found = list.find(item => item.name === name);
+    return found ? Number(found.id) : 0;
+};
+
+const buildServiceList = (data: any, nameField: string) =>
+    (data?.data?.services || []).map((s: any) => ({ id: s.id, name: s[nameField] }));
 
 const EditCompoundPackage = () => {
     const { id } = useParams<{ id: string }>();
@@ -12,6 +25,24 @@ const EditCompoundPackage = () => {
     const packageId = Number(id);
 
     const { data, isLoading } = useGetPackage(packageId);
+    const { data: mainServicesData } = useGetServices({ start: 0, length: 100 });
+    const { data: extraServicesData } = useGetExtraServices({ start: 0, length: 100 });
+    const { data: specialServicesData } = useGetSpecialServices({ per_page: 100 });
+
+    const pkg = data?.data?.data;
+
+    const [initialValues, setInitialValues] = useState({
+        name_en: "",
+        name_ar: "",
+        description_en: "",
+        description_ar: "",
+        price: "",
+        period_days: "30",
+        main_services: [] as { service_name: string; quantity: string }[],
+        extra_services: [] as { service_name: string; quantity: string }[],
+        special_services: [] as { service_name: string; quantity: string }[],
+    });
+
     const updateMutation = useUpdatePackage({
         onSuccess: () => {
             toast.success("Package updated successfully");
@@ -20,7 +51,40 @@ const EditCompoundPackage = () => {
         onError: () => toast.error("Failed to update package"),
     });
 
-    const pkg = data?.data?.data;
+    useEffect(() => {
+        if (!pkg || !mainServicesData || !extraServicesData || !specialServicesData) return;
+
+        const mains = buildServiceList(mainServicesData, "service_name");
+        const extras = buildServiceList(extraServicesData, "extra_service_name");
+        const specials = buildServiceList(specialServicesData, "name_en");
+
+        const mapServiceNameById = (id: number, list: any[]) => {
+            const found = list.find(item => Number(item.id) === Number(id));
+            return found ? found.name : "";
+        };
+
+        const mapServices = (services: any[], list: any[]) =>
+            (services || []).map((s: any) => ({
+                service_name: mapServiceNameById(Number(s.pivot?.service_master_id || s.id), list),
+                quantity: String(s.pivot?.quantity || "1"),
+            }));
+
+        setInitialValues({
+            name_en: pkg.name_en || "",
+            name_ar: pkg.name_ar || "",
+            description_en: pkg.description_en || "",
+            description_ar: pkg.description_ar || "",
+            price: pkg.price || "",
+            period_days: pkg.period_days || "30",
+            main_services: mapServices(pkg.main_services, mains),
+            extra_services: mapServices(pkg.extra_services, extras),
+            special_services: mapServices(pkg.special_services, specials),
+        });
+    }, [pkg, mainServicesData, extraServicesData, specialServicesData]);
+
+    const mainServiceOptions = buildServiceList(mainServicesData, "service_name");
+    const extraServiceOptions = buildServiceList(extraServicesData, "extra_service_name");
+    const specialServiceOptions = buildServiceList(specialServicesData, "name_en");
 
     const handleSubmit = (values: any) => {
         const payload: any = {
@@ -33,14 +97,14 @@ const EditCompoundPackage = () => {
         if (values.description_ar) payload.description_ar = values.description_ar;
 
         const mainServices = (values.main_services || [])
-            .filter((s: any) => s.id)
-            .map((s: any) => ({ id: Number(s.id), quantity: Number(s.quantity) }));
+            .filter((s: any) => s.service_name)
+            .map((s: any) => ({ id: mapServiceId(s.service_name, mainServiceOptions), quantity: Number(s.quantity) }));
         const extraServices = (values.extra_services || [])
-            .filter((s: any) => s.id)
-            .map((s: any) => ({ id: Number(s.id), quantity: Number(s.quantity) }));
+            .filter((s: any) => s.service_name)
+            .map((s: any) => ({ id: mapServiceId(s.service_name, extraServiceOptions), quantity: Number(s.quantity) }));
         const specialServices = (values.special_services || [])
-            .filter((s: any) => s.id)
-            .map((s: any) => ({ id: Number(s.id), quantity: Number(s.quantity) }));
+            .filter((s: any) => s.service_name)
+            .map((s: any) => ({ id: mapServiceId(s.service_name, specialServiceOptions), quantity: Number(s.quantity) }));
 
         if (mainServices.length > 0) payload.main_services = mainServices;
         if (extraServices.length > 0) payload.extra_services = extraServices;
@@ -48,12 +112,6 @@ const EditCompoundPackage = () => {
 
         updateMutation.mutate({ id: packageId, data: payload });
     };
-
-    const mapServices = (services: any[]) =>
-        (services || []).map((s: any) => ({
-            id: String(s.pivot?.service_master_id || s.id || ""),
-            quantity: String(s.pivot?.quantity || "1"),
-        }));
 
     if (isLoading) return <div className="p-8">Loading...</div>;
     if (!pkg) return <div className="p-8">Package not found.</div>;
@@ -66,17 +124,8 @@ const EditCompoundPackage = () => {
                     <p className="text-xs text-secondary-500">Update package details</p>
                 </div>
                 <Formik
-                    initialValues={{
-                        name_en: pkg.name_en || "",
-                        name_ar: pkg.name_ar || "",
-                        description_en: pkg.description_en || "",
-                        description_ar: pkg.description_ar || "",
-                        price: pkg.price || "",
-                        period_days: pkg.period_days || "30",
-                        main_services: mapServices(pkg.main_services),
-                        extra_services: mapServices(pkg.extra_services),
-                        special_services: mapServices(pkg.special_services),
-                    }}
+                    enableReinitialize
+                    initialValues={initialValues}
                     onSubmit={handleSubmit}
                 >
                     {({ isSubmitting, values }) => (
@@ -101,12 +150,25 @@ const EditCompoundPackage = () => {
                                         <div className="space-y-3">
                                             {values.main_services.map((_, index) => (
                                                 <div key={index} className="flex gap-4 items-start">
-                                                    <FormInput name={`main_services.${index}.id`} label="Service ID" type="number" placeholder="ID" className="flex-1" checkmark={false} />
-                                                    <FormInput name={`main_services.${index}.quantity`} label="Quantity" type="number" placeholder="Qty" className="flex-1" checkmark={false} />
+                                                    <FormDropdown
+                                                        name={`main_services.${index}.service_name`}
+                                                        label="Service Name"
+                                                        placeholder="Select Service"
+                                                        options={mainServiceOptions.map(s => s.name)}
+                                                        className="flex-1"
+                                                    />
+                                                    <FormInput
+                                                        name={`main_services.${index}.quantity`}
+                                                        label="Quantity"
+                                                        type="number"
+                                                        placeholder="Qty"
+                                                        className="flex-1"
+                                                        checkmark={false}
+                                                    />
                                                     <button type="button" onClick={() => remove(index)} className="mt-8 p-2 text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
                                                 </div>
                                             ))}
-                                            <button type="button" onClick={() => push({ id: "", quantity: "1" })} className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"><Plus size={16} /> Add Main Service</button>
+                                            <button type="button" onClick={() => push({ service_name: "", quantity: "1" })} className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"><Plus size={16} /> Add Main Service</button>
                                         </div>
                                     )}
                                 </FieldArray>
@@ -119,12 +181,25 @@ const EditCompoundPackage = () => {
                                         <div className="space-y-3">
                                             {values.extra_services.map((_, index) => (
                                                 <div key={index} className="flex gap-4 items-start">
-                                                    <FormInput name={`extra_services.${index}.id`} label="Service ID" type="number" placeholder="ID" className="flex-1" checkmark={false} />
-                                                    <FormInput name={`extra_services.${index}.quantity`} label="Quantity" type="number" placeholder="Qty" className="flex-1" checkmark={false} />
+                                                    <FormDropdown
+                                                        name={`extra_services.${index}.service_name`}
+                                                        label="Service Name"
+                                                        placeholder="Select Service"
+                                                        options={extraServiceOptions.map(s => s.name)}
+                                                        className="flex-1"
+                                                    />
+                                                    <FormInput
+                                                        name={`extra_services.${index}.quantity`}
+                                                        label="Quantity"
+                                                        type="number"
+                                                        placeholder="Qty"
+                                                        className="flex-1"
+                                                        checkmark={false}
+                                                    />
                                                     <button type="button" onClick={() => remove(index)} className="mt-8 p-2 text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
                                                 </div>
                                             ))}
-                                            <button type="button" onClick={() => push({ id: "", quantity: "1" })} className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"><Plus size={16} /> Add Extra Service</button>
+                                            <button type="button" onClick={() => push({ service_name: "", quantity: "1" })} className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"><Plus size={16} /> Add Extra Service</button>
                                         </div>
                                     )}
                                 </FieldArray>
@@ -137,12 +212,25 @@ const EditCompoundPackage = () => {
                                         <div className="space-y-3">
                                             {values.special_services.map((_, index) => (
                                                 <div key={index} className="flex gap-4 items-start">
-                                                    <FormInput name={`special_services.${index}.id`} label="Service ID" type="number" placeholder="ID" className="flex-1" checkmark={false} />
-                                                    <FormInput name={`special_services.${index}.quantity`} label="Quantity" type="number" placeholder="Qty" className="flex-1" checkmark={false} />
+                                                    <FormDropdown
+                                                        name={`special_services.${index}.service_name`}
+                                                        label="Service Name"
+                                                        placeholder="Select Service"
+                                                        options={specialServiceOptions.map(s => s.name)}
+                                                        className="flex-1"
+                                                    />
+                                                    <FormInput
+                                                        name={`special_services.${index}.quantity`}
+                                                        label="Quantity"
+                                                        type="number"
+                                                        placeholder="Qty"
+                                                        className="flex-1"
+                                                        checkmark={false}
+                                                    />
                                                     <button type="button" onClick={() => remove(index)} className="mt-8 p-2 text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
                                                 </div>
                                             ))}
-                                            <button type="button" onClick={() => push({ id: "", quantity: "1" })} className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"><Plus size={16} /> Add Special Service</button>
+                                            <button type="button" onClick={() => push({ service_name: "", quantity: "1" })} className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"><Plus size={16} /> Add Special Service</button>
                                         </div>
                                     )}
                                 </FieldArray>

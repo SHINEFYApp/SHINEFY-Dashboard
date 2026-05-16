@@ -450,7 +450,7 @@ export interface servicesBoysPayload {
     latitude: string
     longitude: string
     booking_date: string
-    booking_time: string
+    booking_time?: string
     service_duration: number
     service_id: number | string
 }
@@ -557,7 +557,10 @@ export interface BookingFilterState {
 export interface UpdateBookingPayload {
     status: string;
     booking_type?: number;
+    booking_date?: string;
+    booking_time?: string;
     main_service?: number;
+    service_boy_id?: number;
     coupan_amount?: number;
     wallet_amount?: number;
     address_loc?: string;

@@ -1,16 +1,34 @@
-import { useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import { FormInput } from "../../common/FormInput";
 import { FormDropdown } from "../../common/FormDropdown";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useCreatePackage } from "../../api/features/compounds.hooks";
+import { useGetServices } from "../../api/features/services.hooks";
+import { useGetExtraServices } from "../../api/features/extraServices.hooks";
+import { useGetSpecialServices } from "../../api/features/specialServices.hooks";
 import { Button } from "../../components/ui/button";
 import { Trash2, Plus } from "lucide-react";
 import type { FormTextArea } from "../../types/common";
 
+const mapServiceId = (name: string, list: any[]) => {
+    const found = list.find(item => item.name === name);
+    return found ? Number(found.id) : 0;
+};
+
 const AddCompoundPackage = () => {
     const navigate = useNavigate();
+
+    const { data: mainServicesData } = useGetServices({ start: 0, length: 100 });
+    const { data: extraServicesData } = useGetExtraServices({ start: 0, length: 100 });
+    const { data: specialServicesData } = useGetSpecialServices({ per_page: 100 });
+
+    const buildServiceList = (data: any, nameField: string) =>
+        (data?.data?.services || []).map((s: any) => ({ id: s.id, name: s[nameField] }));
+
+    const availableMainServices = buildServiceList(mainServicesData, "service_name");
+    const availableExtraServices = buildServiceList(extraServicesData, "extra_service_name");
+    const availableSpecialServices = buildServiceList(specialServicesData, "name_en");
 
     const createMutation = useCreatePackage({
         onSuccess: () => {
@@ -31,14 +49,14 @@ const AddCompoundPackage = () => {
         if (values.description_ar) payload.description_ar = values.description_ar;
 
         const mainServices = (values.main_services || [])
-            .filter((s: any) => s.id)
-            .map((s: any) => ({ id: Number(s.id), quantity: Number(s.quantity) }));
+            .filter((s: any) => s.service_name)
+            .map((s: any) => ({ id: mapServiceId(s.service_name, availableMainServices), quantity: Number(s.quantity) }));
         const extraServices = (values.extra_services || [])
-            .filter((s: any) => s.id)
-            .map((s: any) => ({ id: Number(s.id), quantity: Number(s.quantity) }));
+            .filter((s: any) => s.service_name)
+            .map((s: any) => ({ id: mapServiceId(s.service_name, availableExtraServices), quantity: Number(s.quantity) }));
         const specialServices = (values.special_services || [])
-            .filter((s: any) => s.id)
-            .map((s: any) => ({ id: Number(s.id), quantity: Number(s.quantity) }));
+            .filter((s: any) => s.service_name)
+            .map((s: any) => ({ id: mapServiceId(s.service_name, availableSpecialServices), quantity: Number(s.quantity) }));
 
         if (mainServices.length > 0) payload.main_services = mainServices;
         if (extraServices.length > 0) payload.extra_services = extraServices;
@@ -62,9 +80,9 @@ const AddCompoundPackage = () => {
                         description_ar: "",
                         price: "",
                         period_days: "30",
-                        main_services: [] as { id: string; quantity: string }[],
-                        extra_services: [] as { id: string; quantity: string }[],
-                        special_services: [] as { id: string; quantity: string }[],
+                        main_services: [] as { service_name: string; quantity: string }[],
+                        extra_services: [] as { service_name: string; quantity: string }[],
+                        special_services: [] as { service_name: string; quantity: string }[],
                     }}
                     onSubmit={handleSubmit}
                 >
@@ -91,13 +109,12 @@ const AddCompoundPackage = () => {
                                         <div className="space-y-3">
                                             {values.main_services.map((_, index) => (
                                                 <div key={index} className="flex gap-4 items-start">
-                                                    <FormInput
-                                                        name={`main_services.${index}.id`}
-                                                        label="Service ID"
-                                                        type="number"
-                                                        placeholder="Service ID"
+                                                    <FormDropdown
+                                                        name={`main_services.${index}.service_name`}
+                                                        label="Service Name"
+                                                        placeholder="Select Service"
+                                                        options={availableMainServices.map(s => s.name)}
                                                         className="flex-1"
-                                                        checkmark={false}
                                                     />
                                                     <FormInput
                                                         name={`main_services.${index}.quantity`}
@@ -118,7 +135,7 @@ const AddCompoundPackage = () => {
                                             ))}
                                             <button
                                                 type="button"
-                                                onClick={() => push({ id: "", quantity: "1" })}
+                                                onClick={() => push({ service_name: "", quantity: "1" })}
                                                 className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"
                                             >
                                                 <Plus size={16} /> Add Main Service
@@ -136,13 +153,12 @@ const AddCompoundPackage = () => {
                                         <div className="space-y-3">
                                             {values.extra_services.map((_, index) => (
                                                 <div key={index} className="flex gap-4 items-start">
-                                                    <FormInput
-                                                        name={`extra_services.${index}.id`}
-                                                        label="Service ID"
-                                                        type="number"
-                                                        placeholder="Service ID"
+                                                    <FormDropdown
+                                                        name={`extra_services.${index}.service_name`}
+                                                        label="Service Name"
+                                                        placeholder="Select Service"
+                                                        options={availableExtraServices.map(s => s.name)}
                                                         className="flex-1"
-                                                        checkmark={false}
                                                     />
                                                     <FormInput
                                                         name={`extra_services.${index}.quantity`}
@@ -163,7 +179,7 @@ const AddCompoundPackage = () => {
                                             ))}
                                             <button
                                                 type="button"
-                                                onClick={() => push({ id: "", quantity: "1" })}
+                                                onClick={() => push({ service_name: "", quantity: "1" })}
                                                 className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"
                                             >
                                                 <Plus size={16} /> Add Extra Service
@@ -181,13 +197,12 @@ const AddCompoundPackage = () => {
                                         <div className="space-y-3">
                                             {values.special_services.map((_, index) => (
                                                 <div key={index} className="flex gap-4 items-start">
-                                                    <FormInput
-                                                        name={`special_services.${index}.id`}
-                                                        label="Service ID"
-                                                        type="number"
-                                                        placeholder="Service ID"
+                                                    <FormDropdown
+                                                        name={`special_services.${index}.service_name`}
+                                                        label="Service Name"
+                                                        placeholder="Select Service"
+                                                        options={availableSpecialServices.map(s => s.name)}
                                                         className="flex-1"
-                                                        checkmark={false}
                                                     />
                                                     <FormInput
                                                         name={`special_services.${index}.quantity`}
@@ -208,7 +223,7 @@ const AddCompoundPackage = () => {
                                             ))}
                                             <button
                                                 type="button"
-                                                onClick={() => push({ id: "", quantity: "1" })}
+                                                onClick={() => push({ service_name: "", quantity: "1" })}
                                                 className="flex items-center gap-2 text-sm text-[#4CAF50] font-semibold"
                                             >
                                                 <Plus size={16} /> Add Special Service

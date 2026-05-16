@@ -14,6 +14,7 @@ export function CustomTable<T extends Record<string, any>>({
     pageSize,
     onPageChange,
     isLoading = false,
+    onRowClick,
 }: TableProps<T>) {
 
 
@@ -63,10 +64,12 @@ export function CustomTable<T extends Record<string, any>>({
                             data.map((row, rowIndex) => (
                                 <tr
                                     key={rowIndex}
+                                    onClick={() => onRowClick?.(row)}
                                     className={cn(
                                         "border-b border-gray-100 transition-colors",
                                         rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50/40",
-                                        "hover:bg-blue-50/40"
+                                        "hover:bg-blue-50/40",
+                                        onRowClick && "cursor-pointer"
                                     )}
                                 >
                                     {columns.map((column, colIndex) => (
