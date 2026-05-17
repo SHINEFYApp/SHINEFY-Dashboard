@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell } from 'recharts';
-import { Calendar, FileDown, MapPin } from 'lucide-react';
+import { Calendar, FileDown, MapPin, X } from 'lucide-react';
+import { Formik, Form } from "formik";
 import { useGetServiceBoyDetails, useGetServiceBoyAreas, useGetServiceBoyBookings } from "../../../api/features/serviceBoys.hooks";
 import { CustomTable } from "../../../common/CustomTable";
-import { useMemo } from 'react';
+import { FormDatePicker } from "../../../common/FormDatePicker";
+import { FormDropdown } from "../../../common/FormDropdown";
 
 const chartData = [
   { name: 'Fri', uv: 60, color: '#FF6B4A' },
@@ -42,10 +44,20 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
+const STATUS_OPTIONS = ["Pending", "In Progress", "Completed", "Canceled", "Confirmed"];
+const STATUS_MAP: Record<string, { label: string; className: string }> = {
+    "0": { label: "Pending", className: "bg-yellow-100 text-yellow-800" },
+    "1": { label: "In Progress", className: "bg-blue-100 text-blue-800" },
+    "2": { label: "Completed", className: "bg-green-100 text-green-800" },
+    "3": { label: "Canceled", className: "bg-red-100 text-red-800" },
+    "4": { label: "Confirmed", className: "bg-indigo-100 text-indigo-800" },
+};
+
 const ServiceBoyDetails = () => {
     const { id } = useParams();
     const [currentPage, setCurrentPage] = useState(1);
     const [activeTab, setActiveTab] = useState('Service Boy Details');
+    const [filters, setFilters] = useState({ status: "", date_from: "", date_to: "" });
     const pageSize = 10;
 
     const { data: responseData, isLoading, isError } = useGetServiceBoyDetails(id as string);
@@ -53,6 +65,9 @@ const ServiceBoyDetails = () => {
     const { data: bookingsResponse, isLoading: isLoadingBookings } = useGetServiceBoyBookings(id as string, {
         start: currentPage,
         limit: pageSize,
+        ...(filters.status && { status: filters.status }),
+        ...(filters.date_from && { date_from: filters.date_from }),
+        ...(filters.date_to && { date_to: filters.date_to }),
     });
 
     const tabs = ['Service Boy Details', 'Booking History', 'My Area', 'Daily Report'];
@@ -77,20 +92,11 @@ const ServiceBoyDetails = () => {
         {
             key: "status",
             title: "Status",
-            render: (status: number) => {
-                const statusStyles: Record<number, string> = {
-                    0: "bg-blue-100 text-blue-800",
-                    1: "bg-green-100 text-green-800",
-                    2: "bg-red-100 text-red-800",
-                };
-                const statusLabels: Record<number, string> = {
-                    0: "Pending",
-                    1: "Completed",
-                    2: "Cancelled",
-                };
+            render: (status: number | string) => {
+                const s = STATUS_MAP[String(status)] || STATUS_MAP["0"];
                 return (
-                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${statusStyles[status] || "bg-gray-100 text-gray-800"}`}>
-                        {statusLabels[status] || "Unknown"}
+                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${s.className}`}>
+                        {s.label}
                     </span>
                 );
             }
@@ -282,6 +288,61 @@ const ServiceBoyDetails = () => {
             
             {activeTab === 'Booking History' && (
                 <div className="px-6">
+                    <Formik
+                        initialValues={{ status: "", date_from: "", date_to: "" }}
+                        onSubmit={(values) => {
+                            setFilters(values);
+                            setCurrentPage(1);
+                        }}
+                    >
+                        {({ resetForm }) => (
+                            <Form>
+                                <div className="flex flex-wrap items-end gap-4 mb-6">
+                                    <div className="w-44">
+                                        <FormDropdown
+                                            name="status"
+                                            label="Status"
+                                            placeholder="All Statuses"
+                                            options={STATUS_OPTIONS}
+                                        />
+                                    </div>
+                                    <div className="w-44">
+                                        <FormDatePicker
+                                            name="date_from"
+                                            label="Date From"
+                                            placeholder="From date"
+                                        />
+                                    </div>
+                                    <div className="w-44">
+                                        <FormDatePicker
+                                            name="date_to"
+                                            label="Date To"
+                                            placeholder="To date"
+                                        />
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        className="px-6 py-3 bg-black text-white rounded-lg text-sm font-semibold hover:bg-black/85 transition-colors"
+                                    >
+                                        Filter
+                                    </button>
+                                    {(filters.status || filters.date_from || filters.date_to) && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                resetForm();
+                                                setFilters({ status: "", date_from: "", date_to: "" });
+                                                setCurrentPage(1);
+                                            }}
+                                            className="px-4 py-3 flex items-center gap-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-200 transition-colors"
+                                        >
+                                            <X className="w-4 h-4" /> Clear
+                                        </button>
+                                    )}
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
                     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
                         <CustomTable
                             columns={bookingColumns}
