@@ -31,14 +31,16 @@ const StatCard = ({ title, value, isLoading, index = 0 }: { title: string; value
     );
 };
 
-const getStatusBadge = (status: number) => {
-    const statusMap: { [key: number]: { label: string; className: string } } = {
-        0: { label: "Cancelled", className: "bg-red-100 text-red-800" },
-        1: { label: "Pending", className: "bg-yellow-100 text-yellow-800" },
-        2: { label: "Confirmed", className: "bg-blue-100 text-blue-800" },
-        3: { label: "Completed", className: "bg-green-100 text-green-800" },
-    };
-    const s = statusMap[status] || statusMap[0];
+const STATUS_MAP: Record<string, { label: string; className: string }> = {
+    "0": { label: "Pending", className: "bg-yellow-100 text-yellow-800" },
+    "1": { label: "In Progress", className: "bg-blue-100 text-blue-800" },
+    "2": { label: "Completed", className: "bg-green-100 text-green-800" },
+    "3": { label: "Canceled", className: "bg-red-100 text-red-800" },
+    "4": { label: "Confirmed", className: "bg-indigo-100 text-indigo-800" },
+};
+
+const getStatusBadge = (status: number | string) => {
+    const s = STATUS_MAP[String(status)] || STATUS_MAP["0"];
     return <span className={cn("px-3 py-1 rounded-full text-xs font-semibold", s.className)}>{s.label}</span>;
 };
 
