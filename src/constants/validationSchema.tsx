@@ -565,8 +565,8 @@ export const BroadcastSelectTemplesValidationSchema = Yup.object({
     .min(2, 'Message must be at least 2 characters')
     .max(250, 'Message must be at most 250 characters'),
   search_temple: Yup.array()
-    .min(1, 'Select at least one temple')
-    .required('Temples are required'),
+    .min(1, 'Select at least one service boy')
+    .required('Service boys are required'),
 });
 
 export const BroadcastGroupValidationSchema = Yup.object({

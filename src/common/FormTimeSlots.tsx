@@ -13,6 +13,8 @@ interface FormTimeSlotsProps {
     date?: string;
     serviceBoyId?: number;
     serviceTime?: number;
+    latitude?: string;
+    longitude?: string;
     onSelect?: (time: string) => void;
 }
 
@@ -46,6 +48,8 @@ export const FormTimeSlots = ({
     date: dateProp,
     serviceBoyId,
     serviceTime,
+    latitude,
+    longitude,
     onSelect,
 }: FormTimeSlotsProps) => {
     const [field, meta, helpers] = useField(name);
@@ -58,10 +62,14 @@ export const FormTimeSlots = ({
         date: string;
         service_boy_id?: number;
         service_time?: number;
+        latitude?: string;
+        longitude?: string;
     } = { date: bookingDate || '' };
 
     if (serviceBoyId) params.service_boy_id = serviceBoyId;
     if (serviceTime) params.service_time = serviceTime;
+    if (latitude) params.latitude = latitude;
+    if (longitude) params.longitude = longitude;
 
     const { data: slotsData, isLoading } = useGetAdminSlots(params);
 

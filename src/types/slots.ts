@@ -139,6 +139,8 @@ export interface GetAdminSlotsParams {
     area_id?: number;
     service_time?: number;
     service_boy_id?: number;
+    latitude?: string;
+    longitude?: string;
 }
 
 export interface GetAdminSlotsResponse {

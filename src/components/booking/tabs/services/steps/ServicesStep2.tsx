@@ -139,6 +139,8 @@ export default function ServicesStep2({
     const { data: slotsData, isLoading: slotsLoading } = useGetAdminSlots({
         date: formData.bookingDate || '',
         service_time: totalServiceTime > 0 ? totalServiceTime : undefined,
+        latitude: formData.address?.latitude || undefined,
+        longitude: formData.address?.longitude || undefined,
     });
 
     const available_service_boys = useMemo(
@@ -275,6 +277,8 @@ export default function ServicesStep2({
                                 icon={<Clock className="size-5" />}
                                 date={formData.bookingDate}
                                 serviceTime={totalServiceTime}
+                                latitude={formData.address?.latitude}
+                                longitude={formData.address?.longitude}
                                 onSelect={(time) => {
                                     setFormData((prev) => ({ ...prev, bookingTime: time }));
                                 }}
