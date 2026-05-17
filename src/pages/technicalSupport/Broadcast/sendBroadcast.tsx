@@ -34,6 +34,7 @@ import {
   useAddCommonMessage,
   useDeleteCommonMessage,
 } from "../../../api/features/broadcast.hooks";
+import { useGetServiceBoys } from "../../../api/features/serviceBoys.hooks";
 import { toast } from "sonner";
 import { Trash2, Plus, Search } from "lucide-react";
 import { CustomTable } from "../../../common/CustomTable";
@@ -260,7 +261,12 @@ export default function SendBroadcast() {
   const { data: broadcastData } = useGetBroadcastData();
 
   const users = broadcastData?.data?.users || [];
-  const temples = broadcastData?.data?.temples || [];
+  const { data: serviceBoysRes } = useGetServiceBoys({ limit: 100 }, { refetchInterval: false });
+  const temples = ((serviceBoysRes as any)?.data?.data?.data || []).map((sb: any) => ({
+    user_id: sb.user_id,
+    name: sb.name,
+    phone: sb.phone_number,
+  }));
   const apiGroups = broadcastData?.data?.groups || [];
   const groups = [...staticGroups, ...apiGroups];
 
@@ -275,11 +281,11 @@ export default function SendBroadcast() {
     onError: (err: any) => toast.error(err?.response?.data?.message || "Failed"),
   });
   const sendAllTemples = useSendBroadcastAllTemples({
-    onSuccess: () => toast.success("Broadcast sent to all temples"),
+    onSuccess: () => toast.success("Broadcast sent to all service boys"),
     onError: (err: any) => toast.error(err?.response?.data?.message || "Failed"),
   });
   const sendSelectTemples = useSendBroadcastSelectTemples({
-    onSuccess: () => toast.success("Broadcast sent to selected temples"),
+    onSuccess: () => toast.success("Broadcast sent to selected service boys"),
     onError: (err: any) => toast.error(err?.response?.data?.message || "Failed"),
   });
   const sendGroup = useSendBroadcastGroup({
@@ -519,7 +525,7 @@ export default function SendBroadcast() {
                             onChange={(ids) =>
                               setValues({ ...values, search_temple: ids })
                             }
-                            label="Select Temples (Service Boys)"
+                            label="Select Service Boys"
                           />
                         </>
                       )}

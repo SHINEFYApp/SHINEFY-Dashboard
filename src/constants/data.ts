@@ -411,8 +411,8 @@ export const manageAreaTabs = [
 export const broadcastTabs = [
     { id: 'allUsers', label: 'All Users' },
     { id: 'selectUsers', label: 'Select Users' },
-    { id: 'allTemples', label: 'All Temples' },
-    { id: 'selectTemples', label: 'Select Temples' },
+    { id: 'allTemples', label: 'All Service Boys' },
+    { id: 'selectTemples', label: 'Select Service Boys' },
     { id: 'group', label: 'Group' },
 ];
 

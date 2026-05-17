@@ -7,14 +7,18 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { Box, CarFront, HandCoins, Headphones, Map, Settings, Users } from 'lucide-react';
+import { Box, CarFront, HandCoins, Headphones, Map, Settings, Users, LogOut } from 'lucide-react';
 
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { usePermissions } from '../../hooks/usePermissions';
 import { PRIVILEGES } from '../../constants/permissions';
+import { logout } from '../../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
     const { hasPermission } = usePermissions();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
 
     useEffect(() => {
@@ -355,7 +359,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     isCollapsed ? 'w-20' : 'w-72'
                 )}
             >
-                <div className='h-screen overflow-y-auto scrollbar-hide'>
+                <div className='flex flex-col h-screen'>
                     {/* Logo */}
                     <div className="sticky top-0 bg-[#1a1a1a] z-50 flex items-center justify-center h-20 border-b border-secondary-800/50 px-4">
                         <div className="flex items-center gap-2 overflow-hidden">
@@ -364,7 +368,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     </div>
 
                     {/* Menu Items */}
-                    <nav className="mt-6 px-3 space-y-2">
+                    <nav className="flex-1 overflow-y-auto scrollbar-hide mt-6 px-3 space-y-2">
                         {menuItems.map((item) => {
                             const isMenuActive = item.path ? currentPath === item.path : item.isActive;
 
@@ -479,6 +483,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                             );
                         })}
                     </nav>
+
+                    {/* Logout */}
+                    <div className="px-3 py-4 border-t border-gray-700/50 bg-[#1a1a1a] z-40">
+                        <button
+                            onClick={() => {
+                                dispatch(logout());
+                                navigate("/login");
+                            }}
+                            className={cn(
+                                "w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-200 text-gray-300 hover:bg-red-500/10 hover:text-red-400"
+                            )}
+                        >
+                            <LogOut className="w-5 h-5" />
+                            {!isCollapsed && (
+                                <span className="text-base font-medium whitespace-nowrap">Logout</span>
+                            )}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Toggle Button */}

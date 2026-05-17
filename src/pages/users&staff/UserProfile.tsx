@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Search, Eye, ArrowUpToLine, Trash2, Plus, Pencil, X, Calendar } from "lucide-react";
+import { Search, Eye, ArrowUpToLine, Trash2, Plus, Pencil, X, Calendar, CarFront, LayoutGrid, ScrollText, SprayCan } from "lucide-react";
 import { Form, Formik } from "formik";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,9 +16,17 @@ import {
     useEditUserVehicle,
     useEditUserProfile,
 } from "../../api/features/ManageUsers.hooks";
+import {
+    useGetMakesList,
+    useGetModelsByMake,
+    useGetColorsList,
+    useGetCategoriesList,
+} from "../../api/features/manageVehicles.hooks";
 import { CustomTable } from "../../common/CustomTable";
 import { FormInput } from "../../common/FormInput";
 import { FormDropdown } from "../../common/FormDropdown";
+import LocationPicker from "../../common/LocationPicker";
+import { SearchableFormDropdown } from "../../common/SearchableFormDropdown";
 import { FormDateRangePicker } from "../../common/FormDateRangePicker";
 
 const tabs = [
@@ -61,6 +69,7 @@ export default function UserProfile() {
     const [vehicleModal, setVehicleModal] = useState<{ open: boolean; data?: any }>({
         open: false,
     });
+    const [selectedMakeId, setSelectedMakeId] = useState<number>(0);
     const [profileModal, setProfileModal] = useState<{ open: boolean; data?: any }>({
         open: false,
     });
@@ -101,6 +110,30 @@ export default function UserProfile() {
         from_date: packagesFromDate || undefined,
         to_date: packagesToDate || undefined,
     });
+
+    // Vehicle dropdown data
+    const { data: makesData } = useGetMakesList({ per_page: 100 });
+    const { data: modelsData } = useGetModelsByMake(selectedMakeId);
+    const { data: colorsData } = useGetColorsList({ per_page: 100 });
+    const { data: categoriesData } = useGetCategoriesList({ per_page: 100 });
+
+    const makes = makesData?.data?.makes ?? [];
+    const models = modelsData?.data?.models ?? modelsData?.data ?? [];
+    const colors = colorsData?.data?.colors ?? [];
+    const categories = categoriesData?.data?.categories ?? [];
+
+    const makeOptions = Array.isArray(makes)
+        ? makes.map((m: any) => ({ value: m.make_id.toString(), label: m.make_name }))
+        : [];
+    const modelOptions = Array.isArray(models)
+        ? models.map((m: any) => ({ value: m.model_id.toString(), label: m.model_name }))
+        : [];
+    const colorOptions = Array.isArray(colors)
+        ? colors.map((c: any) => ({ value: c.color_id.toString(), label: c.color_name }))
+        : [];
+    const categoryOptions = Array.isArray(categories)
+        ? categories.map((c: any) => ({ value: c.car_category_id.toString(), label: c.car_category_name_english }))
+        : [];
 
     // Mutations
     const { mutate: addLocation, isPending: isAddingLocation } = useAddUserLocation({
@@ -774,7 +807,7 @@ export default function UserProfile() {
                             }
                         }}
                     >
-                        {({ isValid }) => (
+                        {({ isValid, setFieldValue, values }) => (
                             <Form className="space-y-4">
                                 <FormInput
                                     name="name"
@@ -788,6 +821,19 @@ export default function UserProfile() {
                                     placeholder="Full address"
                                     checkmark={false}
                                 />
+                                <div>
+                                    <label className="text-sm font-medium text-gray-600 mb-1.5 block">
+                                        Pick on Map
+                                    </label>
+                                    <LocationPicker
+                                        lat={Number(values.latitude) || 30.0444}
+                                        lng={Number(values.longitude) || 31.2357}
+                                        onLocationChange={(lat, lng) => {
+                                            setFieldValue("latitude", lat);
+                                            setFieldValue("longitude", lng);
+                                        }}
+                                    />
+                                </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <FormInput
                                         name="latitude"
@@ -865,65 +911,78 @@ export default function UserProfile() {
                             });
                         }}
                     >
-                        {({ isValid }) => (
-                            <Form className="space-y-4">
-                                <FormInput
-                                    name="car_category_id"
-                                    label="Car Category ID"
-                                    placeholder="Car category ID"
-                                    type="text"
-                                    checkmark={false}
-                                />
-                                <div className="grid grid-cols-2 gap-4">
-                                    <FormInput
-                                        name="make_id"
-                                        label="Make ID"
-                                        placeholder="Make ID"
-                                        type="text"
-                                        checkmark={false}
+                        {({ isValid, setFieldValue, values }) => {
+                            useEffect(() => {
+                                if (values.make_id) {
+                                    const selectedMake = makes.find((m: any) => m.make_id.toString() === values.make_id);
+                                    if (selectedMake?.make_id && selectedMake.make_id !== selectedMakeId) {
+                                        setSelectedMakeId(selectedMake.make_id);
+                                        setFieldValue('model_id', '');
+                                    }
+                                }
+                            }, [values.make_id]);
+
+                            return (
+                                <Form className="space-y-4">
+                                    <SearchableFormDropdown
+                                        name="car_category_id"
+                                        label="Category"
+                                        placeholder="Select Category"
+                                        icon={<LayoutGrid className="w-5 h-5" />}
+                                        options={categoryOptions}
                                     />
-                                    <FormInput
-                                        name="model_id"
-                                        label="Model ID"
-                                        placeholder="Model ID"
-                                        type="text"
-                                        checkmark={false}
-                                    />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <FormInput
-                                        name="color_id"
-                                        label="Color ID"
-                                        placeholder="Color ID"
-                                        type="text"
-                                        checkmark={false}
-                                    />
-                                    <FormInput
-                                        name="plate_number"
-                                        label="Plate Number"
-                                        placeholder="Plate number"
-                                        type="text"
-                                        checkmark={false}
-                                    />
-                                </div>
-                                <div className="flex justify-between items-center pt-4">
-                                    <button
-                                        type="button"
-                                        onClick={() => setVehicleModal({ open: false })}
-                                        className="w-[168px] border text-[16px] py-3 border-black rounded-[10px]"
-                                    >
-                                        Back
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        disabled={isEditingVehicle}
-                                        className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-10 py-3 rounded-xl text-[16px] shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {isEditingVehicle ? "Saving..." : "Submit"}
-                                    </button>
-                                </div>
-                            </Form>
-                        )}
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <SearchableFormDropdown
+                                            name="make_id"
+                                            label="Make"
+                                            placeholder="Select Make"
+                                            icon={<CarFront className="w-5 h-5" />}
+                                            options={makeOptions}
+                                        />
+                                        <SearchableFormDropdown
+                                            name="model_id"
+                                            label="Model"
+                                            placeholder={values.make_id ? "Select Model" : "Select Make first"}
+                                            icon={<ScrollText className="w-5 h-5" />}
+                                            options={modelOptions}
+                                            disabled={!values.make_id}
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <SearchableFormDropdown
+                                            name="color_id"
+                                            label="Color"
+                                            placeholder="Select Color"
+                                            icon={<SprayCan className="w-5 h-5" />}
+                                            options={colorOptions}
+                                        />
+                                        <FormInput
+                                            name="plate_number"
+                                            label="Plate Number"
+                                            placeholder="Plate number"
+                                            type="text"
+                                            checkmark={false}
+                                        />
+                                    </div>
+                                    <div className="flex justify-between items-center pt-4">
+                                        <button
+                                            type="button"
+                                            onClick={() => setVehicleModal({ open: false })}
+                                            className="w-[168px] border text-[16px] py-3 border-black rounded-[10px]"
+                                        >
+                                            Back
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={isEditingVehicle}
+                                            className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-10 py-3 rounded-xl text-[16px] shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {isEditingVehicle ? "Saving..." : "Submit"}
+                                        </button>
+                                    </div>
+                                </Form>
+                            );
+                        }}
                     </Formik>
                 </div>
             </section>
