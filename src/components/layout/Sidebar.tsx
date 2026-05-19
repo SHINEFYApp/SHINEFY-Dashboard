@@ -69,6 +69,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 },
                 {
                     icon: null,
+                    label: 'Booking Reports',
+                    path: '/bookings/manage/reports',
+                    permissionId: PRIVILEGES.TABULAR_REPORTS,
+                },
+                {
+                    icon: null,
                     label: 'Manage Slot',
                     path: '/bookings/slot',
                     permissionId: PRIVILEGES.MANAGE_SLOT,

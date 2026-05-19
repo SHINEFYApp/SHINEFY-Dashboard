@@ -32,3 +32,18 @@ export const getServices = async (route: string, params?: any) => {
     const res: AxiosResponse = await getService(route, params ? params : null);
     return res.data;
 }
+
+export const getUserBookingsReport = async (route: string, params?: any) => {
+    const res: AxiosResponse = await getService(route, params || null);
+    return res.data;
+}
+
+export const exportUserBookingsReport = async (route: string, params?: any) => {
+    const res: AxiosResponse = await getService(route, { params, responseType: 'blob' });
+    return res.data;
+}
+
+export const getSubareas = async (route: string) => {
+    const res: AxiosResponse = await getService(route);
+    return res.data;
+}

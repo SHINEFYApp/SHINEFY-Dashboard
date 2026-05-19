@@ -24,6 +24,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Bookings']
     },
+    '/bookings/manage/reports': {
+        title: 'Bookings',
+        breadcrumbs: ['Bookings', 'Manage Bookings', 'Booking Reports']
+    },
     '/bookings/manage/:id': {
         title: 'Bookings',
         breadcrumbs: ['Bookings', 'Manage Bookings' , 'Manage Booking By Id']
@@ -329,6 +333,10 @@ export const sidebarMenuItems = [
             {
                 label: 'Manage Bookings',
                 path: '/bookings/manage'
+            },
+            {
+                label: 'Booking Reports',
+                path: '/bookings/manage/reports'
             },
             {
                 label: 'Manage Slot',
