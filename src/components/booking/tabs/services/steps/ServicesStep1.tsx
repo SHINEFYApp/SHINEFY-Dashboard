@@ -221,15 +221,6 @@ export default function ServicesStep1({
                                     icon={<Calendar className="size-5" />}
                                     checkmark={false}
                                 />
-
-                            <div className="flex justify-start">
-                                <Button
-                                    type="submit"
-                                    disabled={!isValid}
-                                    className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-2 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                                >
-                                    {t('bookings.createBooking.next')}
-                                </Button>
                             </div>
 
                             <div className="flex justify-start">
@@ -238,7 +229,7 @@ export default function ServicesStep1({
                                     disabled={!isValid}
                                     className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-2 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                 >
-                                    Next
+                                    {t('bookings.createBooking.next')}
                                 </Button>
                             </div>
                         </Form>
