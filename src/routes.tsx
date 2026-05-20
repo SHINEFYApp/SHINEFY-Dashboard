@@ -44,6 +44,8 @@ import EditSubArea from './pages/Geography&Regions/subPagesAddAreas/editSubArea'
 import ManagePackage from './pages/services&extra/managePackage/managePackage';
 import AddNewPackage from './pages/services&extra/managePackage/addNewPackage';
 import UpdatePackage from './pages/services&extra/managePackage/updatePackage';
+import AddSubscriptionPackage from './pages/services&extra/managePackage/addSubscriptionPackage';
+import ManageSubscription from './pages/services&extra/managePackage/manageSubscription';
 import ManageVat from './pages/Financial & Points/manageVat';
 import ManageDriverCommission from './pages/Financial & Points/manageDriverCommission';
 import ManageBonusPoint from './pages/Financial & Points/manageBonusPoint';
@@ -158,6 +160,8 @@ export const RoutesPages = () => {
         <Route path="/services&extra/manage/package" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><ManagePackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/addPackage" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><AddNewPackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/updatePackage/:id" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><UpdatePackage /></PermissionGuard>} />
+        <Route path="/services&extra/manage/Package/addSubscriptionPackage" element={<PermissionGuard permissionId={P.PACKAGES_SUBSCRIPTION}><AddSubscriptionPackage /></PermissionGuard>} />
+        <Route path="/services&extra/manage/Package/manageSubscriptions" element={<PermissionGuard permissionId={P.PACKAGES_SUBSCRIPTION}><ManageSubscription /></PermissionGuard>} />
 
         {/* Products & Orders (no specific privilege mapping yet) */}
         <Route path="/products&orders/manage/Products" element={<ManageProducts />} />

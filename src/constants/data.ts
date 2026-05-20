@@ -164,6 +164,14 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Services & Extra',
         breadcrumbs: ['Services & Extra', 'Manage Package', 'Add Package']
     },
+    '/services&extra/manage/Package/addSubscriptionPackage': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Package', 'Add Subscription']
+    },
+    '/services&extra/manage/Package/manageSubscriptions': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Package', 'Manage Subscriptions']
+    },
     '/products&orders/manage/Products': {
         title: 'Products & Orders',
         breadcrumbs: ['Products & Orders', 'Manage Products']
