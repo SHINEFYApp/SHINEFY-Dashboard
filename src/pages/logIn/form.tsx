@@ -1,4 +1,5 @@
 import { Form, Formik, Field, ErrorMessage } from "formik";
+import { useTranslation } from "react-i18next";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { useState } from "react";
@@ -11,6 +12,7 @@ import { useLogin } from "../../api/useLogin";
 import { loginSuccess } from "../../redux/slices/authSlice";
 
 export default function LogInForm() {
+    const { t } = useTranslation();
     const [showPass, setShowPass] = useState<boolean>(false);
 
     const initialValues: LoginFormInitialValues = {
@@ -40,21 +42,21 @@ export default function LogInForm() {
                 <div className="w-full rounded-[10px] border border-[#F4F5F6] p-5 bg-[#FFFFFF] flex flex-col justify-between">
                     {/* Email Field */}
                     <div className=" w-full flex flex-col gap-1">
-                        <Label htmlFor="email" className="text-[16px] font-medium text-[#242731]">Email</Label>
+                        <Label htmlFor="email" className="text-[16px] font-medium text-[#242731]">{t('login.email')}</Label>
                         <Field
                             as={Input}
                             name="email"
                             type="email"
                             id="email"
                             className="h-[59px] placeholder:text-[16px] outline-0 placeholder:text-[#616161] rounded-[10px] border border-[#616161] py-[19px] px-5"
-                            placeholder="uistore@gmail.com"
+                            placeholder={t('login.emailPlaceholder')}
                         />
                         <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
 
                     {/* Password Field */}
                     <div className=" w-full flex flex-col gap-1">
-                        <Label htmlFor="password" className="text-[16px] font-medium text-[#242731]">Password</Label>
+                        <Label htmlFor="password" className="text-[16px] font-medium text-[#242731]">{t('login.password')}</Label>
                         <div className="w-full h-[59px] relative">
                             <Field
                                 as={Input}
@@ -62,9 +64,9 @@ export default function LogInForm() {
                                 type={showPass ? "text" : "password"}
                                 id="password"
                                 className="size-full placeholder:text-[16px] outline-0 placeholder:text-[#616161] rounded-[10px] border border-[#616161] py-[19px] px-5"
-                                placeholder="password"
+                                placeholder={t('login.passwordPlaceholder')}
                             />
-                            <div className="h-full w-[15%] flex justify-center items-center absolute top-0 right-0">
+                            <div className="h-full w-[15%] flex justify-center items-center absolute top-0 ltr:right-0 rtl:left-0">
                                 <button
                                     type="button"
                                     onClick={() => setShowPass(!showPass)}
@@ -85,7 +87,7 @@ export default function LogInForm() {
                         checked={values.remember}
                         onCheckedChange={(checked) => setFieldValue("remember", checked)}
                     />
-                    <Label htmlFor="remember">Remember Me</Label>
+                    <Label htmlFor="remember">{t('login.rememberMe')}</Label>
                 </div>
 
                 {/* Submit Button */}
@@ -95,7 +97,7 @@ export default function LogInForm() {
                         disabled={!isValid || isSubmitting}
                         className="size-full bg-[#FFC107] cursor-pointer text-[#FFFAF7] text-[20px] font-bold"
                     >
-                        {isSubmitting ? "Signing in..." : "Sign in"}
+                        {isSubmitting ? t('login.signingIn') : t('login.signIn')}
                     </button>
                 </div>
             </div>

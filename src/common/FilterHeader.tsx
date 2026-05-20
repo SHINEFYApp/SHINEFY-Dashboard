@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Formik, Form } from "formik";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { FormInput } from "./FormInput";
@@ -55,6 +56,7 @@ export const FilterHeader = ({
     exportOptions = ['PDF', 'Excel', 'CSV'],
     onExport
 }: FilterHeaderProps) => {
+    const { t } = useTranslation();
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
     return (
@@ -74,7 +76,7 @@ export const FilterHeader = ({
                                         {/* Header */}
                                         <div className="flex flex-col shrink-0">
                                             <h1 className="text-lg md:text-xl font-bold text-secondary-900">
-                                                Filter
+                                                {t('common.filter')}
                                             </h1>
                                             <p className="text-xs text-secondary-500 whitespace-nowrap">
                                                 {subtitle}
@@ -97,7 +99,7 @@ export const FilterHeader = ({
                                                 type="submit"
                                                 className="w-full sm:w-auto px-6 py-3 h-fit bg-black rounded-lg text-white text-sm font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap shrink-0"
                                             >
-                                                Search
+                                                {t('common.search')}
                                             </button>
                                         </div>
                                     </div>
@@ -157,7 +159,7 @@ export const FilterHeader = ({
                                                 <FormDropdown
                                                     name="export"
                                                     label=""
-                                                    placeholder="Export"
+                                                    placeholder={t('common.export')}
                                                     options={exportOptions}
                                                     onChangeExternal={onExport}
                                                     className="mb-2 w-full"

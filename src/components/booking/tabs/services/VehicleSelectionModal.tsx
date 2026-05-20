@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '../../../../utils/utils';
 import { IoClose } from 'react-icons/io5';
 import { CheckIcon } from 'lucide-react';
@@ -24,6 +25,7 @@ export const VehicleSelectionModal = ({
     dummyDataVehicles,
     isSuccess ,
 }: VehicleSelectionModalProps) => {
+    const { t } = useTranslation();
 
     const toggleVehicle = (vehicle: Vehicle) => {
         const isSelected = selectedVehicles.some(v => v.vehicle_id === vehicle.vehicle_id);
@@ -67,7 +69,7 @@ export const VehicleSelectionModal = ({
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden animate-scale-up">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                <h2 className="text-2xl font-bold text-gray-900">Select Vehicle</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t('bookings.createBooking.vehicleSelectionModal.title')}</h2>
                 <button
                 onClick={handleCancel}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -82,7 +84,7 @@ export const VehicleSelectionModal = ({
                     {
                         (dummyDataVehicles?.length === 0) ? (
                             <div className="h-100 flex justify-center items-center">
-                                <p className="text-gray-400">The Client doesn't have any vehicle</p>
+                                <p className="text-gray-400">{t('bookings.createBooking.vehicleSelectionModal.noVehicle')}</p>
                             </div>
                         ) : (
                             <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
@@ -124,11 +126,11 @@ export const VehicleSelectionModal = ({
 
                                     {/* Detail grid */}
                                     <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-left">
-                                        <DetailRow label="Make" value={vehicle.make_name} />
-                                        <DetailRow label="Model" value={vehicle.model_name} />
-                                        <DetailRow label="Plate No." value={vehicle.plate_number} />
+                                        <DetailRow label={t('bookings.createBooking.vehicleSelectionModal.make')} value={vehicle.make_name} />
+                                        <DetailRow label={t('bookings.createBooking.vehicleSelectionModal.model')} value={vehicle.model_name} />
+                                        <DetailRow label={t('bookings.createBooking.vehicleSelectionModal.plateNo')} value={vehicle.plate_number} />
                                         <div className="flex flex-col">
-                                            <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Color</span>
+                                            <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">{t('bookings.createBooking.vehicleSelectionModal.color')}</span>
                                             <div className="flex items-center gap-1.5 mt-0.5">
                                                 <span
                                                     className="inline-block w-3 h-3 rounded-full border border-gray-200 shrink-0"
@@ -149,26 +151,26 @@ export const VehicleSelectionModal = ({
                 </>
                 :
                 <div className="h-100 flex justify-center items-center">
-                    <p className="text-gray-400">Not Find Any Client</p>
+                    <p className="text-gray-400">{t('bookings.createBooking.vehicleSelectionModal.noClient')}</p>
                 </div>
             }
 
             {/* Footer */}
             <div className="flex items-center justify-between gap-4 p-6 border-t border-gray-100">
-                <p className="text-sm text-gray-600">{selectedVehicles.length} vehicle(s) selected</p>
+                <p className="text-sm text-gray-600">{t('bookings.createBooking.vehicleSelectionModal.vehiclesSelected', { count: selectedVehicles.length })}</p>
                 <div className="flex gap-4">
                 <button
                     onClick={handleCancel}
                     className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors"
                 >
-                    Cancel
+                    {t('bookings.createBooking.vehicleSelectionModal.cancel')}
                 </button>
                 <button
                     onClick={handleDone}
                     disabled={selectedVehicles.length === 0}
                     className="px-8 py-3 bg-primary hover:bg-primary-600 text-gray-900 rounded-xl font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Done
+                    {t('bookings.createBooking.vehicleSelectionModal.done')}
                 </button>
                 </div>
             </div>

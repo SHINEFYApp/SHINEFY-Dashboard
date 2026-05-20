@@ -9,20 +9,14 @@ import { Formik, Form } from "formik";
 import { useGetBookings, useBulkAssignServiceBoy, useGetCompounds } from "../../api/features/compounds.hooks";
 import { useGetServiceBoys } from "../../api/features/serviceBoys.hooks";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { Eye, UserCheck, Search, User, X, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 
-const statusOptions = [
-    { value: "", label: "All Statuses" },
-    { value: "0", label: "Pending" },
-    { value: "1", label: "In Progress" },
-    { value: "2", label: "Completed" },
-    { value: "3", label: "Cancelled" },
-];
-
 const ManageCompoundBookings = () => {
+    const { t } = useTranslation();
     const queryClient = useQueryClient();
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
@@ -34,6 +28,14 @@ const ManageCompoundBookings = () => {
     const [selectedDriver, setSelectedDriver] = useState<{ user_id: number; name: string } | null>(null);
     const [showDriverResults, setShowDriverResults] = useState(false);
     const pageSize = 10;
+
+    const statusOptions = [
+        { value: "", label: t("compounds.manageBookingsPage.allStatuses") },
+        { value: "0", label: t("compounds.manageBookingsPage.statusLabels.pending") },
+        { value: "1", label: t("compounds.manageBookingsPage.statusLabels.inProgress") },
+        { value: "2", label: t("compounds.manageBookingsPage.statusLabels.completed") },
+        { value: "3", label: t("compounds.manageBookingsPage.statusLabels.cancelled") },
+    ];
 
     const { data: compoundsData } = useGetCompounds({ limit: 200 });
     const compoundsList = (compoundsData?.data?.data?.compounds || []) as any[];
@@ -78,19 +80,19 @@ const ManageCompoundBookings = () => {
 
     const bulkMutation = useBulkAssignServiceBoy({
         onSuccess: (res: any) => {
-            const msg = res?.data?.data?.message || "Service boy assigned successfully";
+            const msg = res?.data?.data?.message || t("compounds.manageBookingsPage.bulkModal.assignSuccess");
             toast.success(msg);
             setBulkModalOpen(false);
             setSelectedDriver(null);
             setDriverSearch("");
             queryClient.invalidateQueries({ queryKey: ["compound-bookings"] });
         },
-        onError: () => toast.error("Failed to assign service boy"),
+        onError: () => toast.error(t("compounds.manageBookingsPage.bulkModal.assignFailed")),
     });
 
     const handleBulkAssign = (values: any) => {
         if (!selectedDriver) {
-            toast.error("Please search and select a driver first");
+            toast.error(t("compounds.manageBookingsPage.bulkModal.noDriverSelected"));
             return;
         }
         bulkMutation.mutate({
@@ -101,10 +103,10 @@ const ManageCompoundBookings = () => {
     };
 
     const statusLabels: Record<string, string> = {
-        "0": "Pending",
-        "1": "In Progress",
-        "2": "Completed",
-        "3": "Cancelled",
+        "0": t("compounds.manageBookingsPage.statusLabels.pending"),
+        "1": t("compounds.manageBookingsPage.statusLabels.inProgress"),
+        "2": t("compounds.manageBookingsPage.statusLabels.completed"),
+        "3": t("compounds.manageBookingsPage.statusLabels.cancelled"),
     };
 
     const statusColors: Record<string, string> = {
@@ -115,23 +117,23 @@ const ManageCompoundBookings = () => {
     };
 
     const columns = useMemo(() => [
-        { key: "id", title: "ID" },
+        { key: "id", title: t("compounds.manageBookingsPage.columns.id") },
         {
             key: "user",
-            title: "User",
+            title: t("compounds.manageBookingsPage.columns.user"),
             render: (user: any) => user?.name || "-",
         },
         {
             key: "compound",
-            title: "Compound",
+            title: t("compounds.manageBookingsPage.columns.compound"),
             render: (compound: any) => compound?.name || "-",
         },
-        { key: "service_type", title: "Service" },
-        { key: "scheduled_date", title: "Date" },
-        { key: "period", title: "Period" },
+        { key: "service_type", title: t("compounds.manageBookingsPage.columns.service") },
+        { key: "scheduled_date", title: t("compounds.manageBookingsPage.columns.date") },
+        { key: "period", title: t("compounds.manageBookingsPage.columns.period") },
         {
             key: "status",
-            title: "Status",
+            title: t("compounds.manageBookingsPage.columns.status"),
             render: (status: string) => (
                 <span className={`font-bold ${statusColors[status] || ""}`}>
                     {statusLabels[status] || status}
@@ -140,41 +142,41 @@ const ManageCompoundBookings = () => {
         },
         {
             key: "service_boy",
-            title: "Service Boy",
+            title: t("compounds.manageBookingsPage.columns.serviceBoy"),
             render: (sb: any) => sb?.name || "-",
         },
         {
             key: "action",
-            title: "Action",
+            title: t("compounds.manageBookingsPage.columns.action"),
             render: (_: any, record: any) => (
                 <div className="flex gap-2 items-center text-nowrap">
                     <Link
                         to={`/compounds/bookings/${record.id}`}
                         className="bg-[#D2E3FF] flex items-center gap-2 rounded-[2.75px] text-[#2196F3] border border-[#2196F3] capitalize hover:text-[#D2E3FF] hover:bg-[#2196F3] px-3.5 py-3 font-semibold transition-colors"
                     >
-                        <Eye size={18} /> details
+                        <Eye size={18} /> {t("compounds.manageBookingsPage.details")}
                     </Link>
                 </div>
             ),
         },
-    ], []);
+    ], [t]);
 
     return (
         <main>
             <div className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl">
                 <FilterHeader
-                    subtitle="Manage Bookings"
+                    subtitle={t("compounds.manageBookingsPage.subtitle")}
                     searchInitialValues={{ search: "" }}
                     onSearchSubmit={handleSearchSubmit}
                     filterInitialValues={{ status: "", date: "", compound_id: "" }}
                     onFilterSubmit={handleFilterSubmit}
-                    filterModalTitle="Filter Bookings"
+                    filterModalTitle={t("common.filter")}
                     filterFields={
                         <>
                             <FormDropdown
                                 name="compound_id"
-                                label="Compound"
-                                placeholder="All Compounds"
+                                label={t("compounds.manageBookingsPage.filterCompound")}
+                                placeholder={t("compounds.manageBookingsPage.allCompounds")}
                                 options={compoundsList.map((c: any) => ({
                                     value: String(c.id),
                                     label: c.name_en,
@@ -182,21 +184,21 @@ const ManageCompoundBookings = () => {
                             />
                             <FormDropdown
                                 name="status"
-                                label="Status"
-                                placeholder="All Statuses"
+                                label={t("compounds.manageBookingsPage.filterStatus")}
+                                placeholder={t("compounds.manageBookingsPage.allStatuses")}
                                 options={["0", "1", "2", "3"]}
                             />
                             <FormDatePicker
                                 name="date"
-                                label="Date"
-                                placeholder="Select Date"
+                                label={t("compounds.manageBookingsPage.filterDate")}
+                                placeholder={t("compounds.manageBookingsPage.selectDate")}
                                 checkmark={false}
                             />
                         </>
                     }
                     actionButtons={[
                         {
-                            label: "Bulk Assign",
+                            label: t("compounds.manageBookingsPage.bulkAssign"),
                             variant: "secondary",
                             onClick: () => setBulkModalOpen(true),
                         },
@@ -205,7 +207,7 @@ const ManageCompoundBookings = () => {
                 />
                 <div className="mt-6">
                     {isLoading ? (
-                        <div>Loading...</div>
+                        <div>{t("compounds.manageBookingsPage.loading")}</div>
                     ) : (
                         <CustomTable
                             columns={columns}
@@ -228,8 +230,8 @@ const ManageCompoundBookings = () => {
                     setSelectedDriver(null);
                     setDriverSearch("");
                 }}
-                title="Bulk Assign Service Boy"
-                subtitle="Assign a service boy to all pending bookings for a compound + date"
+                title={t("compounds.manageBookingsPage.bulkModal.title")}
+                subtitle={t("compounds.manageBookingsPage.bulkModal.subtitle")}
             >
                 <Formik
                     initialValues={{ compound_id: "", date: "" }}
@@ -240,23 +242,23 @@ const ManageCompoundBookings = () => {
                             <div className="flex flex-col gap-4">
                                 <FormDropdown
                                     name="compound_id"
-                                    label="Compound *"
-                                    placeholder="Select Compound"
+                                    label={t("compounds.manageBookingsPage.bulkModal.compound")}
+                                    placeholder={t("compounds.manageBookingsPage.bulkModal.selectCompound")}
                                     options={compoundsList.map((c: any) => ({
                                         value: String(c.id),
                                         label: c.name_en,
                                     }))}
                                 />
-                                <FormDatePicker name="date" label="Date *" placeholder="Select date" checkmark={false} />
+                                <FormDatePicker name="date" label={t("compounds.manageBookingsPage.bulkModal.date")} placeholder={t("compounds.manageBookingsPage.bulkModal.selectDate")} checkmark={false} />
 
                                 <div className="space-y-2 relative">
-                                    <label className="text-sm font-medium text-gray-700">Driver *</label>
+                                    <label className="text-sm font-medium text-gray-700">{t("compounds.manageBookingsPage.bulkModal.driver")}</label>
                                     <div className="relative">
                                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                                         <input
                                             type="text"
                                             value={selectedDriver ? selectedDriver.name : driverSearch}
-                                            placeholder="Search driver by name..."
+                                            placeholder={t("compounds.manageBookingsPage.bulkModal.searchDriver")}
                                             onChange={(e) => {
                                                 setDriverSearch(e.target.value);
                                                 setSelectedDriver(null);
@@ -279,7 +281,7 @@ const ManageCompoundBookings = () => {
                                     {showDriverResults && !selectedDriver && driverSearch.length > 1 && (
                                         <div className="absolute z-50 w-full mt-1 rounded-xl border border-gray-200 bg-white shadow-lg max-h-48 overflow-auto">
                                             {isSearchingBoys ? (
-                                                <div className="px-4 py-3 text-sm text-gray-400">Searching...</div>
+                                                <div className="px-4 py-3 text-sm text-gray-400">{t("compounds.manageBookingsPage.bulkModal.searching")}</div>
                                             ) : driverResults.length > 0 ? (
                                                 driverResults.map((boy: any) => (
                                                     <button
@@ -297,7 +299,7 @@ const ManageCompoundBookings = () => {
                                                     </button>
                                                 ))
                                             ) : (
-                                                <div className="px-4 py-3 text-sm text-gray-400">No drivers found</div>
+                                                <div className="px-4 py-3 text-sm text-gray-400">{t("compounds.manageBookingsPage.bulkModal.noDrivers")}</div>
                                             )}
                                         </div>
                                     )}
@@ -317,9 +319,9 @@ const ManageCompoundBookings = () => {
                                     setBulkModalOpen(false);
                                     setSelectedDriver(null);
                                     setDriverSearch("");
-                                }}>Cancel</Button>
+                                }}>{t("compounds.manageBookingsPage.bulkModal.cancel")}</Button>
                                 <Button type="submit" className="bg-primary text-secondary-900 hover:bg-primary-600" disabled={bulkMutation.isPending || !selectedDriver}>
-                                    {bulkMutation.isPending ? "Assigning..." : "Assign"}
+                                    {bulkMutation.isPending ? t("compounds.manageBookingsPage.bulkModal.assigning") : t("compounds.manageBookingsPage.bulkModal.assign")}
                                 </Button>
                             </div>
                         </Form>

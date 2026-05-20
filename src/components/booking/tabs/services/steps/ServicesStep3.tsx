@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import { servicesStep3Schema } from '../../../../../constants/validationSchema';
 import { Button } from '../../../../ui/button';
@@ -20,6 +21,7 @@ const ServicesStep3 = ({
     formData,
     setFormData
 }: stepsProps) => {
+    const { t } = useTranslation();
     const [selectedPayment, setSelectedPayment] = useState<string>(formData.paymentMethod || '');
 
     const handlePaymentSelect = (method: string, setFieldValue: any) => {
@@ -66,7 +68,7 @@ const ServicesStep3 = ({
                 </div>
             }
             <h2 className="text-2xl font-bold text-gray-900 mb-8">
-                Enter reservation data
+                {t('bookings.createBooking.reservationData')}
             </h2>
 
             <Formik
@@ -92,8 +94,8 @@ const ServicesStep3 = ({
                         <div className="mb-8 md:w-1/2 w-full">
                             <DropDownToSendObject
                                 name="coupon"
-                                label="Coupon"
-                                placeholder="Select Coupon"
+                                label={t('bookings.createBooking.step3.coupon')}
+                                placeholder={t('bookings.createBooking.step3.selectCoupon')}
                                 icon={<TicketSlash className="w-5 h-5" />}
                                 options={coupons}
                                 setFormData={setFormData}
@@ -104,7 +106,7 @@ const ServicesStep3 = ({
                         {/* Payment Method */}
                         <div className="mb-8">
                             <label className="text-base font-bold text-gray-900 mb-4 block">
-                                Payment Method
+                                {t('bookings.createBooking.step3.paymentMethod')}
                             </label>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {paymentMethods.map((method) => (
@@ -129,7 +131,7 @@ const ServicesStep3 = ({
                         {/* Wallet Amount */}
                         <div className="mb-8 md:w-1/2 w-full">
                             <label className="text-sm font-medium text-gray-700 mb-2 block">
-                                Wallet Amount
+                                {t('bookings.createBooking.step3.walletAmount')}
                             </label>
                             <div className="relative">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
@@ -138,7 +140,7 @@ const ServicesStep3 = ({
                                 <input
                                     type="text"
                                     name="walletAmount"
-                                    placeholder="Wallet Amount"
+                                    placeholder={t('bookings.createBooking.step3.walletAmount')}
                                     onChange={(e) => {
                                         setFieldValue('walletAmount', e.target.value);
                                         setFormData({ ...formData, walletAmount: e.target.value });
@@ -155,14 +157,14 @@ const ServicesStep3 = ({
                                 onClick={onBack}
                                 className="flex-1 md:flex-none md:px-16 py-2 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all duration-200"
                             >
-                                Back
+                                {t('bookings.createBooking.back')}
                             </button>
                             <Button
                                 type="submit"
                                 disabled={!isValid}
                                 className="flex-1 md:flex-none bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-4 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                             >
-                                Next
+                                {t('bookings.createBooking.next')}
                             </Button>
                         </div>
                     </Form>

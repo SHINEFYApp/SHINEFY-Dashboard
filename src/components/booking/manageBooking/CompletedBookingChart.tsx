@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     BarChart,
     Bar,
@@ -18,6 +19,7 @@ import { generateChartData } from "../../../utils/utils";
 import type { ReportFilters } from "../../../types/bookings";
 
 const CompletedBookingChart = () => {
+    const { t } = useTranslation();
     const [selectedYear, setSelectedYear] = useState("2025");
     const [selectedMonth, setSelectedMonth] = useState("January");
     const [chartData] = useState(generateChartData(dummyDays));
@@ -28,7 +30,7 @@ const CompletedBookingChart = () => {
         endDate: "",
     };
 
-    const statuses = ["All", "Completed", "Pending", "Cancelled"];
+    const statuses = [t('bookings.completedBookingChart.statuses.all'), t('bookings.completedBookingChart.statuses.completed'), t('bookings.completedBookingChart.statuses.pending'), t('bookings.completedBookingChart.statuses.cancelled')];
 
     const getBarColor = (index: number) => index % 2 === 1 ? "#FFC107" : "#FF7043";
 
@@ -52,34 +54,34 @@ const CompletedBookingChart = () => {
                         <div className="flex flex-wrap items-center gap-3">
                             {/* Title */}
                             <h1 className="text-xl md:text-2xl font-bold text-secondary-900 mr-10">
-                                Bookings Reports
+                                {t('bookings.completedBookingChart.title')}
                             </h1>
 
                             {/* Filters */}
                             <div className="w-36 -space-y-2">
-                                <FormDropdown name="status" label="" placeholder="Status" options={statuses} className="mb-0" />
+                                <FormDropdown name="status" label="" placeholder={t('bookings.completedBookingChart.status')} options={statuses} className="mb-0" />
                             </div>
 
                             <div className="w-40 -space-y-2">
-                                <FormDatePicker name="startDate" label="" placeholder="Start Date" icon={<Calendar className="w-5 h-5" />} className="mb-0" checkmark={false} />
+                                <FormDatePicker name="startDate" label="" placeholder={t('bookings.completedBookingChart.startDate')} icon={<Calendar className="w-5 h-5" />} className="mb-0" checkmark={false} />
                             </div>
 
                             <div className="w-40 -space-y-2">
-                                <FormDatePicker name="endDate" label="" placeholder="End Date" icon={<Calendar className="w-5 h-5" />} className="mb-0" checkmark={false} />
+                                <FormDatePicker name="endDate" label="" placeholder={t('bookings.completedBookingChart.endDate')} icon={<Calendar className="w-5 h-5" />} className="mb-0" checkmark={false} />
                             </div>
 
                             <button type="submit" className="px-8 py-3 bg-primary rounded-lg text-secondary-900 font-semibold hover:bg-primary-600 mr-auto transition-all">
-                                Search
+                                {t('bookings.completedBookingChart.search')}
                             </button>
 
                             <button type="button" className="flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all">
                                 <FileDown className="w-4 h-4 text-[#1B8354]" />
-                                <span className="hidden lg:inline">Export Count</span>
+                                <span className="hidden lg:inline">{t('bookings.completedBookingChart.exportCount')}</span>
                             </button>
 
                             <button type="button" className="flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all">
                                 <FileDown className="w-4 h-4 text-[#1B8354]" />
-                                <span className="hidden lg:inline">Export Details</span>
+                                <span className="hidden lg:inline">{t('bookings.completedBookingChart.exportDetails')}</span>
                             </button>
                         </div>
                     </Form>
@@ -90,8 +92,8 @@ const CompletedBookingChart = () => {
             <div className="bg-[#F4F5FA] px-6 md:px-8 py-6 rounded-2xl">
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                     <h2 className="text-xl md:text-2xl font-bold text-secondary-900">
-                        Completed Bookings
-                    </h2>
+                        {t('bookings.completedBookingChart.chartTitle')}
+                        </h2>
 
                     <div className="flex gap-3">
                         <div className="relative">

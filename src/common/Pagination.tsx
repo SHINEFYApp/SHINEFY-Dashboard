@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { PaginationProps } from "../types/common";
 import { cn } from "../utils/utils";
@@ -9,6 +10,7 @@ export const Pagination = ({
     pageSize,
     onPageChange,
 }: PaginationProps) => {
+    const { t } = useTranslation();
     if (
         currentPage === undefined ||
         totalPages === undefined ||
@@ -68,9 +70,8 @@ export const Pagination = ({
 
     return (
         <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-white">
-            {/* Left Side - Showing entries */}
             <div className="text-sm text-gray-600">
-                Showing {startEntry} to {endEntry} of {totalEntries} entries
+                {t('common.showingEntries', { start: startEntry, end: endEntry, total: totalEntries })}
             </div>
 
             {/* Right Side - Page numbers */}

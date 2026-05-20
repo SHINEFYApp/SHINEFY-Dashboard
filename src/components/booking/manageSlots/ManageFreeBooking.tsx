@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import { manageSlotSchema } from '../../../constants/validationSchema';
 import { manageSlotInitialValues } from '../../../constants/initialValues';
@@ -28,6 +29,7 @@ const DurationListener = ({ values, setDuration }: { values: typeof manageSlotIn
 
 const ManageFreeBooking = () => {
     const [duration, setDuration] = useState<string>('');
+    const { t } = useTranslation();
     const addMutation = useAddSpecificSlot();
 
     const handleSubmit = (values: typeof manageSlotInitialValues, { resetForm }: any) => {
@@ -44,11 +46,11 @@ const ManageFreeBooking = () => {
 
         addMutation.mutate(payload, {
             onSuccess: () => {
-                toast.success('Specific slot added successfully');
+                toast.success(t('bookings.manageFreeBooking.addSuccess'));
                 resetForm();
             },
             onError: () => {
-                toast.error('Failed to add specific slot');
+                toast.error(t('bookings.manageFreeBooking.addFailed'));
             },
         });
     };
@@ -67,19 +69,19 @@ const ManageFreeBooking = () => {
                             {/* Start Time Section */}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                    Start Time :
+                                    {t('bookings.manageFreeBooking.startTime')}
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <FormDatePicker
                                         name="startDate"
-                                        label="Select Booking Date"
+                                        label={t('bookings.manageFreeBooking.selectBookingDate')}
                                         placeholder="12/10/2025"
                                         icon={<Calendar className="size-5" />}
                                         checkmark={true}
                                     />
                                     <FormTimePicker
                                         name="startTime"
-                                        label="Select Booking Time"
+                                        label={t('bookings.manageFreeBooking.selectBookingTime')}
                                         icon={<Clock className="size-5" />}
                                     />
                                 </div>
@@ -88,19 +90,19 @@ const ManageFreeBooking = () => {
                             {/* End Time Section */}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                    End Time :
+                                    {t('bookings.manageFreeBooking.endTime')}
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     <FormDatePicker
                                         name="endDate"
-                                        label="Select Free Booking Date"
+                                        label={t('bookings.manageFreeBooking.selectFreeBookingDate')}
                                         placeholder="12/10/2025"
                                         icon={<Calendar className="size-5" />}
                                         checkmark={true}
                                     />
                                     <FormTimePicker
                                         name="endTime"
-                                        label="Select Free Booking Time"
+                                        label={t('bookings.manageFreeBooking.selectFreeBookingTime')}
                                         icon={<Clock className="size-5" />}
                                     />
                                     {duration && (
@@ -116,35 +118,35 @@ const ManageFreeBooking = () => {
                             {/* Address Section */}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                    Address :
+                                    {t('bookings.manageFreeBooking.address')}
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <FormDropdown
                                         name="city"
-                                        label="City"
-                                        placeholder="Select City"
+                                        label={t('bookings.manageFreeBooking.city')}
+                                        placeholder={t('bookings.manageFreeBooking.selectCity')}
                                         icon={<MapPin className="size-5" />}
                                         options={[
-                                            'Cairo',
-                                            'Alexandria',
-                                            'Giza',
-                                            'New Cairo',
-                                            'Maadi',
-                                            'Al Shorouk City',
+                                            t('bookings.manageFreeBooking.cities.cairo'),
+                                            t('bookings.manageFreeBooking.cities.alexandria'),
+                                            t('bookings.manageFreeBooking.cities.giza'),
+                                            t('bookings.manageFreeBooking.cities.newCairo'),
+                                            t('bookings.manageFreeBooking.cities.maadi'),
+                                            t('bookings.manageFreeBooking.cities.alShorouk'),
                                         ]}
                                     />
                                     <FormDropdown
                                         name="area"
-                                        label="Area"
-                                        placeholder="Select Area"
+                                        label={t('bookings.manageFreeBooking.area')}
+                                        placeholder={t('bookings.manageFreeBooking.selectArea')}
                                         icon={<MapPin className="size-5" />}
                                         options={[
-                                            'Nasr City',
-                                            'Heliopolis',
-                                            'Downtown',
-                                            'Zamalek',
-                                            'Dokki',
-                                            'Mohandessin',
+                                            t('bookings.manageFreeBooking.areas.nasrCity'),
+                                            t('bookings.manageFreeBooking.areas.heliopolis'),
+                                            t('bookings.manageFreeBooking.areas.downtown'),
+                                            t('bookings.manageFreeBooking.areas.zamalek'),
+                                            t('bookings.manageFreeBooking.areas.dokki'),
+                                            t('bookings.manageFreeBooking.areas.mohandessin'),
                                         ]}
                                     />
                                 </div>
@@ -153,22 +155,22 @@ const ManageFreeBooking = () => {
                             {/* Slot Section */}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                    Slot :
+                                    {t('bookings.manageFreeBooking.slot')}
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <FormDropdown
                                         name="slotStatus"
-                                        label="Select Slot Status"
-                                        placeholder="Select Slot Status"
+                                        label={t('bookings.manageFreeBooking.selectSlotStatus')}
+                                        placeholder={t('bookings.manageFreeBooking.selectSlotStatus')}
                                         icon={<User className="size-5" />}
-                                        options={['Open', 'Close', 'Activated', 'Deactivated']}
+                                        options={[t('bookings.manageFreeBooking.open'), t('bookings.manageFreeBooking.close'), t('bookings.manageFreeBooking.activated'), t('bookings.manageFreeBooking.deactivated')]}
                                     />
                                     <FormDropdown
                                         name="slotType"
-                                        label="Select Slot Type"
-                                        placeholder="Select Slot Type"
+                                        label={t('bookings.manageFreeBooking.selectSlotType')}
+                                        placeholder={t('bookings.manageFreeBooking.selectSlotType')}
                                         icon={<User className="size-5" />}
-                                        options={['Regular', 'Premium', 'VIP', 'Express']}
+                                        options={[t('bookings.manageFreeBooking.regular'), t('bookings.manageFreeBooking.premium'), t('bookings.manageFreeBooking.vip'), t('bookings.manageFreeBooking.express')]}
                                     />
                                 </div>
                             </div>
@@ -180,7 +182,7 @@ const ManageFreeBooking = () => {
                                     disabled={!isValid || addMutation.isPending}
                                     className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                 >
-                                    {addMutation.isPending ? 'Adding...' : 'Add Specific Slot'}
+                                    {addMutation.isPending ? t('bookings.manageFreeBooking.adding') : t('bookings.manageFreeBooking.addSpecificSlot')}
                                 </Button>
                             </div>
                         </Form>

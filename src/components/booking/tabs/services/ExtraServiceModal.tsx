@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '../../../../utils/utils';
 import { IoClose } from 'react-icons/io5';
 import { CheckIcon, Clock, DollarSign } from 'lucide-react';
@@ -17,6 +18,7 @@ export const ExtraServiceModal = ({
     selectedExtras,
     onConfirm,
 }: ExtraServiceModalProps) => {
+    const { t } = useTranslation();
     // Local draft state — only committed when "Done" is clicked
     const [draft, setDraft] = useState<ExtraService[]>(selectedExtras);
 
@@ -25,7 +27,7 @@ export const ExtraServiceModal = ({
     const handleQtyChange = (service: ApiExtraService, delta: number) => {
         setDraft((prev) => {
             const svcId = String(service.extra_service_id);
-            const svcName = service.extra_service_name?.[0] || 'Unknown';
+            const svcName = service.extra_service_name?.[0] || t('bookings.createBooking.extraServiceModal.unknown');
             const existing = prev.find((s) => s.id === svcId);
             const newQty = (existing?.quantity ?? 0) + delta;
 
@@ -66,8 +68,8 @@ export const ExtraServiceModal = ({
                     {/* Header */}
                     <div className="flex items-center justify-between p-6 border-b border-gray-100">
                         <div>
-                            <h2 className="text-2xl font-bold text-gray-900">Add Extra Services</h2>
-                            <p className="text-sm text-gray-400 mt-0.5">Select and set quantities for each service</p>
+                            <h2 className="text-2xl font-bold text-gray-900">{t('bookings.createBooking.extraServiceModal.title')}</h2>
+                            <p className="text-sm text-gray-400 mt-0.5">{t('bookings.createBooking.extraServiceModal.description')}</p>
                         </div>
                         <button
                             onClick={handleCancel}
@@ -80,7 +82,7 @@ export const ExtraServiceModal = ({
                     {/* Body */}
                     {availableExtras.length === 0 ? (
                         <div className="h-40 flex justify-center items-center">
-                            <p className="text-gray-400">No extra services available for this service.</p>
+                            <p className="text-gray-400">{t('bookings.createBooking.extraServiceModal.noExtraServices')}</p>
                         </div>
                     ) : (
                         <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
@@ -134,7 +136,7 @@ export const ExtraServiceModal = ({
 
                                             {/* Quantity stepper */}
                                             <div className="flex items-center justify-between mt-3">
-                                                <span className="text-sm font-medium text-gray-600">Quantity</span>
+                                                <span className="text-sm font-medium text-gray-600">{t('bookings.createBooking.extraServiceModal.quantity')}</span>
                                                 <div className="flex items-center gap-3">
                                                     <button
                                                         type="button"
@@ -169,21 +171,21 @@ export const ExtraServiceModal = ({
 
                     {/* Footer */}
                     <div className="flex items-center justify-between gap-4 p-6 border-t border-gray-100">
-                        <p className="text-sm text-gray-600">{totalSelected} item(s) selected</p>
+                        <p className="text-sm text-gray-600">{t('bookings.createBooking.extraServiceModal.itemsSelected', { count: totalSelected })}</p>
                         <div className="flex gap-4">
                             <button
                                 type="button"
                                 onClick={handleCancel}
                                 className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors"
                             >
-                                Cancel
+                                {t('bookings.createBooking.extraServiceModal.cancel')}
                             </button>
                             <button
                                 type="button"
                                 onClick={handleDone}
                                 className="px-8 py-3 bg-primary hover:bg-primary-600 text-gray-900 rounded-xl font-bold transition-colors"
                             >
-                                Done
+                                {t('bookings.createBooking.extraServiceModal.done')}
                             </button>
                         </div>
                     </div>

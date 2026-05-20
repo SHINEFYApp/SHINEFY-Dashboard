@@ -21,6 +21,7 @@ export interface SidebarProps {
 export interface SubItem {
     icon: React.ReactNode;
     label: string;
+    i18nKey?: string;
     path: string;
     permissionId?: number;
 }
@@ -28,6 +29,7 @@ export interface SubItem {
 export interface MenuItem {
     icon: React.ReactNode;
     label: string;
+    i18nKey?: string;
     path?: string;
     subItems?: SubItem[];
     isActive?: boolean;

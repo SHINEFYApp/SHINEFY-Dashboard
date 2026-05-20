@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
@@ -16,6 +17,7 @@ export function CustomTable<T extends Record<string, any>>({
     isLoading = false,
     onRowClick,
 }: TableProps<T>) {
+    const { t } = useTranslation();
 
 
     return (
@@ -30,7 +32,7 @@ export function CustomTable<T extends Record<string, any>>({
                                 <th
                                     key={column.key}
                                     className={cn(
-                                        "px-5 py-3.5 text-left text-nowrap text-xs font-semibold text-gray-500 uppercase tracking-wider",
+                                        "px-5 py-3.5 ltr:text-left rtl:text-right text-nowrap text-xs font-semibold text-gray-500 uppercase tracking-wider",
                                         column.width
                                     )}
                                 >
@@ -48,7 +50,7 @@ export function CustomTable<T extends Record<string, any>>({
                                     colSpan={columns.length}
                                     className="px-5 py-16 text-center text-gray-400 text-sm"
                                 >
-                                    Loading...
+                                    {t('common.loading')}
                                 </td>
                             </tr>
                         ) : data.length === 0 ? (
@@ -57,7 +59,7 @@ export function CustomTable<T extends Record<string, any>>({
                                     colSpan={columns.length}
                                     className="px-5 py-16 text-center text-gray-400 text-sm"
                                 >
-                                    No data available
+                                    {t('common.noDataAvailable')}
                                 </td>
                             </tr>
                         ) : (
@@ -118,7 +120,7 @@ export function CustomTable<T extends Record<string, any>>({
                                                         :
                                                         column.dynmincPage === 'single_booking_details' ? 
                                                             <Link to={`/bookings/manage/${row.booking_id}`} className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-primary bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors">
-                                                                View Details
+                                                                {t('common.viewDetails')}
                                                             </Link>
                                                             :
                                                             column.key === 'car_category_image'?

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useField } from "formik";
 import { X } from "lucide-react";
 import Arrow from "@/assets/images/fileUploader/Vector.png";
@@ -18,6 +19,7 @@ export default function FileUploader({
   multiple = false,
   onPreview,
 }: FileUploaderProps) {
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [, meta, helpers] = useField<File[]>(name);
   const [files, setFiles] = useState<File[]>([]);
@@ -85,7 +87,7 @@ export default function FileUploader({
             {files.length > 0 ? (
               files.slice(0 , 1).map((file, idx) => (
                 <span key={idx} className="block font-semibold text-gray-900">
-                  {file.name }{files.length > 1 ? " and more..." : ' '}
+                  {file.name }{files.length > 1 ? ` ${t('common.andMore')}` : ' '}
                   <button
                     type="button"
                     onClick={(e) => {
@@ -99,10 +101,9 @@ export default function FileUploader({
               ))
             ) : (
               <>
-                Drag your file{multiple ? "(s)" : ""} or{" "}
-                <span className="text-yellow-500 underline">browse</span>
+                {t('common.dragOrBrowse')}
                 <br />
-                Max 10 MB files are allowed
+                {t('common.maxFileSize')}
               </>
             )}
           </p>
@@ -118,7 +119,7 @@ export default function FileUploader({
         </div>
 
         <p className="text-[9px] text-gray-400">
-          Only support .jpg, .png, .svg — Max 10 MB
+          {t('common.fileTypes')}
         </p>
       </div>
 

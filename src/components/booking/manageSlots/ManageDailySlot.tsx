@@ -6,6 +6,7 @@ import { FormDropdown } from '../../../common/FormDropdown';
 import { Button } from '../../ui/button';
 import { useAddSpecificSlot } from '../../../api/features/slots.hooks';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const initialValues = {
     slot_date: '',
@@ -16,6 +17,7 @@ const initialValues = {
 };
 
 const ManageDailySlot = () => {
+    const { t } = useTranslation();
     const addMutation = useAddSpecificSlot();
 
     const handleSubmit = (values: typeof initialValues, { resetForm }: any) => {
@@ -31,11 +33,11 @@ const ManageDailySlot = () => {
 
         addMutation.mutate(payload, {
             onSuccess: () => {
-                toast.success('Specific slot added successfully');
+                toast.success(t('bookings.manageDailySlot.addSuccess'));
                 resetForm();
             },
             onError: () => {
-                toast.error('Failed to add specific slot');
+                toast.error(t('bookings.manageDailySlot.addFailed'));
             },
         });
     };
@@ -51,23 +53,23 @@ const ManageDailySlot = () => {
                         {/* Slot Details */}
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                Slot Details
+                                {t('bookings.manageDailySlot.slotDetails')}
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <FormDatePicker
                                     name="slot_date"
-                                    label="Select Slot Date"
-                                    placeholder="Select date"
+                                    label={t('bookings.manageDailySlot.selectSlotDate')}
+                                    placeholder={t('bookings.manageDailySlot.selectDate')}
                                     icon={<Calendar className="size-5" />}
                                     checkmark={true}
                                 />
                                 <FormDropdown
                                     name="status"
-                                    label="Select Status"
-                                    placeholder="Select Status"
+                                    label={t('bookings.manageDailySlot.selectStatus')}
+                                    placeholder={t('bookings.manageDailySlot.selectStatus')}
                                     icon={<ListChecks className="size-5" />}
                                     options={[
-                                        { label: 'Open', value: '0' },
+                                        { label: t('bookings.manageDailySlot.open'), value: '0' },
                                     ]}
                                 />
                             </div>
@@ -76,17 +78,17 @@ const ManageDailySlot = () => {
                         {/* Working Hours */}
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                Working Hours
+                                {t('bookings.manageDailySlot.workingHours')}
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <FormTimePicker
                                     name="start_time"
-                                    label="Start Time"
+                                    label={t('bookings.manageDailySlot.startTime')}
                                     icon={<Clock className="size-5" />}
                                 />
                                 <FormTimePicker
                                     name="end_time"
-                                    label="End Time"
+                                    label={t('bookings.manageDailySlot.endTime')}
                                     icon={<Clock className="size-5" />}
                                 />
                             </div>
@@ -95,7 +97,7 @@ const ManageDailySlot = () => {
                         {/* Out of Service Hours */}
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                Out of Service Hours
+                                {t('bookings.manageDailySlot.outOfServiceHours')}
                             </h3>
                             <FieldArray name="out_of_service_hours">
                                 {({ push, remove }) => (
@@ -105,12 +107,12 @@ const ManageDailySlot = () => {
                                                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-xl bg-gray-50">
                                                     <FormTimePicker
                                                         name={`out_of_service_hours.${index}.start_time`}
-                                                        label="Start Time"
+                                                        label={t('bookings.manageDailySlot.startTime')}
                                                         icon={<Clock className="size-5" />}
                                                     />
                                                     <FormTimePicker
                                                         name={`out_of_service_hours.${index}.end_time`}
-                                                        label="End Time"
+                                                        label={t('bookings.manageDailySlot.endTime')}
                                                         icon={<Clock className="size-5" />}
                                                     />
                                                 </div>
@@ -118,7 +120,7 @@ const ManageDailySlot = () => {
                                                     type="button"
                                                     onClick={() => remove(index)}
                                                     className="mt-4 p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                                    title="Remove"
+                                                    title={t('bookings.manageDailySlot.remove')}
                                                 >
                                                     <Trash2 className="size-5" />
                                                 </button>
@@ -130,7 +132,7 @@ const ManageDailySlot = () => {
                                             className="flex items-center gap-2 text-primary font-semibold hover:text-primary-600 transition-colors"
                                         >
                                             <Plus className="size-5" />
-                                            Add Out of Service Hours
+                                            {t('bookings.manageDailySlot.addOutOfServiceHours')}
                                         </button>
                                     </div>
                                 )}
@@ -144,7 +146,7 @@ const ManageDailySlot = () => {
                                 disabled={!isValid || addMutation.isPending}
                                 className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                             >
-                                {addMutation.isPending ? 'Adding...' : 'Add Specific Slot'}
+                                {addMutation.isPending ? t('bookings.manageDailySlot.adding') : t('bookings.manageDailySlot.addSpecificSlot')}
                             </Button>
                         </div>
                     </Form>

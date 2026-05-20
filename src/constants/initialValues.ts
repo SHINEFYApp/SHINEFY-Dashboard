@@ -340,6 +340,7 @@ export const manageUsersInitioalValue = {
     companyId : '',
     createtimeFrom : '',
     createtimeTo : '',
+    subareaIds : '',
 }
 
 export interface LoginFormInitialValues {

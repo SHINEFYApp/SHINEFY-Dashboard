@@ -36,6 +36,7 @@ export interface UsersParams {
     company_id?: number;
     createtime_from?: string;
     createtime_to?: string;
+    subarea_ids?: string;
 }
 
 export interface ExportUsersPayload {
@@ -49,6 +50,7 @@ export interface ExportUsersPayload {
     company_id?: number;
     createtime_from?: string;
     createtime_to?: string;
+    subarea_ids?: string;
 }
 
 export interface Company {

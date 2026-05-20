@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import { IoCallOutline, IoLocationOutline } from 'react-icons/io5';
 import { Calendar, User, Hash, MapPin, Car, UserX } from 'lucide-react';
@@ -26,6 +27,7 @@ export default function ServicesStep1({
     formData,
     setFormData,
 }: stepsProps) {
+    const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [lastRequestedPhone, setLastRequestedPhone] = useState<string | null>(null);
     const baseURL = import.meta.env.VITE_API_URL;
@@ -86,7 +88,7 @@ export default function ServicesStep1({
             }
             <main>
                 <h2 className="text-2xl font-bold text-gray-900 mb-8">
-                    Enter reservation data
+                    {t('bookings.createBooking.reservationData')}
                 </h2>
                   {/* Client info card */}
                             {userInfo && (
@@ -97,33 +99,33 @@ export default function ServicesStep1({
                                         <User className="w-5 h-5 text-green-600" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-semibold text-green-800 mb-1">Client Found</p>
+                                        <p className="text-sm font-semibold text-green-800 mb-1">{t('bookings.createBooking.clientFound')}</p>
                                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
                                             <div className="flex items-center gap-2">
                                                 <User className="w-4 h-4 text-green-500" />
                                                 <div>
-                                                    <p className="text-xs text-green-500">Name</p>
+                                                    <p className="text-xs text-green-500">{t('bookings.createBooking.infoLabels.name')}</p>
                                                     <p className="text-sm font-medium text-gray-800">{userInfo.name}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <Hash className="w-4 h-4 text-green-500" />
                                                 <div>
-                                                    <p className="text-xs text-green-500">User ID</p>
+                                                    <p className="text-xs text-green-500">{t('bookings.createBooking.infoLabels.userId')}</p>
                                                     <p className="text-sm font-medium text-gray-800">#{userInfo.user_id}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <MapPin className="w-4 h-4 text-green-500" />
                                                 <div>
-                                                    <p className="text-xs text-green-500">Saved Locations</p>
+                                                    <p className="text-xs text-green-500">{t('bookings.createBooking.infoLabels.savedLocations')}</p>
                                                     <p className="text-sm font-medium text-gray-800">{locations?.length ?? 0}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <Car className="w-4 h-4 text-green-500" />
                                                 <div>
-                                                    <p className="text-xs text-green-500">Vehicles</p>
+                                                    <p className="text-xs text-green-500">{t('bookings.createBooking.infoLabels.vehicles')}</p>
                                                     <p className="text-sm font-medium text-gray-800">{vehiclesData?.length ?? 0}</p>
                                                 </div>
                                             </div>
@@ -141,8 +143,8 @@ export default function ServicesStep1({
                                         <UserX className="w-5 h-5 text-red-500" />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold text-red-700">No client found</p>
-                                        <p className="text-xs text-red-400 mt-0.5">No account is linked to this phone number.</p>
+                                        <p className="text-sm font-semibold text-red-700">{t('bookings.createBooking.clientNotFound')}</p>
+                                        <p className="text-xs text-red-400 mt-0.5">{t('bookings.createBooking.noAccountLinked')}</p>
                                     </div>
                                 </div>
                             )}
@@ -171,8 +173,8 @@ export default function ServicesStep1({
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <FormInput
                                     name="phoneNumber"
-                                    label="User phone number"
-                                    placeholder="User phone number"
+                                    label={t('bookings.createBooking.userPhoneNumber')}
+                                    placeholder={t('bookings.createBooking.userPhoneNumber')}
                                     type="tel"
                                     icon={<IoCallOutline className="w-5 h-5" />}
                                     onBlur={(value) => {
@@ -184,8 +186,8 @@ export default function ServicesStep1({
                                 <div className="mt-2">
                                     <DropDownToSendObject
                                         name="address"
-                                        label="Address"
-                                        placeholder="Select Address"
+                                        label={t('bookings.createBooking.address')}
+                                        placeholder={t('bookings.createBooking.selectAddress')}
                                         icon={<IoLocationOutline className="w-5 h-5" />}
                                         options={locations}
                                         extraKey='user_address_name'
@@ -215,10 +217,19 @@ export default function ServicesStep1({
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <FormDatePicker
                                     name="bookingDate"
-                                    label="Select Booking Date"
+                                    label={t('bookings.createBooking.selectBookingDate')}
                                     icon={<Calendar className="size-5" />}
                                     checkmark={false}
                                 />
+
+                            <div className="flex justify-start">
+                                <Button
+                                    type="submit"
+                                    disabled={!isValid}
+                                    className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-2 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                >
+                                    {t('bookings.createBooking.next')}
+                                </Button>
                             </div>
 
                             <div className="flex justify-start">

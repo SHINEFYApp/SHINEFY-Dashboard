@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useField, useFormikContext } from 'formik';
 import { IoCheckmarkCircle, IoChevronDown, IoSearch } from 'react-icons/io5';
 import { cn } from '../utils/utils';
@@ -34,6 +35,7 @@ export const DropDownToSendObject = <T,>({
   extraKey,
   searchable
 }: DropDownToSendObjectProps<T>) => {
+  const { t } = useTranslation();
   const [field, meta] = useField<T | undefined>(name);
   const { setFieldValue, setFieldTouched } = useFormikContext<any>();
   const [isOpen, setIsOpen] = useState(false);
@@ -124,7 +126,7 @@ export const DropDownToSendObject = <T,>({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
+                  placeholder={t('common.searchDot')}
                   className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
                   autoFocus
                 />
@@ -133,7 +135,7 @@ export const DropDownToSendObject = <T,>({
           )}
           {(filteredOptions?.length === 0) ? (
             <div className="w-full h-20 flex justify-center items-center text-gray-300 text-sm">
-              No Options Available
+              {t('common.noOptionsAvailable')}
             </div>
           ) : (
             filteredOptions?.map((option, index) => (

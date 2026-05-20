@@ -3,6 +3,10 @@
 body {
   direction: ltr;
 }
+
+[dir="rtl"] body {
+  direction: rtl;
+}
 @theme {
   /* Primary Colors (Amber/Yellow) */
   --color-primary-50: #fffbeb;

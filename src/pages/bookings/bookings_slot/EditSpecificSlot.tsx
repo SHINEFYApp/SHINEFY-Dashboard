@@ -8,8 +8,10 @@ import { useViewSpecificSlot, useUpdateSpecificSlot } from '../../../api/feature
 import type { UpdateSpecificSlotPayload } from '../../../types/slots';
 import { useParams, useNavigate } from 'react-router';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const EditSpecificSlot = () => {
+    const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const slotId = Number(id);
@@ -40,22 +42,22 @@ const EditSpecificSlot = () => {
 
         updateMutation.mutate(payload, {
             onSuccess: () => {
-                toast.success('Slot updated successfully');
+                toast.success(t('bookings.editSpecificSlot.updateSuccess'));
                 navigate('/bookings/slot');
             },
             onError: () => {
-                toast.error('Failed to update slot');
+                toast.error(t('bookings.editSpecificSlot.updateFailed'));
             },
         });
     };
 
     if (isLoading) {
-        return <div className="flex justify-center items-center p-10">Loading...</div>;
+        return <div className="flex justify-center items-center p-10">{t('bookings.editSpecificSlot.loading')}</div>;
     }
 
     return (
         <div className="w-full animate-fade-in bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Edit Specific Slot</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('bookings.editSpecificSlot.title')}</h2>
             <div className="w-full max-w-6xl mx-auto p-6">
                 <Formik
                     initialValues={initialValues}
@@ -67,23 +69,23 @@ const EditSpecificSlot = () => {
                             {/* Slot Details */}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                    Slot Details
+                                    {t('bookings.editSpecificSlot.slotDetails')}
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <FormDatePicker
                                         name="slot_date"
-                                        label="Select Slot Date"
-                                        placeholder="Select date"
+                                        label={t('bookings.editSpecificSlot.selectSlotDate')}
+                                        placeholder={t('bookings.editSpecificSlot.selectDate')}
                                         icon={<Calendar className="size-5" />}
                                         checkmark={true}
                                     />
                                     <FormDropdown
                                         name="status"
-                                        label="Select Status"
-                                        placeholder="Select Status"
+                                        label={t('bookings.editSpecificSlot.selectStatus')}
+                                        placeholder={t('bookings.editSpecificSlot.selectStatus')}
                                         icon={<ListChecks className="size-5" />}
                                         options={[
-                                            { label: 'Open', value: '0' },
+                                            { label: t('bookings.editSpecificSlot.open'), value: '0' },
                                         ]}
                                     />
                                 </div>
@@ -92,17 +94,17 @@ const EditSpecificSlot = () => {
                             {/* Working Hours */}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                    Working Hours
+                                    {t('bookings.editSpecificSlot.workingHours')}
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <FormTimePicker
                                         name="start_time"
-                                        label="Start Time"
+                                        label={t('bookings.editSpecificSlot.startTime')}
                                         icon={<Clock className="size-5" />}
                                     />
                                     <FormTimePicker
                                         name="end_time"
-                                        label="End Time"
+                                        label={t('bookings.editSpecificSlot.endTime')}
                                         icon={<Clock className="size-5" />}
                                     />
                                 </div>
@@ -111,7 +113,7 @@ const EditSpecificSlot = () => {
                             {/* Out of Service Hours */}
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                    Out of Service Hours
+                                    {t('bookings.editSpecificSlot.outOfServiceHours')}
                                 </h3>
                                 <FieldArray name="out_of_service_hours">
                                     {({ push, remove }) => (
@@ -121,12 +123,12 @@ const EditSpecificSlot = () => {
                                                     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-xl bg-gray-50">
                                                         <FormTimePicker
                                                             name={`out_of_service_hours.${index}.start_time`}
-                                                            label="Start Time"
+                                                            label={t('bookings.editSpecificSlot.startTime')}
                                                             icon={<Clock className="size-5" />}
                                                         />
                                                         <FormTimePicker
                                                             name={`out_of_service_hours.${index}.end_time`}
-                                                            label="End Time"
+                                                            label={t('bookings.editSpecificSlot.endTime')}
                                                             icon={<Clock className="size-5" />}
                                                         />
                                                     </div>
@@ -134,7 +136,7 @@ const EditSpecificSlot = () => {
                                                         type="button"
                                                         onClick={() => remove(index)}
                                                         className="mt-4 p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                                        title="Remove"
+                                                        title={t('bookings.editSpecificSlot.remove')}
                                                     >
                                                         <Trash2 className="size-5" />
                                                     </button>
@@ -146,7 +148,7 @@ const EditSpecificSlot = () => {
                                                 className="flex items-center gap-2 text-primary font-semibold hover:text-primary-600 transition-colors"
                                             >
                                                 <Plus className="size-5" />
-                                                Add Out of Service Hours
+                                                {t('bookings.editSpecificSlot.addOutOfServiceHours')}
                                             </button>
                                         </div>
                                     )}
@@ -160,14 +162,14 @@ const EditSpecificSlot = () => {
                                     disabled={!isValid || updateMutation.isPending}
                                     className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                 >
-                                    {updateMutation.isPending ? 'Updating...' : 'Update Slot'}
+                                    {updateMutation.isPending ? t('bookings.editSpecificSlot.updating') : t('bookings.editSpecificSlot.updateSlot')}
                                 </Button>
                                 <Button
                                     type="button"
                                     onClick={() => navigate('/bookings/slot')}
                                     className="bg-gray-200 hover:bg-gray-300 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200"
                                 >
-                                    Cancel
+                                    {t('bookings.editSpecificSlot.cancel')}
                                 </Button>
                             </div>
                         </Form>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Form, Formik } from "formik";
 import { Calendar, Search } from "lucide-react";
@@ -17,6 +18,7 @@ interface AdminSlotsFormValues {
 }
 
 export default function AdminSlots() {
+    const { t } = useTranslation();
     const [selectedMainArea, setSelectedMainArea] = useState<string>("");
     const [queryParams, setQueryParams] = useState<{ date: string; area_id?: number; service_time?: number } | null>(null);
 
@@ -75,17 +77,17 @@ export default function AdminSlots() {
                                     <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1 flex-wrap">
                                         <div className="flex flex-col min-w-[140px]">
                                             <h1 className="text-xl md:text-2xl font-bold text-secondary-900">
-                                                Admin Slots
+                                                {t('bookings.adminSlots.title')}
                                             </h1>
                                             <p className="text-xs md:text-sm text-secondary-500">
-                                                View service boy availability by time slot
+                                                {t('bookings.adminSlots.subtitle')}
                                             </p>
                                         </div>
                                         <div className="w-full md:w-[178px] -space-y-2">
                                             <FormDropdown
                                                 name="main_area_id"
                                                 label=""
-                                                placeholder="Main Area"
+                                                placeholder={t('bookings.adminSlots.mainArea')}
                                                 options={mainAreaOptions as any}
                                                 className="mb-2"
                                                 onChangeExternal={(value) => {
@@ -98,7 +100,7 @@ export default function AdminSlots() {
                                             <FormDropdown
                                                 name="sub_area_id"
                                                 label=""
-                                                placeholder="Sub Area"
+                                                placeholder={t('bookings.adminSlots.subArea')}
                                                 options={subAreaOptions as any}
                                                 className="mb-2"
                                                 disabled={!selectedMainArea}
@@ -108,7 +110,7 @@ export default function AdminSlots() {
                                             <FormDatePicker
                                                 name="date"
                                                 label=""
-                                                placeholder="Date"
+                                                placeholder={t('bookings.adminSlots.date')}
                                                 icon={<Calendar className="w-5 h-5" />}
                                                 className="mb-0"
                                                 checkmark={false}
@@ -118,7 +120,7 @@ export default function AdminSlots() {
                                             <input
                                                 type="number"
                                                 name="service_time"
-                                                placeholder="Duration (min)"
+                                                placeholder={t('bookings.adminSlots.duration')}
                                                 className="w-full rounded-xl mt-2 border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm font-medium transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
                                                 defaultValue={60}
                                                 onChange={(e) => setFieldValue("service_time", e.target.value)}
@@ -129,7 +131,7 @@ export default function AdminSlots() {
                                             className="px-6 lg:px-8 py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap mt-2 md:mt-0 flex items-center gap-2"
                                         >
                                             <Search className="w-4 h-4" />
-                                            Search
+                                            {t('bookings.adminSlots.search')}
                                         </button>
                                     </div>
                                 </div>
@@ -145,10 +147,10 @@ export default function AdminSlots() {
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="border-b border-gray-200 bg-gray-50">
-                                    <th className="text-left py-3 px-4 font-semibold text-secondary-900">Time</th>
-                                    <th className="text-center py-3 px-4 font-semibold text-secondary-900">Available</th>
-                                    <th className="text-center py-3 px-4 font-semibold text-secondary-900">Busy</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-secondary-900">Breakdown</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-secondary-900">{t('bookings.adminSlots.tableHeaders.time')}</th>
+                                    <th className="text-center py-3 px-4 font-semibold text-secondary-900">{t('bookings.adminSlots.tableHeaders.available')}</th>
+                                    <th className="text-center py-3 px-4 font-semibold text-secondary-900">{t('bookings.adminSlots.tableHeaders.busy')}</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-secondary-900">{t('bookings.adminSlots.tableHeaders.breakdown')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -171,7 +173,7 @@ export default function AdminSlots() {
                                             <div className="space-y-1.5">
                                                 {slot.available_boys?.length > 0 && (
                                                     <div className="flex flex-wrap items-center gap-1">
-                                                        <span className="text-green-600 font-medium text-xs mr-1">Available:</span>
+                                                        <span className="text-green-600 font-medium text-xs mr-1">{t('bookings.adminSlots.availableLabel')}</span>
                                                         {slot.available_boys.map((boy) => (
                                                             <span
                                                                 key={boy.user_id}
@@ -187,7 +189,7 @@ export default function AdminSlots() {
                                                 )}
                                                 {slot.busy_boys?.length > 0 && (
                                                     <div className="flex flex-wrap items-center gap-1">
-                                                        <span className="text-red-600 font-medium text-xs mr-1">Busy:</span>
+                                                        <span className="text-red-600 font-medium text-xs mr-1">{t('bookings.adminSlots.busyLabel')}</span>
                                                         {slot.busy_boys.map((boy) => (
                                                             <div
                                                                 key={boy.user_id}
@@ -206,7 +208,7 @@ export default function AdminSlots() {
                                                 )}
                                                 {slot.off_shift_boys?.length > 0 && (
                                                     <div className="flex flex-wrap items-center gap-1">
-                                                        <span className="text-gray-500 font-medium text-xs mr-1">Off-shift:</span>
+                                                        <span className="text-gray-500 font-medium text-xs mr-1">{t('bookings.adminSlots.offShift')}</span>
                                                         {slot.off_shift_boys.map((boy) => (
                                                             <span
                                                                 key={boy.user_id}
@@ -221,7 +223,7 @@ export default function AdminSlots() {
                                                 {(!slot.available_boys || slot.available_boys.length === 0) &&
                                                  (!slot.busy_boys || slot.busy_boys.length === 0) &&
                                                  (!slot.off_shift_boys || slot.off_shift_boys.length === 0) && (
-                                                    <span className="text-gray-400 text-xs">No service boys</span>
+                                                    <span className="text-gray-400 text-xs">{t('bookings.adminSlots.noServiceBoys')}</span>
                                                 )}
                                             </div>
                                         </td>
@@ -232,7 +234,7 @@ export default function AdminSlots() {
                     </div>
                 ) : queryParams ? (
                     <div className="text-center py-12 text-secondary-500">
-                        No slots found for the selected criteria.
+                        {t('bookings.adminSlots.noSlotsFound')}
                     </div>
                 ) : null}
             </div>

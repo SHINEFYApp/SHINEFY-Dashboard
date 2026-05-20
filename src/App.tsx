@@ -1,5 +1,5 @@
-import i18n from './i18n';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import LogIn from './pages/logIn/logIn';
 import { Layout } from './components/layout/Layout';
@@ -10,13 +10,12 @@ import ProtectedLayout from './components/ProtectedLayout/ProtectedLayout';
 import { RoutesPages } from './routes';
 
 function App() {
-
+  const { i18n } = useTranslation();
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     dispatch(initializeAuth());
@@ -29,7 +28,6 @@ function App() {
 
     return isAuthenticated ? <Navigate to="/" replace /> : <LogIn />;
   };
-
 
   return (
     <>

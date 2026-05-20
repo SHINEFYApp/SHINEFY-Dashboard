@@ -8,6 +8,7 @@ import type { Company } from "../../../api/features/ManageUsers.services";
 
 interface Props extends filteroptionsProps {
     companies?: Company[];
+    subareas?: any[];
 }
 
 const loginTypeOptions = [
@@ -29,11 +30,19 @@ const otpOptions = [
     { label: 'Not Verified', value: '0' },
 ];
 
-export default function FillterOptions({ filterOptions, setFilterOptions, companies }: Props) {
+export default function FillterOptions({ filterOptions, setFilterOptions, companies, subareas }: Props) {
     const companyOptions = companies?.map(c => ({
         label: c.name,
         value: String(c.id),
     })) || [];
+
+    const subareaOptions = [
+        { label: 'All Subareas', value: '' },
+        ...(Array.isArray(subareas) ? subareas.map((a: any) => ({
+            label: a.name || a.area_name || String(a.id),
+            value: String(a.id),
+        })) : []),
+    ];
 
     return (
         <GenericFilterModal
@@ -75,6 +84,12 @@ export default function FillterOptions({ filterOptions, setFilterOptions, compan
                 label="Company"
                 placeholder="Select Company"
                 options={companyOptions}
+            />
+            <FormDropdown
+                name="subareaIds"
+                label="Subarea"
+                placeholder="Select Subarea"
+                options={subareaOptions}
             />
             <FormDatePicker
                 name="createtimeFrom"
