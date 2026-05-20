@@ -1,4 +1,5 @@
 import { useField } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { CheckIcon, X } from 'lucide-react';
 import addVehicle from '../../../../assets/addVehicle.svg';
 import car from '../../../../assets/addVehicle.svg';
@@ -15,10 +16,12 @@ type FormSelectedVehiclesProps = {
 
 export const FormSelectedVehicles = ({
     name,
-    label = 'Select Vehicle',
+    label,
     onAddClick,
     className,
 }: FormSelectedVehiclesProps) => {
+    const { t } = useTranslation();
+    const resolvedLabel = label || t('bookings.createBooking.selectedVehicles.selectVehicle');
     const [field, meta, helpers] = useField<Vehicle[]>(name);
 
     const vehicles = field.value || [];
@@ -33,7 +36,7 @@ export const FormSelectedVehicles = ({
     return (
         <div className={cn('space-y-2', className)}>
             <label className="text-sm font-medium text-gray-700 block">
-                {label}
+                {resolvedLabel}
             </label>
 
             {vehicles.length === 0 ? (
@@ -96,25 +99,25 @@ export const FormSelectedVehicles = ({
                             <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-left">
                                 {vehicle.make_name && (
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Make</span>
+                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">{t('bookings.createBooking.selectedVehicles.make')}</span>
                                         <span className="text-sm font-semibold text-gray-700 truncate">{vehicle.make_name}</span>
                                     </div>
                                 )}
                                 {vehicle.model_name && (
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Model</span>
+                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">{t('bookings.createBooking.selectedVehicles.model')}</span>
                                         <span className="text-sm font-semibold text-gray-700 truncate">{vehicle.model_name}</span>
                                     </div>
                                 )}
                                 {vehicle.plate_number && (
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Plate No.</span>
+                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">{t('bookings.createBooking.selectedVehicles.plateNo')}</span>
                                         <span className="text-sm font-semibold text-gray-700 truncate">{vehicle.plate_number}</span>
                                     </div>
                                 )}
                                 {vehicle.color_name && (
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">Color</span>
+                                        <span className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">{t('bookings.createBooking.selectedVehicles.color')}</span>
                                         <div className="flex items-center gap-1.5 mt-0.5">
                                             <span
                                                 className="inline-block w-3 h-3 rounded-full border border-gray-200 shrink-0"

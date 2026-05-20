@@ -23,28 +23,9 @@ import { cn } from "../../../utils/utils";
 import { Input } from "../../../components/ui/input";
 import { Textarea } from "../../../components/ui/textarea";
 import { ExtraServiceModal } from "../../../components/booking/tabs/services/ExtraServiceModal";
+import { useTranslation } from "react-i18next";
 
-/* ─── Status Maps ─── */
-const BOOKING_STATUS: Record<string, { label: string; color: string }> = {
-    "0": { label: "Pending", color: "bg-yellow-50 text-yellow-700 border-yellow-300" },
-    "1": { label: "In-Progress", color: "bg-blue-50 text-blue-700 border-blue-300" },
-    "2": { label: "Completed", color: "bg-green-50 text-green-700 border-green-300" },
-    "3": { label: "Canceled", color: "bg-red-50 text-red-700 border-red-300" },
-    "4": { label: "Confirmed", color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
-};
 
-const BOOKING_TYPE: Record<number, { label: string; color: string }> = {
-    0: { label: "Suchdegle", color: "bg-purple-50 text-purple-700 border-purple-300" },
-    1: { label: "Waiting", color: "bg-orange-50 text-orange-700 border-orange-300" },
-};
-
-const DRIVER_STATUS: Record<string, { label: string; color: string }> = {
-    "1": { label: "Assigned", color: "bg-blue-50 text-blue-700 border-blue-300" },
-    "2": { label: "On the Way", color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
-    "3": { label: "Arrived", color: "bg-purple-50 text-purple-700 border-purple-300" },
-    "4": { label: "Working", color: "bg-yellow-50 text-yellow-700 border-yellow-300" },
-    "5": { label: "Done", color: "bg-green-50 text-green-700 border-green-300" },
-};
 
 /*
  * The API returns status as a text label ("Pending", "Canceled", etc.)
@@ -100,9 +81,32 @@ interface EditFormState {
 /*                        Component                        */
 /* ═══════════════════════════════════════════════════════ */
 const ManageBookingDetails = () => {
+    const { t } = useTranslation();
     const { id } = useParams();
     const baseURL = import.meta.env.VITE_API_URL;
     const route = `${baseURL}/api/book/get/${id}`;
+
+    /* ─── Status Maps ─── */
+    const BOOKING_STATUS: Record<string, { label: string; color: string }> = {
+        "0": { label: t("bookings.manageBookingDetails.statusValues.pending"), color: "bg-yellow-50 text-yellow-700 border-yellow-300" },
+        "1": { label: t("bookings.manageBookingDetails.statusValues.inProgress"), color: "bg-blue-50 text-blue-700 border-blue-300" },
+        "2": { label: t("bookings.manageBookingDetails.statusValues.completed"), color: "bg-green-50 text-green-700 border-green-300" },
+        "3": { label: t("bookings.manageBookingDetails.statusValues.canceled"), color: "bg-red-50 text-red-700 border-red-300" },
+        "4": { label: t("bookings.manageBookingDetails.statusValues.confirmed"), color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
+    };
+
+    const BOOKING_TYPE: Record<number, { label: string; color: string }> = {
+        0: { label: t("bookings.manageBookingDetails.bookingTypeValues.suchdegle"), color: "bg-purple-50 text-purple-700 border-purple-300" },
+        1: { label: t("bookings.manageBookingDetails.bookingTypeValues.waiting"), color: "bg-orange-50 text-orange-700 border-orange-300" },
+    };
+
+    const DRIVER_STATUS: Record<string, { label: string; color: string }> = {
+        "1": { label: t("bookings.manageBookingDetails.driverStatus.assigned"), color: "bg-blue-50 text-blue-700 border-blue-300" },
+        "2": { label: t("bookings.manageBookingDetails.driverStatus.onTheWay"), color: "bg-indigo-50 text-indigo-700 border-indigo-300" },
+        "3": { label: t("bookings.manageBookingDetails.driverStatus.arrived"), color: "bg-purple-50 text-purple-700 border-purple-300" },
+        "4": { label: t("bookings.manageBookingDetails.driverStatus.working"), color: "bg-yellow-50 text-yellow-700 border-yellow-300" },
+        "5": { label: t("bookings.manageBookingDetails.driverStatus.done"), color: "bg-green-50 text-green-700 border-green-300" },
+    };
 
     /* ─── Booking data ─── */
     const { data, isLoading, isError, error } = useGet<ApiResponse>({
@@ -352,12 +356,12 @@ const ManageBookingDetails = () => {
 
         updateMutate(payload, {
             onSuccess: () => {
-                toast.success("Booking updated successfully");
+                toast.success(t("bookings.manageBookingDetails.updateSuccess"));
                 setInitialForm({ ...form });
                 setHasChanges(false);
             },
             onError: (err: any) => {
-                toast.error(err?.response?.data?.message || "Failed to update booking");
+                toast.error(err?.response?.data?.message || t("bookings.manageBookingDetails.updateFailed"));
             },
         });
     };
@@ -372,12 +376,12 @@ const ManageBookingDetails = () => {
 
     /* ─── Table columns ─── */
     const vehicleColumns: any[] = [
-        { key: "car_category_image", title: "Image", width: "w-32" },
-        { key: "make_name", title: "Make", render: (v: string) => <span className="text-gray-700 font-medium">{v}</span> },
-        { key: "model_name", title: "Model", render: (v: string) => <span className="text-gray-700 font-medium">{v}</span> },
-        { key: "plate_number", title: "Plate Number", render: (v: string) => <span className="text-gray-700 font-medium" dir="rtl">{v}</span> },
+        { key: "car_category_image", title: t("bookings.manageBookingDetails.vehicleColumns.image"), width: "w-32" },
+        { key: "make_name", title: t("bookings.manageBookingDetails.vehicleColumns.make"), render: (v: string) => <span className="text-gray-700 font-medium">{v}</span> },
+        { key: "model_name", title: t("bookings.manageBookingDetails.vehicleColumns.model"), render: (v: string) => <span className="text-gray-700 font-medium">{v}</span> },
+        { key: "plate_number", title: t("bookings.manageBookingDetails.vehicleColumns.plateNumber"), render: (v: string) => <span className="text-gray-700 font-medium" dir="rtl">{v}</span> },
         {
-            key: "color_name", title: "Color",
+            key: "color_name", title: t("bookings.manageBookingDetails.vehicleColumns.color"),
             render: (v: string, row: Vehicle) => (
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-md border border-gray-300 shadow-sm" style={{ backgroundColor: row.color_name }} />
@@ -388,8 +392,8 @@ const ManageBookingDetails = () => {
     ];
 
     const serviceBoyColumns: any[] = [
-        { key: "service_boy_name", title: "Name", render: (v: string) => <span className="font-medium">{v}</span> },
-        { key: "service_boy_id ", title: "ID" },
+        { key: "service_boy_name", title: t("bookings.manageBookingDetails.vehicleColumns.name"), render: (v: string) => <span className="font-medium">{v}</span> },
+        { key: "service_boy_id ", title: t("bookings.manageBookingDetails.vehicleColumns.id") },
     ];
 
     
@@ -422,7 +426,7 @@ const ManageBookingDetails = () => {
                             )}
                         >
                             {isUpdating ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
-                            {isUpdating ? "Saving..." : "Save Changes"}
+                            {isUpdating ? t("bookings.manageBookingDetails.saving") : t("bookings.manageBookingDetails.saveChanges")}
                         </button>
                         <button className="flex items-center justify-center p-2.5 bg-purple-50 border border-purple-200 rounded-lg text-purple-700 hover:bg-purple-100 transition-all">
                             <History className="size-4" />
@@ -432,15 +436,15 @@ const ManageBookingDetails = () => {
 
                 {/* Read-only info cards */}
                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <InfoCard label="Booking ID" value={`#${booking.booking_id}`} />
-                    <InfoCard label="Customer" value={booking.user?.customer_name || "—"} />
-                    <InfoCard label="Date & Time" value={`${booking.booking_date || "—"} at ${booking.booking_time || "—"}`} />
-                    <InfoCard label="Payment" value={booking.payment_option || "—"} />
-                    <InfoCard label="Total Price" value={`EGP ${booking.total_price || "0"}`} highlight />
-                    <InfoCard label="Order Type" value={booking.order_pay_type || "—"} />
-                    <InfoCard label="Current Service" value={selectedServiceName} />
-                    <InfoCard label="Collect Status" value={booking.payment_collect_status || "—"} />
-                    <InfoCard label="Booking Type" value={BOOKING_TYPE[booking.booking_type]?.label || "—"} />
+                    <InfoCard label={t("bookings.manageBookingDetails.bookingId")} value={`#${booking.booking_id}`} />
+                    <InfoCard label={t("bookings.manageBookingDetails.customer")} value={booking.user?.customer_name || "—"} />
+                    <InfoCard label={t("bookings.manageBookingDetails.dateTime")} value={`${booking.booking_date || "—"} at ${booking.booking_time || "—"}`} />
+                    <InfoCard label={t("bookings.manageBookingDetails.payment")} value={booking.payment_option || "—"} />
+                    <InfoCard label={t("bookings.manageBookingDetails.totalPrice")} value={`EGP ${booking.total_price || "0"}`} highlight />
+                    <InfoCard label={t("bookings.manageBookingDetails.orderType")} value={booking.order_pay_type || "—"} />
+                    <InfoCard label={t("bookings.manageBookingDetails.currentService")} value={selectedServiceName} />
+                    <InfoCard label={t("bookings.manageBookingDetails.collectStatus")} value={booking.payment_collect_status || "—"} />
+                    <InfoCard label={t("bookings.manageBookingDetails.bookingType")} value={BOOKING_TYPE[booking.booking_type]?.label || "—"} />
                 </div>
             </div>
 
@@ -448,11 +452,11 @@ const ManageBookingDetails = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                 {/* ── Date & Time ── */}
-                <SectionCard title="Date & Time" icon={<History className="size-5" />}>
+                <SectionCard title={t("bookings.manageBookingDetails.dateTimeSection")} icon={<History className="size-5" />}>
                     <div className="space-y-5">
                         <div>
                             <label className="text-sm font-medium text-gray-600 mb-1.5 block">
-                                Booking Date
+                                {t("bookings.manageBookingDetails.bookingDate")}
                             </label>
                             <input
                                 type="date"
@@ -464,23 +468,23 @@ const ManageBookingDetails = () => {
 
                         <div>
                             <label className="text-sm font-medium text-gray-600 mb-1.5 block">
-                                Booking Time
+                                {t("bookings.manageBookingDetails.bookingTime")}
                                 {!form.booking_date && (
-                                    <span className="ml-2 text-xs text-gray-400 font-normal">Select a date first</span>
+                                    <span className="ml-2 text-xs text-gray-400 font-normal">{t("bookings.manageBookingDetails.selectDateFirst")}</span>
                                 )}
                             </label>
                             {!form.booking_date ? (
                                 <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center text-sm text-gray-400">
-                                    Select a date to see available time slots
+                                    {t("bookings.manageBookingDetails.selectDateToSeeSlots")}
                                 </div>
                             ) : slotsLoading ? (
                                 <div className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-8 text-center text-sm text-gray-400">
                                     <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
-                                    Loading available slots...
+                                    {t("bookings.manageBookingDetails.loadingSlots")}
                                 </div>
                             ) : slots.length === 0 ? (
                                 <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center text-sm text-gray-400">
-                                    No available slots for this date
+                                    {t("bookings.manageBookingDetails.noSlotsAvailable")}
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -504,7 +508,7 @@ const ManageBookingDetails = () => {
                                             >
                                                 <span className="font-semibold">{slot.time}</span>
                                                 <span className={cn("text-xs", isSelected ? "text-primary/70" : "text-gray-400")}>
-                                                    {slot.available_count} available
+                                                    {slot.available_count} {t("bookings.manageBookingDetails.available")}
                                                 </span>
                                             </button>
                                         );
@@ -513,7 +517,7 @@ const ManageBookingDetails = () => {
                             )}
                             {form.booking_time && (
                                 <p className="text-xs text-green-600 mt-2">
-                                    Selected: {form.booking_date} at {form.booking_time}
+                                    {t("bookings.manageBookingDetails.selectedDateTime", { date: form.booking_date, time: form.booking_time })}
                                 </p>
                             )}
                         </div>
@@ -521,9 +525,9 @@ const ManageBookingDetails = () => {
                         {/* ── Service Boy ── */}
                         <div>
                             <label className="text-sm font-medium text-gray-600 mb-1.5 block">
-                                Service Boy
+                                {t("bookings.manageBookingDetails.serviceBoy")}
                                 {!form.booking_time && (
-                                    <span className="ml-2 text-xs text-gray-400 font-normal">Select a time slot first</span>
+                                    <span className="ml-2 text-xs text-gray-400 font-normal">{t("bookings.manageBookingDetails.selectTimeSlotFirst")}</span>
                                 )}
                             </label>
                             <div className="relative">
@@ -536,7 +540,7 @@ const ManageBookingDetails = () => {
                                     <span className={cn("truncate", form.service_boy_id ? "text-gray-800" : "text-gray-400")}>
                                         {form.service_boy_id
                                             ? (availableServiceBoys.find((b) => b.user_id === form.service_boy_id)?.name ?? `Boy #${form.service_boy_id}`)
-                                            : "Select a service boy"
+                                            : t("bookings.manageBookingDetails.selectServiceBoy")
                                         }
                                     </span>
                                     <ChevronDown className={cn("size-4 text-gray-400 transition-transform", isServiceBoyDropdownOpen && "rotate-180")} />
@@ -545,7 +549,7 @@ const ManageBookingDetails = () => {
                                     <>
                                         {availableServiceBoys.length === 0 ? (
                                             <div className="absolute z-50 w-full mt-1 rounded-xl border bg-white shadow-lg p-4 text-center text-sm text-gray-400">
-                                                {slotsLoading ? "Loading available service boys..." : "No available service boys for this time slot"}
+                                                {slotsLoading ? t("bookings.manageBookingDetails.loadingServiceBoys") : t("bookings.manageBookingDetails.noServiceBoys")}
                                             </div>
                                         ) : (
                                             <div className="absolute z-50 w-full mt-1 rounded-xl border bg-white shadow-lg max-h-60 overflow-auto">
@@ -575,11 +579,11 @@ const ManageBookingDetails = () => {
                 </SectionCard>
 
                 {/* ── Status ── */}
-                <SectionCard title="Status" icon={<Truck className="size-5" />}>
+                <SectionCard title={t("bookings.manageBookingDetails.statusSection")} icon={<Truck className="size-5" />}>
                     <div className="space-y-5">
                         <div>
                             <label className="text-sm font-medium text-gray-600 mb-2 block">
-                                Booking Status
+                                {t("bookings.manageBookingDetails.bookingStatus")}
                                 {form.status && (
                                     <span className={cn("ml-2 text-xs px-2 py-0.5 rounded-md border", BOOKING_STATUS[form.status]?.color)}>
                                         {BOOKING_STATUS[form.status]?.label}
@@ -607,7 +611,7 @@ const ManageBookingDetails = () => {
                         {/* Booking Type */}
                         <div>
                             <label className="text-sm font-medium text-gray-600 mb-2 block">
-                                Booking Type
+                                {t("bookings.manageBookingDetails.bookingTypeLabel")}
                                 {BOOKING_TYPE[form.booking_type] && (
                                     <span className={cn("ml-2 text-xs px-2 py-0.5 rounded-md border", BOOKING_TYPE[form.booking_type]?.color)}>
                                         {BOOKING_TYPE[form.booking_type]?.label}
@@ -664,13 +668,13 @@ const ManageBookingDetails = () => {
                 </SectionCard>
 
                 {/* ── Location ── */}
-                <SectionCard title="Location" icon={<MapPin className="size-5" />}>
+                <SectionCard title={t("bookings.manageBookingDetails.locationSection")} icon={<MapPin className="size-5" />}>
                     <div className="space-y-4">
                         {/* Location dropdown from user saved addresses */}
                         <div>
                             <label className="text-sm font-medium text-gray-600 mb-1.5 block">
-                                Saved Locations
-                                {isLoadingLocations && <span className="ml-2 text-xs text-gray-400">(Loading...)</span>}
+                                {t("bookings.manageBookingDetails.savedLocations")}
+                                {isLoadingLocations && <span className="ml-2 text-xs text-gray-400">{t("bookings.manageBookingDetails.loadingLocations")}</span>}
                             </label>
                             <div className="relative">
                                 <button
@@ -684,10 +688,10 @@ const ManageBookingDetails = () => {
                                 >
                                     <span className="text-gray-500 truncate">
                                         {isLoadingLocations
-                                            ? "Loading user locations..."
+                                            ? t("bookings.manageBookingDetails.loadingUserLocations")
                                             : !Array.isArray(userLocations) || userLocations.length === 0
-                                                ? "No saved locations"
-                                                : "Select a saved location"
+                                                ? t("bookings.manageBookingDetails.noSavedLocations")
+                                                : t("bookings.manageBookingDetails.selectSavedLocation")
                                         }
                                     </span>
                                     <ChevronDown className={cn("size-4 text-gray-400 transition-transform", isLocationDropdownOpen && "rotate-180")} />
@@ -729,30 +733,30 @@ const ManageBookingDetails = () => {
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">Address</label>
+                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("bookings.manageBookingDetails.address")}</label>
                             <Input
                                 value={form.address_loc}
                                 onChange={(e) => updateField("address_loc", e.target.value)}
-                                placeholder="Enter address"
+                                placeholder={t("bookings.manageBookingDetails.enterAddress")}
                                 className="border-gray-200 bg-gray-50 rounded-xl py-3 focus:border-primary"
                             />
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="text-sm font-medium text-gray-600 mb-1.5 block">Latitude</label>
+                                <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("bookings.manageBookingDetails.latitude")}</label>
                                 <Input
                                     value={form.lat}
                                     onChange={(e) => updateField("lat", e.target.value)}
-                                    placeholder="Lat"
+                                    placeholder={t("bookings.manageBookingDetails.latPlaceholder")}
                                     className="border-gray-200 bg-gray-50 rounded-xl py-3"
                                 />
                             </div>
                             <div>
-                                <label className="text-sm font-medium text-gray-600 mb-1.5 block">Longitude</label>
+                                <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("bookings.manageBookingDetails.longitude")}</label>
                                 <Input
                                     value={form.lon}
                                     onChange={(e) => updateField("lon", e.target.value)}
-                                    placeholder="Lon"
+                                    placeholder={t("bookings.manageBookingDetails.lonPlaceholder")}
                                     className="border-gray-200 bg-gray-50 rounded-xl py-3"
                                 />
                             </div>
@@ -761,11 +765,11 @@ const ManageBookingDetails = () => {
                 </SectionCard>
 
                 {/* ── Main Service + Extras ── */}
-                <SectionCard title="Services" icon={<Package className="size-5" />}>
+                <SectionCard title={t("bookings.manageBookingDetails.servicesSection")} icon={<Package className="size-5" />}>
                     <div className="space-y-5">
                         {/* Main Service Dropdown */}
                         <div>
-                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">Main Service</label>
+                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("bookings.manageBookingDetails.mainService")}</label>
                             {getServicesQuery.isLoading ? (
                                 <div className="h-12 rounded-xl bg-gray-100 animate-pulse" />
                             ) : (
@@ -780,7 +784,7 @@ const ManageBookingDetails = () => {
                                                 ? selectedServiceObj.service_name?.[0]
                                                 : form.main_service
                                                     ? `Service #${form.main_service}`
-                                                    : "Select a service"
+                                                    : t("bookings.manageBookingDetails.selectService")
                                             }
                                         </span>
                                         <ChevronDown className={cn("size-4 text-gray-400 transition-transform", isServiceDropdownOpen && "rotate-180")} />
@@ -789,7 +793,7 @@ const ManageBookingDetails = () => {
                                         <div className="absolute z-50 w-full mt-1 rounded-xl border bg-white shadow-lg max-h-60 overflow-auto">
                                             {allServices.length === 0 ? (
                                                 <div className="w-full h-20 flex justify-center items-center text-gray-300 text-sm">
-                                                    No services available
+                                                    {t("bookings.manageBookingDetails.noServices")}
                                                 </div>
                                             ) : (
                                                 allServices.map((svc) => (
@@ -826,7 +830,7 @@ const ManageBookingDetails = () => {
 
                         {/* Extra Services */}
                         <div>
-                            <label className="text-sm font-medium text-gray-600 mb-2 block">Extra Services</label>
+                            <label className="text-sm font-medium text-gray-600 mb-2 block">{t("bookings.manageBookingDetails.extraServices")}</label>
 
                             {form.extra_services.length > 0 && (
                                 <div className="flex flex-wrap gap-2 mb-3">
@@ -850,7 +854,7 @@ const ManageBookingDetails = () => {
                             )}
 
                             {form.extra_services.length === 0 && bookingExtraServices && bookingExtraServices.length === 0 && (
-                                <p className="text-xs text-gray-400 mb-2">No extra services on this booking</p>
+                                <p className="text-xs text-gray-400 mb-2">{t("bookings.manageBookingDetails.noExtraServicesOnBooking")}</p>
                             )}
 
                             <button
@@ -861,8 +865,8 @@ const ManageBookingDetails = () => {
                             >
                                 <Plus className="w-4 h-4" />
                                 {availableExtras.length === 0
-                                    ? form.main_service ? "No extras for this service" : "Select a service first"
-                                    : "Add / Edit Extra Services"
+                                    ? form.main_service ? t("bookings.manageBookingDetails.noExtrasForService") : t("bookings.manageBookingDetails.selectServiceFirst")
+                                    : t("bookings.manageBookingDetails.addEditExtraServices")
                                 }
                             </button>
                         </div>
@@ -870,10 +874,10 @@ const ManageBookingDetails = () => {
                 </SectionCard>
 
                 {/* ── Payment ── */}
-                <SectionCard title="Payment Adjustments" icon={<CreditCard className="size-5" />}>
+                <SectionCard title={t("bookings.manageBookingDetails.paymentSection")} icon={<CreditCard className="size-5" />}>
                     <div className="space-y-4">
                         <div>
-                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">Coupon Amount</label>
+                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("bookings.manageBookingDetails.couponAmount")}</label>
                             <Input
                                 type="number"
                                 min="0"
@@ -885,7 +889,7 @@ const ManageBookingDetails = () => {
                             />
                         </div>
                         <div>
-                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">Wallet Amount</label>
+                            <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("bookings.manageBookingDetails.walletAmount")}</label>
                             <Input
                                 type="number"
                                 min="0"
@@ -900,22 +904,22 @@ const ManageBookingDetails = () => {
                 </SectionCard>
 
                 {/* ── Admin Note ── */}
-                <SectionCard title="Admin Note" icon={<FileText className="size-5" />} fullWidth>
+                <SectionCard title={t("bookings.manageBookingDetails.adminNoteSection")} icon={<FileText className="size-5" />} fullWidth>
                     <div>
-                        <label className="text-sm font-medium text-gray-600 mb-1.5 block">Note</label>
+                        <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("bookings.manageBookingDetails.note")}</label>
                         <Textarea
                             value={form.booking_admin_note}
                             onChange={(e) => updateField("booking_admin_note", e.target.value)}
-                            placeholder="Add notes for this booking..."
+                            placeholder={t("bookings.manageBookingDetails.addNotes")}
                             className="border-gray-200 bg-gray-50 rounded-xl resize-none min-h-[120px]"
                         />
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-gray-600 mb-1.5 block">Note</label>
+                        <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("bookings.manageBookingDetails.note")}</label>
                         <Textarea
                             value={form.note}
                             onChange={(e) => updateField("note", e.target.value)}
-                            placeholder="Add notes for this booking..."
+                            placeholder={t("bookings.manageBookingDetails.addNotes")}
                             className="border-gray-200 bg-gray-50 rounded-xl resize-none min-h-[120px]"
                         />
                     </div>
@@ -926,7 +930,7 @@ const ManageBookingDetails = () => {
 
             {/* Booking Vehicle */}
             {booking.vehicle && (
-                <SectionCard title="Booking Vehicle" icon={<Wrench className="size-5" />} fullWidth>
+                <SectionCard title={t("bookings.manageBookingDetails.bookingVehicle")} icon={<Wrench className="size-5" />} fullWidth>
                     <CustomTable
                         columns={vehicleColumns}
                         data={[booking.vehicle]}
@@ -942,7 +946,7 @@ const ManageBookingDetails = () => {
 
             {/* All User Vehicles */}
             {Array.isArray(userVehicles) && userVehicles.length > 0 && (
-                <SectionCard title={`All Customer Vehicles (${userVehicles.length})`} icon={<Wrench className="size-5" />} fullWidth>
+                <SectionCard title={t("bookings.manageBookingDetails.allCustomerVehicles", { count: userVehicles.length })} icon={<Wrench className="size-5" />} fullWidth>
                     <CustomTable
                         columns={vehicleColumns}
                         data={userVehicles}
@@ -958,7 +962,7 @@ const ManageBookingDetails = () => {
 
             {/* Service Boy */}
             {booking.service_boy && (
-                <SectionCard title="Service Boy" icon={<Truck className="size-5" />} fullWidth>
+                <SectionCard title={t("bookings.manageBookingDetails.serviceBoySection")} icon={<Truck className="size-5" />} fullWidth>
                     <CustomTable
                         columns={serviceBoyColumns}
                         data={[booking.service_boy]}
@@ -986,13 +990,13 @@ const ManageBookingDetails = () => {
             {hasChanges && (
                 <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg p-4 z-40">
                     <div className="max-w-7xl mx-auto flex items-center justify-between">
-                        <p className="text-sm text-gray-600">You have unsaved changes</p>
+                        <p className="text-sm text-gray-600">{t("bookings.manageBookingDetails.unsavedChanges")}</p>
                         <div className="flex gap-3">
                             <button
                                 onClick={() => { if (initialForm) setForm(initialForm); }}
                                 className="px-5 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all"
                             >
-                                Discard
+                                {t("bookings.manageBookingDetails.discard")}
                             </button>
                             <button
                                 onClick={handleSave}
@@ -1000,7 +1004,7 @@ const ManageBookingDetails = () => {
                                 className="flex items-center gap-2 px-6 py-2 rounded-lg bg-primary text-secondary-900 font-semibold text-sm hover:bg-primary-600 transition-all shadow-sm"
                             >
                                 {isUpdating ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
-                                {isUpdating ? "Saving..." : "Save Changes"}
+                                {isUpdating ? t("bookings.manageBookingDetails.saving") : t("bookings.manageBookingDetails.saveChanges")}
                             </button>
                         </div>
                     </div>

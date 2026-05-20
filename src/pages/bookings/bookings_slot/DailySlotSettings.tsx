@@ -5,8 +5,10 @@ import { Button } from '../../../components/ui/button';
 import { useGetDailySlotSettings, useUpdateDailySlotSettings } from '../../../api/features/slots.hooks';
 import type { DailySlotSettingsFormValues } from '../../../types/slots';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const DailySlotSettings = () => {
+    const { t } = useTranslation();
     const { data: dailySlotData, isLoading } = useGetDailySlotSettings();
     const updateMutation = useUpdateDailySlotSettings();
 
@@ -29,17 +31,17 @@ const DailySlotSettings = () => {
             },
             {
                 onSuccess: () => {
-                    toast.success('Daily slot settings updated successfully');
+                    toast.success(t('bookings.dailySlotSettings.updateSuccess'));
                 },
                 onError: () => {
-                    toast.error('Failed to update daily slot settings');
+                    toast.error(t('bookings.dailySlotSettings.updateFailed'));
                 },
             }
         );
     };
 
     if (isLoading) {
-        return <div className="flex justify-center items-center p-10">Loading...</div>;
+        return <div className="flex justify-center items-center p-10">{t('bookings.dailySlotSettings.loading')}</div>;
     }
 
     return (
@@ -53,17 +55,17 @@ const DailySlotSettings = () => {
                     <Form className="space-y-8">
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                                Working Hours
+                                {t('bookings.dailySlotSettings.workingHours')}
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <FormTimePicker
                                     name="start_time"
-                                    label="Start Time"
+                                    label={t('bookings.dailySlotSettings.startTime')}
                                     icon={<Clock className="size-5" />}
                                 />
                                 <FormTimePicker
                                     name="end_time"
-                                    label="End Time"
+                                    label={t('bookings.dailySlotSettings.endTime')}
                                     icon={<Clock className="size-5" />}
                                 />
                             </div>
@@ -72,7 +74,7 @@ const DailySlotSettings = () => {
                         <div>
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-lg font-semibold text-gray-900">
-                                    Out of Service Hours
+                                    {t('bookings.dailySlotSettings.outOfServiceHours')}
                                 </h3>
                             </div>
                             <FieldArray name="out_of_service_hours">
@@ -90,12 +92,12 @@ const DailySlotSettings = () => {
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     <FormTimePicker
                                                         name={`out_of_service_hours.${index}.start_time`}
-                                                        label="Start Time"
+                                                        label={t('bookings.dailySlotSettings.startTime')}
                                                         icon={<Clock className="size-5" />}
                                                     />
                                                     <FormTimePicker
                                                         name={`out_of_service_hours.${index}.end_time`}
-                                                        label="End Time"
+                                                        label={t('bookings.dailySlotSettings.endTime')}
                                                         icon={<Clock className="size-5" />}
                                                     />
                                                 </div>
@@ -107,7 +109,7 @@ const DailySlotSettings = () => {
                                             className="flex items-center gap-2 text-primary font-semibold hover:text-primary-600 transition-colors"
                                         >
                                             <Plus className="size-5" />
-                                            Add Out of Service Hours
+                                            {t('bookings.dailySlotSettings.addOutOfServiceHours')}
                                         </button>
                                     </div>
                                 )}
@@ -120,7 +122,7 @@ const DailySlotSettings = () => {
                                 disabled={!isValid || updateMutation.isPending}
                                 className="bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-6 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                             >
-                                {updateMutation.isPending ? 'Updating...' : 'Update Daily Slot Settings'}
+                                {updateMutation.isPending ? t('bookings.dailySlotSettings.updating') : t('bookings.dailySlotSettings.updateSettings')}
                             </Button>
                         </div>
                     </Form>

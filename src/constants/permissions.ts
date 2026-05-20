@@ -62,6 +62,7 @@ export const ROUTE_PERMISSIONS: Record<string, number> = {
     // Bookings
     "/bookings/create": PRIVILEGES.MANAGE_CREATE_BOOKING,
     "/bookings/manage": PRIVILEGES.MANAGE_BOOKING,
+    "/bookings/manage/reports": PRIVILEGES.TABULAR_REPORTS,
     "/bookings/slot": PRIVILEGES.MANAGE_SLOT,
 
     // Vehicles

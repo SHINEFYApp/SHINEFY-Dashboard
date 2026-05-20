@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdDashboard } from 'react-icons/md';
 import { BsCalendarEvent } from 'react-icons/bs';
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5';
@@ -16,6 +17,7 @@ import { logout } from '../../redux/slices/authSlice';
 import { useDispatch } from 'react-redux';
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, currentPath = '/bookings/create' }) => {
+    const { t } = useTranslation();
     const { hasPermission } = usePermissions();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -47,29 +49,41 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         {
             icon: <MdDashboard className="w-5 h-5" />,
             label: 'Dashboard',
+            i18nKey: 'sidebar.dashboard',
             path: '/',
             permissionId: PRIVILEGES.DASHBOARD,
         },
         {
             icon: <BsCalendarEvent className="w-5 h-5" />,
             label: 'Bookings',
+            i18nKey: 'sidebar.bookings',
             isActive: currentPath?.startsWith('/bookings'),
             subItems: [
                 {
                     icon: null,
                     label: 'Create Booking',
+                    i18nKey: 'sidebar.createBooking',
                     path: '/bookings/create',
                     permissionId: PRIVILEGES.MANAGE_CREATE_BOOKING,
                 },
                 {
                     icon: null,
                     label: 'Manage Bookings',
+                    i18nKey: 'sidebar.manageBookings',
                     path: '/bookings/manage',
                     permissionId: PRIVILEGES.MANAGE_BOOKING,
                 },
                 {
                     icon: null,
+                    label: 'Booking Reports',
+                    i18nKey: 'sidebar.bookingReports',
+                    path: '/bookings/manage/reports',
+                    permissionId: PRIVILEGES.TABULAR_REPORTS,
+                },
+                {
+                    icon: null,
                     label: 'Manage Slot',
+                    i18nKey: 'sidebar.manageSlot',
                     path: '/bookings/slot',
                     permissionId: PRIVILEGES.MANAGE_SLOT,
                 },
@@ -78,17 +92,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         {
             icon: <CarFront className="w-5 h-5" />,
             label: 'Vehicles',
+            i18nKey: 'sidebar.vehicles',
             isActive: currentPath?.startsWith('/vehicles'),
             subItems: [
                 {
                     icon: null,
                     label: 'Add Vehicle',
+                    i18nKey: 'sidebar.addVehicle',
                     path: '/vehicles/add',
                     permissionId: PRIVILEGES.CREATE_VEHICLE,
                 },
                 {
                     icon: null,
                     label: 'Manage Vehicle',
+                    i18nKey: 'sidebar.manageVehicle',
                     path: '/vehicles/manage',
                     permissionId: PRIVILEGES.MANAGE_CAR_OPTIONS,
                 }
@@ -97,29 +114,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         {
             icon: <Users className="w-5 h-5" />,
             label: 'Users & Staff',
+            i18nKey: 'sidebar.usersAndStaff',
             isActive: currentPath?.startsWith('/users&staff/manage'),
             subItems: [
                 {
                     icon: null,
                     label: 'Manage Users',
+                    i18nKey: 'sidebar.manageUsers',
                     path: '/users&staff/manage/users',
                     permissionId: PRIVILEGES.MANAGE_USERS,
                 },
                 {
                     icon: null,
                     label: 'Manage Sub Admin',
+                    i18nKey: 'sidebar.manageSubAdmin',
                     path: '/users&staff/manage/subAdmin',
                     permissionId: PRIVILEGES.MANAGE_SUB_ADMIN,
                 },
                 {
                     icon: null,
                     label: 'Manage Service Boy',
+                    i18nKey: 'sidebar.manageServiceBoy',
                     path: '/users&staff/manage/serviceBoy',
                     permissionId: PRIVILEGES.MANAGE_SERVICE_BOY,
                 },
                 {
                     icon: null,
                     label: 'Manage Users Wallet',
+                    i18nKey: 'sidebar.manageUsersWallet',
                     path: '/users&staff/manage/usersWallet',
                     permissionId: PRIVILEGES.MANAGE_USER_WALLET,
                 }
@@ -128,23 +150,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
          {
             icon: <Map className="w-5 h-5" />,
             label: 'Geography & Regions',
+            i18nKey: 'sidebar.geographyAndRegions',
             isActive: currentPath?.startsWith('/geography&regions/manage'),
             subItems: [
-                // {
-                //     icon: null,
-                //     label: 'Manage Countries',
-                //     path: '/geography&regions/manage/countries',
-                //     permissionId: PRIVILEGES.MANAGE_COUNTRIES,
-                // },
-                // {
-                //     icon: null,
-                //     label: 'Manage Regions',
-                //     path: '/geography&regions/manage/regions',
-                //     permissionId: PRIVILEGES.MANAGE_REGIONS,
-                // },
                 {
                     icon: null,
                     label: 'Manage Area',
+                    i18nKey: 'sidebar.manageArea',
                     path: '/geography&regions/manage/area',
                     permissionId: PRIVILEGES.MANAGE_AREA,
                 }
@@ -152,35 +164,41 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         }, {
             icon: <Settings className="w-5 h-5" />,
             label: 'Services & Extra',
+            i18nKey: 'sidebar.servicesAndExtra',
             isActive: currentPath?.startsWith('/services&extra/manage'),
             subItems: [
                 {
                     icon: null,
                     label: 'Manage Service',
+                    i18nKey: 'sidebar.manageService',
                     path: '/services&extra/manage/Service',
                     permissionId: PRIVILEGES.MANAGE_SERVICE,
                 },
                 {
                     icon: null,
                     label: 'Manage Extra Service',
+                    i18nKey: 'sidebar.manageExtraService',
                     path: '/services&extra/manage/ExtreService',
                     permissionId: PRIVILEGES.MANAGE_EXTRA_SERVICE,
                 },
                 {
                     icon: null,
                     label: 'Manage Special Service',
+                    i18nKey: 'sidebar.manageSpecialService',
                     path: '/services&extra/manage/SpecialService',
                     permissionId: PRIVILEGES.MANAGE_SPECIAL_SERVICE,
                 },
                 {
                     icon: null,
                     label: 'Manage Coupon',
+                    i18nKey: 'sidebar.manageCoupon',
                     path: '/services&extra/manage/Coupon',
                     permissionId: PRIVILEGES.MANAGE_COUPON,
                 },
                 {
                     icon: null,
                     label: 'Manage Package',
+                    i18nKey: 'sidebar.managePackage',
                     path: '/services&extra/manage/Package',
                     permissionId: PRIVILEGES.MANAGE_PACKAGES,
                 }
@@ -189,35 +207,41 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         {
             icon: <Map className="w-5 h-5" />,
             label: 'Compounds System',
+            i18nKey: 'sidebar.compoundsSystem',
             isActive: currentPath?.startsWith('/compounds'),
             subItems: [
                 {
                     icon: null,
                     label: 'Manage Compounds',
+                    i18nKey: 'sidebar.manageCompounds',
                     path: '/compounds/manage',
                     permissionId: PRIVILEGES.MANAGE_COMPOUNDS,
                 },
                 {
                     icon: null,
                     label: 'Manage Packages',
+                    i18nKey: 'sidebar.managePackages',
                     path: '/compounds/packages',
                     permissionId: PRIVILEGES.MANAGE_COMPOUND_PACKAGES,
                 },
                 {
                     icon: null,
                     label: 'Manage Subscriptions',
+                    i18nKey: 'sidebar.manageSubscriptions',
                     path: '/compounds/subscriptions',
                     permissionId: PRIVILEGES.MANAGE_COMPOUND_SUBSCRIPTIONS,
                 },
                 {
                     icon: null,
                     label: 'Manage Bookings',
+                    i18nKey: 'sidebar.manageBookings',
                     path: '/compounds/bookings',
                     permissionId: PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
                 },
                 {
                     icon: null,
                     label: 'Today Summary',
+                    i18nKey: 'sidebar.todaySummary',
                     path: '/compounds/today-summary',
                     permissionId: PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
                 },
@@ -226,16 +250,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         {
             icon: <Box className="w-5 h-5" />,
             label: 'Products & Orders',
+            i18nKey: 'sidebar.productsAndOrders',
             isActive: currentPath?.startsWith('/products&orders/manage'),
             subItems: [
                 {
                     icon: null,
                     label: 'Manage Products',
+                    i18nKey: 'sidebar.manageProducts',
                     path: '/products&orders/manage/Products'
                 },
                 {
                     icon: null,
                     label: 'Manage Orders',
+                    i18nKey: 'sidebar.manageOrders',
                     path: '/products&orders/manage/Orders'
                 }
             ],
@@ -243,66 +270,70 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         {
             icon: <HandCoins className="w-5 h-5" />,
             label: 'Financial & Points',
+            i18nKey: 'sidebar.financialAndPoints',
             isActive: currentPath?.startsWith('/financial&points/manage'),
             subItems: [
                 {
                     icon: null,
                     label: 'Manage VAT',
+                    i18nKey: 'sidebar.manageVAT',
                     path: '/financial&points/manage/Vat',
                     permissionId: PRIVILEGES.MANAGE_VAT,
                 },
                 {
                     icon: null,
                     label: 'Manage Driver Commission',
+                    i18nKey: 'sidebar.manageDriverCommission',
                     path: '/financial&points/manage/driverCommission',
                     permissionId: PRIVILEGES.DRIVER_COMMISSION,
                 },
                 {
                     icon: null,
                     label: 'Bonus Point',
+                    i18nKey: 'sidebar.bonusPoint',
                     path: '/financial&points/manage/bonusPoint',
                     permissionId: PRIVILEGES.MANAGE_BONUS_POINT,
                 },
-                // {
-                //     icon: null,
-                //     label: 'Admin Earning',
-                //     path: '/financial&points/manage/adminEarning',
-                //     permissionId: PRIVILEGES.MANAGE_EARNING,
-                // }
             ],
         },
         {
             icon: <Headphones className="w-5 h-5" />,
             label: 'Technical Support',
+            i18nKey: 'sidebar.technicalSupport',
             isActive: currentPath?.startsWith('/technicalSupport'),
             subItems: [
                 {
                     icon: null,
                     label: 'Contact Us',
+                    i18nKey: 'sidebar.contactUs',
                     path: '/technicalSupport/contactUs',
                     permissionId: PRIVILEGES.CONTACT_US,
                 },
                 {
                     icon: null,
                     label: 'Manage Companies',
+                    i18nKey: 'sidebar.manageCompanies',
                     path: '/technicalSupport/manage/companies',
                     permissionId: PRIVILEGES.MANAGE_COMPANIES,
                 },
                 {
                     icon: null,
                     label: 'Broadcast',
+                    i18nKey: 'sidebar.broadcast',
                     path: '/technicalSupport/broadcast',
                     permissionId: PRIVILEGES.BROADCAST,
                 },
                 {
                     icon: null,
                     label: 'Manage FAQS',
+                    i18nKey: 'sidebar.manageFAQS',
                     path: '/technicalSupport/manage/faqs',
                     permissionId: PRIVILEGES.MANAGE_FAQS,
                 },
                 {
                     icon: null,
                     label: 'Manage Order Questions',
+                    i18nKey: 'sidebar.manageOrderQuestions',
                     path: '/technicalSupport/manage/orderQuestions',
                     permissionId: PRIVILEGES.MANAGE_ORDER_QUESTION,
                 }
@@ -355,7 +386,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
         <>
             <aside
                 className={cn(
-                    "fixed left-0 top-0 bg-[#1a1a1a] text-white transition-all duration-300 ease-in-out z-30 ",
+                    "fixed ltr:left-0 rtl:right-0 top-0 bg-[#1a1a1a] text-white transition-all duration-300 ease-in-out z-30 ",
                     isCollapsed ? 'w-20' : 'w-72'
                 )}
             >
@@ -388,7 +419,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                                 {item.icon}
                                                 {!isCollapsed && (
                                                     <span className="text-base font-medium whitespace-nowrap">
-                                                        {item.label}
+                                                        {t(item.i18nKey || item.label)}
                                                     </span>
                                                 )}
                                             </div>
@@ -407,7 +438,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                                 {item.icon}
                                                 {!isCollapsed && (
                                                     <span className="text-base font-medium whitespace-nowrap">
-                                                        {item.label}
+                                                        {t(item.i18nKey || item.label)}
                                                     </span>
                                                 )}
                                             </div>
@@ -432,18 +463,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                                     : "max-h-0 opacity-0"
                                             )}
                                         >
-                                            <div className="relative pl-6 space-y-2">
+                                            <div className="relative ltr:pl-6 rtl:pr-6 space-y-2">
                                                 {/* Vertical Line */}
-                                                <div className={`absolute left-6 -top-8 bottom-0 w-0.5 bg-gray-600 h-full`} />
+                                                <div className={`absolute ltr:left-6 rtl:right-6 -top-8 bottom-0 w-0.5 bg-gray-600 h-full`} />
 
                                                 {item.subItems.map((subItem, index) => {
                                                     const isActive = currentPath === subItem.path;
 
                                                     return (
-                                                        <div key={index} className="relative">
+                                                                <div key={index} className="relative">
                                                             {/* Curved connector line */}
                                                             <svg
-                                                                className="absolute left-0 top-1/2 -translate-y-1/2"
+                                                                className="absolute ltr:left-0 rtl:right-0 top-1/2 -translate-y-1/2"
                                                                 width="24"
                                                                 height="40"
                                                                 viewBox="0 0 24 40"
@@ -460,7 +491,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                                             <Link
                                                                 to={subItem.path}
                                                                 className={cn(
-                                                                    "flex items-center gap-3 pl-8 pr-4 py-3 text-sm rounded-xl transition-all duration-200 group relative",
+                                                                    "flex items-center gap-3 ltr:pl-8 rtl:pr-8 ltr:pr-4 rtl:pl-4 py-3 text-sm rounded-xl transition-all duration-200 group relative",
                                                                     isActive
                                                                         ? "text-primary font-medium"
                                                                         : "text-gray-400 hover:text-white hover:bg-secondary-800/30"
@@ -471,7 +502,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                                                                     alt=""
                                                                     className="w-5 h-5 transition-all duration-200"
                                                                 />
-                                                                <span className="whitespace-nowrap">{subItem.label}</span>
+                                                                <span className="whitespace-nowrap">{t(subItem.i18nKey || subItem.label)}</span>
                                                             </Link>
                                                         </div>
                                                     );
@@ -497,7 +528,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                         >
                             <LogOut className="w-5 h-5" />
                             {!isCollapsed && (
-                                <span className="text-base font-medium whitespace-nowrap">Logout</span>
+                                <span className="text-base font-medium whitespace-nowrap">{t('sidebar.logout')}</span>
                             )}
                         </button>
                     </div>
@@ -506,8 +537,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 {/* Toggle Button */}
                 <button
                     onClick={onToggle}
-                    className="absolute -right-3 top-14 bg-primary text-[#1a1a1a] rounded-full p-2 shadow-xl hover:scale-110 transition-all duration-200 hover:shadow-2xl z-50"
-                    aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                    className="absolute ltr:-right-3 rtl:-left-3 top-14 bg-primary text-[#1a1a1a] rounded-full p-2 shadow-xl hover:scale-110 transition-all duration-200 hover:shadow-2xl z-50"
+                    aria-label={t(isCollapsed ? 'sidebar.expandSidebar' : 'sidebar.collapseSidebar')}
                 >
                     <IoChevronForward
                         className={cn(

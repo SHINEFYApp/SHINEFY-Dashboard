@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Form, Formik } from "formik";
 import { ArrowUpToLine, Calendar, Trash2 } from "lucide-react";
 import { FormDatePicker } from "../../../common/FormDatePicker";
@@ -11,34 +12,8 @@ import { useGetSpecificSlots, useDeleteSpecificSlot } from "../../../api/feature
 import type { GetSpecificSlotsParams } from "../../../types/slots";
 import { toast } from "sonner";
 
-const columns = [
-    {
-        key: "slot_id",
-        title: "ID",
-    },
-    {
-        key: "slot_date_formatted",
-        title: "Slot Date",
-    },
-    {
-        key: "start_time_formatted",
-        title: "Start Time",
-    },
-    {
-        key: "end_time_formatted",
-        title: "End Time",
-    },
-    {
-        key: "status_label",
-        title: "Status",
-    },
-    {
-        key: "created_at",
-        title: "Created At",
-    },
-];
-
 export default function ManageSlot() {
+    const { t } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
     const navigate = useNavigate();
@@ -72,37 +47,64 @@ export default function ManageSlot() {
     };
 
     const handleDelete = (id: number) => {
-        if (window.confirm("Are you sure you want to delete this slot?")) {
+        if (window.confirm(t('bookings.manageSlots.deleteConfirm'))) {
             deleteMutation.mutate(id, {
                 onSuccess: () => {
-                    toast.success("Slot deleted successfully");
+                    toast.success(t('bookings.manageSlots.deleteSuccess'));
                 },
                 onError: () => {
-                    toast.error("Failed to delete slot");
+                    toast.error(t('bookings.manageSlots.deleteFailed'));
                 },
             });
         }
     };
 
+    const columns = [
+        {
+            key: "slot_id",
+            title: t('bookings.manageSlots.columns.id'),
+        },
+        {
+            key: "slot_date_formatted",
+            title: t('bookings.manageSlots.columns.slotDate'),
+        },
+        {
+            key: "start_time_formatted",
+            title: t('bookings.manageSlots.columns.startTime'),
+        },
+        {
+            key: "end_time_formatted",
+            title: t('bookings.manageSlots.columns.endTime'),
+        },
+        {
+            key: "status_label",
+            title: t('bookings.manageSlots.columns.status'),
+        },
+        {
+            key: "created_at",
+            title: t('bookings.manageSlots.columns.createdAt'),
+        },
+    ];
+
     const columnsWithActions = [
         ...columns,
         {
             key: "action",
-            title: "Action",
+            title: t('bookings.manageSlots.columns.action'),
             render: (_: any, row: any) => (
                 <div className="flex gap-2 items-center">
                     <button
                         className="bg-[#C9FFCB] flex items-center gap-2 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-3.5 py-3 font-semibold transition-colors"
                         onClick={() => navigate(`/bookings/slot/edit/${row.slot_id}`)}
                     >
-                        <ArrowUpToLine /> update
+                        <ArrowUpToLine /> {t('bookings.manageSlots.update')}
                     </button>
                     <button
                         className="bg-[#FFD5D2] flex items-center gap-2 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-3.5 py-3 font-semibold transition-colors"
                         onClick={() => handleDelete(row.slot_id)}
                         disabled={deleteMutation.isPending}
                     >
-                        <Trash2 /> delete
+                        <Trash2 /> {t('bookings.manageSlots.delete')}
                     </button>
                 </div>
             ),
@@ -127,23 +129,23 @@ export default function ManageSlot() {
                                     <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 flex-1">
                                         <div className={`flex flex-col min-w-[140px]`}>
                                             <h1 className="text-xl md:text-2xl font-bold text-secondary-900">
-                                                Filter
+                                                {t('bookings.manageSlots.title')}
                                             </h1>
                                             <p className="text-xs md:text-sm text-secondary-500">
-                                                Manage Slots
+                                                {t('bookings.manageSlots.subtitle')}
                                             </p>
                                         </div>
                                         <div className={`w-full md:w-[178px] -space-y-2`}>
-                                            <FormDropdown name="type" label="" placeholder="Type" options={types} className="mb-2" />
+                                            <FormDropdown name="type" label="" placeholder={t('bookings.manageSlots.type')} options={types} className="mb-2" />
                                         </div>
                                         <div className="w-full md:w-[178px] -space-y-2">
-                                            <FormDropdown name="status" label="" placeholder="Status" options={status} className="mb-2" />
+                                            <FormDropdown name="status" label="" placeholder={t('bookings.manageSlots.status')} options={status} className="mb-2" />
                                         </div>
                                         <div className={`w-full md:w-[150px] -space-y-2`}>
                                             <FormDatePicker
                                                 name="date"
                                                 label=""
-                                                placeholder="Date"
+                                                placeholder={t('bookings.manageSlots.date')}
                                                 icon={<Calendar className="w-5 h-5" />}
                                                 className="mb-0"
                                                 checkmark={false}
@@ -153,25 +155,25 @@ export default function ManageSlot() {
                                             type="submit"
                                             className="px-6 lg:px-8 py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap"
                                         >
-                                            Search
+                                            {t('bookings.manageSlots.search')}
                                         </button>
                                     </div>
                                     <div className="flex flex-col lg:flex-row items-center gap-5">
                                         <div className="w-full lg:w-[135px]">
-                                            <FormDropdown name="export" label="" placeholder={'Export'} options={exportTypes} className="mb-2" />
+                                            <FormDropdown name="export" label="" placeholder={t('bookings.manageSlots.export')} options={exportTypes} className="mb-2" />
                                         </div>
                                         <span className="w-full h-px lg:w-px lg:h-10 bg-[#D2D2D2]"></span>
                                         <Link
                                             to={"/bookings/slot/create"}
                                             className="w-full lg:w-[94px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
                                         >
-                                            Add Slot
+                                            {t('bookings.manageSlots.addSlot')}
                                         </Link>
                                         <Link
                                             to={"/bookings/slot/daily-slot"}
                                             className="w-full lg:w-[180px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
                                         >
-                                            Manage Daily Slots
+                                            {t('bookings.manageSlots.manageDailySlots')}
                                         </Link>
                                     </div>
                                 </div>

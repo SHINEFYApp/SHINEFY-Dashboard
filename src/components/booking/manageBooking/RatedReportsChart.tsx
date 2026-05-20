@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     BarChart,
     Bar,
@@ -18,6 +19,7 @@ import { generateChartData } from "../../../utils/utils";
 import type { ReportFilters } from "../../../types/bookings";
 
 const RatedReportsChart = () => {
+    const { t } = useTranslation();
     const [selectedYear, setSelectedYear] = useState("2025");
     const [selectedMonth, setSelectedMonth] = useState("January");
     const [chartData] = useState(generateChartData(dummyDays));
@@ -28,7 +30,7 @@ const RatedReportsChart = () => {
         endDate: "",
     };
 
-    const statuses = ["All", "Completed", "Pending", "Cancelled"];
+    const statuses = [t('bookings.ratedReportsChart.statuses.all'), t('bookings.ratedReportsChart.statuses.completed'), t('bookings.ratedReportsChart.statuses.pending'), t('bookings.ratedReportsChart.statuses.cancelled')];
 
     const getBarColor = (index: number) => index % 2 === 1 ? "#FFC107" : "#FF7043";
 
@@ -52,34 +54,34 @@ const RatedReportsChart = () => {
                         <div className="flex flex-wrap items-center gap-3">
                             {/* Title */}
                             <h1 className="text-xl md:text-2xl font-bold text-secondary-900 mr-10">
-                                Rated Reports
+                                {t('bookings.ratedReportsChart.title')}
                             </h1>
 
                             {/* Filters */}
                             <div className="w-36 -space-y-2">
-                                <FormDropdown name="status" label="" placeholder="Status" options={statuses} className="mb-0" />
+                                <FormDropdown name="status" label="" placeholder={t('bookings.ratedReportsChart.status')} options={statuses} className="mb-0" />
                             </div>
 
                             <div className="w-40 -space-y-2">
-                                <FormDatePicker name="startDate" label="" placeholder="Start Date" icon={<Calendar className="w-5 h-5" />} className="mb-0" checkmark={false} />
+                                <FormDatePicker name="startDate" label="" placeholder={t('bookings.ratedReportsChart.startDate')} icon={<Calendar className="w-5 h-5" />} className="mb-0" checkmark={false} />
                             </div>
 
                             <div className="w-40 -space-y-2">
-                                <FormDatePicker name="endDate" label="" placeholder="End Date" icon={<Calendar className="w-5 h-5" />} className="mb-0" checkmark={false} />
+                                <FormDatePicker name="endDate" label="" placeholder={t('bookings.ratedReportsChart.endDate')} icon={<Calendar className="w-5 h-5" />} className="mb-0" checkmark={false} />
                             </div>
 
                             <button type="submit" className="px-8 py-3 bg-primary rounded-lg text-secondary-900 font-semibold hover:bg-primary-600 mr-auto transition-all">
-                                Search
+                                {t('bookings.ratedReportsChart.search')}
                             </button>
 
                             <button type="button" className="flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all">
                                 <FileDown className="w-4 h-4 text-[#1B8354]" />
-                                <span className="hidden lg:inline">Export Count</span>
+                                <span className="hidden lg:inline">{t('bookings.ratedReportsChart.exportCount')}</span>
                             </button>
 
                             <button type="button" className="flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all">
                                 <FileDown className="w-4 h-4 text-[#1B8354]" />
-                                <span className="hidden lg:inline">Export Details</span>
+                                <span className="hidden lg:inline">{t('bookings.ratedReportsChart.exportDetails')}</span>
                             </button>
                         </div>
                     </Form>
@@ -91,7 +93,7 @@ const RatedReportsChart = () => {
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                     <div className="flex items-center gap-6">
                         <h2 className="text-xl md:text-2xl font-bold text-secondary-900">
-                            Rated Reports
+                            {t('bookings.ratedReportsChart.chartTitle')}
                         </h2>
                         <div className="flex items-center gap-2">
                             <span className="font-bold">4</span>

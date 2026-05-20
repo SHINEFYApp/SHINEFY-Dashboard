@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import { servicesBookingSchema, packageBookingSchema } from '../../../../../constants/validationSchema';
 import { Clock, Package, PersonStanding, Plus, X } from 'lucide-react';
@@ -40,7 +41,7 @@ export default function ServicesStep2({
     formData,
     setFormData
 }: stepsProps) {
-  
+    const { t } = useTranslation();
     const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
     const baseURL = import.meta.env.VITE_API_URL;
 
@@ -158,7 +159,7 @@ export default function ServicesStep2({
                 </div>
             )}
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Enter reservation data</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-8">{t('bookings.createBooking.reservationData')}</h2>
 
             <Formik
                 initialValues={{
@@ -182,20 +183,20 @@ export default function ServicesStep2({
                                 <>
                                     <DropDownToSendObject
                                         name="mainPackage"
-                                        label="User Packages"
-                                        placeholder="Select User Package"
+                                        label={t('bookings.createBooking.step2.userPackages')}
+                                        placeholder={t('bookings.createBooking.step2.selectUserPackage')}
                                         icon={<Package className="w-5 h-5" />}
                                         options={userPackages}
                                         getOptionLabel={(opt: any) => {
-                                            const name = opt.package?.name || 'Unknown Package';
+                                            const name = opt.package?.name || t('bookings.createBooking.step2.unknownPackage');
                                             const isExpired = opt.available_to && new Date(opt.available_to) < new Date();
                                             const isInactive = opt.status !== 'active';
                                             const isExhausted = opt.remind_used !== null && opt.remind_used <= 0;
                                             
                                             let statusLabel = '';
-                                            if (isInactive) statusLabel = '(Inactive)';
-                                            else if (isExpired) statusLabel = '(Expired)';
-                                            else if (isExhausted) statusLabel = '(Exhausted)';
+                                            if (isInactive) statusLabel = t('bookings.createBooking.step2.inactive');
+                                            else if (isExpired) statusLabel = t('bookings.createBooking.step2.expired');
+                                            else if (isExhausted) statusLabel = t('bookings.createBooking.step2.exhausted');
                                             
                                             return `${name} ${statusLabel}`.trim();
                                         }}
@@ -203,12 +204,12 @@ export default function ServicesStep2({
                                     />
                                     <DropDownToSendObject
                                         name="mainService"
-                                        label="Service"
-                                        placeholder="Select Service from Package"
+                                        label={t('bookings.createBooking.step2.service')}
+                                        placeholder={t('bookings.createBooking.step2.selectServiceFromPackage')}
                                         icon={<Package className="w-5 h-5" />}
                                         options={allServices}
                                         setFormData={setFormData}
-                                        getOptionLabel={(opt: any) => `${opt.service_name?.[0] || 'Unknown Service'} ${opt.remind_quantity !== undefined ? `(${opt.remind_quantity} left)` : ''}`}
+                                        getOptionLabel={(opt: any) => `${opt.service_name?.[0] || t('bookings.createBooking.step2.unknownService')} ${opt.remind_quantity !== undefined ? `(${opt.remind_quantity} ${t('bookings.createBooking.step2.left')})` : ''}`}
                                         valueExtractor={(opt: any) => String(opt.service_id)}
                                         disabled={!formData.mainPackage?.id}
                                     />
@@ -216,13 +217,13 @@ export default function ServicesStep2({
                             ) : (
                                 <DropDownToSendObject
                                     name="mainService"
-                                    label="Service"
-                                    placeholder="Select Service"
+                                    label={t('bookings.createBooking.step2.service')}
+                                    placeholder={t('bookings.createBooking.step2.selectService')}
                                     icon={<Package className="w-5 h-5" />}
                                     options={allServices}
                                     setFormData={setFormData}
                                     valueExtractor={(opt) => String(opt.service_id)}
-                                    getOptionLabel={(opt) => opt.service_name?.[0] || 'Unknown'}
+                                    getOptionLabel={(opt) => opt.service_name?.[0] || t('bookings.createBooking.step2.unknownService')}
                                 />
                             )}
                         </div>
@@ -230,7 +231,7 @@ export default function ServicesStep2({
                         {/* ── Extra Services ── */}
                         <div className="mb-8">
                             <label className="text-sm font-medium text-gray-700 block mb-3">
-                                Extra Services
+                                {t('bookings.createBooking.step2.extraServices')}
                             </label>
 
                             {/* Selected extras chips */}
@@ -264,8 +265,8 @@ export default function ServicesStep2({
                             >
                                 <Plus className="w-4 h-4" />
                                 {availableExtras.length === 0
-                                    ? (userPackageInput && !formData.mainPackage?.id ? 'Select a package first' : 'Select a service first')
-                                    : 'Add Extra Service'}
+                                    ? (userPackageInput && !formData.mainPackage?.id ? t('bookings.createBooking.step2.selectPackageFirst') : t('bookings.createBooking.step2.selectServiceFirst'))
+                                    : t('bookings.createBooking.step2.addExtraService')}
                             </button>
                         </div>
 
@@ -273,7 +274,7 @@ export default function ServicesStep2({
                         <div className="mb-8">
                             <FormTimeSlots
                                 name="bookingTime"
-                                label="Select Booking Time"
+                                label={t('bookings.createBooking.step2.selectBookingTime')}
                                 icon={<Clock className="size-5" />}
                                 date={formData.bookingDate}
                                 serviceTime={totalServiceTime}
@@ -289,8 +290,8 @@ export default function ServicesStep2({
                         <div className="mb-8 md:w-1/2 w-full">
                             <DropDownToSendObject
                                 name="serviceBoy"
-                                label="Service Boy"
-                                placeholder="Select Service Boy"
+                                label={t('bookings.createBooking.step2.serviceBoy')}
+                                placeholder={t('bookings.createBooking.step2.selectServiceBoy')}
                                 setFormData={setFormData}
                                 icon={<PersonStanding className="w-5 h-5" />}
                                 options={available_service_boys}
@@ -304,14 +305,14 @@ export default function ServicesStep2({
                                 onClick={onBack}
                                 className="flex-1 md:flex-none md:px-16 py-2 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all duration-200"
                             >
-                                Back
+                                {t('bookings.createBooking.back')}
                             </button>
                             <Button
                                 type="submit"
                                 disabled={!isValid}
                                 className="flex-1 md:flex-none bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-4 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                             >
-                                Next
+                                {t('bookings.createBooking.next')}
                             </Button>
                         </div>
 

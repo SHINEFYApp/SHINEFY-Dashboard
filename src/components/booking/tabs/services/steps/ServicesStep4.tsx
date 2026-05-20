@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import { servicesStep4Schema } from '../../../../../constants/validationSchema';
 import { Button } from '../../../../ui/button';
@@ -9,11 +10,12 @@ const ServicesStep4 = ({
     formData ,
     setFormData
 }: stepsProps) => {
+    const { t } = useTranslation();
 
     return (
         <>
             <h2 className="text-2xl font-bold text-gray-900 mb-8">
-                Enter reservation data
+                {t('bookings.createBooking.reservationData')}
             </h2>
 
             <Formik
@@ -33,7 +35,7 @@ const ServicesStep4 = ({
                         {/* User Note */}
                         <div className="mb-8">
                             <label className="text-base font-bold text-gray-900 mb-3 block">
-                                User Note
+                                {t('bookings.createBooking.step4.userNote')}
                             </label>
                             <textarea
                                 name="userNote"
@@ -41,7 +43,7 @@ const ServicesStep4 = ({
                                 onChange={(e) => {
                                     setFormData({...formData , userNote: e.target.value });
                                 }}
-                                placeholder="Enter Note"
+                                placeholder={t('bookings.createBooking.step4.enterNote')}
                                 rows={6}
                                 className="w-full rounded-2xl border-2 border-gray-200 bg-gray-50 px-6 py-4 text-sm font-medium text-gray-700 placeholder:text-gray-400 resize-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200"
                             />
@@ -51,7 +53,7 @@ const ServicesStep4 = ({
                         <div className="mb-8">
                             <div className="flex items-center justify-between mb-3">
                                 <label className="text-base font-bold text-gray-900">
-                                    Admin Notes
+                                    {t('bookings.createBooking.step4.adminNotes')}
                                 </label>
                             </div>
 
@@ -61,7 +63,7 @@ const ServicesStep4 = ({
                                 onChange={(e) => {
                                     setFormData({...formData , adminNotes: e.target.value });
                                 }}
-                                placeholder="Enter Note"
+                                placeholder={t('bookings.createBooking.step4.enterNote')}
                                 rows={8}
                                 className="w-full rounded-2xl border-2 border-gray-200 bg-gray-50 px-6 py-4 text-sm font-medium text-gray-700 placeholder:text-gray-400 resize-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200"
                             />
@@ -74,13 +76,13 @@ const ServicesStep4 = ({
                                 onClick={onBack}
                                 className="flex-1 md:flex-none md:px-16 py-4 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all duration-200"
                             >
-                                Back
+                                {t('bookings.createBooking.back')}
                             </button>
                             <Button
                                 type="submit"
                                 className="flex-1 md:flex-none bg-primary hover:bg-primary-600 text-gray-900 font-bold px-16 py-4 rounded-xl text-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
                             >
-                                Submit
+                                {t('bookings.createBooking.submit')}
                             </Button>
                         </div>
                     </Form>

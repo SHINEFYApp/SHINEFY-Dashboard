@@ -20,6 +20,7 @@ export interface filterOptionsTypes {
         companyId : string,
         createtimeFrom : string,
         createtimeTo : string,
+        subareaIds : string,
     }
 }
 

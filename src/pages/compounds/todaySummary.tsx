@@ -1,8 +1,10 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useGetTodaySummary } from "../../api/features/compounds.hooks";
 import { CalendarDays, Building2, Clock, CheckCircle, Circle } from "lucide-react";
 
 const CompoundTodaySummary = () => {
+    const { t } = useTranslation();
     const { data, isLoading } = useGetTodaySummary();
     const summary = data?.data?.data;
     const compounds = summary?.compounds || [];
@@ -18,14 +20,14 @@ const CompoundTodaySummary = () => {
         [compounds]
     );
 
-    if (isLoading) return <div className="p-8">Loading...</div>;
+    if (isLoading) return <div className="p-8">{t("compounds.todaySummaryPage.loading")}</div>;
 
     return (
         <main>
             <div className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl">
                 <div className="mb-6">
-                    <h1 className="text-lg md:text-xl font-bold text-secondary-900">Today's Summary</h1>
-                    <p className="text-xs text-secondary-500">Compound booking summary for {todayDate}</p>
+                    <h1 className="text-lg md:text-xl font-bold text-secondary-900">{t("compounds.todaySummaryPage.title")}</h1>
+                    <p className="text-xs text-secondary-500">{t("compounds.todaySummaryPage.subtitle", { date: todayDate })}</p>
                 </div>
 
                 {/* Stats Cards */}
@@ -35,7 +37,7 @@ const CompoundTodaySummary = () => {
                             <CalendarDays className="w-8 h-8 text-amber-600" />
                             <div>
                                 <p className="text-2xl font-bold text-amber-800">{totalToday}</p>
-                                <p className="text-sm text-amber-600">Total Bookings Today</p>
+                                <p className="text-sm text-amber-600">{t("compounds.todaySummaryPage.totalBookingsToday")}</p>
                             </div>
                         </div>
                     </div>
@@ -44,7 +46,7 @@ const CompoundTodaySummary = () => {
                             <Circle className="w-8 h-8 text-blue-600" />
                             <div>
                                 <p className="text-2xl font-bold text-blue-800">{totalPending}</p>
-                                <p className="text-sm text-blue-600">Pending</p>
+                                <p className="text-sm text-blue-600">{t("compounds.todaySummaryPage.pending")}</p>
                             </div>
                         </div>
                     </div>
@@ -53,7 +55,7 @@ const CompoundTodaySummary = () => {
                             <Building2 className="w-8 h-8 text-green-600" />
                             <div>
                                 <p className="text-2xl font-bold text-green-800">{compounds.length}</p>
-                                <p className="text-sm text-green-600">Compounds</p>
+                                <p className="text-sm text-green-600">{t("compounds.todaySummaryPage.compounds")}</p>
                             </div>
                         </div>
                     </div>
@@ -64,16 +66,16 @@ const CompoundTodaySummary = () => {
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Compound</th>
-                                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Total Today</th>
-                                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Pending</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Service Boys</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{t("compounds.todaySummaryPage.tableHeaders.compound")}</th>
+                                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{t("compounds.todaySummaryPage.tableHeaders.totalToday")}</th>
+                                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{t("compounds.todaySummaryPage.tableHeaders.pending")}</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{t("compounds.todaySummaryPage.tableHeaders.serviceBoys")}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {compounds.length === 0 ? (
                                 <tr>
-                                    <td colSpan={4} className="px-4 py-8 text-center text-gray-400">No data available</td>
+                                    <td colSpan={4} className="px-4 py-8 text-center text-gray-400">{t("compounds.todaySummaryPage.noData")}</td>
                                 </tr>
                             ) : (
                                 compounds.map((c: any, i: number) => (

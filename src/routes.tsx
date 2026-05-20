@@ -3,6 +3,7 @@ import Home from './pages/home';
 import CreateBookings from './pages/bookings/CreateBookings';
 import ManageBooking from './pages/bookings/manage_booking/ManageBooking';
 import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingDetails';
+import BookingReports from './pages/bookings/manage_booking/BookingReports';
 import ManageSlot from './pages/bookings/bookings_slot/ManageSlots';
 import AdminSlots from './pages/bookings/bookings_slot/AdminSlots';
 import AddVehicles from './pages/vehicles/addVehicles';
@@ -101,6 +102,7 @@ export const RoutesPages = () => {
         {/* Bookings */}
         <Route path="/bookings/create" element={<PermissionGuard permissionId={P.MANAGE_CREATE_BOOKING}><CreateBookings /></PermissionGuard>} />
         <Route path="/bookings/manage" element={<PermissionGuard permissionId={P.MANAGE_BOOKING}><ManageBooking /></PermissionGuard>} />
+        <Route path="/bookings/manage/reports" element={<PermissionGuard permissionId={P.TABULAR_REPORTS}><BookingReports /></PermissionGuard>} />
         <Route path="/bookings/manage/:id" element={<PermissionGuard permissionId={P.MANAGE_BOOKING}><ManageBookingDetails /></PermissionGuard>} />
         <Route path="/bookings/slot" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><ManageSlot /></PermissionGuard>} />
         <Route path="/bookings/slot/admin-slots" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><AdminSlots /></PermissionGuard>} />

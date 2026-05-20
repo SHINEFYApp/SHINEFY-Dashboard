@@ -46,7 +46,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <main
                 className={cn(
                     "pt-20 min-h-screen transition-all duration-300 ease-in-out",
-                    isCollapsed ? 'ml-20' : 'ml-72'
+                    isCollapsed ? 'ltr:ml-20 rtl:mr-20' : 'ltr:ml-72 rtl:mr-72'
                 )}
             >
                 <div className="p-6 animate-fade-in">

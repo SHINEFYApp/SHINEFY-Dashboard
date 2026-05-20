@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatedTabs } from '../../components/booking/AnimatedTabs';
 import { ProgressSteps } from '../../components/booking/ProgressSteps';
@@ -13,6 +14,7 @@ import { formDataInitialValues } from '../../constants/initialValues';
 import { mutateBookingPackage, mutateBookingService } from './mutates';
 
 const CreateBookings = () => {
+    const { t } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
     const validTabs = ['services', 'package'];
     const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -149,7 +151,7 @@ const CreateBookings = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.success('Sucessfuly Booking Service');
+            toast.success(t('bookings.createBooking.successToast'));
             setCurrentStep(1);
             setFormData(formDataInitialValues)
             setCompletedSteps([])

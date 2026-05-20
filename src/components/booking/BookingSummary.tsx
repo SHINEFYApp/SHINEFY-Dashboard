@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type {
     BookingFormData,
     GetServiceResponse,
@@ -16,6 +17,7 @@ function formatPrice(amount: number) {
 }
 
 export default function BookingSummary({ formData }: BookingSummaryProps) {
+    const { t } = useTranslation();
     const { data: servicesData } = useGet<GetServiceResponse>({
         queryKey: ['services'],
         queryFn: () => getServices(`${baseURL}/api/get_service/`),
@@ -58,20 +60,20 @@ export default function BookingSummary({ formData }: BookingSummaryProps) {
             {/* Customer Info */}
             <section className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
                 <h3 className="text-sm font-bold text-gray-900 mb-3 pb-2 border-b border-gray-100">
-                    Customer Info
+                    {t('bookings.createBooking.bookingSummary.customerInfo')}
                 </h3>
                 <div className="space-y-2.5 text-sm">
-                    <Row label="Name" value={formData.userDetails?.name} placeholder="Not yet entered" />
-                    <Row label="Phone" value={formData.phoneNumber} placeholder="Not yet entered" />
-                    <Row label="Address" value={formData.address?.location} placeholder="Not yet entered" />
-                    <Row label="Date" value={formData.bookingDate} placeholder="Not yet selected" />
+                    <Row label={t('bookings.createBooking.bookingSummary.name')} value={formData.userDetails?.name} placeholder={t('bookings.createBooking.bookingSummary.notYetEntered')} />
+                    <Row label={t('bookings.createBooking.bookingSummary.phone')} value={formData.phoneNumber} placeholder={t('bookings.createBooking.bookingSummary.notYetEntered')} />
+                    <Row label={t('bookings.createBooking.bookingSummary.address')} value={formData.address?.location} placeholder={t('bookings.createBooking.bookingSummary.notYetEntered')} />
+                    <Row label={t('bookings.createBooking.bookingSummary.date')} value={formData.bookingDate} placeholder={t('bookings.createBooking.bookingSummary.notYetSelected')} />
                 </div>
             </section>
 
             {/* Vehicles */}
             <section className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
                 <h3 className="text-sm font-bold text-gray-900 mb-3 pb-2 border-b border-gray-100">
-                    Vehicles
+                    {t('bookings.createBooking.bookingSummary.vehicles')}
                 </h3>
                 {formData.vehicles?.length > 0 ? (
                     <ul className="space-y-1.5">
@@ -85,19 +87,19 @@ export default function BookingSummary({ formData }: BookingSummaryProps) {
                         ))}
                     </ul>
                 ) : (
-                    <p className="text-sm text-gray-300 italic">No vehicles added</p>
+                    <p className="text-sm text-gray-300 italic">{t('bookings.createBooking.bookingSummary.noVehiclesAdded')}</p>
                 )}
             </section>
 
             {/* Service Details */}
             <section className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
                 <h3 className="text-sm font-bold text-gray-900 mb-3 pb-2 border-b border-gray-100">
-                    Service Details
+                    {t('bookings.createBooking.bookingSummary.serviceDetails')}
                 </h3>
                 <div className="space-y-2.5 text-sm">
-                    <Row label="Service" value={mainServiceLabel} placeholder="Not yet selected" />
-                    <Row label="Time Slot" value={formData.bookingTime} placeholder="Not yet selected" />
-                    <Row label="Service Boy" value={formData.serviceBoy?.name} placeholder="Not yet assigned" />
+                    <Row label={t('bookings.createBooking.bookingSummary.service')} value={mainServiceLabel} placeholder={t('bookings.createBooking.bookingSummary.notYetSelected')} />
+                    <Row label={t('bookings.createBooking.bookingSummary.timeSlot')} value={formData.bookingTime} placeholder={t('bookings.createBooking.bookingSummary.notYetSelected')} />
+                    <Row label={t('bookings.createBooking.bookingSummary.serviceBoy')} value={formData.serviceBoy?.name} placeholder={t('bookings.createBooking.bookingSummary.notYetAssigned')} />
                     {formData.extraServices.map((es) => {
                         const found = allExtras.find((e) => String(e.extra_service_id) === es.id);
                         const price = Number(found?.extra_service_price || 0);
@@ -118,37 +120,37 @@ export default function BookingSummary({ formData }: BookingSummaryProps) {
             {/* Payment & Price Summary */}
             <section className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
                 <h3 className="text-sm font-bold text-gray-900 mb-3 pb-2 border-b border-gray-100">
-                    Payment
+                    {t('bookings.createBooking.bookingSummary.payment')}
                 </h3>
                 <div className="space-y-2.5 text-sm">
-                    <Row label="Method" value={formData.paymentMethod} placeholder="Not yet selected" />
-                    <Row label="Coupon" value={formData.coupon?.code} placeholder="Not applied" />
+                    <Row label={t('bookings.createBooking.bookingSummary.method')} value={formData.paymentMethod} placeholder={t('bookings.createBooking.bookingSummary.notYetSelected')} />
+                    <Row label={t('bookings.createBooking.bookingSummary.coupon')} value={formData.coupon?.code} placeholder={t('bookings.createBooking.bookingSummary.notApplied')} />
 
                     {mainServiceId && (
                         <>
                             <div className="border-t border-gray-100 pt-2 mt-2 space-y-2">
-                                <PriceRow label="Main Service" amount={mainServicePrice} />
+                                <PriceRow label={t('bookings.createBooking.bookingSummary.mainService')} amount={mainServicePrice} />
                                 {formData.extraServices.length > 0 && (
-                                    <PriceRow label="Extra Services" amount={extrasTotal} />
+                                    <PriceRow label={t('bookings.createBooking.bookingSummary.extraServices')} amount={extrasTotal} />
                                 )}
-                                <PriceRow label="Subtotal" amount={subtotal} bold />
+                                <PriceRow label={t('bookings.createBooking.bookingSummary.subtotal')} amount={subtotal} bold />
 
                                 {couponDiscount > 0 && (
                                     <div className="flex justify-between gap-2 text-green-600">
-                                        <span>Coupon Discount</span>
+                                        <span>{t('bookings.createBooking.bookingSummary.couponDiscount')}</span>
                                         <span className="font-medium">-{formatPrice(couponDiscount)}</span>
                                     </div>
                                 )}
 
                                 {walletAmount > 0 && (
                                     <div className="flex justify-between gap-2 text-blue-600">
-                                        <span>Wallet</span>
+                                        <span>{t('bookings.createBooking.bookingSummary.wallet')}</span>
                                         <span className="font-medium">-{formatPrice(walletAmount)}</span>
                                     </div>
                                 )}
 
                                 <div className="flex justify-between gap-2 text-sm font-bold text-gray-900 border-t border-gray-200 pt-2">
-                                    <span>Total</span>
+                                    <span>{t('bookings.createBooking.bookingSummary.total')}</span>
                                     <span>{formatPrice(grandTotal)}</span>
                                 </div>
                             </div>
@@ -160,11 +162,11 @@ export default function BookingSummary({ formData }: BookingSummaryProps) {
             {/* Notes */}
             <section className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
                 <h3 className="text-sm font-bold text-gray-900 mb-3 pb-2 border-b border-gray-100">
-                    Notes
+                    {t('bookings.createBooking.bookingSummary.notes')}
                 </h3>
                 <div className="space-y-2.5 text-sm">
-                    <Row label="User Note" value={formData.userNote} placeholder="No note" />
-                    <Row label="Admin" value={formData.adminNotes} placeholder="No note" />
+                    <Row label={t('bookings.createBooking.bookingSummary.userNote')} value={formData.userNote} placeholder={t('bookings.createBooking.bookingSummary.noNote')} />
+                    <Row label={t('bookings.createBooking.bookingSummary.adminNote')} value={formData.adminNotes} placeholder={t('bookings.createBooking.bookingSummary.noNote')} />
                 </div>
             </section>
         </aside>

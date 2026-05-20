@@ -1,9 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { useDashboardStatistics, useRecentBookings, useRevenueChart } from "../api/features/home.hooks";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Skeleton } from "../components/ui/skeleton";
 import { cn } from "../utils/utils";
 
-// Color Palette from Design System
 const CARD_COLORS = [
     { bg: "bg-primary-50", border: "border-primary-200", text: "text-primary-700", accent: "#ffc107" },
     { bg: "bg-blue-50", border: "border-blue-200", text: "text-blue-700", accent: "#3b82f6" },
@@ -31,20 +31,21 @@ const StatCard = ({ title, value, isLoading, index = 0 }: { title: string; value
     );
 };
 
-const STATUS_MAP: Record<string, { label: string; className: string }> = {
-    "0": { label: "Pending", className: "bg-yellow-100 text-yellow-800" },
-    "1": { label: "In Progress", className: "bg-blue-100 text-blue-800" },
-    "2": { label: "Completed", className: "bg-green-100 text-green-800" },
-    "3": { label: "Canceled", className: "bg-red-100 text-red-800" },
-    "4": { label: "Confirmed", className: "bg-indigo-100 text-indigo-800" },
+const STATUS_MAP: Record<string, { labelKey: string; className: string }> = {
+    "0": { labelKey: "bookings.pending", className: "bg-yellow-100 text-yellow-800" },
+    "1": { labelKey: "bookings.inProgress", className: "bg-blue-100 text-blue-800" },
+    "2": { labelKey: "bookings.completed", className: "bg-green-100 text-green-800" },
+    "3": { labelKey: "bookings.canceled", className: "bg-red-100 text-red-800" },
+    "4": { labelKey: "bookings.confirmed", className: "bg-indigo-100 text-indigo-800" },
 };
 
-const getStatusBadge = (status: number | string) => {
+const getStatusBadge = (status: number | string, t: (key: string) => string) => {
     const s = STATUS_MAP[String(status)] || STATUS_MAP["0"];
-    return <span className={cn("px-3 py-1 rounded-full text-xs font-semibold", s.className)}>{s.label}</span>;
+    return <span className={cn("px-3 py-1 rounded-full text-xs font-semibold", s.className)}>{t(s.labelKey)}</span>;
 };
 
 const DashboardHome = () => {
+    const { t } = useTranslation();
     const { data: statsData, isLoading: statsLoading } = useDashboardStatistics();
     const { data: recentBookings, isLoading: bookingsLoading } = useRecentBookings(10);
     const { data: revenueData, isLoading: revenueLoading } = useRevenueChart('weekly');
@@ -57,35 +58,34 @@ const DashboardHome = () => {
             {/* Header */}
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-secondary-900">Dashboard</h1>
-                    <p className="text-secondary-500 mt-1">Welcome back, here's what's happening today.</p>
+                    <h1 className="text-3xl font-bold text-secondary-900">{t('navbar.dashboard')}</h1>
+                    <p className="text-secondary-500 mt-1">{t('home.welcomeMessage')}</p>
                 </div>
             </div>
 
             {/* Statistics Grid */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <StatCard title="Waiting Bookings" value={stats?.waiting_bookings ?? 0} isLoading={statsLoading} index={0} />
-                <StatCard title="Total Bookings" value={stats?.total_bookings_today ?? 0} isLoading={statsLoading} index={1} />
-                <StatCard title="Cancelled Today" value={stats?.cancelled_bookings_today ?? 0} isLoading={statsLoading} index={2} />
-                <StatCard title="Total Revenue" value={`EGP ${stats?.total_revenue ?? 0}`} isLoading={statsLoading} index={3} />
-                <StatCard title="Package Subscriptions" value={stats?.package_subscriptions_today ?? 0} isLoading={statsLoading} index={4} />
-                <StatCard title="Active Service Boys" value={stats?.active_service_boys ?? 0} isLoading={statsLoading} index={5} />
-                {/* <StatCard title="Pending Slots" value={stats?.pending_slots_today ?? 0} isLoading={statsLoading} index={6} /> */}
+                <StatCard title={t('home.waitingBookings')} value={stats?.waiting_bookings ?? 0} isLoading={statsLoading} index={0} />
+                <StatCard title={t('home.totalBookings')} value={stats?.total_bookings_today ?? 0} isLoading={statsLoading} index={1} />
+                <StatCard title={t('home.cancelledToday')} value={stats?.cancelled_bookings_today ?? 0} isLoading={statsLoading} index={2} />
+                <StatCard title={t('home.totalRevenue')} value={`EGP ${stats?.total_revenue ?? 0}`} isLoading={statsLoading} index={3} />
+                <StatCard title={t('home.packageSubscriptions')} value={stats?.package_subscriptions_today ?? 0} isLoading={statsLoading} index={4} />
+                <StatCard title={t('home.activeServiceBoys')} value={stats?.active_service_boys ?? 0} isLoading={statsLoading} index={5} />
             </div>
 
             {/* Recent Bookings & Chart */}
             <div className="grid gap-8 lg:grid-cols-5">
                 {/* Recent Bookings Table */}
                 <div className="lg:col-span-2 bg-white rounded-2xl shadow-md border p-6">
-                    <h2 className="text-xl font-semibold text-secondary-900 mb-4">Recent Bookings</h2>
+                    <h2 className="text-xl font-semibold text-secondary-900 mb-4">{t('home.recentBookings')}</h2>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="border-b text-left text-secondary-500">
-                                    <th className="p-3 font-medium">Booking</th>
-                                    <th className="p-3 font-medium">Customer</th>
-                                    <th className="p-3 font-medium">Price</th>
-                                    <th className="p-3 font-medium">Status</th>
+                                <tr className="border-b ltr:text-left rtl:text-right text-secondary-500">
+                                    <th className="p-3 font-medium">{t('home.bookingNo')}</th>
+                                    <th className="p-3 font-medium">{t('home.customer')}</th>
+                                    <th className="p-3 font-medium">{t('home.price')}</th>
+                                    <th className="p-3 font-medium">{t('home.status')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,7 +104,7 @@ const DashboardHome = () => {
                                             <td className="p-3 font-medium text-secondary-900">{booking.booking_no}</td>
                                             <td className="p-3 text-secondary-600">{booking.customer_name}</td>
                                             <td className="p-3 text-secondary-900 font-semibold">EGP {booking.total_price}</td>
-                                            <td className="p-3">{getStatusBadge(booking.status)}</td>
+                                            <td className="p-3">{getStatusBadge(booking.status, t)}</td>
                                         </tr>
                                     ))
                                 )}
@@ -115,7 +115,7 @@ const DashboardHome = () => {
 
                 {/* Revenue Chart */}
                 <div className="lg:col-span-3 bg-white rounded-2xl shadow-md border p-6">
-                    <h2 className="text-xl font-semibold text-secondary-900 mb-4">Revenue Overview</h2>
+                    <h2 className="text-xl font-semibold text-secondary-900 mb-4">{t('home.revenueOverview')}</h2>
                     <div className="h-[300px] w-full">
                         {revenueLoading ? (
                             <Skeleton className="h-full w-full rounded-xl" />

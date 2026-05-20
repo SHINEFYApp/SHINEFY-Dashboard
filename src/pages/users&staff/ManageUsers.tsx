@@ -3,6 +3,8 @@ import { ArrowUpToLine, Eye, Key, Search, Shield, ShieldCheck, SlidersHorizontal
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useGetUsers, useExportUsers, useEditUserStatus, useEditOtpStatus, useGetCompanies, useEditUserProfile } from "../../api/features/ManageUsers.hooks";
+import { getSubareas } from "../../api/features/bookings";
+import { useGet } from "../../api/useGetData";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormInput } from "../../common/FormInput";
 import { Link, useSearchParams } from "react-router";
@@ -12,6 +14,8 @@ import { exportTypes } from "../../constants/data";
 import FillterOptions from "./popUpWindow/filterOptions";
 import type { filterOptionsTypes } from "../../types/users&staff";
 
+
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function ManageUsers() {
     const queryClient = useQueryClient();
@@ -159,6 +163,7 @@ export default function ManageUsers() {
             companyId: searchParams.get("companyId") || "",
             createtimeFrom: searchParams.get("createtimeFrom") || "",
             createtimeTo: searchParams.get("createtimeTo") || "",
+            subareaIds: searchParams.get("subareaIds") || "",
         }
     }))
 
@@ -177,6 +182,13 @@ export default function ManageUsers() {
     const { data: companiesData } = useGetCompanies();
     const companies = companiesData?.data?.companies;
 
+    const { data: subareasData } = useGet({
+        queryFn: () => getSubareas(`${BASE_URL}/api/reports/subareas`),
+        queryKey: ["reports", "subareas"],
+        options: { staleTime: 1000 * 60 * 5 },
+    });
+    const subareas = Array.isArray(subareasData?.data) ? subareasData?.data : (subareasData?.data?.subareas || []);
+
     const isFirstRender = useRef(true);
     useEffect(() => {
         if (isFirstRender.current) {
@@ -192,6 +204,7 @@ export default function ManageUsers() {
         if (filterOptions.data.companyId) urlParams.set("companyId", filterOptions.data.companyId);
         if (filterOptions.data.createtimeFrom) urlParams.set("createtimeFrom", filterOptions.data.createtimeFrom);
         if (filterOptions.data.createtimeTo) urlParams.set("createtimeTo", filterOptions.data.createtimeTo);
+        if (filterOptions.data.subareaIds) urlParams.set("subareaIds", filterOptions.data.subareaIds);
         if (filterOptions.data.groupName) urlParams.set("filterGroupName", filterOptions.data.groupName);
         if (currentPage > 1) urlParams.set("page", String(currentPage));
         setSearchParams(urlParams, { replace: true });
@@ -200,6 +213,7 @@ export default function ManageUsers() {
         filterOptions.data.activeFlag, filterOptions.data.otpVerify,
         filterOptions.data.loginType, filterOptions.data.companyId,
         filterOptions.data.createtimeFrom, filterOptions.data.createtimeTo,
+        filterOptions.data.subareaIds,
         filterOptions.data.groupName,
         currentPage, setSearchParams
     ]);
@@ -217,6 +231,7 @@ export default function ManageUsers() {
         company_id: toInt(filterOptions.data.companyId),
         createtime_from: filterOptions.data.createtimeFrom || undefined,
         createtime_to: filterOptions.data.createtimeTo || undefined,
+        subarea_ids: filterOptions.data.subareaIds || undefined,
     });
 
     const { mutate: exportMutation } = useExportUsers();
@@ -234,6 +249,7 @@ export default function ManageUsers() {
             company_id: toInt(filterOptions.data.companyId),
             createtime_from: filterOptions.data.createtimeFrom || undefined,
             createtime_to: filterOptions.data.createtimeTo || undefined,
+            subarea_ids: filterOptions.data.subareaIds || undefined,
         }, {
             onSuccess: (data: any) => {
                 if (data instanceof Blob) {
@@ -447,7 +463,7 @@ export default function ManageUsers() {
                 </div>
             </section>
             
-            <FillterOptions filterOptions={filterOptions} setFilterOptions={setFilterOptions} companies={companies} />
+            <FillterOptions filterOptions={filterOptions} setFilterOptions={setFilterOptions} companies={companies} subareas={subareas} />
         </>
     )
 }

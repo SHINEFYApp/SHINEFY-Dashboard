@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Formik, Form } from "formik";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "../components/ui/button";
@@ -22,6 +23,7 @@ export const GenericFilterModal = ({
     subtitle = "Refine your search",
     children
 }: GenericFilterModalProps) => {
+    const { t } = useTranslation();
     const handleSubmit = (values: any) => {
         onSubmit(values);
         onClose();
@@ -37,13 +39,13 @@ export const GenericFilterModal = ({
             onClick={onClose}
         >
             <div
-                className={`w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transition-transform duration-300 mx-4
+                className={`w-full max-w-2xl bg-white rounded-2xl shadow-2xl transition-transform duration-300 mx-4 flex flex-col max-h-[90vh]
                     ${isOpen ? "scale-100" : "scale-95"}
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Modal Header */}
-                <div className="flex items-center gap-5 px-8 py-6 border-b border-gray-200">
+                <div className="flex items-center gap-5 px-8 py-6 border-b border-gray-200 shrink-0">
                     <button
                         onClick={onClose}
                         className="text-gray-400 border border-[#E7E7E7] bg-[#F7F7F7] transition-colors p-2 rounded-lg hover:bg-gray-200"
@@ -57,7 +59,7 @@ export const GenericFilterModal = ({
                 </div>
 
                 {/* Modal Body */}
-                <div className="bg-[#F4F5FA]">
+                <div className="bg-[#F4F5FA] overflow-y-auto">
                     <Formik
                         initialValues={initialValues}
                         onSubmit={handleSubmit}
@@ -69,12 +71,12 @@ export const GenericFilterModal = ({
                                 </div>
 
                                 {/* Modal Footer */}
-                                <div className="flex gap-4 items-stretch mt-8 p-6 bg-white shadow-2xl">
+                                <div className="flex gap-4 items-stretch mt-8 p-6 bg-white shadow-2xl shrink-0">
                                     <Button
                                         type="submit"
                                         className="bg-primary hover:bg-primary-600 text-gray-900 font-semibold px-8 py-3 rounded-xl shadow-md hover:shadow-lg h-full w-[60%]"
                                     >
-                                        Apply Filters
+                                        {t('common.applyFilters')}
                                     </Button>
                                     <button
                                         type="button"
@@ -85,7 +87,7 @@ export const GenericFilterModal = ({
                                         }}
                                         className="px-6 py-3 bg-[#EFEFEF] text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors w-[40%]"
                                     >
-                                        Reset
+                                        {t('common.reset')}
                                     </button>
                                 </div>
                             </Form>

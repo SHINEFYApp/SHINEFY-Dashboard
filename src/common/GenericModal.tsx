@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { ReactNode } from "react";
 
 interface GenericModalProps {
@@ -12,11 +13,12 @@ interface GenericModalProps {
 export const GenericModal = ({
     isOpen,
     onClose,
-    title = "Modal Title",
+    title = t('common.modalTitle'),
     subtitle,
     children,
     className = ""
 }: GenericModalProps) => {
+    const { t } = useTranslation();
     return (
         <section
             className={`

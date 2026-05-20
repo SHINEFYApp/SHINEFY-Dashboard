@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { GenericFilterModal } from "../../../common/GenericFilterModal";
 import { FormDropdown } from "../../../common/FormDropdown";
 import { bookingFilterInitialValues } from "../../../constants/initialValues";
@@ -9,6 +10,7 @@ interface BookingFilterOptionsProps {
 }
 
 export default function BookingFilterOptions({ filterOptions, setFilterOptions }: BookingFilterOptionsProps) {
+    const { t } = useTranslation();
     return (
         <GenericFilterModal
             isOpen={filterOptions.state}
@@ -17,39 +19,39 @@ export default function BookingFilterOptions({ filterOptions, setFilterOptions }
                 setFilterOptions({ data: values, state: false });
             }}
             initialValues={bookingFilterInitialValues}
-            title="Filter options"
-            subtitle="Manage Bookings"
+            title={t('bookings.filterOptions.title')}
+            subtitle={t('bookings.filterOptions.subtitle')}
         >
             <FormDropdown
                 name="status"
-                label="Booking Status"
-                placeholder="Select Status"
+                label={t('bookings.filterOptions.bookingStatus')}
+                placeholder={t('bookings.filterOptions.selectStatus')}
                 options={[
-                    { value: '0', label: 'Pending' },
-                    { value: '1', label: 'In Progress' },
-                    { value: '2', label: 'Completed' },
-                    { value: '3', label: 'Canceled' },
-                    { value: '4', label: 'Confirmed' },
+                    { value: '0', label: t('bookings.filterOptions.statusValues.pending') },
+                    { value: '1', label: t('bookings.filterOptions.statusValues.inProgress') },
+                    { value: '2', label: t('bookings.filterOptions.statusValues.completed') },
+                    { value: '3', label: t('bookings.filterOptions.statusValues.canceled') },
+                    { value: '4', label: t('bookings.filterOptions.statusValues.confirmed') },
                 ]}
             />
             <FormDropdown
                 name="booking_type"
-                label="Booking Type"
-                placeholder="Select Booking Type"
+                label={t('bookings.filterOptions.bookingType')}
+                placeholder={t('bookings.filterOptions.selectBookingType')}
                 options={[
-                    { value: '0', label: 'Scheduled' },
-                    { value: '1', label: 'Waiting' },
+                    { value: '0', label: t('bookings.filterOptions.bookingTypeValues.scheduled') },
+                    { value: '1', label: t('bookings.filterOptions.bookingTypeValues.waiting') },
                 ]}
             />
             <FormDropdown
                 name="paymentMethod"
-                label="Payment Method"
-                placeholder="Select Payment Method"
+                label={t('bookings.filterOptions.paymentMethod')}
+                placeholder={t('bookings.filterOptions.selectPaymentMethod')}
                 options={[
-                    { value: '0', label: 'Cash' },
-                    { value: '1', label: 'Credit' },
-                    { value: '2', label: 'Free' },
-                    { value: '3', label: 'Package' },
+                    { value: '0', label: t('bookings.filterOptions.paymentMethodValues.cash') },
+                    { value: '1', label: t('bookings.filterOptions.paymentMethodValues.credit') },
+                    { value: '2', label: t('bookings.filterOptions.paymentMethodValues.free') },
+                    { value: '3', label: t('bookings.filterOptions.paymentMethodValues.package') },
                 ]}
             />
         </GenericFilterModal>
