@@ -87,6 +87,8 @@ export const ROUTE_PERMISSIONS: Record<string, number> = {
     "/services&extra/manage/coupon": PRIVILEGES.MANAGE_COUPON,
     "/services&extra/manage/package": PRIVILEGES.MANAGE_PACKAGES,
     "/services&extra/manage/Package": PRIVILEGES.MANAGE_PACKAGES,
+    "/services&extra/manage/Package/addSubscriptionPackage": PRIVILEGES.PACKAGES_SUBSCRIPTION,
+    "/services&extra/manage/Package/manageSubscriptions": PRIVILEGES.PACKAGES_SUBSCRIPTION,
 
     // Products & Orders (no specific privilege in API - will be visible to all)
     // "/products&orders/manage/Products": ???,

@@ -201,6 +201,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     i18nKey: 'sidebar.managePackage',
                     path: '/services&extra/manage/Package',
                     permissionId: PRIVILEGES.MANAGE_PACKAGES,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Subscriptions',
+                    i18nKey: 'sidebar.manageSubscriptions',
+                    path: '/services&extra/manage/Package/manageSubscriptions',
+                    permissionId: PRIVILEGES.PACKAGES_SUBSCRIPTION,
                 }
             ],
         },
