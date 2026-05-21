@@ -7,6 +7,7 @@ import {
     addExtraService,
     updateExtraService,
     deleteExtraServiceItem,
+    reorderExtraServices,
     type GetExtraServicesParams,
 } from "./extraServices";
 
@@ -43,6 +44,13 @@ export const useUpdateExtraService = (options?: any) => {
 export const useDeleteExtraService = (options?: any) => {
     return useMutation<any, AxiosError, number | string>({
         mutationFn: (id: number | string) => deleteExtraServiceItem(id),
+        ...options,
+    });
+};
+
+export const useReorderExtraServices = (options?: any) => {
+    return useMutation<any, AxiosError, { id: number; sort_order: number }[]>({
+        mutationFn: (orders) => reorderExtraServices(orders),
         ...options,
     });
 };

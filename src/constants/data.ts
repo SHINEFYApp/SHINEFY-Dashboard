@@ -104,6 +104,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Services & Extra',
         breadcrumbs: ['Services & Extra', 'Manage Service']
     },
+    '/services&extra/manage/Service/reorder': {
+        title: 'Services & Extra',
+        breadcrumbs: ['Services & Extra', 'Manage Service', 'Reorder Services']
+    },
     '/services&extra/manage/Service/addService': {
         title: 'Services & Extra',
         breadcrumbs: ['Services & Extra', 'Manage Service', 'Add Service']

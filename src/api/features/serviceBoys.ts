@@ -196,3 +196,106 @@ export const getServiceBoyTrack = async (id: number | string): Promise<AxiosResp
 export const getServiceBoyBookings = async (id: number | string, params?: any): Promise<AxiosResponse<ServiceBoyBookingsResponse>> => {
     return await getService(`/api/service-boys/${id}/bookings`, params);
 };
+
+/* ─── Daily Report ─── */
+
+export interface DailyReportCommissionBooking {
+    booking_id: number;
+    position: number;
+    commission: number;
+    vehicle_count: number;
+    "main_service_20%": number;
+    "extra_service_20%": number;
+    note?: string;
+}
+
+export interface DailyReportCommission {
+    total_commission: number;
+    commissionable_bookings_count: number;
+    first_4_no_commission: boolean;
+    commission_rate: string;
+    bookings: DailyReportCommissionBooking[];
+}
+
+export interface DailyReportPaymentBreakdown {
+    cash: { count: number; amount: number };
+    credit: { count: number; amount: number };
+    package: { count: number; amount: number };
+}
+
+export interface DailyReportData {
+    service_boy_id: number;
+    service_boy_name: string;
+    date: string;
+    completed_bookings_count: number;
+    available_slots: number;
+    total_km: number;
+    average_km: number;
+    payment_breakdown: DailyReportPaymentBreakdown;
+    commission: DailyReportCommission;
+}
+
+export interface ServiceBoyDailyReportResponse {
+    status: string;
+    data: DailyReportData;
+}
+
+// GET /service-boys/{id}/daily-report?date=YYYY-MM-DD
+export const getServiceBoyDailyReport = async (id: number | string, date?: string): Promise<AxiosResponse<ServiceBoyDailyReportResponse>> => {
+    const params: any = {};
+    if (date) params.date = date;
+    return await getService(`/api/service-boys/${id}/daily-report`, params);
+};
+
+// GET /api/dashboard/service-boys-with-bookings
+export interface TodayBooking {
+    booking_id: number;
+    booking_no: number;
+    booking_date: string;
+    booking_time: string;
+    booking_type: number;
+    status: number | string;
+    total_price: string;
+    customer_name: string;
+    service_name: string;
+    payment_option: string;
+    subarea: string;
+}
+
+export interface ServiceBoyWithBookings {
+    service_boy: {
+        user_id: number;
+        name: string;
+        image_url: string;
+        phone_number: string;
+        status: string;
+        active_flag: number;
+    };
+    today_bookings: TodayBooking[];
+    total_bookings_today: number;
+}
+
+export interface ServiceBoysWithBookingsResponse {
+    status: string;
+    data: {
+        service_boys: ServiceBoyWithBookings[];
+        pagination: {
+            current_page: number;
+            total_pages: number;
+            total_items: number;
+            limit: number;
+        };
+    };
+}
+
+export interface GetServiceBoysWithBookingsParams {
+    booking_date?: string;
+    page?: number;
+    limit?: number;
+    search?: string;
+    order?: 'asc' | 'desc';
+}
+
+export const getServiceBoysWithBookings = async (params: GetServiceBoysWithBookingsParams): Promise<AxiosResponse<ServiceBoysWithBookingsResponse>> => {
+    return await getService("/api/dashboard/service-boys-with-bookings", params);
+};

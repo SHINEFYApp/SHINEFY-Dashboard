@@ -85,6 +85,7 @@
     "createBooking": "إنشاء حجز",
     "manageBookings": "إدارة الحجوزات",
     "bookingReports": "تقارير الحجوزات",
+    "serviceBoysWithBookings": "عمال الخدمة مع الحجوزات",
     "manageSlot": "إدارة المواعيد",
     "adminSlots": "مواعيد المسؤول",
     "vehicles": "المركبات",
@@ -99,6 +100,7 @@
     "manageArea": "إدارة المنطقة",
     "servicesAndExtra": "الخدمات والإضافات",
     "manageService": "إدارة الخدمات",
+    "reorderServices": "إعادة ترتيب الخدمات",
     "manageExtraService": "إدارة الخدمات الإضافية",
     "manageSpecialService": "إدارة الخدمات الخاصة",
     "manageCoupon": "إدارة القسائم",
@@ -156,6 +158,7 @@
     "addSubArea": "إضافة منطقة فرعية",
     "servicesAndExtra": "الخدمات والإضافات",
     "manageService": "إدارة الخدمات",
+    "reorderServices": "إعادة ترتيب الخدمات",
     "addService": "إضافة خدمة",
     "editService": "تعديل الخدمة",
     "viewService": "عرض الخدمة",
@@ -348,7 +351,8 @@
         "serviceBoy": "عامل الخدمة",
         "service": "الخدمة",
         "payment": "الدفع",
-        "amount": "المبلغ (EGP)"
+        "amount": "المبلغ (EGP)",
+        "subarea": "المنطقة الفرعية"
       },
       "status": {
         "pending": "معلق",

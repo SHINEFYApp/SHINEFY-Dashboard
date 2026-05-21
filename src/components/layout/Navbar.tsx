@@ -36,6 +36,7 @@ const breadcrumbKeyMap: Record<string, string> = {
   'Add Sub Area': 'navbar.addSubArea',
   'Services & Extra': 'navbar.servicesAndExtra',
   'Manage Service': 'navbar.manageService',
+  'Reorder Services': 'navbar.reorderServices',
   'Add Service': 'navbar.addService',
   'Edit Service': 'navbar.editService',
   'View Service': 'navbar.viewService',
