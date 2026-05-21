@@ -452,6 +452,15 @@
         "working": "Working",
         "done": "Done"
       },
+      "serviceBoyProgress": "Service Boy Progress",
+      "serviceBoyStatusLabels": {
+        "onTheWay": "On the Way",
+        "arrived": "Arrived",
+        "washing": "Washing",
+        "completed": "Completed",
+        "paymentCollected": "Payment Collected"
+      },
+      "viewOnGoogleMaps": "View on Google Maps",
       "updateSuccess": "Booking updated successfully",
       "updateFailed": "Failed to update booking"
     },

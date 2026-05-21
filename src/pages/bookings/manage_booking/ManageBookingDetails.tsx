@@ -1,4 +1,4 @@
-import { History, MapPin, FileText, CreditCard, Truck, Wrench, Save, Loader2, Package, Plus, X, ChevronDown } from "lucide-react";
+import { History, MapPin, FileText, CreditCard, Truck, Wrench, Save, Loader2, Package, Plus, X, ChevronDown, Check, ExternalLink } from "lucide-react";
 import { CustomTable } from "../../../common/CustomTable";
 import type {
     ApiResponse,
@@ -8,6 +8,8 @@ import type {
     GetServiceResponse,
     UpdateBookingPayload,
     Vehicle,
+    ServiceBoyStatus,
+    ServiceBoyStatusItem,
 } from "../../../types/bookings";
 import { useGet } from "../../../api/useGetData";
 import { useParams } from "react-router";
@@ -75,6 +77,7 @@ interface EditFormState {
     booking_admin_note: string;
     note?: string;
     extra_services: ExtraService[];
+    service_boy_status: ServiceBoyStatus | null;
 }
 
 /* ═══════════════════════════════════════════════════════ */
@@ -119,6 +122,7 @@ const ManageBookingDetails = () => {
 
     const booking = data?.data?.booking;
     const bookingExtraServices = data?.data?.extra_services;
+    const bookingServiceBoyStatus = data?.data?.service_boy_status;
     /* ─── Fetch all services (same endpoint as create booking) ─── */
     const getServicesQuery = useGet<GetServiceResponse>({
         queryFn: () => getServices(`${baseURL}/api/get_service/`),
@@ -159,6 +163,7 @@ const ManageBookingDetails = () => {
         booking_admin_note: "",
         note: "",
         extra_services: [],
+        service_boy_status: null,
     });
 
     const [hasChanges, setHasChanges] = useState(false);
@@ -220,6 +225,7 @@ const ManageBookingDetails = () => {
             booking_admin_note: booking.booking_admin_note ?? "",
             note: booking.note ?? "",
             extra_services: existingExtras,
+            service_boy_status: bookingServiceBoyStatus ?? null,
         };
         setForm(initial);
         setInitialForm(initial);
@@ -244,7 +250,8 @@ const ManageBookingDetails = () => {
             form.wallet_amount !== initialForm.wallet_amount ||
             form.booking_admin_note !== initialForm.booking_admin_note ||
             form.note !== initialForm.note ||
-            JSON.stringify(form.extra_services) !== JSON.stringify(initialForm.extra_services);
+            JSON.stringify(form.extra_services) !== JSON.stringify(initialForm.extra_services) ||
+            JSON.stringify(form.service_boy_status) !== JSON.stringify(initialForm.service_boy_status);
         setHasChanges(changed);
     }, [form, initialForm]);
 
@@ -348,6 +355,8 @@ const ManageBookingDetails = () => {
         if (form.booking_admin_note) payload.booking_admin_note = form.booking_admin_note;
         if (form.note) payload.note = form.note;
         if (form.driver_status) payload.driver_status = form.driver_status; // "1"-"5"
+
+        if (form.service_boy_status) payload.service_boy_status = form.service_boy_status;
 
         if (form.extra_services.length > 0) {
             payload.extra_service_id = form.extra_services.map((es) => Number(es.id));
@@ -761,6 +770,17 @@ const ManageBookingDetails = () => {
                                 />
                             </div>
                         </div>
+                        {(form.lat || booking?.lat || booking?.latitude) && (form.lon || booking?.lon || booking?.longitude) && (
+                            <a
+                                href={`https://www.google.com/maps?q=${form.lat || booking?.lat || booking?.latitude},${form.lon || booking?.lon || booking?.longitude}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-blue-200 bg-blue-50 text-blue-700 text-sm font-medium hover:bg-blue-100 transition-all"
+                            >
+                                <ExternalLink className="size-4" />
+                                {t("bookings.manageBookingDetails.viewOnGoogleMaps")}
+                            </a>
+                        )}
                     </div>
                 </SectionCard>
 
@@ -973,6 +993,72 @@ const ManageBookingDetails = () => {
                         onPageChange={() => { }}
                         isLoading={false}
                     />
+                </SectionCard>
+            )}
+
+            {/* ══════════════ Service Boy Status Progress ══════════════ */}
+            {form.service_boy_status && (
+                <SectionCard title={t("bookings.manageBookingDetails.serviceBoyProgress")} icon={<Truck className="size-5" />} fullWidth>
+                    {(() => {
+                        const steps = [
+                            { key: "on_the_way", label: t("bookings.manageBookingDetails.serviceBoyStatusLabels.onTheWay") },
+                            { key: "arrived", label: t("bookings.manageBookingDetails.serviceBoyStatusLabels.arrived") },
+                            { key: "washing", label: t("bookings.manageBookingDetails.serviceBoyStatusLabels.washing") },
+                            { key: "completed", label: t("bookings.manageBookingDetails.serviceBoyStatusLabels.completed") },
+                            { key: "payment_collected", label: t("bookings.manageBookingDetails.serviceBoyStatusLabels.paymentCollected") },
+                        ];
+                        const total = steps.length;
+                        const active = steps.filter((s) => {
+                            const item = form.service_boy_status?.[s.key as keyof ServiceBoyStatus] as ServiceBoyStatusItem | undefined;
+                            return item?.status;
+                        }).length;
+                        const pct = Math.round((active / total) * 100);
+                        return (
+                            <>
+                                <div className="mb-6">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-gray-600">{t("bookings.manageBookingDetails.serviceBoyProgress")}</span>
+                                        <span className="text-sm font-bold text-gray-800">{pct}%</span>
+                                    </div>
+                                    <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full rounded-full transition-all duration-500 ease-out"
+                                            style={{
+                                                width: `${pct}%`,
+                                                background: pct === 100
+                                                    ? "linear-gradient(90deg, #22c55e, #16a34a)"
+                                                    : "linear-gradient(90deg, #3b82f6, #22c55e)",
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                                    {steps.map(({ key, label }, idx) => {
+                                        const item = form.service_boy_status?.[key as keyof ServiceBoyStatus] as ServiceBoyStatusItem | undefined;
+                                        const isActive = item?.status ?? false;
+                                        const datetime = item?.datetime;
+                                        return (
+                                            <div
+                                                key={key}
+                                                className="flex flex-col items-center text-center p-3 rounded-xl border bg-gray-50"
+                                            >
+                                                <div className={cn(
+                                                    "w-10 h-10 rounded-full flex items-center justify-center border-2 mb-2 transition-colors",
+                                                    isActive
+                                                        ? "bg-green-500 border-green-500 text-white"
+                                                        : "bg-white border-gray-300 text-gray-400"
+                                                )}>
+                                                    {isActive ? <Check className="w-5 h-5" /> : <div className="w-3 h-3 rounded-full bg-gray-300" />}
+                                                </div>
+                                                <p className={cn("text-xs font-semibold", isActive ? "text-green-700" : "text-gray-500")}>{label}</p>
+                                                {datetime && <p className="text-[10px] text-gray-400 mt-1 leading-tight">{datetime}</p>}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </>
+                        );
+                    })()}
                 </SectionCard>
             )}
 

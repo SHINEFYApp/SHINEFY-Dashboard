@@ -450,6 +450,15 @@
         "working": "يعمل",
         "done": "تم"
       },
+      "serviceBoyProgress": "تقدم عامل الخدمة",
+      "serviceBoyStatusLabels": {
+        "onTheWay": "في الطريق",
+        "arrived": "وصل",
+        "washing": "غسيل",
+        "completed": "مكتمل",
+        "paymentCollected": "تم التحصيل"
+      },
+      "viewOnGoogleMaps": "عرض على خرائط جوجل",
       "updateSuccess": "تم تحديث الحجز بنجاح",
       "updateFailed": "فشل في تحديث الحجز"
     },
