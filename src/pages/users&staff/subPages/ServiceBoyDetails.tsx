@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell } from 'recharts';
-import { Calendar, FileDown, MapPin, X } from 'lucide-react';
+import { Calendar, FileDown, MapPin, X, DollarSign, Route, Clock, Briefcase, TrendingUp } from 'lucide-react';
 import { Formik, Form } from "formik";
-import { useGetServiceBoyDetails, useGetServiceBoyAreas, useGetServiceBoyBookings } from "../../../api/features/serviceBoys.hooks";
+import { useGetServiceBoyDetails, useGetServiceBoyAreas, useGetServiceBoyBookings, useGetServiceBoyDailyReport } from "../../../api/features/serviceBoys.hooks";
 import { CustomTable } from "../../../common/CustomTable";
 import { FormDatePicker } from "../../../common/FormDatePicker";
 import { FormDropdown } from "../../../common/FormDropdown";
@@ -58,6 +58,7 @@ const ServiceBoyDetails = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [activeTab, setActiveTab] = useState('Service Boy Details');
     const [filters, setFilters] = useState({ status: "", date_from: "", date_to: "" });
+    const [reportDate, setReportDate] = useState(() => new Date().toISOString().split("T")[0]);
     const pageSize = 10;
 
     const { data: responseData, isLoading, isError } = useGetServiceBoyDetails(id as string);
@@ -69,6 +70,9 @@ const ServiceBoyDetails = () => {
         ...(filters.date_from && { date_from: filters.date_from }),
         ...(filters.date_to && { date_to: filters.date_to }),
     });
+
+    const { data: dailyReportResponse, isLoading: isLoadingReport } = useGetServiceBoyDailyReport(id as string, reportDate);
+    const dailyReport = dailyReportResponse?.data?.data;
 
     const tabs = ['Service Boy Details', 'Booking History', 'My Area', 'Daily Report'];
     const serviceBoy = responseData?.data?.data || responseData?.data;
@@ -385,9 +389,149 @@ const ServiceBoyDetails = () => {
                 </div>
             )}
 
-            {activeTab !== 'Service Boy Details' && activeTab !== 'My Area' && (
-                <div className="py-20 text-center text-gray-500 font-medium">
-                    Content for {activeTab}
+            {activeTab === 'Daily Report' && (
+                <div className="px-6 space-y-6">
+                    <div className="flex flex-wrap items-center gap-4 mb-2">
+                        <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5">
+                            <Calendar className="w-5 h-5 text-gray-400" />
+                            <input
+                                type="date"
+                                value={reportDate}
+                                onChange={(e) => setReportDate(e.target.value)}
+                                className="bg-transparent border-none outline-none text-sm font-medium text-gray-700"
+                            />
+                        </div>
+                    </div>
+
+                    {isLoadingReport ? (
+                        <div className="py-10 text-center text-gray-500 font-medium">Loading report...</div>
+                    ) : !dailyReport ? (
+                        <div className="py-10 text-center text-gray-500 font-medium bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                            No data for this date
+                        </div>
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Completed Bookings</p>
+                                        <Briefcase className="w-5 h-5 text-green-500" />
+                                    </div>
+                                    <p className="text-2xl font-bold text-gray-900">{dailyReport.completed_bookings_count}</p>
+                                </div>
+                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Available Slots</p>
+                                        <Clock className="w-5 h-5 text-blue-500" />
+                                    </div>
+                                    <p className="text-2xl font-bold text-gray-900">{dailyReport.available_slots}</p>
+                                </div>
+                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Total KM</p>
+                                        <Route className="w-5 h-5 text-orange-500" />
+                                    </div>
+                                    <p className="text-2xl font-bold text-gray-900">{dailyReport.total_km.toFixed(2)} km</p>
+                                </div>
+                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Avg KM</p>
+                                        <TrendingUp className="w-5 h-5 text-purple-500" />
+                                    </div>
+                                    <p className="text-2xl font-bold text-gray-900">{dailyReport.average_km.toFixed(2)} km</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                                    <h3 className="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                        <DollarSign className="w-5 h-5 text-green-500" />
+                                        Payment Breakdown
+                                    </h3>
+                                    <div className="space-y-3">
+                                        {[
+                                            { label: "Cash", key: "cash", color: "text-emerald-600" },
+                                            { label: "Credit", key: "credit", color: "text-purple-600" },
+                                            { label: "Package", key: "package", color: "text-amber-600" },
+                                        ].map(({ label, key, color }) => {
+                                            const item = (dailyReport.payment_breakdown as any)[key];
+                                            return (
+                                                <div key={key} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                                                    <span className="text-sm font-semibold text-gray-700">{label}</span>
+                                                    <span className={`text-sm font-bold ${color}`}>
+                                                        {item.count} bookings &middot; EGP {item.amount.toFixed(2)}
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                                    <h3 className="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                        <TrendingUp className="w-5 h-5 text-blue-500" />
+                                        Commission Summary
+                                    </h3>
+                                    <div className="space-y-3">
+                                        <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                                            <span className="text-sm font-semibold text-gray-700">Commissionable Bookings</span>
+                                            <span className="text-sm font-bold text-blue-600">{dailyReport.commission.commissionable_bookings_count}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                                            <span className="text-sm font-semibold text-gray-700">Total Commission</span>
+                                            <span className="text-sm font-bold text-green-600">EGP {dailyReport.commission.total_commission.toFixed(2)}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                                            <span className="text-sm font-semibold text-gray-700">First 4 No Commission</span>
+                                            <span className={`text-sm font-bold ${dailyReport.commission.first_4_no_commission ? "text-red-500" : "text-gray-500"}`}>
+                                                {dailyReport.commission.first_4_no_commission ? "Yes" : "No"}
+                                            </span>
+                                        </div>
+                                        <div className="py-2">
+                                            <span className="text-xs text-gray-500 font-medium">Commission Rule:</span>
+                                            <p className="text-xs text-gray-400 mt-1 leading-relaxed">{dailyReport.commission.commission_rate}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {dailyReport.commission.bookings.length > 0 && (
+                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm overflow-x-auto">
+                                    <h3 className="text-base font-bold text-gray-800 mb-4">Commission Per Booking</h3>
+                                    <table className="w-full text-sm">
+                                        <thead>
+                                            <tr className="border-b border-gray-200">
+                                                <th className="text-left py-3 px-3 text-gray-500 font-semibold text-xs uppercase">#</th>
+                                                <th className="text-left py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Booking ID</th>
+                                                <th className="text-right py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Vehicles</th>
+                                                <th className="text-right py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Main 20%</th>
+                                                <th className="text-right py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Extra 20%</th>
+                                                <th className="text-right py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Commission</th>
+                                                <th className="text-left py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Note</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {dailyReport.commission.bookings.map((b) => (
+                                                <tr key={b.booking_id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                                                    <td className="py-3 px-3 text-gray-700 font-medium">{b.position}</td>
+                                                    <td className="py-3 px-3">
+                                                        <Link to={`/bookings/manage/${b.booking_id}`} className="text-primary hover:underline font-medium">
+                                                            #{b.booking_id}
+                                                        </Link>
+                                                    </td>
+                                                    <td className="py-3 px-3 text-right text-gray-700">{b.vehicle_count}</td>
+                                                    <td className="py-3 px-3 text-right text-gray-700">EGP {b["main_service_20%"].toFixed(2)}</td>
+                                                    <td className="py-3 px-3 text-right text-gray-700">EGP {b["extra_service_20%"].toFixed(2)}</td>
+                                                    <td className="py-3 px-3 text-right font-bold text-green-600">EGP {b.commission.toFixed(2)}</td>
+                                                    <td className="py-3 px-3 text-xs text-gray-400">{b.note || "—"}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             )}
         </div>

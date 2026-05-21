@@ -81,3 +81,8 @@ export const deleteExtraServiceItem = async (id: number | string) => {
     const res: AxiosResponse = await deleteService(`/api/services/extra/${id}`);
     return res.data;
 };
+
+export const reorderExtraServices = async (orders: { id: number; sort_order: number }[]) => {
+    const res: AxiosResponse = await postService("/api/services/extra/reorder", { orders });
+    return res.data;
+};

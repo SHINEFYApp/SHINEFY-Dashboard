@@ -82,9 +82,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 },
                 {
                     icon: null,
+                    label: 'Service Boys With Bookings',
+                    i18nKey: 'sidebar.serviceBoysWithBookings',
+                    path: '/bookings/manage/service-boys',
+                    permissionId: PRIVILEGES.MANAGE_BOOKING,
+                },
+                {
+                    icon: null,
                     label: 'Manage Slot',
                     i18nKey: 'sidebar.manageSlot',
                     path: '/bookings/slot',
+                    permissionId: PRIVILEGES.MANAGE_SLOT,
+                },
+                {
+                    icon: null,
+                    label: 'Admin Slots',
+                    i18nKey: 'sidebar.adminSlots',
+                    path: '/bookings/slot/admin-slots',
                     permissionId: PRIVILEGES.MANAGE_SLOT,
                 },
             ],
@@ -172,6 +186,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     label: 'Manage Service',
                     i18nKey: 'sidebar.manageService',
                     path: '/services&extra/manage/Service',
+                    permissionId: PRIVILEGES.MANAGE_SERVICE,
+                },
+                {
+                    icon: null,
+                    label: 'Reorder Services',
+                    i18nKey: 'sidebar.reorderServices',
+                    path: '/services&extra/manage/Service/reorder',
                     permissionId: PRIVILEGES.MANAGE_SERVICE,
                 },
                 {

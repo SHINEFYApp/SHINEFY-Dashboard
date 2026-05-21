@@ -17,7 +17,10 @@ import {
     exportServiceBoysPdf,
     getServiceBoyTrack,
     getServiceBoyBookings,
+    getServiceBoyDailyReport,
+    getServiceBoysWithBookings,
     type GetServiceBoysParams,
+    type GetServiceBoysWithBookingsParams,
     type UpdateStatusPayload,
     type UpdateServiceBoyAreasPayload,
     type SetTemporaryOffPayload,
@@ -114,5 +117,21 @@ export const useGetServiceBoyBookings = (id: number | string, params?: any, opti
         queryFn: () => getServiceBoyBookings(id, params),
         queryKey: ["service-boy-bookings", id, params],
         options: { enabled: !!id, ...options },
+    });
+};
+
+export const useGetServiceBoyDailyReport = (id: number | string, date?: string, options?: any) => {
+    return useGet({
+        queryFn: () => getServiceBoyDailyReport(id, date),
+        queryKey: ["service-boy-daily-report", id, date],
+        options: { enabled: !!id, ...options },
+    });
+};
+
+export const useGetServiceBoysWithBookings = (params: GetServiceBoysWithBookingsParams, options?: any) => {
+    return useGet({
+        queryFn: () => getServiceBoysWithBookings(params),
+        queryKey: ["service-boys-with-bookings", params],
+        options,
     });
 };

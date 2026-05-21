@@ -7,6 +7,7 @@ import {
     addService,
     updateService,
     deleteServiceItem,
+    reorderMainServices,
     type GetServicesParams,
 } from "./services";
 
@@ -43,6 +44,13 @@ export const useUpdateService = (options?: any) => {
 export const useDeleteService = (options?: any) => {
     return useMutation<any, AxiosError, number | string>({
         mutationFn: (id: number | string) => deleteServiceItem(id),
+        ...options,
+    });
+};
+
+export const useReorderMainServices = (options?: any) => {
+    return useMutation<any, AxiosError, { id: number; sort_order: number }[]>({
+        mutationFn: (orders) => reorderMainServices(orders),
         ...options,
     });
 };
