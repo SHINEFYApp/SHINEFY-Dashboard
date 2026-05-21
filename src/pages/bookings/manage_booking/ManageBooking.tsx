@@ -160,6 +160,7 @@ export default function ManageBooking() {
         },
         { key: "service_boy_name", title: t("bookings.manageBooking.columns.serviceBoy") },
         { key: "service_name", title: t("bookings.manageBooking.columns.service") },
+        { key: "subarea", title: t("bookings.manageBooking.columns.subarea") },
         {
             key: "payment_option",
             title: t("bookings.manageBooking.columns.payment"),

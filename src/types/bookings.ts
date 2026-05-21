@@ -517,6 +517,7 @@ export interface Booking {
     service_name: string;
     payment_option: string;
     booking_type?: number;
+    subarea?: string;
 }
 export interface Pagination {
     current_page: number;
@@ -554,6 +555,19 @@ export interface BookingFilterState {
     data: BookingFilterValues;
 }
 
+export interface ServiceBoyStatusItem {
+    status: boolean;
+    datetime: string | null;
+}
+
+export interface ServiceBoyStatus {
+    on_the_way: ServiceBoyStatusItem;
+    arrived: ServiceBoyStatusItem;
+    washing: ServiceBoyStatusItem;
+    completed: ServiceBoyStatusItem;
+    payment_collected: ServiceBoyStatusItem;
+}
+
 export interface UpdateBookingPayload {
     status: string;
     booking_type?: number;
@@ -571,4 +585,5 @@ export interface UpdateBookingPayload {
     extra_service_id?: number[];
     extra_services_quantity?: number[];
     driver_status?: string;
+    service_boy_status?: ServiceBoyStatus;
 }
