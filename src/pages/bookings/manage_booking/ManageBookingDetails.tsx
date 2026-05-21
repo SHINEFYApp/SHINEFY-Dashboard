@@ -167,7 +167,7 @@ const ManageBookingDetails = () => {
     const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
     const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
     const [isServiceBoyDropdownOpen, setIsServiceBoyDropdownOpen] = useState(false);
-    
+
     /*
      * ─── Match initial main_service from the booking ───
      * The API doesn't return a service_id directly on the booking object.
@@ -203,8 +203,8 @@ const ManageBookingDetails = () => {
 
         // Resolve status to a code "0"-"5" regardless of whether the value is already a code or a label
         const resolvedStatus = resolveStatusCode(booking.status, STATUS_LABEL_TO_CODE);
-      
-        
+
+
         const initial: EditFormState = {
             status: String(resolvedStatus),
             booking_type: booking.booking_type ?? 0,
@@ -225,7 +225,7 @@ const ManageBookingDetails = () => {
         setInitialForm(initial);
     }, [data, allServices]);
 
-    
+
     /* ─── Track changes ─── */
     useEffect(() => {
         if (!initialForm) return;
@@ -396,7 +396,7 @@ const ManageBookingDetails = () => {
         { key: "service_boy_id ", title: t("bookings.manageBookingDetails.vehicleColumns.id") },
     ];
 
-    
+
 
     /* ═══════════════════════════════════════════════════════ */
     /*                         RENDER                         */
@@ -637,7 +637,7 @@ const ManageBookingDetails = () => {
                             </div>
                         </div>
 
-                        {/* <div>
+                        <div>
                             <label className="text-sm font-medium text-gray-600 mb-2 block">
                                 Driver Status
                                 {form.driver_status && (
@@ -663,7 +663,7 @@ const ManageBookingDetails = () => {
                                     </button>
                                 ))}
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </SectionCard>
 
