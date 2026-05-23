@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
-import type { TableProps } from "../types/common";
+import type { Column, TableProps } from "../types/common";
 import { cn } from "../utils/utils";
 import { Pagination } from "./Pagination";
 import KsaMan from '../assets/images/a2d5b399907e9638f3692bc625edb48bf22a9919.jpg'
 import { Link } from "react-router";
+import { ChevronUp, ChevronDown } from "lucide-react";
 
 export function CustomTable<T extends Record<string, any>>({
     page ,
@@ -16,9 +17,21 @@ export function CustomTable<T extends Record<string, any>>({
     onPageChange,
     isLoading = false,
     onRowClick,
+    sortBy,
+    sortOrder,
+    onSort,
 }: TableProps<T>) {
     const { t } = useTranslation();
 
+    const handleHeaderClick = (column: Column<T>) => {
+        if (!onSort || !column.sortable) return;
+        const key = column.sortKey || column.key;
+        if (sortBy === key) {
+            onSort(key, sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            onSort(key, "desc");
+        }
+    };
 
     return (
         <div className="w-full bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
@@ -28,17 +41,31 @@ export function CustomTable<T extends Record<string, any>>({
                     {/* Table Header */}
                     <thead>
                         <tr className="bg-gray-50 border-b border-gray-200">
-                            {columns.map((column, index) => (
-                                <th
-                                    key={column.key}
-                                    className={cn(
-                                        "px-5 py-3.5 ltr:text-left rtl:text-right text-nowrap text-xs font-semibold text-gray-500 uppercase tracking-wider",
-                                        column.width
-                                    )}
-                                >
-                                    {column.title}
-                                </th>
-                            ))}
+                            {columns.map((column, index) => {
+                                const sortKey = column.sortKey || column.key;
+                                const isActive = column.sortable && sortBy === sortKey;
+                                return (
+                                    <th
+                                        key={column.key}
+                                        onClick={() => handleHeaderClick(column)}
+                                        className={cn(
+                                            "px-5 py-3.5 ltr:text-left rtl:text-right text-nowrap text-xs font-semibold text-gray-500 uppercase tracking-wider",
+                                            column.width,
+                                            column.sortable && "cursor-pointer select-none hover:text-gray-700 transition-colors"
+                                        )}
+                                    >
+                                        <span className="inline-flex items-center gap-1">
+                                            {column.title}
+                                            {column.sortable && isActive && (
+                                                sortOrder === "asc" ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />
+                                            )}
+                                            {column.sortable && !isActive && (
+                                                <ChevronUp className="w-3.5 h-3.5 text-gray-300" />
+                                            )}
+                                        </span>
+                                    </th>
+                                );
+                            })}
                         </tr>
                     </thead>
 

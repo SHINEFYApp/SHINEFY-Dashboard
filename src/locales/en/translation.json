@@ -373,6 +373,7 @@
       "saveChanges": "Save Changes",
       "bookingId": "Booking ID",
       "customer": "Customer",
+      "customerPhone": "Customer Phone",
       "dateTime": "Date & Time",
       "payment": "Payment",
       "totalPrice": "Total Price",

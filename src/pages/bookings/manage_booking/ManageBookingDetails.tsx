@@ -447,6 +447,7 @@ const ManageBookingDetails = () => {
                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <InfoCard label={t("bookings.manageBookingDetails.bookingId")} value={`#${booking.booking_id}`} />
                     <InfoCard label={t("bookings.manageBookingDetails.customer")} value={booking.user?.customer_name || "—"} />
+                    <InfoCard label={t("bookings.manageBookingDetails.customerPhone")} value={booking.user?.customer_phone || "—"} />
                     <InfoCard label={t("bookings.manageBookingDetails.dateTime")} value={`${booking.booking_date || "—"} at ${booking.booking_time || "—"}`} />
                     <InfoCard label={t("bookings.manageBookingDetails.payment")} value={booking.payment_option || "—"} />
                     <InfoCard label={t("bookings.manageBookingDetails.totalPrice")} value={`EGP ${booking.total_price || "0"}`} highlight />

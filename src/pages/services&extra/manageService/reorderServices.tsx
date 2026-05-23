@@ -20,7 +20,7 @@ import { getService, postService } from "../../../api/service/service-requests";
 
 const IMAGE_BASE = import.meta.env.VITE_API_URL;
 
-type TabType = "main" | "extra";
+type TabType = "main" | "extra" | "packages";
 
 interface SortableItem {
     id: number;
@@ -92,7 +92,7 @@ function SortableRow({ item, index }: { item: SortableItem; index: number }) {
     );
 }
 
-function mapMainService(s: any, i: number): SortableItem {
+function mapMainService(s: any): SortableItem {
     return {
         id: s.service_id,
         name: s.service_name || "",
@@ -102,7 +102,7 @@ function mapMainService(s: any, i: number): SortableItem {
     };
 }
 
-function mapExtraService(s: any, i: number): SortableItem {
+function mapExtraService(s: any): SortableItem {
     return {
         id: s.extra_service_id,
         name: s.extra_service_name || "",
@@ -112,10 +112,21 @@ function mapExtraService(s: any, i: number): SortableItem {
     };
 }
 
+function mapPackage(s: any): SortableItem {
+    return {
+        id: s.id,
+        name: s.name || "",
+        name_arabic: s.name_ar || "",
+        price: s.price != null ? `${s.price}` : "-",
+        image: s.package_img || "",
+    };
+}
+
 export default function ReorderServices() {
     const [activeTab, setActiveTab] = useState<TabType>("main");
     const [mainItems, setMainItems] = useState<SortableItem[]>([]);
     const [extraItems, setExtraItems] = useState<SortableItem[]>([]);
+    const [packageItems, setPackageItems] = useState<SortableItem[]>([]);
     const [hasChanges, setHasChanges] = useState(false);
     const [saving, setSaving] = useState(false);
 
@@ -139,36 +150,79 @@ export default function ReorderServices() {
         },
     });
 
+    const packagesQuery = useQuery({
+        queryKey: ["services-reorder-packages"],
+        queryFn: async () => {
+            const res = await getService("/api/packages/v2", { limit: 100 });
+            return res.data;
+        },
+    });
+
     useEffect(() => {
         const data = mainQuery.data;
         if (!data?.data?.services) return;
-        const items = data.data.services.map(mapMainService);
-        setMainItems(items);
+        setMainItems(data.data.services.map(mapMainService));
         setHasChanges(false);
     }, [mainQuery.data]);
 
     useEffect(() => {
         const data = extraQuery.data;
         if (!data?.data?.services) return;
-        const items = data.data.services.map(mapExtraService);
-        setExtraItems(items);
+        setExtraItems(data.data.services.map(mapExtraService));
         setHasChanges(false);
     }, [extraQuery.data]);
 
-    const items = activeTab === "main" ? mainItems : extraItems;
-    const isFetching =
-        activeTab === "main" ? mainQuery.isLoading : extraQuery.isLoading;
-    const isError =
-        activeTab === "main" ? mainQuery.isError : extraQuery.isError;
+    useEffect(() => {
+        const data = packagesQuery.data;
+        if (!data?.data?.data) return;
+        setPackageItems(data.data.data.map(mapPackage));
+        setHasChanges(false);
+    }, [packagesQuery.data]);
+
+    const getItems = useCallback(() => {
+        switch (activeTab) {
+            case "main": return mainItems;
+            case "extra": return extraItems;
+            case "packages": return packageItems;
+        }
+    }, [activeTab, mainItems, extraItems, packageItems]);
+
+    const getSetItems = useCallback(() => {
+        switch (activeTab) {
+            case "main": return setMainItems;
+            case "extra": return setExtraItems;
+            case "packages": return setPackageItems;
+        }
+    }, [activeTab]);
+
+    const getQuery = useCallback(() => {
+        switch (activeTab) {
+            case "main": return mainQuery;
+            case "extra": return extraQuery;
+            case "packages": return packagesQuery;
+        }
+    }, [activeTab, mainQuery, extraQuery, packagesQuery]);
+
+    const getReorderEndpoint = useCallback(() => {
+        switch (activeTab) {
+            case "main": return "/api/services/main/reorder";
+            case "extra": return "/api/services/extra/reorder";
+            case "packages": return "/api/packages/reorder";
+        }
+    }, [activeTab]);
+
+    const items = getItems();
+    const query = getQuery();
+    const isFetching = query.isLoading;
+    const isError = query.isError;
 
     const handleDragEnd = useCallback(
         (event: DragEndEvent) => {
             const { active, over } = event;
             if (!over || active.id === over.id) return;
 
-            const setter = activeTab === "main" ? setMainItems : setExtraItems;
-            const current =
-                activeTab === "main" ? [...mainItems] : [...extraItems];
+            const setter = getSetItems();
+            const current = [...getItems()];
 
             const oldIndex = current.findIndex((i) => i.id === active.id);
             const newIndex = current.findIndex((i) => i.id === over.id);
@@ -179,36 +233,28 @@ export default function ReorderServices() {
             setter(current);
             setHasChanges(true);
         },
-        [activeTab, mainItems, extraItems]
+        [getItems, getSetItems]
     );
 
     const handleSave = async () => {
         setSaving(true);
         try {
-            const current = activeTab === "main" ? mainItems : extraItems;
+            const current = getItems();
             const orders = current.map((item, index) => ({
                 id: item.id,
                 sort_order: index,
             }));
 
-            const endpoint =
-                activeTab === "main"
-                    ? "/api/services/main/reorder"
-                    : "/api/services/extra/reorder";
+            await postService(getReorderEndpoint(), { orders });
 
-            await postService(endpoint, { orders });
-            toast.success(
-                activeTab === "main"
-                    ? "Main services reordered successfully!"
-                    : "Extra services reordered successfully!"
-            );
+            const labels = {
+                main: "Main services",
+                extra: "Extra services",
+                packages: "Packages",
+            };
+            toast.success(`${labels[activeTab]} reordered successfully!`);
             setHasChanges(false);
-
-            if (activeTab === "main") {
-                mainQuery.refetch();
-            } else {
-                extraQuery.refetch();
-            }
+            query.refetch();
         } catch (err: any) {
             toast.error(
                 err?.response?.data?.message || "Failed to reorder services"
@@ -226,31 +272,30 @@ export default function ReorderServices() {
         setHasChanges(false);
     };
 
+    const tabs: { key: TabType; label: string }[] = [
+        { key: "main", label: "Main Services" },
+        { key: "extra", label: "Extra Services" },
+        { key: "packages", label: "Packages" },
+    ];
+
     return (
         <main>
             <div className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen">
                 {/* Tabs */}
                 <div className="flex border-b border-gray-200 mb-6">
-                    <button
-                        onClick={() => handleTabChange("main")}
-                        className={`px-6 py-3 text-sm font-medium transition-colors relative ${
-                            activeTab === "main"
-                                ? "text-primary border-b-2 border-primary"
-                                : "text-gray-500 hover:text-gray-700"
-                        }`}
-                    >
-                        Main Services
-                    </button>
-                    <button
-                        onClick={() => handleTabChange("extra")}
-                        className={`px-6 py-3 text-sm font-medium transition-colors relative ${
-                            activeTab === "extra"
-                                ? "text-primary border-b-2 border-primary"
-                                : "text-gray-500 hover:text-gray-700"
-                        }`}
-                    >
-                        Extra Services
-                    </button>
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab.key}
+                            onClick={() => handleTabChange(tab.key)}
+                            className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+                                activeTab === tab.key
+                                    ? "text-primary border-b-2 border-primary"
+                                    : "text-gray-500 hover:text-gray-700"
+                            }`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                 </div>
 
                 {/* Save Bar */}
@@ -273,7 +318,7 @@ export default function ReorderServices() {
                 {/* Loading */}
                 {isFetching && (
                     <div className="text-center py-10 text-gray-500">
-                        Loading services...
+                        Loading...
                     </div>
                 )}
 
@@ -281,14 +326,10 @@ export default function ReorderServices() {
                 {isError && !isFetching && (
                     <div className="text-center py-10">
                         <p className="text-red-500 mb-3">
-                            Failed to load services
+                            Failed to load data
                         </p>
                         <button
-                            onClick={() =>
-                                activeTab === "main"
-                                    ? mainQuery.refetch()
-                                    : extraQuery.refetch()
-                            }
+                            onClick={() => query.refetch()}
                             className="px-4 py-2 bg-primary text-secondary-900 font-semibold rounded-lg hover:bg-primary-600 transition-colors"
                         >
                             Retry
@@ -299,7 +340,7 @@ export default function ReorderServices() {
                 {/* Empty */}
                 {!isFetching && !isError && items.length === 0 && (
                     <div className="text-center py-10 text-gray-500">
-                        No services found
+                        No items found
                     </div>
                 )}
 
