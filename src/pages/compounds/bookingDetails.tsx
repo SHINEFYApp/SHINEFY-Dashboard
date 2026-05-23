@@ -279,7 +279,7 @@ const CompoundBookingDetails = () => {
                                     {booking.booking_images.map((img: any) => (
                                         <img
                                             key={img.id}
-                                            src={img.image}
+                                            src={img.image?.startsWith("http") ? img.image : `${import.meta.env.VITE_IMAGES_URL}/${img.image}`}
                                             alt={t("common.image")}
                                             className="w-24 h-24 object-cover rounded-lg border"
                                         />

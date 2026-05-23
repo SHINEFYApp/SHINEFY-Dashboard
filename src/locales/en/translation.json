@@ -81,6 +81,7 @@
   },
   "sidebar": {
     "dashboard": "Dashboard",
+    "serviceBoy": "Service Boy",
     "bookings": "Bookings",
     "createBooking": "Create Booking",
     "manageBookings": "Manage Bookings",

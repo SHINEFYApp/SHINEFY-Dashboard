@@ -180,7 +180,7 @@ export default function AdminSlots() {
                                                                 className="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs px-2 py-0.5 rounded-full border border-green-200"
                                                             >
                                                                 {boy.image && (
-                                                                    <img src={boy.image} alt="" className="w-4 h-4 rounded-full object-cover" />
+                                                                    <img src={boy.image?.startsWith("http") ? boy.image : `${import.meta.env.VITE_IMAGES_URL}/${boy.image}`} alt="" className="w-4 h-4 rounded-full object-cover" />
                                                                 )}
                                                                 {boy.name}
                                                             </span>

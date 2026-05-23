@@ -5,7 +5,7 @@ export const manageMakeColumns = [
         key: "image",
         title: "Brand Logo",
         render: (image: string) => (
-            <img src={image} alt="Brand Logo" className="w-14 h-14 object-contain mx-auto" />
+            <img src={image?.startsWith("http") ? image : `${import.meta.env.VITE_IMAGES_URL}/${image}`} alt="Brand Logo" className="w-14 h-14 object-contain mx-auto" />
         )
     },
     {

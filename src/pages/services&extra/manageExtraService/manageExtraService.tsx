@@ -39,7 +39,7 @@ export default function ManageExtraService() {
     const pagination = extraServicesData?.data?.pagination;
     const recordsTotal = pagination?.total || 0;
     const totalPages = pagination?.last_page || 1;
-    const imageBase = import.meta.env.VITE_API_URL;
+    const imageBase = import.meta.env.VITE_IMAGES_URL;
 
     const columns = [
         {
@@ -47,7 +47,7 @@ export default function ManageExtraService() {
             title: "Extra Image",
             render: (_: any, row: any) => (
                 <img
-                    src={row.extra_service_image ? `${imageBase}/uploads/service_image/${row.extra_service_image}` : "/placeholder.png"}
+                    src={row.extra_service_image ? (row.extra_service_image.startsWith("http") ? row.extra_service_image : `${imageBase}/${row.extra_service_image}`) : "/placeholder.png"}
                     alt={row.extra_service_name}
                     className="w-12 h-12 rounded object-cover"
                 />

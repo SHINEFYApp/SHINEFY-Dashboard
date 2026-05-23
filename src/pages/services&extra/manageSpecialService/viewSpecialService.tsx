@@ -10,6 +10,7 @@ export default function ViewSpecialService() {
     })
 
     const svc = serviceDetails?.data || serviceDetails
+    const imageBase = import.meta.env.VITE_IMAGES_URL
 
     if (isLoading) {
         return (
@@ -80,7 +81,7 @@ export default function ViewSpecialService() {
                 <div className="w-60 h-60 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden border border-gray-200">
                     {svc?.photo_url ? (
                         <img
-                            src={svc.photo_url}
+                            src={svc.photo_url.startsWith("http") ? svc.photo_url : `${imageBase}/${svc.photo_url}`}
                             alt={svc.name_en}
                             className="w-full h-full object-cover"
                         />

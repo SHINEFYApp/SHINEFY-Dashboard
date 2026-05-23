@@ -233,7 +233,7 @@ const ManageServiceBoy = () => {
             title: "Image",
             render: (image_url: string) => (
                 <div className="w-10 h-10 rounded-full overflow-hidden">
-                    {image_url ? <img src={image_url} alt="Service Boy" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200"></div>}
+                    {image_url ? <img src={image_url?.startsWith("http") ? image_url : `${import.meta.env.VITE_IMAGES_URL}/${image_url}`} alt="Service Boy" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200"></div>}
                 </div>
             ),
         },

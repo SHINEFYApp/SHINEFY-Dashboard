@@ -103,7 +103,7 @@ export default function ManageSubAdmin() {
             title: "Image",
             render: (image: string) => (
                 <div className="w-10 h-10 rounded-full overflow-hidden">
-                    {image ? <img src={image} alt="Sub Admin" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200"></div>}
+                    {image ? <img src={image?.startsWith("http") ? image : `${import.meta.env.VITE_IMAGES_URL}/${image}`} alt="Sub Admin" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200"></div>}
                 </div>
             )
         },

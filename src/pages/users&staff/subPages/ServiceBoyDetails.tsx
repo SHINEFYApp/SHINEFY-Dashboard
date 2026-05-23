@@ -135,7 +135,7 @@ const ServiceBoyDetails = () => {
                 <div className="flex items-center gap-5">
                     <div className="w-[84px] h-[84px] bg-white rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
                         {serviceBoy?.image_url ? (
-                            <img src={serviceBoy.image_url} alt="Profile" className="w-full h-full object-cover" />
+                            <img src={serviceBoy.image_url?.startsWith("http") ? serviceBoy.image_url : `${import.meta.env.VITE_IMAGES_URL}/${serviceBoy.image_url}`} alt="Profile" className="w-full h-full object-cover" />
                         ) : null}
                     </div>
                     <div className="pt-1">

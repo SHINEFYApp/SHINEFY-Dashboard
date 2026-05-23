@@ -105,7 +105,7 @@ export default function ViewSubAdmin() {
                         <h1 className='font-bold capitalize mb-4'>Profile Photo</h1>
                         <div className='w-60 h-60 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden border border-gray-200'>
                             {data?.image_url ? (
-                                <img src={data.image_url} alt="Profile" className="w-full h-full object-cover" />
+                                <img src={data.image_url?.startsWith("http") ? data.image_url : `${import.meta.env.VITE_IMAGES_URL}/${data.image_url}`} alt="Profile" className="w-full h-full object-cover" />
                             ) : (
                                 <span className="text-gray-400">No Image</span>
                             )}

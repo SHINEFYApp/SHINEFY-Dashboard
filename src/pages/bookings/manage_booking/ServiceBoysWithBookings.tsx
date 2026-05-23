@@ -192,6 +192,9 @@ export default function ServiceBoysWithBookings() {
                         {serviceBoys.map((sb: any) => {
                             const boy = sb.service_boy;
                             const isExpanded = expandedId === boy.user_id;
+                            const cashTotal = (sb.today_bookings || [])
+                                .filter((b: any) => b.payment_option?.toLowerCase() === "cash")
+                                .reduce((sum: number, b: any) => sum + (Number(b.total_price) || 0), 0);
                             return (
                                 <div key={boy.user_id} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
                                     <button
@@ -201,7 +204,7 @@ export default function ServiceBoysWithBookings() {
                                         <div className="flex items-center gap-4">
                                             <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden shrink-0">
                                                 {boy.image_url ? (
-                                                    <img src={boy.image_url} alt={boy.name} className="w-full h-full object-cover" />
+                                                    <img src={boy.image_url?.startsWith("http") ? boy.image_url : `${import.meta.env.VITE_IMAGES_URL}/${boy.image_url}`} alt={boy.name} className="w-full h-full object-cover" />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary">
                                                         <User className="w-5 h-5" />
@@ -219,6 +222,11 @@ export default function ServiceBoysWithBookings() {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-4">
+                                            {cashTotal > 0 && (
+                                                <span className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-3 py-1 rounded-full">
+                                                    Cash: {cashTotal.toLocaleString()} EGP
+                                                </span>
+                                            )}
                                             <span className="text-xs bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full">
                                                 {sb.total_bookings_today} bookings
                                             </span>

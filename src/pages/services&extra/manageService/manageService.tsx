@@ -40,7 +40,7 @@ export default function ManageService() {
     const pagination = servicesData?.data?.pagination;
     const recordsTotal = pagination?.total || 0;
     const totalPages = pagination?.last_page || 1;
-    const imageBase = import.meta.env.VITE_API_URL;
+    const imageBase = import.meta.env.VITE_IMAGES_URL;
 
     const columns = [
         {
@@ -48,7 +48,7 @@ export default function ManageService() {
             title: "Service Image",
             render: (_: any, row: any) => (
                 <img
-                    src={row.service_image ? `${imageBase}/uploads/service_image/${row.service_image}` : "/placeholder.png"}
+                    src={row.service_image ? (row.service_image.startsWith("http") ? row.service_image : `${imageBase}/${row.service_image}`) : "/placeholder.png"}
                     alt={row.service_name}
                     className="w-12 h-12 rounded object-cover"
                 />
