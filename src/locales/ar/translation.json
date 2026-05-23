@@ -371,6 +371,7 @@
       "saveChanges": "حفظ التغييرات",
       "bookingId": "معرف الحجز",
       "customer": "العميل",
+      "customerPhone": "هاتف العميل",
       "dateTime": "التاريخ والوقت",
       "payment": "الدفع",
       "totalPrice": "السعر الإجمالي",

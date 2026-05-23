@@ -26,6 +26,16 @@ function formatDate(dateStr: string) {
     return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+function formatTime(timeStr: string) {
+    if (!timeStr) return "";
+    const [h, m] = timeStr.split(":");
+    const hours = parseInt(h, 10);
+    if (isNaN(hours)) return timeStr;
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const h12 = hours % 12 || 12;
+    return `${h12}:${m} ${ampm}`;
+}
+
 export default function ManageBooking() {
     const { t } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -46,6 +56,9 @@ export default function ManageBooking() {
         },
     }));
 
+    const [sortBy, setSortBy] = useState(() => searchParams.get("sort_by") || "");
+    const [sortOrder, setSortOrder] = useState(() => searchParams.get("order") || "desc");
+
     const isFirstRender = useRef(true);
 
     useEffect(() => {
@@ -62,8 +75,10 @@ export default function ManageBooking() {
         if (filterOptions.data.status) urlParams.set("status", filterOptions.data.status);
         if (filterOptions.data.booking_type) urlParams.set("booking_type", filterOptions.data.booking_type);
         if (filterOptions.data.paymentMethod) urlParams.set("paymentMethod", filterOptions.data.paymentMethod);
+        if (sortBy) urlParams.set("sort_by", sortBy);
+        if (sortOrder && sortOrder !== "desc") urlParams.set("order", sortOrder);
         setSearchParams(urlParams, { replace: true });
-    }, [formData.search, formData.dateFrom, formData.dateTo, formData.limit, currentPage, filterOptions.data.status, filterOptions.data.booking_type, filterOptions.data.paymentMethod, setSearchParams]);
+    }, [formData.search, formData.dateFrom, formData.dateTo, formData.limit, currentPage, filterOptions.data.status, filterOptions.data.booking_type, filterOptions.data.paymentMethod, sortBy, sortOrder, setSearchParams]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -81,12 +96,14 @@ export default function ManageBooking() {
         status: filterOptions.data.status || undefined,
         booking_type: filterOptions.data.booking_type || undefined,
         payment_method: filterOptions.data.paymentMethod || undefined,
+        sort_by: sortBy || undefined,
+        order: sortBy ? sortOrder : undefined,
     };
 
     // Fetch data
     const { data, isLoading, isError, isSuccess, error } = useGet({
         queryFn: () => manageBookings(route, params),
-        queryKey: ["bookings", currentPage, formData.search, formData.dateFrom, formData.dateTo, formData.limit, filterOptions.data.status, filterOptions.data.booking_type, filterOptions.data.paymentMethod],
+        queryKey: ["bookings", currentPage, formData.search, formData.dateFrom, formData.dateTo, formData.limit, filterOptions.data.status, filterOptions.data.booking_type, filterOptions.data.paymentMethod, sortBy, sortOrder],
         options: { staleTime: 1000 * 10 },
     });
 
@@ -126,15 +143,26 @@ export default function ManageBooking() {
         {
             key: "booking_date",
             title: t("bookings.manageBooking.columns.bookingDate"),
-            render: (value: string) => (
-                <span className="text-gray-700 font-medium text-xs whitespace-nowrap">
-                    {formatDate(value)}
-                </span>
+            sortable: true,
+            sortKey: "date",
+            render: (_value: string, row: any) => (
+                <div className="flex flex-col">
+                    <span className="text-gray-700 font-medium text-xs whitespace-nowrap">
+                        {formatDate(row.booking_date)}
+                    </span>
+                    {row.booking_time && (
+                        <span className="text-gray-400 text-[10px] whitespace-nowrap">
+                            {formatTime(row.booking_time)}
+                        </span>
+                    )}
+                </div>
             ),
         },
         {
             key: "status",
             title: t("bookings.manageBooking.columns.status"),
+            sortable: true,
+            sortKey: "status",
             render: (value: string) => {
                 const status = STATUS_MAP[value];
                 if (!status) return <span className="text-gray-500">—</span>;
@@ -158,7 +186,7 @@ export default function ManageBooking() {
                 );
             },
         },
-        { key: "service_boy_name", title: t("bookings.manageBooking.columns.serviceBoy") },
+        { key: "service_boy_name", title: t("bookings.manageBooking.columns.serviceBoy"), sortable: true, sortKey: "service_boy" },
         { key: "service_name", title: t("bookings.manageBooking.columns.service") },
         { key: "subarea", title: t("bookings.manageBooking.columns.subarea") },
         {
@@ -187,6 +215,8 @@ export default function ManageBooking() {
     const handleReset = () => {
         setFormData({ search: "", dateFrom: "", dateTo: "", limit: "25" });
         setFilterOptions({ state: false, data: { status: "", booking_type: "", paymentMethod: "" } });
+        setSortBy("");
+        setSortOrder("desc");
         setCurrentPage(1);
     };
 
@@ -199,6 +229,12 @@ export default function ManageBooking() {
     // Handle Limit change on dropdown directly (onChange)
     const handleLimitChange = (newLimit: string) => {
         setFormData((prev) => ({ ...prev, limit: newLimit }));
+        setCurrentPage(1);
+    };
+
+    const handleSort = (newSortBy: string, newSortOrder: string) => {
+        setSortBy(newSortBy);
+        setSortOrder(newSortOrder);
         setCurrentPage(1);
     };
 
@@ -258,6 +294,9 @@ export default function ManageBooking() {
                         totalEntries={totalItems}
                         pageSize={Number(formData.limit) || 25}
                         onPageChange={handlePageChange}
+                        sortBy={sortBy}
+                        sortOrder={sortOrder}
+                        onSort={handleSort}
                     />
                 )}
             </div>

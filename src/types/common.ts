@@ -137,6 +137,8 @@ export interface Column<T> {
     title: string;
     render?: (value: any, row: T, index: number) => React.ReactNode;
     width?: string;
+    sortable?: boolean;
+    sortKey?: string;
 }
 
 export interface TableProps<T> {
@@ -150,6 +152,9 @@ export interface TableProps<T> {
     onPageChange?: (page: number) => void;
     isLoading?: boolean;
     onRowClick?: (row: T) => void;
+    sortBy?: string;
+    sortOrder?: string;
+    onSort?: (sortBy: string, sortOrder: string) => void;
 }
 
 export interface FormDataListProps {
