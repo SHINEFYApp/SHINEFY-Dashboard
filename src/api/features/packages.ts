@@ -133,3 +133,8 @@ export const exportPackagesPdf = async (params: ExportPackagesParams) => {
     );
     return res.data;
 };
+
+export const reorderPackages = async (orders: { id: number; sort_order: number }[]) => {
+    const res: AxiosResponse = await postService("/api/packages/reorder", { orders });
+    return res.data;
+};

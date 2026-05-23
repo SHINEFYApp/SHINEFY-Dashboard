@@ -8,8 +8,8 @@ import {
     updatePackage,
     deletePackage,
     exportPackagesCsv,
-    exportPackagesExcel,
     exportPackagesPdf,
+    reorderPackages,
     type GetPackagesParams,
     type AddPackagePayload,
     type UpdatePackagePayload,
@@ -80,6 +80,13 @@ export const useExportPackagesCsv = (options?: any) => {
         ...options
     })
 }
+
+export const useReorderPackages = (options?: any) => {
+    return useMutation<any, AxiosError, { id: number; sort_order: number }[]>({
+        mutationFn: (orders) => reorderPackages(orders),
+        ...options,
+    });
+};
 
 // Better Export Hooks (Mutation style for triggering download)
 export const useExportPackages = (type: 'csv' | 'excel' | 'pdf', options?: any) => {
