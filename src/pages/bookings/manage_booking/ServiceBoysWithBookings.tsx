@@ -193,7 +193,11 @@ export default function ServiceBoysWithBookings() {
                             const boy = sb.service_boy;
                             const isExpanded = expandedId === boy.user_id;
                             const cashTotal = (sb.today_bookings || [])
+<<<<<<< Updated upstream
                                 .filter((b: any) => b.payment_option?.toLowerCase() === "cash")
+=======
+                                .filter((b: any) => b.payment_option?.toLowerCase() === "cash" && String(b.status) === "2")
+>>>>>>> Stashed changes
                                 .reduce((sum: number, b: any) => sum + (Number(b.total_price) || 0), 0);
                             return (
                                 <div key={boy.user_id} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
@@ -224,7 +228,11 @@ export default function ServiceBoysWithBookings() {
                                         <div className="flex items-center gap-4">
                                             {cashTotal > 0 && (
                                                 <span className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-3 py-1 rounded-full">
+<<<<<<< Updated upstream
                                                     Cash: {cashTotal.toLocaleString()} EGP
+=======
+                                                    Collected: {cashTotal.toLocaleString()} EGP
+>>>>>>> Stashed changes
                                                 </span>
                                             )}
                                             <span className="text-xs bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full">
