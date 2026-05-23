@@ -8,7 +8,7 @@ import calendar from '../../assets/icons/calendar.svg';
 import activeCalendar from '../../assets/icons/activeCalendar.svg';
 import type { MenuItem, SidebarProps } from '../../types/layout';
 import logo from '../../assets/logo.svg';
-import { Box, CarFront, HandCoins, Headphones, Map, Settings, Users, LogOut } from 'lucide-react';
+import { Box, CarFront, HandCoins, Headphones, Map, Settings, Users, LogOut, Wrench } from 'lucide-react';
 
 import { Link, useNavigate } from 'react-router';
 import { usePermissions } from '../../hooks/usePermissions';
@@ -24,7 +24,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
     const [expandedMenu, setExpandedMenu] = useState<string | null>('Bookings');
 
     useEffect(() => {
-        if (currentPath.startsWith('/vehicles')) {
+        if (currentPath.startsWith('/bookings/manage/service-boys') || currentPath.startsWith('/users&staff/manage/serviceBoy')) {
+            setExpandedMenu('Service Boy');
+        } else if (currentPath.startsWith('/vehicles')) {
             setExpandedMenu('Vehicles');
         } else if (currentPath.startsWith('/bookings')) {
             setExpandedMenu('Bookings');
@@ -82,13 +84,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 },
                 {
                     icon: null,
-                    label: 'Service Boys With Bookings',
-                    i18nKey: 'sidebar.serviceBoysWithBookings',
-                    path: '/bookings/manage/service-boys',
-                    permissionId: PRIVILEGES.MANAGE_BOOKING,
-                },
-                {
-                    icon: null,
                     label: 'Manage Slot',
                     i18nKey: 'sidebar.manageSlot',
                     path: '/bookings/slot',
@@ -100,6 +95,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     i18nKey: 'sidebar.adminSlots',
                     path: '/bookings/slot/admin-slots',
                     permissionId: PRIVILEGES.MANAGE_SLOT,
+                },
+            ],
+        },
+        {
+            icon: <Wrench className="w-5 h-5" />,
+            label: 'Service Boy',
+            i18nKey: 'sidebar.serviceBoy',
+            isActive: currentPath?.startsWith('/bookings/manage/service-boys') || currentPath?.startsWith('/users&staff/manage/serviceBoy'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Service Boy',
+                    i18nKey: 'sidebar.manageServiceBoy',
+                    path: '/users&staff/manage/serviceBoy',
+                    permissionId: PRIVILEGES.MANAGE_SERVICE_BOY,
+                },
+                {
+                    icon: null,
+                    label: 'Service Boys With Bookings',
+                    i18nKey: 'sidebar.serviceBoysWithBookings',
+                    path: '/bookings/manage/service-boys',
+                    permissionId: PRIVILEGES.MANAGE_BOOKING,
                 },
             ],
         },
@@ -144,13 +161,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     i18nKey: 'sidebar.manageSubAdmin',
                     path: '/users&staff/manage/subAdmin',
                     permissionId: PRIVILEGES.MANAGE_SUB_ADMIN,
-                },
-                {
-                    icon: null,
-                    label: 'Manage Service Boy',
-                    i18nKey: 'sidebar.manageServiceBoy',
-                    path: '/users&staff/manage/serviceBoy',
-                    permissionId: PRIVILEGES.MANAGE_SERVICE_BOY,
                 },
                 {
                     icon: null,

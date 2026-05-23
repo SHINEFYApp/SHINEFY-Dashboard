@@ -227,7 +227,7 @@ export default function UserProfile() {
             title: "Vehicle Image",
             render: (value: string) => (
                 <div className="w-20 h-14 bg-gray-100 rounded overflow-hidden">
-                    {value && <img src={value} alt="Vehicle" className="w-full h-full object-cover" />}
+                    {value && <img src={value?.startsWith("http") ? value : `${import.meta.env.VITE_IMAGES_URL}/${value}`} alt="Vehicle" className="w-full h-full object-cover" />}
                 </div>
             ),
         },
@@ -391,7 +391,7 @@ export default function UserProfile() {
                     <div className="flex items-center gap-5">
                         <div className="w-[84px] h-[84px] bg-white rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
                             {user?.image && (
-                                <img src={user.image} alt="Profile" className="w-full h-full object-cover" />
+                                <img src={user.image.startsWith("http") ? user.image : `${import.meta.env.VITE_IMAGES_URL}/${user.image}`} alt="Profile" className="w-full h-full object-cover" />
                             )}
                         </div>
                         <div className="pt-1">

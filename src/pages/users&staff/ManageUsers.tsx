@@ -54,7 +54,7 @@ export default function ManageUsers() {
             key: "image",
             title: "Image",
             render: (value: string) => (
-                <img src={value} alt="User" className="w-10 h-10 rounded-full object-cover" />
+                <img src={value?.startsWith("http") ? value : `${import.meta.env.VITE_IMAGES_URL}/${value}`} alt="User" className="w-10 h-10 rounded-full object-cover" />
             )
         },
         {

@@ -5,7 +5,7 @@ export const manageCarCategoryColumns = [
         key: "image",
         title: "Car Category Image",
         render: (image: string) => (
-            <img src={image} alt="Car Category" className="w-14 h-14 object-contain mx-auto" />
+            <img src={image?.startsWith("http") ? image : `${import.meta.env.VITE_IMAGES_URL}/${image}`} alt="Car Category" className="w-14 h-14 object-contain mx-auto" />
         )
     },
     {

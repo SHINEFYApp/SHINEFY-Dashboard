@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { getService, postService } from "../../../api/service/service-requests";
 
-const IMAGE_BASE = import.meta.env.VITE_API_URL;
+const IMAGE_BASE = import.meta.env.VITE_IMAGES_URL;
 
 type TabType = "main" | "extra" | "packages";
 
@@ -69,7 +69,7 @@ function SortableRow({ item, index }: { item: SortableItem; index: number }) {
                     <img
                         src={
                             item.image
-                                ? `${IMAGE_BASE}/uploads/service_image/${item.image}`
+                                ? (item.image.startsWith("http") ? item.image : `${IMAGE_BASE}/${item.image}`)
                                 : "/placeholder.png"
                         }
                         alt={item.name}

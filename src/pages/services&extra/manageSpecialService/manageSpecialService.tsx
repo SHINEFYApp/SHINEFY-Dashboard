@@ -12,6 +12,7 @@ export default function ManageSpecialService() {
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     const pageSize = 10;
+    const imageBase = import.meta.env.VITE_IMAGES_URL;
 
     const { data: specialServicesData, isLoading, isError, refetch } = useGetSpecialServices({
         per_page: pageSize,
@@ -58,7 +59,7 @@ export default function ManageSpecialService() {
             title: "Image",
             render: (_: any, row: any) => (
                 <img
-                    src={row.photo_url || "/placeholder.png"}
+                    src={row.photo_url ? (row.photo_url.startsWith("http") ? row.photo_url : `${imageBase}/${row.photo_url}`) : "/placeholder.png"}
                     alt={row.name_en}
                     className="w-12 h-12 rounded object-cover"
                 />

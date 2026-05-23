@@ -7,7 +7,7 @@ export const manageServiceBoyColumns = [
         title: "Image",
         render: (image: string) => (
             <div className="w-10 h-10 rounded-full overflow-hidden">
-                <img src={image} alt="Service Boy" className="w-full h-full object-cover" />
+                <img src={image?.startsWith("http") ? image : `${import.meta.env.VITE_IMAGES_URL}/${image}`} alt="Service Boy" className="w-full h-full object-cover" />
             </div>
         ),
     },
