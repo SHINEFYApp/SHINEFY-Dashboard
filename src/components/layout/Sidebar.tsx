@@ -157,6 +157,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                 },
                 {
                     icon: null,
+                    label: 'Advanced User Filter',
+                    i18nKey: 'sidebar.advancedUserFilter',
+                    path: '/users&staff/manage/users/advanced-filter',
+                    permissionId: PRIVILEGES.MANAGE_USERS,
+                },
+                {
+                    icon: null,
                     label: 'Manage Sub Admin',
                     i18nKey: 'sidebar.manageSubAdmin',
                     path: '/users&staff/manage/subAdmin',
