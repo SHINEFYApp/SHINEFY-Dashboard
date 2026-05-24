@@ -21,6 +21,7 @@ const breadcrumbKeyMap: Record<string, string> = {
   'Manage Vehicles': 'navbar.manageVehicles',
   'Users & Stuff': 'navbar.usersAndStaff',
   'Manage Users': 'navbar.manageUsers',
+  'Advanced User Filter': 'navbar.advancedUserFilter',
   'Manage Group': 'navbar.manageGroup',
   'Manage': 'navbar.manage',
   'Sub Admin': 'navbar.subAdmin',

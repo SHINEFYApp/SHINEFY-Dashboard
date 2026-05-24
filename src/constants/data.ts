@@ -52,6 +52,10 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
         title: 'Users & Stuff',
         breadcrumbs: ['Users & Stuff', 'Manage Users']
     },
+    '/users&staff/manage/users/advanced-filter': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'Manage Users', 'Advanced User Filter']
+    },
     '/users&staff/manage/users/manageGroup': {
         title: 'Users & Stuff',
         breadcrumbs: ['Users & Stuff', 'Manage Users' , 'Manage Group']

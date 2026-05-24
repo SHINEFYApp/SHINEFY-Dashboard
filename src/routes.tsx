@@ -33,6 +33,7 @@ import ViewCoupon from './pages/services&extra/manageCoupon/viewCoupon';
 import EditCoupon from './pages/services&extra/manageCoupon/editCoupon';
 import ManageVehicles from './pages/vehicles/ManageVehicles';
 import ManageUsers from './pages/users&staff/ManageUsers';
+import AdvancedUserFilter from './pages/users&staff/AdvancedUserFilter';
 import ManageServiceBoy from './pages/users&staff/ManageServiceBoy';
 import AddCoupon from './pages/services&extra/manageCoupon/addCoupon';
 import ManageProducts from './pages/productsAndOrders/manageProducts';
@@ -123,6 +124,7 @@ export const RoutesPages = () => {
         <Route path="/users&staff/manage/users" element={<PermissionGuard permissionId={P.MANAGE_USERS}><ManageUsers /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/:id" element={<PermissionGuard permissionId={P.MANAGE_USERS}><UserProfile /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/:userId/packageDetails/:packageId" element={<PermissionGuard permissionId={P.MANAGE_USERS}><UserPackageDetails /></PermissionGuard>} />
+        <Route path="/users&staff/manage/users/advanced-filter" element={<PermissionGuard permissionId={P.MANAGE_USERS}><AdvancedUserFilter /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/manageGroup" element={<PermissionGuard permissionId={P.MANAGE_GROUP}><ManageGroup /></PermissionGuard>} />
         <Route path="/users&staff/manage/subAdmin" element={<PermissionGuard permissionId={P.MANAGE_SUB_ADMIN}><ManageSubAdmin /></PermissionGuard>} />
         <Route path="/users&staff/manage/subAdmin/addSubAdmin" element={<PermissionGuard permissionId={P.MANAGE_SUB_ADMIN}><AddSubAdmin /></PermissionGuard>} />
