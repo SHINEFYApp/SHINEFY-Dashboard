@@ -185,6 +185,7 @@ export default function UserProfile() {
     const bookingPagination = bookingData?.data?.pagination;
     const vehicles = vehiclesData?.data || [];
     const locations = locationsData?.data || [];
+    const walletBalance = walletData?.data?.balance ?? 0;
     const walletHistory = walletData?.data?.wallet_history || [];
     const walletPagination = walletData?.data?.pagination;
     const packages = packagesData?.data?.packages || [];
@@ -591,6 +592,10 @@ export default function UserProfile() {
 
                 {activeTab === "Wallet History" && (
                     <div className="px-6">
+                        <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <span className="text-sm text-gray-600">Current Balance: </span>
+                            <span className="text-xl font-bold text-green-600">EGP {walletBalance}</span>
+                        </div>
                         <CustomTable
                             columns={walletColumns}
                             data={walletHistory}
