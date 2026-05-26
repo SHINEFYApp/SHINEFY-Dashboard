@@ -47,3 +47,9 @@ export const getSubareas = async (route: string) => {
     const res: AxiosResponse = await getService(route);
     return res.data;
 }
+
+export const getBookingLogs = async (id: number | string, per_page?: number) => {
+    const baseURL = import.meta.env.VITE_API_URL;
+    const res: AxiosResponse = await getService(`${baseURL}/api/book/${id}/logs`, per_page ? { per_page } : undefined);
+    return res.data;
+}

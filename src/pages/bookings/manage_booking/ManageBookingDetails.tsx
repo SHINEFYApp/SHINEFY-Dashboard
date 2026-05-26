@@ -25,6 +25,7 @@ import { cn } from "../../../utils/utils";
 import { Input } from "../../../components/ui/input";
 import { Textarea } from "../../../components/ui/textarea";
 import { ExtraServiceModal } from "../../../components/booking/tabs/services/ExtraServiceModal";
+import { BookingLogsModal } from "../../../components/booking/BookingLogsModal";
 import { useTranslation } from "react-i18next";
 
 
@@ -169,6 +170,7 @@ const ManageBookingDetails = () => {
     const [hasChanges, setHasChanges] = useState(false);
     const [initialForm, setInitialForm] = useState<EditFormState | null>(null);
     const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
+    const [isLogsModalOpen, setIsLogsModalOpen] = useState(false);
     const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
     const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
     const [isServiceBoyDropdownOpen, setIsServiceBoyDropdownOpen] = useState(false);
@@ -437,7 +439,10 @@ const ManageBookingDetails = () => {
                             {isUpdating ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
                             {isUpdating ? t("bookings.manageBookingDetails.saving") : t("bookings.manageBookingDetails.saveChanges")}
                         </button>
-                        <button className="flex items-center justify-center p-2.5 bg-purple-50 border border-purple-200 rounded-lg text-purple-700 hover:bg-purple-100 transition-all">
+                        <button
+                            onClick={() => setIsLogsModalOpen(true)}
+                            className="flex items-center justify-center p-2.5 bg-purple-50 border border-purple-200 rounded-lg text-purple-700 hover:bg-purple-100 transition-all"
+                        >
                             <History className="size-4" />
                         </button>
                     </div>
@@ -1061,6 +1066,26 @@ const ManageBookingDetails = () => {
                         );
                     })()}
                 </SectionCard>
+            )}
+
+            {/* ══════════════ Booking Logs Modal ══════════════ */}
+            {isLogsModalOpen && (
+                <BookingLogsModal
+                    isOpen={isLogsModalOpen}
+                    onClose={() => setIsLogsModalOpen(false)}
+                    bookingId={id!}
+                    fieldLabels={{
+                        status: Object.fromEntries(
+                            Object.entries(BOOKING_STATUS).map(([k, v]) => [k, v.label])
+                        ),
+                        booking_type: Object.fromEntries(
+                            Object.entries(BOOKING_TYPE).map(([k, v]) => [String(k), v.label])
+                        ),
+                        driver_status: Object.fromEntries(
+                            Object.entries(DRIVER_STATUS).map(([k, v]) => [k, v.label])
+                        ),
+                    }}
+                />
             )}
 
             {/* ══════════════ Extra Service Modal ══════════════ */}

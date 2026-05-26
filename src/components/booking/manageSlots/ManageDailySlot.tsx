@@ -70,6 +70,7 @@ const ManageDailySlot = () => {
                                     icon={<ListChecks className="size-5" />}
                                     options={[
                                         { label: t('bookings.manageDailySlot.open'), value: '0' },
+                                        { label: t('bookings.manageDailySlot.close'), value: '1' },
                                     ]}
                                 />
                             </div>
