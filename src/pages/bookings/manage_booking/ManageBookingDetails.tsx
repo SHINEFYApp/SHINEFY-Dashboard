@@ -5,12 +5,12 @@ import type {
     ApiMainService,
     ApiExtraService,
     ExtraService,
-    GetServiceResponse,
     UpdateBookingPayload,
     Vehicle,
     ServiceBoyStatus,
     ServiceBoyStatusItem,
 } from "../../../types/bookings";
+import { VehicleSelectionModal } from "../../../components/booking/tabs/services/VehicleSelectionModal";
 import { useGet } from "../../../api/useGetData";
 import { useParams } from "react-router";
 import { toast } from "sonner";
@@ -78,6 +78,7 @@ interface EditFormState {
     booking_admin_note: string;
     note?: string;
     extra_services: ExtraService[];
+    vehicle_ids: number[];
     service_boy_status: ServiceBoyStatus | null;
 }
 
@@ -124,6 +125,7 @@ const ManageBookingDetails = () => {
     const booking = data?.data?.booking;
     const bookingExtraServices = data?.data?.extra_services;
     const bookingServiceBoyStatus = data?.data?.service_boy_status;
+    const bookingVehicles = data?.data?.vehicles;
     /* ─── Fetch all services (same endpoint as create booking) ─── */
     const getServicesQuery = useGet<GetServiceResponse>({
         queryFn: () => getServices(`${baseURL}/api/get_service/`),
@@ -150,6 +152,48 @@ const ManageBookingDetails = () => {
     const userLocations = locationsData?.data ?? locationsData?.locations ?? locationsData ?? [];
     const userVehicles = vehiclesData?.data ?? vehiclesData?.vehicles ?? vehiclesData ?? [];
 
+    /* ─── Combined vehicle lookup (user vehicles + booking data) ─── */
+    const vehicleLookup = useMemo(() => {
+        const map = new Map<number, Vehicle>();
+        if (Array.isArray(userVehicles)) {
+            userVehicles.forEach((v: Vehicle) => map.set(Number(v.vehicle_id), v));
+        }
+        if (Array.isArray(bookingVehicles)) {
+            bookingVehicles.forEach((v: any) => {
+                const id = Number(v.vehicle_id);
+                if (id > 0 && !map.has(id)) map.set(id, v);
+            });
+        }
+        if (booking?.vehicle && booking?.vehicle_id && !map.has(Number(booking.vehicle_id))) {
+            map.set(Number(booking.vehicle_id), booking.vehicle);
+        }
+        return map;
+    }, [userVehicles, booking, bookingVehicles]);
+
+    /* --- Resolve initial vehicle IDs from bookingVehicles + userVehicles --- */
+    const resolvedInitialVehicleIds = useMemo(() => {
+        if (Array.isArray(bookingVehicles) && bookingVehicles.length > 0) {
+            const directIds = bookingVehicles
+                .map((v: any) => Number(v.vehicle_id))
+                .filter((id: number) => id > 0);
+            if (directIds.length > 0) return directIds;
+
+            if (Array.isArray(userVehicles) && userVehicles.length > 0) {
+                const matchedIds = userVehicles
+                    .filter((uv: Vehicle) =>
+                        bookingVehicles.some((bv: any) =>
+                            (bv.plate_number && bv.plate_number !== "undefined" && bv.plate_number !== "NA" && bv.plate_number === uv.plate_number) ||
+                            (bv.make_name && bv.make_name === uv.make_name && bv.model_name === uv.model_name)
+                        )
+                    )
+                    .map((uv: Vehicle) => Number(uv.vehicle_id));
+                if (matchedIds.length > 0) return matchedIds;
+            }
+        }
+        if (booking?.vehicle_id) return [Number(booking.vehicle_id)];
+        return [];
+    }, [bookingVehicles, userVehicles, booking]);
+
     /* ─── Form state ─── */
     const [form, setForm] = useState<EditFormState>({
         status: "",
@@ -164,6 +208,7 @@ const ManageBookingDetails = () => {
         booking_admin_note: "",
         note: "",
         extra_services: [],
+        vehicle_ids: [],
         service_boy_status: null,
     });
 
@@ -171,6 +216,7 @@ const ManageBookingDetails = () => {
     const [initialForm, setInitialForm] = useState<EditFormState | null>(null);
     const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
     const [isLogsModalOpen, setIsLogsModalOpen] = useState(false);
+    const [isVehicleModalOpen, setIsVehicleModalOpen] = useState(false);
     const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
     const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
     const [isServiceBoyDropdownOpen, setIsServiceBoyDropdownOpen] = useState(false);
@@ -214,7 +260,7 @@ const ManageBookingDetails = () => {
 
         const initial: EditFormState = {
             status: String(resolvedStatus),
-            booking_type: booking.booking_type ?? 0,
+            booking_type: booking.order_type ?? booking.booking_type ?? 0,
             booking_date: booking.booking_date ?? "",
             booking_time: booking.booking_time ?? "",
             service_boy_id: booking.service_boy?.service_boy_id ?? null,
@@ -227,11 +273,12 @@ const ManageBookingDetails = () => {
             booking_admin_note: booking.booking_admin_note ?? "",
             note: booking.note ?? "",
             extra_services: existingExtras,
+            vehicle_ids: resolvedInitialVehicleIds,
             service_boy_status: bookingServiceBoyStatus ?? null,
         };
         setForm(initial);
         setInitialForm(initial);
-    }, [data, allServices]);
+    }, [data, allServices, bookingVehicles, resolvedInitialVehicleIds]);
 
 
     /* ─── Track changes ─── */
@@ -253,6 +300,7 @@ const ManageBookingDetails = () => {
             form.booking_admin_note !== initialForm.booking_admin_note ||
             form.note !== initialForm.note ||
             JSON.stringify(form.extra_services) !== JSON.stringify(initialForm.extra_services) ||
+            JSON.stringify(form.vehicle_ids) !== JSON.stringify(initialForm.vehicle_ids) ||
             JSON.stringify(form.service_boy_status) !== JSON.stringify(initialForm.service_boy_status);
         setHasChanges(changed);
     }, [form, initialForm]);
@@ -359,6 +407,10 @@ const ManageBookingDetails = () => {
         if (form.driver_status) payload.driver_status = form.driver_status; // "1"-"5"
 
         if (form.service_boy_status) payload.service_boy_status = form.service_boy_status;
+
+        if (form.vehicle_ids.length > 0) {
+            payload.vehicle_ids = form.vehicle_ids;
+        }
 
         if (form.extra_services.length > 0) {
             payload.extra_service_id = form.extra_services.map((es) => Number(es.id));
@@ -954,21 +1006,87 @@ const ManageBookingDetails = () => {
 
             {/* ══════════════ Tables ══════════════ */}
 
-            {/* Booking Vehicle */}
-            {booking.vehicle && (
-                <SectionCard title={t("bookings.manageBookingDetails.bookingVehicle")} icon={<Wrench className="size-5" />} fullWidth>
-                    <CustomTable
-                        columns={vehicleColumns}
-                        data={[booking.vehicle]}
-                        currentPage={1}
-                        totalPages={1}
-                        totalEntries={1}
-                        pageSize={10}
-                        onPageChange={() => { }}
-                        isLoading={false}
-                    />
-                </SectionCard>
-            )}
+            {/* Booking Vehicle — Editable */}
+            <SectionCard title="Booking Vehicles" icon={<Wrench className="size-5" />} fullWidth>
+                {(() => {
+                    const userEditedVehicles =
+                        initialForm &&
+                        JSON.stringify(form.vehicle_ids) !== JSON.stringify(initialForm.vehicle_ids);
+
+                    const assignedVehicles = userEditedVehicles
+                        ? form.vehicle_ids
+                            .map((vid) => vehicleLookup.get(vid))
+                            .filter(Boolean)
+                        : Array.isArray(bookingVehicles) && bookingVehicles.length > 0
+                            ? bookingVehicles
+                            : form.vehicle_ids
+                                .map((vid) => vehicleLookup.get(vid))
+                                .filter(Boolean);
+
+                    if (assignedVehicles.length === 0) {
+                        return (
+                            <div className="text-center py-8">
+                                <p className="text-sm text-gray-400 mb-4">No vehicles assigned</p>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsVehicleModalOpen(true)}
+                                    disabled={!Array.isArray(userVehicles) || userVehicles.length === 0}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                    {Array.isArray(userVehicles) && userVehicles.length > 0
+                                        ? "Add Vehicles"
+                                        : "No customer vehicles"}
+                                </button>
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <div className="space-y-4">
+                            <div className="flex flex-wrap gap-4">
+                                {assignedVehicles.map((v: any, idx: number) => {
+                                    const vehicleId = Number(v.vehicle_id);
+                                    return (
+                                        <div
+                                            key={vehicleId || idx}
+                                            className="relative flex items-center gap-4 px-4 py-3 rounded-xl border-2 border-green-400 bg-green-50"
+                                        >
+                                            <div>
+                                                <p className="text-sm font-semibold text-gray-800">{v.vehicle_name || v.make_name} {v.model_name}</p>
+                                                <p className="text-xs text-gray-500">{v.plate_number} &middot; {v.color_name}</p>
+                                            </div>
+                                            {vehicleId > 0 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setForm((prev) => ({
+                                                            ...prev,
+                                                            vehicle_ids: prev.vehicle_ids.filter((id) => id !== vehicleId),
+                                                        }))
+                                                    }
+                                                    className="ml-2 text-red-400 hover:text-red-600 transition-colors"
+                                                >
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setIsVehicleModalOpen(true)}
+                                disabled={!Array.isArray(userVehicles) || userVehicles.length === 0}
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                            >
+                                <Plus className="w-4 h-4" />
+                                Edit Vehicles
+                            </button>
+                        </div>
+                    );
+                })()}
+            </SectionCard>
 
             {/* All User Vehicles */}
             {Array.isArray(userVehicles) && userVehicles.length > 0 && (
@@ -1095,6 +1213,25 @@ const ManageBookingDetails = () => {
                     availableExtras={availableExtras}
                     selectedExtras={form.extra_services}
                     onConfirm={(updated) => updateField("extra_services", updated)}
+                />
+            )}
+
+            {/* ══════════════ Vehicle Selection Modal ══════════════ */}
+            {isVehicleModalOpen && (
+                <VehicleSelectionModal
+                    isOpen={isVehicleModalOpen}
+                    onClose={() => setIsVehicleModalOpen(false)}
+                    selectedVehicles={userVehicles.filter((v: Vehicle) =>
+                        form.vehicle_ids.includes(Number(v.vehicle_id))
+                    )}
+                    setSelectedVehicles={(newVehicles: Vehicle[]) =>
+                        setForm((prev) => ({
+                            ...prev,
+                            vehicle_ids: newVehicles.map((v) => Number(v.vehicle_id)),
+                        }))
+                    }
+                    dummyDataVehicles={userVehicles}
+                    isSuccess={true}
                 />
             )}
 
