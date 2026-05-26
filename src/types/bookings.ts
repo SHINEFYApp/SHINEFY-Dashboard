@@ -517,6 +517,7 @@ export interface Booking {
     service_name: string;
     payment_option: string;
     booking_type?: number;
+    order_type?: number;
     subarea?: string;
 }
 export interface Pagination {
@@ -643,6 +644,7 @@ export interface UpdateBookingPayload {
     booking_time?: string;
     main_service?: number;
     service_boy_id?: number;
+    vehicle_ids?: number[];
     coupan_amount?: number;
     wallet_amount?: number;
     address_loc?: string;
