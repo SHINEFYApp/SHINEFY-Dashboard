@@ -568,6 +568,74 @@ export interface ServiceBoyStatus {
     payment_collected: ServiceBoyStatusItem;
 }
 
+/* ─── Booking Logs ─── */
+export interface BookingLogCauser {
+    id: number;
+    name: string;
+    type: string;
+}
+
+export interface BookingLogChange {
+    field: string;
+    old_value: string | null;
+    new_value: string | null;
+}
+
+export interface BookingLogActivity {
+    id: number;
+    description: string;
+    event: string;
+    changes: BookingLogChange[];
+    causer: BookingLogCauser;
+    created_at: string;
+}
+
+export interface BookingLogPagination {
+    total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+}
+
+export interface BookingCompanyLog {
+    id: number;
+    company_name: string;
+    user_name: string;
+    user_email: string;
+    booking_no: string;
+    sub_total: number;
+    benefit_percentage: number;
+    benefit_amount: number;
+    created_at: string;
+}
+
+export interface BookingCustomLog {
+    id: number;
+    user_id: number;
+    type: string;
+    created_at: string;
+}
+
+export interface BookingLogsData {
+    booking: {
+        id: number;
+        booking_no: string;
+    };
+    activity_logs: {
+        data: BookingLogActivity[];
+        pagination: BookingLogPagination;
+    };
+    company_logs: BookingCompanyLog[];
+    custom_logs: BookingCustomLog[];
+}
+
+export interface BookingLogsResponse {
+    status: string;
+    data: BookingLogsData | null;
+    message?: string;
+    code?: number;
+}
+
 export interface UpdateBookingPayload {
     status: string;
     booking_type?: number;

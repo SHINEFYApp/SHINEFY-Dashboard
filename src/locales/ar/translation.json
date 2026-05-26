@@ -465,7 +465,28 @@
       },
       "viewOnGoogleMaps": "عرض على خرائط جوجل",
       "updateSuccess": "تم تحديث الحجز بنجاح",
-      "updateFailed": "فشل في تحديث الحجز"
+      "updateFailed": "فشل في تحديث الحجز",
+      "logs": {
+        "title": "سجلات الحجز",
+        "bookingRef": "الحجز {{no}}",
+        "activityLogs": "سجلات النشاط",
+        "companyLogs": "سجلات الشركة",
+        "customLogs": "سجلات مخصصة",
+        "noData": "لا توجد بيانات سجلات متاحة",
+        "noActivityLogs": "لا توجد سجلات نشاط",
+        "noCompanyLogs": "لا توجد سجلات شركة",
+        "noCustomLogs": "لا توجد سجلات مخصصة",
+        "null": "فارغ",
+        "company": "الشركة",
+        "user": "المستخدم",
+        "email": "البريد الإلكتروني",
+        "subTotal": "المجموع الفرعي",
+        "benefit": "نسبة المنفعة",
+        "benefitAmount": "قيمة المنفعة",
+        "companyLogsCount": "إجمالي {{count}} سجل شركة",
+        "customLogsCount": "إجمالي {{count}} سجل مخصص",
+        "userId": "معرف المستخدم"
+      }
     },
     "bookingReports": {
       "title": "تقارير الحجوزات",

@@ -468,7 +468,28 @@
       },
       "viewOnGoogleMaps": "View on Google Maps",
       "updateSuccess": "Booking updated successfully",
-      "updateFailed": "Failed to update booking"
+      "updateFailed": "Failed to update booking",
+      "logs": {
+        "title": "Booking Logs",
+        "bookingRef": "Booking {{no}}",
+        "activityLogs": "Activity Logs",
+        "companyLogs": "Company Logs",
+        "customLogs": "Custom Logs",
+        "noData": "No log data available",
+        "noActivityLogs": "No activity logs found",
+        "noCompanyLogs": "No company logs found",
+        "noCustomLogs": "No custom logs found",
+        "null": "null",
+        "company": "Company",
+        "user": "User",
+        "email": "Email",
+        "subTotal": "Sub Total",
+        "benefit": "Benefit %",
+        "benefitAmount": "Benefit Amount",
+        "companyLogsCount": "Total {{count}} company log entries",
+        "customLogsCount": "Total {{count}} custom log entries",
+        "userId": "User ID"
+      }
     },
     "bookingReports": {
       "title": "Booking Reports",

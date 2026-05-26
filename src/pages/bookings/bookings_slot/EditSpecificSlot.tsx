@@ -26,7 +26,11 @@ const EditSpecificSlot = () => {
         start_time: slot?.start_time ?? '',
         end_time: slot?.end_time ?? '',
         status: slot?.status !== undefined ? String(slot.status) : '',
-        out_of_service_hours: slot?.out_of_service_hours ?? [],
+        out_of_service_hours: Array.isArray(slot?.out_of_service_hours)
+            ? slot.out_of_service_hours
+            : slot?.out_of_service_hours
+                ? Object.values(slot.out_of_service_hours)
+                : [],
     };
 
     const handleSubmit = (values: typeof initialValues) => {
@@ -86,6 +90,8 @@ const EditSpecificSlot = () => {
                                         icon={<ListChecks className="size-5" />}
                                         options={[
                                             { label: t('bookings.editSpecificSlot.open'), value: '0' },
+                                        { label: t('bookings.manageDailySlot.close'), value: '1' },
+
                                         ]}
                                     />
                                 </div>
@@ -118,7 +124,7 @@ const EditSpecificSlot = () => {
                                 <FieldArray name="out_of_service_hours">
                                     {({ push, remove }) => (
                                         <div className="space-y-4">
-                                            {values.out_of_service_hours.map((_, index) => (
+                                            {(values.out_of_service_hours || []).map((_, index) => (
                                                 <div key={index} className="flex items-start gap-3">
                                                     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-xl bg-gray-50">
                                                         <FormTimePicker
