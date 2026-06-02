@@ -8,6 +8,7 @@ import {
     deleteArea,
     getNearestAreas,
     updateNearestAreas,
+    getServiceBoysByArea,
 } from "./areas";
 import type {
     GetAreasParams,
@@ -89,6 +90,16 @@ export const useGetNearestAreas = (id: number, options?: any) => {
 export const useUpdateNearestAreas = (options?: any) => {
     return useMutation<any, AxiosError, UpdateNearestAreasPayload>({
         mutationFn: updateNearestAreas,
+        ...options,
+    });
+};
+
+// GET Service Boys by Area
+export const useGetServiceBoysByArea = (areaId: number | null, options?: any) => {
+    return useQuery({
+        queryKey: ["service-boys-by-area", areaId],
+        queryFn: () => getServiceBoysByArea(areaId!),
+        enabled: !!areaId,
         ...options,
     });
 };

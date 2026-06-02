@@ -102,3 +102,30 @@ export const updateNearestAreas = async (data: UpdateNearestAreasPayload) => {
     // If we pass array in object to axios, it serializes nicely often.
     return await postService("/api/areas/sub/UpdateNearestAreas", null, data);
 };
+
+// ─── Service Boys by Area ───
+
+export interface ServiceBoyByAreaItem {
+    user_id: number;
+    name: string;
+    image_url: string;
+    phone_number: string;
+    phone_number_display: string;
+    registered_at: string;
+    status: string;
+    active_flag: number;
+}
+
+export interface ServiceBoysByAreaResponse {
+    status: string;
+    data: {
+        area_id: number;
+        area_name: string;
+        service_boys: ServiceBoyByAreaItem[];
+    };
+}
+
+// GET /api/areas/{areaId}/service-boys
+export const getServiceBoysByArea = async (areaId: number) => {
+    return await getService(`/api/areas/${areaId}/service-boys`);
+};

@@ -5,9 +5,10 @@ import { FormDropdown } from "../../common/FormDropdown";
 import { exportTypes, manageAreaTabs } from "../../constants/data";
 import { Link, useSearchParams } from "react-router-dom";
 import { AnimatedTabs } from "../../components/booking/AnimatedTabs";
-import { ArrowUpToLine, Navigation, Search, Trash2 } from "lucide-react";
+import { ArrowUpToLine, Navigation, Search, Trash2, Users } from "lucide-react";
 import { CustomTable } from "../../common/CustomTable";
-import { useGetMainAreas, useGetSubAreas, useDeleteArea, useGetNearestAreas, useUpdateNearestAreas } from "../../api/features/areas.hooks";
+import { useGetMainAreas, useGetSubAreas, useDeleteArea, useGetNearestAreas, useUpdateNearestAreas, useGetServiceBoysByArea } from "../../api/features/areas.hooks";
+import type { ServiceBoyByAreaItem } from "../../api/features/areas";
 import { GenericModal } from "../../common/GenericModal";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -28,6 +29,9 @@ export default function ManageAreas() {
     const [nearestModalOpen, setNearestModalOpen] = useState(false);
     const [selectedSubAreaId, setSelectedSubAreaId] = useState<number | null>(null);
     const [selectedNearest, setSelectedNearest] = useState<number[]>([]);
+    const [serviceBoysModalOpen, setServiceBoysModalOpen] = useState(false);
+    const [serviceBoysAreaId, setServiceBoysAreaId] = useState<number | null>(null);
+    const [serviceBoysAreaName, setServiceBoysAreaName] = useState("");
     const pageSize = 10;
 
     useEffect(() => {
@@ -112,6 +116,19 @@ export default function ManageAreas() {
         setSelectedSubAreaId(id);
         setSelectedNearest([]);
         setNearestModalOpen(true);
+    };
+
+    // Service Boys by Area
+    const { data: serviceBoysData, isLoading: serviceBoysLoading } = useGetServiceBoysByArea(serviceBoysAreaId, {
+        enabled: !!serviceBoysAreaId && serviceBoysModalOpen,
+    });
+
+    const serviceBoys: ServiceBoyByAreaItem[] = serviceBoysData?.data?.data?.service_boys || [];
+
+    const handleServiceBoysClick = (id: number, name: string) => {
+        setServiceBoysAreaId(id);
+        setServiceBoysAreaName(name);
+        setServiceBoysModalOpen(true);
     };
 
     // Initialize selectedNearest when nearest data loads
@@ -201,6 +218,12 @@ export default function ManageAreas() {
                 title: "Action",
                 render: (_: any, record: any) => (
                     <div className="flex gap-2 items-center text-nowrap">
+                        <button
+                            className="bg-[#E3F2FD] flex items-center gap-2 rounded-[2.75px] text-[#1565C0] border border-[#1565C0] capitalize hover:text-[#E3F2FD] hover:bg-[#1565C0] px-3.5 py-3 font-semibold transition-colors"
+                            onClick={() => handleServiceBoysClick(record.id, record.area_name)}
+                        >
+                            <Users size={18} /> service boys
+                        </button>
                         <button
                             className="bg-[#E8F5E9] flex items-center gap-2 rounded-[2.75px] text-[#2E7D32] border border-[#2E7D32] capitalize hover:text-[#E8F5E9] hover:bg-[#2E7D32] px-3.5 py-3 font-semibold transition-colors"
                             onClick={() => handleNearestClick(record.id)}
@@ -358,6 +381,56 @@ export default function ManageAreas() {
                                 </div>
                             </div>
                         </>
+                    )}
+                </GenericModal>
+
+                {/* Service Boys Modal */}
+                <GenericModal
+                    isOpen={serviceBoysModalOpen}
+                    onClose={() => { setServiceBoysModalOpen(false); setServiceBoysAreaId(null); setServiceBoysAreaName(""); }}
+                    title={`Service Boys in ${serviceBoysAreaName}`}
+                >
+                    {serviceBoysLoading ? (
+                        <div className="text-center py-8 text-gray-500">Loading service boys...</div>
+                    ) : serviceBoys.length === 0 ? (
+                        <div className="text-center py-8 text-gray-400">No service boys assigned to this area.</div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead>
+                                    <tr className="border-b border-gray-200">
+                                        <th className="text-left py-3 px-2 font-semibold text-gray-600">Name</th>
+                                        <th className="text-left py-3 px-2 font-semibold text-gray-600">Phone</th>
+                                        <th className="text-left py-3 px-2 font-semibold text-gray-600">Status</th>
+                                        <th className="text-left py-3 px-2 font-semibold text-gray-600">Registered</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {serviceBoys.map((boy) => (
+                                        <tr key={boy.user_id} className="border-b border-gray-100 hover:bg-gray-50">
+                                            <td className="py-3 px-2">
+                                                <div className="flex items-center gap-3">
+                                                    <img
+                                                        src={boy.image_url}
+                                                        alt=""
+                                                        className="w-8 h-8 rounded-full object-cover"
+                                                        onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/32'; }}
+                                                    />
+                                                    <span className="font-medium text-gray-900">{boy.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-3 px-2 text-gray-700">{boy.phone_number_display}</td>
+                                            <td className="py-3 px-2">
+                                                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${boy.active_flag ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                                    {boy.status}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 px-2 text-gray-600">{boy.registered_at}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     )}
                 </GenericModal>
             </main>
