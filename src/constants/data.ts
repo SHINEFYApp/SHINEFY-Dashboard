@@ -325,6 +325,20 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     '/compounds/today-summary': {
         title: 'Compounds System',
         breadcrumbs: ['Compounds System', 'Today Summary']
+    },
+
+    // Advertising
+    '/advertising/manage': {
+        title: 'Advertising',
+        breadcrumbs: ['Advertising', 'Manage Ads']
+    },
+    '/advertising/manage/add': {
+        title: 'Advertising',
+        breadcrumbs: ['Advertising', 'Manage Ads', 'Add Ad']
+    },
+    '/advertising/manage/edit/:id': {
+        title: 'Advertising',
+        breadcrumbs: ['Advertising', 'Manage Ads', 'Edit Ad']
     }
 };
 

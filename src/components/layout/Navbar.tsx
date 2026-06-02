@@ -90,7 +90,11 @@ const breadcrumbKeyMap: Record<string, string> = {
    'Add Subscription': 'navbar.addSubscription',
    'Subscription Details': 'navbar.subscriptionDetails',
    'Booking Details': 'navbar.bookingDetails',
-   'Today Summary': 'navbar.todaySummary',
+    'Today Summary': 'navbar.todaySummary',
+    'Advertising': 'navbar.advertising',
+    'Manage Ads': 'navbar.manageAds',
+    'Add Ad': 'navbar.addAd',
+    'Edit Ad': 'navbar.editAd',
 };
 
 export const Navbar: React.FC<NavbarProps> = ({ isCollapsed, currentPath = '/dashboard' }) => {
