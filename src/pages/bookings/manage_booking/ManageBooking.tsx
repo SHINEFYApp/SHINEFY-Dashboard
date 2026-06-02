@@ -36,15 +36,24 @@ function formatTime(timeStr: string) {
     return `${h12}:${m} ${ampm}`;
 }
 
+function todayString() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
+
 export default function ManageBooking() {
     const { t } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [currentPage, setCurrentPage] = useState(() => Number(searchParams.get("page")) || 1);
+    const today = todayString();
     const [formData, setFormData] = useState(() => ({
         search: searchParams.get("search") || "",
-        dateFrom: searchParams.get("dateFrom") || "",
-        dateTo: searchParams.get("dateTo") || "",
+        dateFrom: searchParams.get("dateFrom") || today,
+        dateTo: searchParams.get("dateTo") || today,
         limit: searchParams.get("limit") || "25",
     }));
     const [filterOptions, setFilterOptions] = useState<BookingFilterState>(() => ({
@@ -213,7 +222,8 @@ export default function ManageBooking() {
 
     // Reset form
     const handleReset = () => {
-        setFormData({ search: "", dateFrom: "", dateTo: "", limit: "25" });
+        const today = todayString();
+        setFormData({ search: "", dateFrom: today, dateTo: today, limit: "25" });
         setFilterOptions({ state: false, data: { status: "", booking_type: "", paymentMethod: "" } });
         setSortBy("");
         setSortOrder("desc");

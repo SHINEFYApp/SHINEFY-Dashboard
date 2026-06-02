@@ -136,6 +136,27 @@ const ManageBookingDetails = () => {
     const allServices: ApiMainService[] = getServicesQuery.data?.all_service_arr?.sorted_main_services ?? [];
     const allExtras: ApiExtraService[] = getServicesQuery.data?.all_service_arr?.sorted_extra_services ?? [];
 
+    /* ─── Merge booking's service into dropdown if missing from API ─── */
+    const mergedServices = useMemo(() => {
+        if (!booking) return allServices;
+        const bookingServiceId =
+            Number(booking.main_service_id ?? booking.service_id ?? booking.main_service?.service_id);
+        const bookingServiceName = booking.main_service?.service_name || booking.service_name;
+        const exists = allServices.some(
+            (s) =>
+                (bookingServiceId > 0 && s.service_id === bookingServiceId) ||
+                (bookingServiceName && s.service_name?.[0]?.toLowerCase() === bookingServiceName.toLowerCase())
+        );
+        if (exists) return allServices;
+        const name = bookingServiceName || `Service #${booking.booking_id}`;
+        const fallback: ApiMainService = {
+            service_id: bookingServiceId > 0 ? bookingServiceId : -(booking.booking_id || 0),
+            service_name: [name, name],
+            service_price: booking.main_service?.service_price ?? booking.total_price,
+        };
+        return [...allServices, fallback];
+    }, [allServices, booking]);
+
     /* ─── Fetch user locations & vehicles via user_id ─── */
     const userId = booking?.user_id ?? booking?.user?.customer_id;
 
@@ -229,16 +250,18 @@ const ManageBookingDetails = () => {
     const resolveMainServiceId = (): number | null => {
         if (!booking) return null;
         // 1. Direct numeric field (if the API does return it)
-        const directId = booking.main_service_id ?? booking.service_id ?? booking.main_service;
+        const directId = booking.main_service_id ?? booking.service_id ?? booking.main_service?.service_id;
         if (directId && Number(directId) > 0) return Number(directId);
-        // 2. Match by service_name from booking list data
-        const bookingServiceName = booking.service_name;
-        if (bookingServiceName && allServices.length > 0) {
-            const match = allServices.find(
-                (s) => s.service_name?.[0]?.toLowerCase() === String(bookingServiceName).toLowerCase()
+        // 2. Match by service_name from merged list (includes booking's own service)
+        const bookingServiceName = booking.main_service?.service_name || booking.service_name;
+        if (bookingServiceName) {
+            const match = mergedServices.find(
+                (s) => s.service_name?.[0]?.toLowerCase() === bookingServiceName.toLowerCase()
             );
             if (match) return match.service_id;
         }
+        // 3. Fallback: booking has data but no match — use booking_id as synthetic ID
+        if (bookingServiceName || booking.main_service || booking.total_price) return -(booking.booking_id || 0);
         return null;
     };
 
@@ -311,11 +334,12 @@ const ManageBookingDetails = () => {
 
     /* ─── Derived: selected service & available extras ─── */
     const selectedServiceObj = useMemo(
-        () => allServices.find((s) => s.service_id === form.main_service),
-        [allServices, form.main_service]
+        () => mergedServices.find((s) => s.service_id === form.main_service),
+        [mergedServices, form.main_service]
     );
 
     const selectedServiceName = selectedServiceObj?.service_name?.[0]
+        ?? booking?.main_service?.service_name
         ?? booking?.service_name
         ?? "—";
 
@@ -859,7 +883,7 @@ const ManageBookingDetails = () => {
                                     >
                                         <span className={cn("truncate", form.main_service ? "text-gray-800" : "text-gray-400")}>
                                             {selectedServiceObj
-                                                ? selectedServiceObj.service_name?.[0]
+                                                ? (selectedServiceObj.service_name?.[0] || booking?.main_service?.service_name || booking?.service_name || `Service #${form.main_service}`)
                                                 : form.main_service
                                                     ? `Service #${form.main_service}`
                                                     : t("bookings.manageBookingDetails.selectService")
@@ -869,12 +893,12 @@ const ManageBookingDetails = () => {
                                     </button>
                                     {isServiceDropdownOpen && (
                                         <div className="absolute z-50 w-full mt-1 rounded-xl border bg-white shadow-lg max-h-60 overflow-auto">
-                                            {allServices.length === 0 ? (
+                                            {mergedServices.length === 0 ? (
                                                 <div className="w-full h-20 flex justify-center items-center text-gray-300 text-sm">
                                                     {t("bookings.manageBookingDetails.noServices")}
                                                 </div>
                                             ) : (
-                                                allServices.map((svc) => (
+                                                mergedServices.map((svc) => (
                                                     <button
                                                         key={svc.service_id}
                                                         type="button"
@@ -888,7 +912,7 @@ const ManageBookingDetails = () => {
                                                         )}
                                                     >
                                                         <div className="flex items-center justify-between">
-                                                            <span>{svc.service_name?.[0] || "Unknown"}</span>
+                                                            <span>{svc.service_name?.[0] || booking?.main_service?.service_name || booking?.service_name || `Service #${svc.service_id}`}</span>
                                                             <div className="flex items-center gap-3 text-xs text-gray-400">
                                                                 {svc.service_price && <span>EGP {svc.service_price}</span>}
                                                                 {svc.service_time && <span>{svc.service_time} min</span>}
