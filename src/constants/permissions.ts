@@ -106,6 +106,9 @@ export const ROUTE_PERMISSIONS: Record<string, number> = {
     "/compounds/subscriptions": PRIVILEGES.MANAGE_COMPOUND_SUBSCRIPTIONS,
     "/compounds/bookings": PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
 
+    // Advertising
+    "/advertising/manage": PRIVILEGES.AD_SECTION,
+
     // Technical Support
     "/technicalSupport/contactUs": PRIVILEGES.CONTACT_US,
     "/technicalSupport/manage/companies": PRIVILEGES.MANAGE_COMPANIES,

@@ -40,6 +40,8 @@ import ManageProducts from './pages/productsAndOrders/manageProducts';
 import AddProduct from './pages/productsAndOrders/subPages/addProducts';
 import AddCategory from './pages/productsAndOrders/subPages/addCategory';
 import ManageOrders from './pages/productsAndOrders/manageOrders';
+import ManageAds from './pages/ads/manageAds';
+import ManageAddAds from './pages/ads/manageAddAds';
 import AddMainArea from './pages/Geography&Regions/subPagesAddAreas/addMainArea';
 import AddSubArea from './pages/Geography&Regions/subPagesAddAreas/addSubArea';
 import EditMainArea from './pages/Geography&Regions/subPagesAddAreas/editMainArea';
@@ -168,6 +170,11 @@ export const RoutesPages = () => {
         <Route path="/services&extra/manage/Package/updatePackage/:id" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><UpdatePackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/addSubscriptionPackage" element={<PermissionGuard permissionId={P.PACKAGES_SUBSCRIPTION}><AddSubscriptionPackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/manageSubscriptions" element={<PermissionGuard permissionId={P.PACKAGES_SUBSCRIPTION}><ManageSubscription /></PermissionGuard>} />
+
+        {/* Advertising */}
+        <Route path="/advertising/manage" element={<PermissionGuard permissionId={P.AD_SECTION}><ManageAds /></PermissionGuard>} />
+        <Route path="/advertising/manage/add" element={<PermissionGuard permissionId={P.AD_SECTION}><ManageAddAds /></PermissionGuard>} />
+        <Route path="/advertising/manage/edit/:id" element={<PermissionGuard permissionId={P.AD_SECTION}><ManageAddAds /></PermissionGuard>} />
 
         {/* Products & Orders (no specific privilege mapping yet) */}
         <Route path="/products&orders/manage/Products" element={<ManageProducts />} />

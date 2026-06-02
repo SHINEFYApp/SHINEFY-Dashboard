@@ -125,6 +125,8 @@
     "broadcast": "Broadcast",
     "manageFAQS": "Manage FAQS",
     "manageOrderQuestions": "Manage Order Questions",
+    "advertising": "Advertising",
+    "manageAds": "Manage Ads",
     "logout": "Logout",
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar"
@@ -214,7 +216,11 @@
     "subscriptionDetails": "Subscription Details",
     "manageBookings": "Manage Bookings",
     "bookingDetails": "Booking Details",
-    "todaySummary": "Today Summary"
+    "todaySummary": "Today Summary",
+    "advertising": "Advertising",
+    "manageAds": "Manage Ads",
+    "addAd": "Add Ad",
+    "editAd": "Edit Ad"
   },
   "home": {
     "totalBookings": "Total Bookings",

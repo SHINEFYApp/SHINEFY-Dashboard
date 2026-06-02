@@ -124,6 +124,8 @@
     "broadcast": "البث الجماعي",
     "manageFAQS": "إدارة الأسئلة الشائعة",
     "manageOrderQuestions": "إدارة أسئلة الطلبات",
+    "advertising": "الإعلانات",
+    "manageAds": "إدارة الإعلانات",
     "logout": "تسجيل الخروج",
     "expandSidebar": "توسيع الشريط الجانبي",
     "collapseSidebar": "طي الشريط الجانبي"
@@ -213,7 +215,11 @@
     "subscriptionDetails": "تفاصيل الاشتراك",
     "manageBookings": "إدارة الحجوزات",
     "bookingDetails": "تفاصيل الحجز",
-    "todaySummary": "ملخص اليوم"
+    "todaySummary": "ملخص اليوم",
+    "advertising": "الإعلانات",
+    "manageAds": "إدارة الإعلانات",
+    "addAd": "إضافة إعلان",
+    "editAd": "تعديل الإعلان"
   },
   "home": {
     "totalBookings": "إجمالي الحجوزات",
