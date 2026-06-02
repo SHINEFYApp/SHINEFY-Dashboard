@@ -18,6 +18,16 @@ function formatDate(dateStr: string) {
     return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+function formatTime(timeStr: string) {
+    if (!timeStr) return "";
+    const [h, m] = timeStr.split(":");
+    const hours = parseInt(h, 10);
+    if (isNaN(hours)) return timeStr;
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const h12 = hours % 12 || 12;
+    return `${h12}:${m} ${ampm}`;
+}
+
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
     "0": { label: "Pending", color: "bg-yellow-100 text-yellow-800" },
     "1": { label: "In Progress", color: "bg-blue-100 text-blue-800" },
@@ -89,10 +99,17 @@ export default function ServiceBoysWithBookings() {
         {
             key: "booking_date",
             title: t("bookings.manageBooking.columns.bookingDate"),
-            render: (value: string) => (
-                <span className="text-gray-700 font-medium text-xs whitespace-nowrap">
-                    {formatDate(value)}
-                </span>
+            render: (_value: string, row: any) => (
+                <div className="flex flex-col">
+                    <span className="text-gray-700 font-medium text-xs whitespace-nowrap">
+                        {formatDate(row.booking_date)}
+                    </span>
+                    {row.booking_time && (
+                        <span className="text-gray-400 text-[10px] whitespace-nowrap">
+                            {formatTime(row.booking_time)}
+                        </span>
+                    )}
+                </div>
             ),
         },
         {

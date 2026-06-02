@@ -510,6 +510,7 @@ export interface Booking {
     booking_id: number;
     booking_no: string;
     booking_date: string;
+    booking_time?: string;
     status: string;
     total_price: string;
     customer_name: string;
