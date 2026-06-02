@@ -21,6 +21,8 @@ export default function AdvancedUserFilter() {
         filter_type: searchParams.get("filter_type") || "",
         from_date: searchParams.get("from_date") || "",
         to_date: searchParams.get("to_date") || "",
+        register_from_date: searchParams.get("register_from_date") || "",
+        register_to_date: searchParams.get("register_to_date") || "",
         min_bookings: searchParams.get("min_bookings") || "",
         days: searchParams.get("days") || "",
         cancel_pct: searchParams.get("cancel_pct") || "",
@@ -39,6 +41,8 @@ export default function AdvancedUserFilter() {
         };
         if (appliedFilters.from_date) params.from_date = appliedFilters.from_date;
         if (appliedFilters.to_date) params.to_date = appliedFilters.to_date;
+        if (appliedFilters.register_from_date) params.register_from_date = appliedFilters.register_from_date;
+        if (appliedFilters.register_to_date) params.register_to_date = appliedFilters.register_to_date;
         if (appliedFilters.min_bookings) params.min_bookings = Number(appliedFilters.min_bookings);
         if (appliedFilters.days) params.days = Number(appliedFilters.days);
         if (appliedFilters.cancel_pct) params.cancel_pct = Number(appliedFilters.cancel_pct);
@@ -85,6 +89,8 @@ export default function AdvancedUserFilter() {
         if (values.filter_type) params.set("filter_type", values.filter_type);
         if (values.from_date) params.set("from_date", values.from_date);
         if (values.to_date) params.set("to_date", values.to_date);
+        if (values.register_from_date) params.set("register_from_date", values.register_from_date);
+        if (values.register_to_date) params.set("register_to_date", values.register_to_date);
         if (values.min_bookings) params.set("min_bookings", values.min_bookings);
         if (values.days) params.set("days", values.days);
         if (values.cancel_pct) params.set("cancel_pct", values.cancel_pct);
@@ -179,6 +185,8 @@ export default function AdvancedUserFilter() {
                             filter_type: appliedFilters.filter_type,
                             from_date: appliedFilters.from_date,
                             to_date: appliedFilters.to_date,
+                            register_from_date: appliedFilters.register_from_date,
+                            register_to_date: appliedFilters.register_to_date,
                             min_bookings: appliedFilters.min_bookings,
                             days: appliedFilters.days,
                             cancel_pct: appliedFilters.cancel_pct,
@@ -247,6 +255,15 @@ export default function AdvancedUserFilter() {
                                                 </div>
                                             )}
 
+                                            <div className="w-full md:w-[320px]">
+                                                <FormDateRangePicker
+                                                    fromName="register_from_date"
+                                                    toName="register_to_date"
+                                                    label="Registration Date"
+                                                    placeholder="Select registration date range"
+                                                />
+                                            </div>
+
                                             <button
                                                 type="submit"
                                                 className="w-full md:w-[120px] h-fit py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap flex items-center justify-center gap-2"
@@ -272,6 +289,9 @@ export default function AdvancedUserFilter() {
                                             Showing results for: <span className="font-semibold text-gray-700">{filterOptionsList.find(f => f.value === selectedFilter)?.label || selectedFilter}</span>
                                             {showDateRange && appliedFilters.from_date && appliedFilters.to_date && (
                                                 <> &middot; {appliedFilters.from_date} to {appliedFilters.to_date}</>
+                                            )}
+                                            {appliedFilters.register_from_date && appliedFilters.register_to_date && (
+                                                <> &middot; Registered {appliedFilters.register_from_date} to {appliedFilters.register_to_date}</>
                                             )}
                                         </p>
                                     )}

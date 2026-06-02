@@ -36,6 +36,8 @@ export interface AdvancedFilterParams {
     limit?: number;
     from_date?: string;
     to_date?: string;
+    register_from_date?: string;
+    register_to_date?: string;
     min_bookings?: number;
     days?: number;
     cancel_pct?: number;
