@@ -74,6 +74,16 @@ export default function ManageAds() {
                     : "-",
         },
         {
+            key: "link",
+            title: "Link",
+            render: (_: any, row: any) =>
+                row.link ? (
+                    <a href={row.link} target="_blank" rel="noopener noreferrer" className="text-[#1976D2] underline text-sm">
+                        {row.link.length > 40 ? row.link.substring(0, 40) + "..." : row.link}
+                    </a>
+                ) : "-",
+        },
+        {
             key: "image",
             title: "Image",
             render: (_: any, row: any) => (
@@ -107,7 +117,7 @@ export default function ManageAds() {
             key: "is_active",
             title: "Active",
             render: (_: any, row: any) =>
-                row.is_active ? (
+                row.is_active === "1" ? (
                     <span className="text-green-600 font-semibold">Yes</span>
                 ) : (
                     <span className="text-red-600 font-semibold">No</span>
@@ -136,11 +146,11 @@ export default function ManageAds() {
                         <Trash2 /> Delete
                     </button>
                     <button
-                        className={`flex items-center gap-2 rounded-[2.75px] border p-2 font-semibold transition-colors ${row.is_active ? "bg-[#C9FFCB] text-[#4CAF50] border-[#4CAF50] hover:text-[#C9FFCB] hover:bg-[#4CAF50]" : "bg-gray-100 text-gray-600 border-gray-400 hover:text-white hover:bg-gray-600"}`}
+                        className={`flex items-center gap-2 rounded-[2.75px] border p-2 font-semibold transition-colors ${row.is_active === "1" ? "bg-[#C9FFCB] text-[#4CAF50] border-[#4CAF50] hover:text-[#C9FFCB] hover:bg-[#4CAF50]" : "bg-gray-100 text-gray-600 border-gray-400 hover:text-white hover:bg-gray-600"}`}
                         onClick={() => toggleStatus(row.id)}
                     >
-                        {row.is_active ? <ToggleRight /> : <ToggleLeft />}
-                        {row.is_active ? "Active" : "Inactive"}
+                        {row.is_active === "1" ? <ToggleRight /> : <ToggleLeft />}
+                        {row.is_active === "1" ? "Active" : "Inactive"}
                     </button>
                 </div>
             ),
