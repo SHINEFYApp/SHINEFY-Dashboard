@@ -196,6 +196,106 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             ]
         },
         {
+            icon: <Settings className="w-5 h-5" />,
+            label: 'Services & Extra',
+            i18nKey: 'sidebar.servicesAndExtra',
+            isActive: currentPath?.startsWith('/services&extra/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Service',
+                    i18nKey: 'sidebar.manageService',
+                    path: '/services&extra/manage/Service',
+                    permissionId: PRIVILEGES.MANAGE_SERVICE,
+                },
+                {
+                    icon: null,
+                    label: 'Reorder Services',
+                    i18nKey: 'sidebar.reorderServices',
+                    path: '/services&extra/manage/Service/reorder',
+                    permissionId: PRIVILEGES.MANAGE_SERVICE,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Extra Service',
+                    i18nKey: 'sidebar.manageExtraService',
+                    path: '/services&extra/manage/ExtreService',
+                    permissionId: PRIVILEGES.MANAGE_EXTRA_SERVICE,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Special Service',
+                    i18nKey: 'sidebar.manageSpecialService',
+                    path: '/services&extra/manage/SpecialService',
+                    permissionId: PRIVILEGES.MANAGE_SPECIAL_SERVICE,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Coupon',
+                    i18nKey: 'sidebar.manageCoupon',
+                    path: '/services&extra/manage/Coupon',
+                    permissionId: PRIVILEGES.MANAGE_COUPON,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Package',
+                    i18nKey: 'sidebar.managePackage',
+                    path: '/services&extra/manage/Package',
+                    permissionId: PRIVILEGES.MANAGE_PACKAGES,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Subscriptions',
+                    i18nKey: 'sidebar.manageSubscriptions',
+                    path: '/services&extra/manage/Package/manageSubscriptions',
+                    permissionId: PRIVILEGES.PACKAGES_SUBSCRIPTION,
+                }
+            ],
+        },
+        {
+            icon: <Map className="w-5 h-5" />,
+            label: 'Compounds System',
+            i18nKey: 'sidebar.compoundsSystem',
+            isActive: currentPath?.startsWith('/compounds'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Compounds',
+                    i18nKey: 'sidebar.manageCompounds',
+                    path: '/compounds/manage',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUNDS,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Packages',
+                    i18nKey: 'sidebar.managePackages',
+                    path: '/compounds/packages',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_PACKAGES,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Subscriptions',
+                    i18nKey: 'sidebar.manageSubscriptions',
+                    path: '/compounds/subscriptions',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_SUBSCRIPTIONS,
+                },
+                {
+                    icon: null,
+                    label: 'Manage Bookings',
+                    i18nKey: 'sidebar.manageBookings',
+                    path: '/compounds/bookings',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
+                },
+                {
+                    icon: null,
+                    label: 'Today Summary',
+                    i18nKey: 'sidebar.todaySummary',
+                    path: '/compounds/today-summary',
+                    permissionId: PRIVILEGES.MANAGE_COMPOUND_BOOKINGS,
+                },
+            ],
+        },
+        {
             icon: <Box className="w-5 h-5" />,
             label: 'Advertising',
             i18nKey: 'sidebar.advertising',
@@ -237,6 +337,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     path: '/financial&points/manage/bonusPoint',
                     permissionId: PRIVILEGES.MANAGE_BONUS_POINT,
                 },
+            ],
+        },
+        {
+            icon: <Box className="w-5 h-5" />,
+            label: 'Products & Orders',
+            i18nKey: 'sidebar.productsAndOrders',
+            isActive: currentPath?.startsWith('/products&orders/manage'),
+            subItems: [
+                {
+                    icon: null,
+                    label: 'Manage Products',
+                    i18nKey: 'sidebar.manageProducts',
+                    path: '/products&orders/manage/Products'
+
+                },
+                {
+                    icon: null,
+                    label: 'Manage Orders',
+                    i18nKey: 'sidebar.manageOrders',
+                    path: '/products&orders/manage/Orders'
+                }
             ],
         },
         {
