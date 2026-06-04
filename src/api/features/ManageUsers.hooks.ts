@@ -15,6 +15,9 @@ import {
     editOtpStatus,
     getCompanies,
     editUserProfile,
+    addUserLocation,
+    editUserLocation,
+    deleteUserLocation,
     type UsersParams,
     type ExportUsersPayload,
     type UserDetailsParams,
@@ -136,6 +139,14 @@ export const useAddUserLocation = (options?: any) => {
 export const useEditUserLocation = (options?: any) => {
     return useMutation<any, AxiosError, EditLocationParams>({
         mutationFn: (params: EditLocationParams) => editUserLocation(params),
+        ...options
+    });
+};
+
+// Delete user location (Mutation)
+export const useDeleteUserLocation = (options?: any) => {
+    return useMutation<any, AxiosError, { user_location_id: number; user_id: number | string }>({
+        mutationFn: (params: { user_location_id: number; user_id: number | string }) => deleteUserLocation(params),
         ...options
     });
 };
