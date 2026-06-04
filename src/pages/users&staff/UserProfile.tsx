@@ -13,6 +13,7 @@ import {
     useUserPackages,
     useAddUserLocation,
     useEditUserLocation,
+    useDeleteUserLocation,
     useEditUserVehicle,
     useEditUserProfile,
 } from "../../api/features/ManageUsers.hooks";
@@ -143,6 +144,7 @@ export default function UserProfile() {
             queryClient.invalidateQueries({ queryKey: ["user-locations", userId] });
         },
         onError: (error: any) => {
+            console.error("Add location error:", error);
             toast.error(error?.response?.data?.message || "Failed to add location");
         },
     });
@@ -154,7 +156,19 @@ export default function UserProfile() {
             queryClient.invalidateQueries({ queryKey: ["user-locations", userId] });
         },
         onError: (error: any) => {
+            console.error("Edit location error:", error);
             toast.error(error?.response?.data?.message || "Failed to update location");
+        },
+    });
+
+    const { mutate: deleteLocation, isPending: isDeletingLocation } = useDeleteUserLocation({
+        onSuccess: () => {
+            toast.success("Location deleted successfully");
+            queryClient.invalidateQueries({ queryKey: ["user-locations", userId] });
+        },
+        onError: (error: any) => {
+            console.error("Delete location error:", error);
+            toast.error(error?.response?.data?.message || "Failed to delete location");
         },
     });
 
@@ -286,18 +300,29 @@ export default function UserProfile() {
                         <Eye className="w-3 h-3" /> View
                     </a>
                     <button
-                        onClick={() => setLocationModal({ open: true, mode: "edit", data: record })}
+                        onClick={() => {
+                            console.log("Edit location record:", record);
+                            setLocationModal({ open: true, mode: "edit", data: record });
+                        }}
                         className="bg-[#C9FFCB] flex items-center gap-1 rounded-[2.75px] text-[#4CAF50] border border-[#4CAF50] capitalize hover:text-[#C9FFCB] hover:bg-[#4CAF50] px-2 py-1 text-xs font-semibold transition-colors"
                     >
                         <Pencil className="w-3 h-3" /> Edit
                     </button>
-                    <button className="bg-[#FFD5D2] flex items-center gap-1 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-2 py-1 text-xs font-semibold transition-colors">
+                    <button
+                        onClick={() => {
+                            if (window.confirm("Are you sure you want to delete this location?")) {
+                                deleteLocation({ user_location_id: record.user_location_id, user_id: userId });
+                            }
+                        }}
+                        disabled={isDeletingLocation}
+                        className="bg-[#FFD5D2] flex items-center gap-1 rounded-[2.75px] text-[#F44336] border border-[#F44336] capitalize hover:text-[#FFD5D2] hover:bg-[#F44336] px-2 py-1 text-xs font-semibold transition-colors disabled:opacity-50"
+                    >
                         <Trash2 className="w-3 h-3" /> Delete
                     </button>
                 </div>
             ),
         },
-    ], []);
+    ], [deleteLocation, isDeletingLocation]);
 
     // Wallet columns
     const walletColumns = useMemo(() => [
@@ -786,7 +811,7 @@ export default function UserProfile() {
                     <Formik
                         enableReinitialize
                         initialValues={{
-                            name: locationModal.data?.name || "",
+                            name: locationModal.data?.user_address_name || locationModal.data?.name || "",
                             location: locationModal.data?.location || "",
                             latitude: locationModal.data?.latitude || "",
                             longitude: locationModal.data?.longitude || "",

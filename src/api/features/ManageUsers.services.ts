@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import { getService, postService, putService } from "../service/service-requests";
+import { getService, postService, putService, deleteService } from "../service/service-requests";
 
 export interface User {
     name: string;
@@ -197,6 +197,12 @@ export interface EditLocationParams {
 
 export const editUserLocation = async (params: EditLocationParams) => {
     const res: AxiosResponse = await putService("/api/users/edit/location", params);
+    return res.data;
+};
+
+// DELETE /api/users/delete/location
+export const deleteUserLocation = async (params: { user_location_id: number; user_id: number | string }) => {
+    const res: AxiosResponse = await deleteService("/api/users/delete/location", null, { params });
     return res.data;
 };
 
