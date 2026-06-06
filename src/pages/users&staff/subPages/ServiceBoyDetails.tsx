@@ -58,7 +58,9 @@ const ServiceBoyDetails = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [activeTab, setActiveTab] = useState('Service Boy Details');
     const [filters, setFilters] = useState({ status: "", date_from: "", date_to: "" });
-    const [reportDate, setReportDate] = useState(() => new Date().toISOString().split("T")[0]);
+    const todayStr = () => new Date().toISOString().split("T")[0];
+    const [dateFrom, setDateFrom] = useState(todayStr);
+    const [dateTo, setDateTo] = useState(todayStr);
     const pageSize = 10;
 
     const { data: responseData, isLoading, isError } = useGetServiceBoyDetails(id as string);
@@ -71,7 +73,7 @@ const ServiceBoyDetails = () => {
         ...(filters.date_to && { date_to: filters.date_to }),
     });
 
-    const { data: dailyReportResponse, isLoading: isLoadingReport } = useGetServiceBoyDailyReport(id as string, reportDate);
+    const { data: dailyReportResponse, isLoading: isLoadingReport } = useGetServiceBoyDailyReport(id as string, dateFrom, dateTo);
     const dailyReport = dailyReportResponse?.data?.data;
 
     const tabs = ['Service Boy Details', 'Booking History', 'My Area', 'Daily Report'];
@@ -396,8 +398,23 @@ const ServiceBoyDetails = () => {
                             <Calendar className="w-5 h-5 text-gray-400" />
                             <input
                                 type="date"
-                                value={reportDate}
-                                onChange={(e) => setReportDate(e.target.value)}
+                                value={dateFrom}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setDateFrom(val);
+                                    if (dateTo < val) setDateTo(val);
+                                }}
+                                className="bg-transparent border-none outline-none text-sm font-medium text-gray-700"
+                            />
+                        </div>
+                        <span className="text-gray-400 font-medium text-sm">to</span>
+                        <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5">
+                            <Calendar className="w-5 h-5 text-gray-400" />
+                            <input
+                                type="date"
+                                value={dateTo}
+                                min={dateFrom}
+                                onChange={(e) => setDateTo(e.target.value)}
                                 className="bg-transparent border-none outline-none text-sm font-medium text-gray-700"
                             />
                         </div>
@@ -405,9 +422,13 @@ const ServiceBoyDetails = () => {
 
                     {isLoadingReport ? (
                         <div className="py-10 text-center text-gray-500 font-medium">Loading report...</div>
-                    ) : !dailyReport ? (
-                        <div className="py-10 text-center text-gray-500 font-medium bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                            No data for this date
+                    ) : !dailyReport || dailyReport.completed_bookings_count === 0 ? (
+                        <div className="py-16 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                            <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                            <p className="text-gray-500 font-semibold text-lg">No completed bookings</p>
+                            <p className="text-gray-400 text-sm mt-1">
+                                {serviceBoy?.name} has no completed bookings for the selected date range.
+                            </p>
                         </div>
                     ) : (
                         <>
@@ -418,6 +439,19 @@ const ServiceBoyDetails = () => {
                                         <Briefcase className="w-5 h-5 text-green-500" />
                                     </div>
                                     <p className="text-2xl font-bold text-gray-900">{dailyReport.completed_bookings_count}</p>
+                                </div>
+                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Average Rating</p>
+                                        <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                    </div>
+                                    <p className="text-2xl font-bold text-gray-900">
+                                        {dailyReport.average_rating != null ? (
+                                            <>{dailyReport.average_rating.toFixed(1)}</>
+                                        ) : (
+                                            <span className="text-gray-300">&mdash;</span>
+                                        )}
+                                    </p>
                                 </div>
                                 <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
                                     <div className="flex items-center justify-between mb-2">
@@ -432,13 +466,6 @@ const ServiceBoyDetails = () => {
                                         <Route className="w-5 h-5 text-orange-500" />
                                     </div>
                                     <p className="text-2xl font-bold text-gray-900">{dailyReport.total_km.toFixed(2)} km</p>
-                                </div>
-                                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Avg KM</p>
-                                        <TrendingUp className="w-5 h-5 text-purple-500" />
-                                    </div>
-                                    <p className="text-2xl font-bold text-gray-900">{dailyReport.average_km.toFixed(2)} km</p>
                                 </div>
                             </div>
 
@@ -464,6 +491,12 @@ const ServiceBoyDetails = () => {
                                                 </div>
                                             );
                                         })}
+                                        <div className="flex items-center justify-between py-2 pt-3 border-t-2 border-gray-200">
+                                            <span className="text-sm font-bold text-gray-900">Total</span>
+                                            <span className="text-sm font-bold text-gray-900">
+                                                {Object.values(dailyReport.payment_breakdown).reduce((s, p) => s + p.count, 0)} bookings &middot; EGR {Object.values(dailyReport.payment_breakdown).reduce((s, p) => s + p.amount, 0).toFixed(2)}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -477,19 +510,9 @@ const ServiceBoyDetails = () => {
                                             <span className="text-sm font-semibold text-gray-700">Commissionable Bookings</span>
                                             <span className="text-sm font-bold text-blue-600">{dailyReport.commission.commissionable_bookings_count}</span>
                                         </div>
-                                        <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                                            <span className="text-sm font-semibold text-gray-700">Total Commission</span>
-                                            <span className="text-sm font-bold text-green-600">EGP {dailyReport.commission.total_commission.toFixed(2)}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                                            <span className="text-sm font-semibold text-gray-700">First 4 No Commission</span>
-                                            <span className={`text-sm font-bold ${dailyReport.commission.first_4_no_commission ? "text-red-500" : "text-gray-500"}`}>
-                                                {dailyReport.commission.first_4_no_commission ? "Yes" : "No"}
-                                            </span>
-                                        </div>
-                                        <div className="py-2">
-                                            <span className="text-xs text-gray-500 font-medium">Commission Rule:</span>
-                                            <p className="text-xs text-gray-400 mt-1 leading-relaxed">{dailyReport.commission.commission_rate}</p>
+                                        <div className="flex items-center justify-between py-3">
+                                            <span className="text-base font-bold text-gray-800">Total Commission</span>
+                                            <span className="text-lg font-bold text-green-600">EGP {dailyReport.commission.total_commission.toFixed(2)}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -511,21 +534,24 @@ const ServiceBoyDetails = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {dailyReport.commission.bookings.map((b) => (
-                                                <tr key={b.booking_id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                                    <td className="py-3 px-3 text-gray-700 font-medium">{b.position}</td>
-                                                    <td className="py-3 px-3">
-                                                        <Link to={`/bookings/manage/${b.booking_id}`} className="text-primary hover:underline font-medium">
-                                                            #{b.booking_id}
-                                                        </Link>
-                                                    </td>
-                                                    <td className="py-3 px-3 text-right text-gray-700">{b.vehicle_count}</td>
-                                                    <td className="py-3 px-3 text-right text-gray-700">EGP {b["main_service_20%"].toFixed(2)}</td>
-                                                    <td className="py-3 px-3 text-right text-gray-700">EGP {b["extra_service_20%"].toFixed(2)}</td>
-                                                    <td className="py-3 px-3 text-right font-bold text-green-600">EGP {b.commission.toFixed(2)}</td>
-                                                    <td className="py-3 px-3 text-xs text-gray-400">{b.note || "—"}</td>
-                                                </tr>
-                                            ))}
+                                            {dailyReport.commission.bookings.map((b) => {
+                                                const isFirst4 = b.position <= 4 && b.commission === 0;
+                                                return (
+                                                    <tr key={b.booking_id} className={`border-b border-gray-50 transition-colors ${isFirst4 ? "bg-yellow-50/60" : "hover:bg-gray-50"}`}>
+                                                        <td className="py-3 px-3 text-gray-700 font-medium">{b.position}</td>
+                                                        <td className="py-3 px-3">
+                                                            <Link to={`/bookings/manage/${b.booking_id}`} className="text-primary hover:underline font-medium">
+                                                                #{b.booking_id}
+                                                            </Link>
+                                                        </td>
+                                                        <td className="py-3 px-3 text-right text-gray-700">{b.vehicle_count}</td>
+                                                        <td className="py-3 px-3 text-right text-gray-700">EGP {b["main_service_20%"].toFixed(2)}</td>
+                                                        <td className="py-3 px-3 text-right text-gray-700">EGP {b["extra_service_20%"].toFixed(2)}</td>
+                                                        <td className="py-3 px-3 text-right font-bold text-green-600">EGP {b.commission.toFixed(2)}</td>
+                                                        <td className="py-3 px-3 text-xs text-gray-400">{b.note || <span className="text-gray-300">&mdash;</span>}</td>
+                                                    </tr>
+                                                );
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>

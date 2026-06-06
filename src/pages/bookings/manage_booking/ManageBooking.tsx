@@ -141,11 +141,6 @@ export default function ManageBooking() {
         "4": { label: t("bookings.manageBooking.status.confirmed"), color: "bg-indigo-100 text-indigo-800" },
     };
 
-    const BOOKING_TYPE_MAP: Record<number, { label: string; color: string }> = {
-        0: { label: t("bookings.manageBooking.bookingType.suchdegle"), color: "bg-purple-100 text-purple-800" },
-        1: { label: t("bookings.manageBooking.bookingType.waiting"), color: "bg-orange-100 text-orange-800" },
-    };
-
     const columns = [
         { key: "booking_no", title: t("bookings.manageBooking.columns.bookingNo") },
         { key: "customer_name", title: t("bookings.manageBooking.columns.customer") },
@@ -185,13 +180,28 @@ export default function ManageBooking() {
         {
             key: "booking_type",
             title: t("bookings.manageBooking.columns.type"),
-            render: (value: number) => {
-                const bt = BOOKING_TYPE_MAP[value];
-                if (!bt) return <span className="text-gray-500">—</span>;
+            render: (_value: number, row: any) => {
+                const BOOKING_TYPE_MAP: Record<number, { label: string; color: string }> = {
+                    0: { label: t("bookings.manageBooking.bookingType.suchdegle"), color: "bg-purple-100 text-purple-800" },
+                    1: { label: t("bookings.manageBooking.bookingType.waiting"), color: "bg-orange-100 text-orange-800" },
+                };
+                const bt = BOOKING_TYPE_MAP[row.booking_type];
+                const isMulti = row.order_type === 1;
+                const orderLabel = isMulti
+                    ? t("bookings.manageBooking.bookingType.multi", { count: row.vehicles_count ?? 0 })
+                    : t("bookings.manageBooking.bookingType.single");
+                const orderColor = isMulti ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800";
                 return (
-                    <span className={cn("inline-block px-2.5 py-1 rounded-full text-xs font-semibold", bt.color)}>
-                        {bt.label}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                        {bt && (
+                            <span className={cn("inline-block px-2 py-0.5 rounded-full text-xs font-semibold", bt.color)}>
+                                {bt.label}
+                            </span>
+                        )}
+                        <span className={cn("inline-block px-2 py-0.5 rounded-full text-xs font-semibold", orderColor)}>
+                            {orderLabel}
+                        </span>
+                    </div>
                 );
             },
         },
