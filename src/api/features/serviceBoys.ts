@@ -206,6 +206,7 @@ export interface DailyReportCommissionBooking {
     vehicle_count: number;
     "main_service_20%": number;
     "extra_service_20%": number;
+    date?: string;
     note?: string;
 }
 
