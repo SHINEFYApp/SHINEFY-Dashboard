@@ -547,9 +547,9 @@ const ServiceBoyDetails = () => {
                                                         </td>
                                                         <td className="py-3 px-3 text-gray-700">{b.date || <span className="text-gray-300">&mdash;</span>}</td>
                                                         <td className="py-3 px-3 text-right text-gray-700">{b.vehicle_count}</td>
-                                                        <td className="py-3 px-3 text-right text-gray-700">EGP {b["main_service_20%"].toFixed(2)}</td>
-                                                        <td className="py-3 px-3 text-right text-gray-700">EGP {b["extra_service_20%"].toFixed(2)}</td>
-                                                        <td className="py-3 px-3 text-right font-bold text-green-600">EGP {b.commission.toFixed(2)}</td>
+                                                        <td className="py-3 px-3 text-right text-gray-700">EGP {(b["main_service_20%"] ?? 0).toFixed(2)}</td>
+                                                        <td className="py-3 px-3 text-right text-gray-700">EGP {(b["extra_service_20%"] ?? 0).toFixed(2)}</td>
+                                                        <td className="py-3 px-3 text-right font-bold text-green-600">EGP {(b.commission ?? 0).toFixed(2)}</td>
                                                         <td className="py-3 px-3 text-xs text-gray-400">{b.note || <span className="text-gray-300">&mdash;</span>}</td>
                                                     </tr>
                                                 );
