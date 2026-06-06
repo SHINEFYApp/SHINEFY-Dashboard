@@ -369,7 +369,9 @@
       },
       "bookingType": {
         "suchdegle": "مجدول",
-        "waiting": "انتظار"
+        "waiting": "انتظار",
+        "single": "فردي",
+        "multi": "متعدد بـ {{count}} عربيات"
       }
     },
     "manageBookingDetails": {
@@ -452,7 +454,9 @@
       },
       "bookingTypeValues": {
         "suchdegle": "مجدول",
-        "waiting": "انتظار"
+        "waiting": "انتظار",
+        "single": "فردي",
+        "multi": "متعدد بـ {{count}} عربيات"
       },
       "driverStatus": {
         "assigned": "تم التعيين",

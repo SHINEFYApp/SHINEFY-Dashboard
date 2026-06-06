@@ -519,6 +519,7 @@ export interface Booking {
     payment_option: string;
     booking_type?: number;
     order_type?: number;
+    vehicles_count?: number;
     subarea?: string;
 }
 export interface Pagination {

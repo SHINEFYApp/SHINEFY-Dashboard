@@ -372,7 +372,9 @@
       },
       "bookingType": {
         "suchdegle": "Suchdegle",
-        "waiting": "Waiting"
+        "waiting": "Waiting",
+        "single": "Single",
+        "multi": "Multi with {{count}} cars"
       }
     },
     "manageBookingDetails": {
@@ -455,7 +457,9 @@
       },
       "bookingTypeValues": {
         "suchdegle": "Suchdegle",
-        "waiting": "Waiting"
+        "waiting": "Waiting",
+        "single": "Single",
+        "multi": "Multi with {{count}} cars"
       },
       "driverStatus": {
         "assigned": "Assigned",

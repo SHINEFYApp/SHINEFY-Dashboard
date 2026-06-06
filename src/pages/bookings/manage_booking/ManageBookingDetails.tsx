@@ -14,7 +14,7 @@ import { VehicleSelectionModal } from "../../../components/booking/tabs/services
 import { useGet } from "../../../api/useGetData";
 import { useParams } from "react-router";
 import { toast } from "sonner";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { getServices, singleBookingDetails } from "../../../api/features/bookings";
 import { useUpdateBooking } from "../../../api/features/bookings.hooks";
 import { useUserLocations, useUserVehicles } from "../../../api/features/ManageUsers.hooks";
@@ -535,7 +535,23 @@ const ManageBookingDetails = () => {
                     <InfoCard label={t("bookings.manageBookingDetails.orderType")} value={booking.order_pay_type || "—"} />
                     <InfoCard label={t("bookings.manageBookingDetails.currentService")} value={selectedServiceName} />
                     <InfoCard label={t("bookings.manageBookingDetails.collectStatus")} value={booking.payment_collect_status || "—"} />
-                    <InfoCard label={t("bookings.manageBookingDetails.bookingType")} value={BOOKING_TYPE[booking.booking_type]?.label || "—"} />
+                    <InfoCard label={t("bookings.manageBookingDetails.bookingType")} value={
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                            {BOOKING_TYPE[booking.booking_type] && (
+                                <span className={cn("inline-block px-2 py-0.5 rounded-full text-xs font-semibold", BOOKING_TYPE[booking.booking_type].color)}>
+                                    {BOOKING_TYPE[booking.booking_type].label}
+                                </span>
+                            )}
+                            <span className={cn(
+                                "inline-block px-2 py-0.5 rounded-full text-xs font-semibold",
+                                booking.order_type === 1 ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"
+                            )}>
+                                {booking.order_type === 1
+                                    ? t("bookings.manageBookingDetails.bookingTypeValues.multi", { count: booking.vehicles_count ?? 0 })
+                                    : t("bookings.manageBookingDetails.bookingTypeValues.single")}
+                            </span>
+                        </div>
+                    } />
                 </div>
             </div>
 
@@ -1289,14 +1305,14 @@ const ManageBookingDetails = () => {
 
 /* ─── Helper Components ─── */
 
-function InfoCard({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
+function InfoCard({ label, value, highlight = false }: { label: string; value: ReactNode; highlight?: boolean }) {
     return (
         <div className={cn(
             "rounded-xl border p-4",
             highlight ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-100"
         )}>
             <p className="text-xs text-gray-500 mb-1">{label}</p>
-            <p className={cn("text-sm font-semibold", highlight ? "text-green-700" : "text-gray-800")}>{value}</p>
+            <div className={cn("text-sm font-semibold", highlight ? "text-green-700" : "text-gray-800")}>{value}</div>
         </div>
     );
 }

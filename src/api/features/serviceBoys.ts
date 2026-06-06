@@ -212,8 +212,6 @@ export interface DailyReportCommissionBooking {
 export interface DailyReportCommission {
     total_commission: number;
     commissionable_bookings_count: number;
-    first_4_no_commission: boolean;
-    commission_rate: string;
     bookings: DailyReportCommissionBooking[];
 }
 
@@ -226,8 +224,10 @@ export interface DailyReportPaymentBreakdown {
 export interface DailyReportData {
     service_boy_id: number;
     service_boy_name: string;
-    date: string;
+    date_from: string;
+    date_to: string;
     completed_bookings_count: number;
+    average_rating: number | null;
     available_slots: number;
     total_km: number;
     average_km: number;
@@ -240,10 +240,11 @@ export interface ServiceBoyDailyReportResponse {
     data: DailyReportData;
 }
 
-// GET /service-boys/{id}/daily-report?date=YYYY-MM-DD
-export const getServiceBoyDailyReport = async (id: number | string, date?: string): Promise<AxiosResponse<ServiceBoyDailyReportResponse>> => {
+// GET /service-boys/{id}/daily-report?date_from=YYYY-MM-DD&date_to=YYYY-MM-DD
+export const getServiceBoyDailyReport = async (id: number | string, dateFrom?: string, dateTo?: string): Promise<AxiosResponse<ServiceBoyDailyReportResponse>> => {
     const params: any = {};
-    if (date) params.date = date;
+    if (dateFrom) params.date_from = dateFrom;
+    if (dateTo) params.date_to = dateTo;
     return await getService(`/api/service-boys/${id}/daily-report`, params);
 };
 

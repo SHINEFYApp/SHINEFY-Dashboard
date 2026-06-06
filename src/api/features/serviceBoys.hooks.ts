@@ -120,10 +120,10 @@ export const useGetServiceBoyBookings = (id: number | string, params?: any, opti
     });
 };
 
-export const useGetServiceBoyDailyReport = (id: number | string, date?: string, options?: any) => {
+export const useGetServiceBoyDailyReport = (id: number | string, dateFrom?: string, dateTo?: string, options?: any) => {
     return useGet({
-        queryFn: () => getServiceBoyDailyReport(id, date),
-        queryKey: ["service-boy-daily-report", id, date],
+        queryFn: () => getServiceBoyDailyReport(id, dateFrom, dateTo),
+        queryKey: ["service-boy-daily-report", id, dateFrom, dateTo],
         options: { enabled: !!id, ...options },
     });
 };
