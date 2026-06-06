@@ -526,6 +526,7 @@ const ServiceBoyDetails = () => {
                                             <tr className="border-b border-gray-200">
                                                 <th className="text-left py-3 px-3 text-gray-500 font-semibold text-xs uppercase">#</th>
                                                 <th className="text-left py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Booking ID</th>
+                                                <th className="text-left py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Booking Date</th>
                                                 <th className="text-right py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Vehicles</th>
                                                 <th className="text-right py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Main 20%</th>
                                                 <th className="text-right py-3 px-3 text-gray-500 font-semibold text-xs uppercase">Extra 20%</th>
@@ -544,6 +545,7 @@ const ServiceBoyDetails = () => {
                                                                 #{b.booking_id}
                                                             </Link>
                                                         </td>
+                                                        <td className="py-3 px-3 text-gray-700">{b.date || <span className="text-gray-300">&mdash;</span>}</td>
                                                         <td className="py-3 px-3 text-right text-gray-700">{b.vehicle_count}</td>
                                                         <td className="py-3 px-3 text-right text-gray-700">EGP {b["main_service_20%"].toFixed(2)}</td>
                                                         <td className="py-3 px-3 text-right text-gray-700">EGP {b["extra_service_20%"].toFixed(2)}</td>
