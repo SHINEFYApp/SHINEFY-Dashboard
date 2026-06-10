@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import Home from './pages/home';
+import LiveDriversMap from './pages/features/LiveDriversMap';
 import CreateBookings from './pages/bookings/CreateBookings';
 import ManageBooking from './pages/bookings/manage_booking/ManageBooking';
 import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingDetails';
@@ -195,6 +196,9 @@ export const RoutesPages = () => {
         <Route path="/compounds/bookings" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_BOOKINGS}><ManageCompoundBookings /></PermissionGuard>} />
         <Route path="/compounds/bookings/:id" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_BOOKINGS}><CompoundBookingDetails /></PermissionGuard>} />
         <Route path="/compounds/today-summary" element={<PermissionGuard permissionId={P.MANAGE_COMPOUND_BOOKINGS}><CompoundTodaySummary /></PermissionGuard>} />
+
+        {/* Live Drivers Map */}
+        <Route path="/live-drivers" element={<LiveDriversMap />} />
 
         {/* Financial & Points */}
         <Route path="/financial&points/manage/Vat" element={<PermissionGuard permissionId={P.MANAGE_VAT}><ManageVat /></PermissionGuard>} />

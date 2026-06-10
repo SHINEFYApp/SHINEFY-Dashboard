@@ -58,6 +58,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
             permissionId: PRIVILEGES.DASHBOARD,
         },
         {
+            icon: <Map className="w-5 h-5" />,
+            label: 'Live Drivers',
+            i18nKey: 'sidebar.liveDrivers',
+            path: '/live-drivers',
+            permissionId: PRIVILEGES.DASHBOARD,
+        },
+        {
             icon: <BsCalendarEvent className="w-5 h-5" />,
             label: 'Bookings',
             i18nKey: 'sidebar.bookings',
