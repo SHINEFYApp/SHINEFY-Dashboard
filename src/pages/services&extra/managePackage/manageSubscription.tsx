@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Form, Formik } from "formik"
 import { Link } from "react-router"
 import { Search, ExternalLink, Copy } from "lucide-react"
@@ -10,71 +10,98 @@ import { useResendPaymentLink } from "../../../api/features/subscriptionPackage.
 import type { UserPackageItem } from "../../../api/features/userPackages"
 import { toast } from "sonner"
 
-const statusOptions = ["", "pending", "active", "finished"]
-
 const statusLabels: Record<string, string> = {
     pending: "Pending",
     active: "Active",
     finished: "Finished",
 }
 
-const columns = [
-    { key: "id", title: "ID" },
-    { key: "user_name", title: "User Name" },
-    { key: "user_email", title: "Email" },
-    { key: "user_mobile", title: "Mobile" },
-    { key: "package_name", title: "Package" },
-    {
-        key: "status",
-        title: "Status",
-        render: (_: any, row: UserPackageItem) => {
-            const colors: Record<string, string> = {
-                pending: "text-[#FFC107] bg-[#FFF8E1] border-[#FFC107]",
-                active: "text-green-600 bg-green-50 border-green-500",
-                finished: "text-gray-500 bg-gray-100 border-gray-400",
+export default function ManageSubscription() {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [search, setSearch] = useState("")
+    const [statusFilter, setStatusFilter] = useState("")
+    const pageSize = 15
+
+    const { data, isLoading } = useGetUserPackages({
+        page: currentPage,
+        per_page: pageSize,
+        search: search || undefined,
+        status: statusFilter || undefined,
+    })
+
+    const { mutate: resendLink, isPending: resending } = useResendPaymentLink({
+        onSuccess: (res: any) => {
+            const url = res?.data?.payment_url || res?.payment_url
+            if (url) {
+                window.open(url, "_blank")
+                toast.success("Payment link generated")
             }
-            return (
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${colors[row.status] || "text-gray-500 bg-gray-100"}`}>
-                    {statusLabels[row.status] || row.status}
-                </span>
-            )
         },
-    },
-    { key: "total_price", title: "Total Price" },
-    { key: "payment_method", title: "Payment" },
-    {
-        key: "created_at_formatted",
-        title: "Created At",
-    },
-    {
-        key: "action",
-        title: "Action",
-        render: (_: any, row: UserPackageItem) => {
-            const { mutate: resendLink, isPending: resending } = useResendPaymentLink({
-                onSuccess: (data: any) => {
-                    toast.success("Payment link generated")
-                    if (data.payment_url) {
-                        window.open(data.payment_url, "_blank")
-                    }
-                },
-                onError: (err: any) => {
-                    toast.error(err?.response?.data?.message || "Failed to generate link")
-                },
-            })
+        onError: (err: any) => {
+            toast.error(err?.response?.data?.message || "Failed to generate link")
+        },
+    })
 
-            const { mutate: copyLink, isPending: copying } = useResendPaymentLink({
-                onSuccess: (data: any) => {
-                    if (data.payment_url) {
-                        navigator.clipboard.writeText(data.payment_url)
-                        toast.success("Link copied to clipboard")
-                    }
-                },
-                onError: (err: any) => {
-                    toast.error(err?.response?.data?.message || "Failed to generate link")
-                },
-            })
+    const { mutate: copyLink, isPending: copying } = useResendPaymentLink({
+        onSuccess: (res: any) => {
+            const url = res?.data?.payment_url || res?.payment_url
+            if (url) {
+                navigator.clipboard.writeText(url)
+                toast.success("Link copied to clipboard")
+            }
+        },
+        onError: (err: any) => {
+            toast.error(err?.response?.data?.message || "Failed to generate link")
+        },
+    })
 
-            return (
+    const userPackages: UserPackageItem[] = data?.data?.user_packages || []
+    const pagination = data?.data?.pagination
+    const totalEntries = pagination?.total || 0
+    const totalPages = pagination?.last_page || 0
+
+    const handleSubmit = (values: { search: string }) => {
+        setSearch(values.search)
+        setCurrentPage(1)
+    }
+
+    const handleStatusChange = (value: string) => {
+        setStatusFilter(value)
+        setCurrentPage(1)
+    }
+
+    const columns = useMemo(() => [
+        { key: "id", title: "ID" },
+        { key: "user_name", title: "User Name" },
+        { key: "user_email", title: "Email" },
+        { key: "user_mobile", title: "Mobile" },
+        { key: "package_name", title: "Package" },
+        {
+            key: "status",
+            title: "Status",
+            render: (_: any, row: UserPackageItem) => {
+                const colors: Record<string, string> = {
+                    pending: "text-[#FFC107] bg-[#FFF8E1] border-[#FFC107]",
+                    active: "text-green-600 bg-green-50 border-green-500",
+                    finished: "text-gray-500 bg-gray-100 border-gray-400",
+                }
+                return (
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${colors[row.status] || "text-gray-500 bg-gray-100"}`}>
+                        {statusLabels[row.status] || row.status}
+                    </span>
+                )
+            },
+        },
+        { key: "total_price", title: "Total Price" },
+        { key: "payment_method", title: "Payment" },
+        {
+            key: "created_at_formatted",
+            title: "Created At",
+        },
+        {
+            key: "action",
+            title: "Action",
+            render: (_: any, row: UserPackageItem) => (
                 <div className="flex gap-2 items-center">
                     {row.status === "pending" && (
                         <>
@@ -97,38 +124,9 @@ const columns = [
                         </>
                     )}
                 </div>
-            )
+            ),
         },
-    },
-]
-
-export default function ManageSubscription() {
-    const [currentPage, setCurrentPage] = useState(1)
-    const [search, setSearch] = useState("")
-    const [statusFilter, setStatusFilter] = useState("")
-    const pageSize = 15
-
-    const { data, isLoading } = useGetUserPackages({
-        page: currentPage,
-        per_page: pageSize,
-        search: search || undefined,
-        status: statusFilter || undefined,
-    })
-
-    const userPackages: UserPackageItem[] = data?.data?.user_packages || []
-    const pagination = data?.data?.pagination
-    const totalEntries = pagination?.total || 0
-    const totalPages = pagination?.last_page || 0
-
-    const handleSubmit = (values: { search: string }) => {
-        setSearch(values.search)
-        setCurrentPage(1)
-    }
-
-    const handleStatusChange = (value: string) => {
-        setStatusFilter(value)
-        setCurrentPage(1)
-    }
+    ], [resendLink, copyLink, resending, copying])
 
     return (
         <main className="w-full bg-white shadow-md px-4 md:px-6 py-4 rounded-2xl min-h-screen">
