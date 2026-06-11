@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Form, Formik } from "formik"
 import { Link } from "react-router"
-import { Search, ExternalLink } from "lucide-react"
+import { Search, ExternalLink, Copy } from "lucide-react"
 import { FormInput } from "../../../common/FormInput"
 import { FormDropdown } from "../../../common/FormDropdown"
 import { CustomTable } from "../../../common/CustomTable"
@@ -62,17 +62,39 @@ const columns = [
                 },
             })
 
+            const { mutate: copyLink, isPending: copying } = useResendPaymentLink({
+                onSuccess: (data: any) => {
+                    if (data.payment_url) {
+                        navigator.clipboard.writeText(data.payment_url)
+                        toast.success("Link copied to clipboard")
+                    }
+                },
+                onError: (err: any) => {
+                    toast.error(err?.response?.data?.message || "Failed to generate link")
+                },
+            })
+
             return (
                 <div className="flex gap-2 items-center">
                     {row.status === "pending" && (
-                        <button
-                            onClick={() => resendLink({ user_package_id: row.id })}
-                            disabled={resending}
-                            className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-white hover:bg-[#1976D2] p-2 font-semibold transition-colors text-xs"
-                        >
-                            <ExternalLink className="w-4 h-4" />
-                            {resending ? "..." : "Payment Link"}
-                        </button>
+                        <>
+                            <button
+                                onClick={() => resendLink({ user_package_id: row.id })}
+                                disabled={resending}
+                                className="bg-[#D0E8FF] flex items-center gap-2 rounded-[2.75px] text-[#1976D2] border border-[#1976D2] capitalize hover:text-white hover:bg-[#1976D2] p-2 font-semibold transition-colors text-xs"
+                            >
+                                <ExternalLink className="w-4 h-4" />
+                                {resending ? "..." : "Payment Link"}
+                            </button>
+                            <button
+                                onClick={() => copyLink({ user_package_id: row.id })}
+                                disabled={copying}
+                                className="bg-[#E8F5E9] flex items-center gap-2 rounded-[2.75px] text-[#2E7D32] border border-[#2E7D32] capitalize hover:text-white hover:bg-[#2E7D32] p-2 font-semibold transition-colors text-xs"
+                            >
+                                <Copy className="w-4 h-4" />
+                                {copying ? "..." : "Copy Link"}
+                            </button>
+                        </>
                     )}
                 </div>
             )
