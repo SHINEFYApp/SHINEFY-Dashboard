@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import { ArrowUpToLine, Eye, Key, Search, Shield, ShieldCheck, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpToLine, Eye, Key, Search, Shield, ShieldCheck, SlidersHorizontal, Tag, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useGetUsers, useExportUsers, useEditUserStatus, useEditOtpStatus, useGetCompanies, useEditUserProfile } from "../../api/features/ManageUsers.hooks";
@@ -13,12 +13,16 @@ import { CustomTable } from "../../common/CustomTable";
 import { exportTypes } from "../../constants/data";
 import FillterOptions from "./popUpWindow/filterOptions";
 import type { filterOptionsTypes } from "../../types/users&staff";
+import { UserTagsBadge } from "../../common/UserTagsBadge";
+import { AssignTagsModal } from "./popUpWindow/AssignTagsModal";
 
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function ManageUsers() {
     const queryClient = useQueryClient();
+    const [assignTagsUser, setAssignTagsUser] = useState<{ user_id: number; name: string; tags: any[] } | null>(null);
+
     const { mutate: editUserStatus } = useEditUserStatus({
         onSuccess: () => {
             toast.success("User status updated successfully");
@@ -60,6 +64,16 @@ export default function ManageUsers() {
         {
             key: "name",
             title: "Name",
+            render: (_: any, row: any) => (
+                <div>
+                    <span className="font-medium text-gray-800 text-sm">{row?.name}</span>
+                    {row?.tags && row.tags.length > 0 && (
+                        <div className="mt-1">
+                            <UserTagsBadge tags={row.tags} max={3} />
+                        </div>
+                    )}
+                </div>
+            ),
         },
         {
             key: "email",
@@ -135,8 +149,8 @@ export default function ManageUsers() {
                     </button>
                     <button
                         className={`flex items-center gap-2 rounded-[2.75px] p-2 font-semibold transition-colors border ${
-                            record.otp_status === 1 
-                                ? "bg-[#FFD5D2] text-[#F44336] border-[#F44336] hover:text-[#FFD5D2] hover:bg-[#F44336]" 
+                            record.otp_status === 1
+                                ? "bg-[#FFD5D2] text-[#F44336] border-[#F44336] hover:text-[#FFD5D2] hover:bg-[#F44336]"
                                 : "bg-[#C9FFCB] text-[#4CAF50] border-[#4CAF50] hover:text-[#C9FFCB] hover:bg-[#4CAF50]"
                         }`}
                         onClick={() => editOtpStatus({
@@ -145,6 +159,12 @@ export default function ManageUsers() {
                         })}
                     >
                         <Key className="w-4 h-4" /> {record.otp_status === 1 ? "Disable OTP" : "Enable OTP"}
+                    </button>
+                    <button
+                        className="bg-[#EEF2FF] flex items-center gap-2 rounded-[2.75px] text-[#6366f1] border border-[#6366f1] capitalize hover:text-[#EEF2FF] hover:bg-[#6366f1] p-2 font-semibold transition-colors"
+                        onClick={() => setAssignTagsUser({ user_id: record.user_id || record.id, name: record.name, tags: record.tags ?? [] })}
+                    >
+                        <Tag className="w-4 h-4" /> Tags
                     </button>
                 </div>
             ),
@@ -464,6 +484,13 @@ export default function ManageUsers() {
             </section>
             
             <FillterOptions filterOptions={filterOptions} setFilterOptions={setFilterOptions} companies={companies} subareas={subareas} />
+
+            {assignTagsUser && (
+                <AssignTagsModal
+                    user={assignTagsUser}
+                    onClose={() => setAssignTagsUser(null)}
+                />
+            )}
         </>
     )
 }

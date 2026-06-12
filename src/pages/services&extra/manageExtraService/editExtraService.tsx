@@ -20,6 +20,8 @@ export default function EditExtraService() {
         extarServiceTime: "",
         englishServiceDescription: "",
         extraArabicServiceDescription: "",
+        shortDescriptionEnglish: "",
+        shortDescriptionArabic: "",
         image: null,
     })
 
@@ -49,6 +51,8 @@ export default function EditExtraService() {
                 extarServiceTime: String(svc.extra_service_time ?? ""),
                 englishServiceDescription: svc.extra_service_description || "",
                 extraArabicServiceDescription: svc.extra_service_description_arabic || "",
+                shortDescriptionEnglish: svc.short_description || "",
+                shortDescriptionArabic: svc.short_description_arabic || "",
                 image: null,
             })
         }
@@ -73,6 +77,8 @@ export default function EditExtraService() {
                     const formData = new FormData()
                     formData.append("extra_service_name", values.extraServiceNameEnglish)
                     formData.append("extra_service_description", values.englishServiceDescription)
+                    formData.append("short_description", values.shortDescriptionEnglish || "")
+                    formData.append("short_description_arabic", values.shortDescriptionArabic || "")
                     formData.append("extra_service_name_arabic", values.serviceNameArabic)
                     formData.append("extra_service_description_arabic", values.extraArabicServiceDescription)
                     formData.append("extra_service_price", String(values.extarServicePrice))
@@ -135,6 +141,24 @@ export default function EditExtraService() {
                                     placeholder="Extra Service Time"
                                     type="text"
                                     moreOptions="m"
+                                />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-5 mt-5 border-b border-[#E9EAEC] pb-10">
+                            <div className="grid grid-cols-1 gap-5">
+                                <FormInput
+                                    name="shortDescriptionEnglish"
+                                    label="Short Description (English)"
+                                    placeholder="e.g. Deep interior cleaning"
+                                    type="text"
+                                />
+                            </div>
+                            <div className="grid grid-cols-1 gap-5">
+                                <FormInput
+                                    name="shortDescriptionArabic"
+                                    label="Short Description (Arabic)"
+                                    placeholder="مثال: تنظيف داخلي عميق"
+                                    type="text"
                                 />
                             </div>
                         </div>

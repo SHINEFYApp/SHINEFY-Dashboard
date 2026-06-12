@@ -43,6 +43,17 @@ export interface AddCouponPayload {
     start_hour?: string | null;
     end_hour?: string | null;
     max_uses_per_user: number;
+    service_boy_id?: number; // 0 = not linked to any service boy
+}
+
+export interface CouponBookingItem {
+    booking_id: number;
+    createtime: string;
+    total_price: string;
+    completed_status: number;
+    status: number;
+    customer_name: string;
+    customer_mobile: string;
 }
 
 export interface EditCouponPayload extends AddCouponPayload {
@@ -71,11 +82,11 @@ export const getCoupon = async (id: number) => {
 };
 
 export const addCoupon = async (data: AddCouponPayload) => {
-    return await postService("/api/add/coupon", null, data);
+    return await postService("/api/add/coupon", data);
 };
 
 export const editCoupon = async (data: EditCouponPayload) => {
-    return await putService(`/api/edit/coupon/${data.id}`, null, data);
+    return await putService(`/api/edit/coupon/${data.id}`, data);
 };
 
 export const deleteCoupon = async (id: number) => {
@@ -84,4 +95,11 @@ export const deleteCoupon = async (id: number) => {
 
 export const exportCoupons = async (type: 'csv' | 'excel' | 'pdf', search: string = "") => {
     return await getService(`/api/export/coupons/${type}`, { search });
+};
+
+export const getCouponBookings = async (
+    couponId: number,
+    params: { start?: number; limit?: number }
+) => {
+    return await getService(`/api/dashboard/coupons/${couponId}/bookings`, params);
 };

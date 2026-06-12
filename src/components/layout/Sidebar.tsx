@@ -105,6 +105,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle, current
                     path: '/bookings/slot/admin-slots',
                     permissionId: PRIVILEGES.MANAGE_SLOT,
                 },
+                {
+                    icon: null,
+                    label: 'Schedule Bookings',
+                    i18nKey: 'sidebar.scheduleBookings',
+                    path: '/bookings/schedules',
+                    permissionId: PRIVILEGES.MANAGE_CREATE_BOOKING,
+                },
             ],
         },
         {

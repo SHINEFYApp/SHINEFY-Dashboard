@@ -2,6 +2,9 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './pages/home';
 import LiveDriversMap from './pages/features/LiveDriversMap';
 import CreateBookings from './pages/bookings/CreateBookings';
+import ManageSchedules from './pages/bookings/manage_schedule/ManageSchedules';
+import CreateScheduleBooking from './pages/bookings/manage_schedule/CreateScheduleBooking';
+import ScheduleDetails from './pages/bookings/manage_schedule/ScheduleDetails';
 import ManageBooking from './pages/bookings/manage_booking/ManageBooking';
 import ManageBookingDetails from './pages/bookings/manage_booking/ManageBookingDetails';
 import BookingReports from './pages/bookings/manage_booking/BookingReports';
@@ -32,8 +35,10 @@ import ViewSpecialService from './pages/services&extra/manageSpecialService/view
 import ManageCoupon from './pages/services&extra/manageCoupon/manageCoupon';
 import ViewCoupon from './pages/services&extra/manageCoupon/viewCoupon';
 import EditCoupon from './pages/services&extra/manageCoupon/editCoupon';
+import CouponBookings from './pages/services&extra/manageCoupon/couponBookings';
 import ManageVehicles from './pages/vehicles/ManageVehicles';
 import ManageUsers from './pages/users&staff/ManageUsers';
+import ManageUserTags from './pages/users&staff/ManageUserTags';
 import AdvancedUserFilter from './pages/users&staff/AdvancedUserFilter';
 import ManageServiceBoy from './pages/users&staff/ManageServiceBoy';
 import AddCoupon from './pages/services&extra/manageCoupon/addCoupon';
@@ -118,6 +123,9 @@ export const RoutesPages = () => {
         <Route path="/bookings/slot/create" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><CreateBookingsSlot /></PermissionGuard>} />
         <Route path="/bookings/slot/daily-slot" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><DailySlotSettings /></PermissionGuard>} />
         <Route path="/bookings/slot/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_SLOT}><EditSpecificSlot /></PermissionGuard>} />
+        <Route path="/bookings/schedules" element={<PermissionGuard permissionId={P.MANAGE_CREATE_BOOKING}><ManageSchedules /></PermissionGuard>} />
+        <Route path="/bookings/schedules/create" element={<PermissionGuard permissionId={P.MANAGE_CREATE_BOOKING}><CreateScheduleBooking /></PermissionGuard>} />
+        <Route path="/bookings/schedules/:id" element={<PermissionGuard permissionId={P.MANAGE_CREATE_BOOKING}><ScheduleDetails /></PermissionGuard>} />
 
         {/* Vehicles */}
         <Route path="/vehicles/add" element={<PermissionGuard permissionId={P.CREATE_VEHICLE}><AddVehicles /></PermissionGuard>} />
@@ -125,6 +133,7 @@ export const RoutesPages = () => {
 
         {/* Users & Staff */}
         <Route path="/users&staff/manage/users" element={<PermissionGuard permissionId={P.MANAGE_USERS}><ManageUsers /></PermissionGuard>} />
+        <Route path="/users&staff/manage/tags" element={<PermissionGuard permissionId={P.MANAGE_USERS}><ManageUserTags /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/:id" element={<PermissionGuard permissionId={P.MANAGE_USERS}><UserProfile /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/:userId/packageDetails/:packageId" element={<PermissionGuard permissionId={P.MANAGE_USERS}><UserPackageDetails /></PermissionGuard>} />
         <Route path="/users&staff/manage/users/advanced-filter" element={<PermissionGuard permissionId={P.MANAGE_USERS}><AdvancedUserFilter /></PermissionGuard>} />
@@ -166,6 +175,7 @@ export const RoutesPages = () => {
         <Route path="/services&extra/manage/coupon/addCoupon" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><AddCoupon /></PermissionGuard>} />
         <Route path="/services&extra/manage/coupon/view/:id" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><ViewCoupon /></PermissionGuard>} />
         <Route path="/services&extra/manage/coupon/edit/:id" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><EditCoupon /></PermissionGuard>} />
+        <Route path="/services&extra/manage/coupon/:id/bookings" element={<PermissionGuard permissionId={P.MANAGE_COUPON}><CouponBookings /></PermissionGuard>} />
         <Route path="/services&extra/manage/package" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><ManagePackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/addPackage" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><AddNewPackage /></PermissionGuard>} />
         <Route path="/services&extra/manage/Package/updatePackage/:id" element={<PermissionGuard permissionId={P.MANAGE_PACKAGES}><UpdatePackage /></PermissionGuard>} />

@@ -1,6 +1,15 @@
 import { useNavigate, useParams } from "react-router"
 import { useGetCoupon } from "../../../api/features/coupons.hooks"
+import { useGetServiceBoyDetails } from "../../../api/features/serviceBoys.hooks"
 import { ArrowLeft } from "lucide-react"
+
+const audienceTypeLabels: Record<string, string> = {
+    all_users: "All Users",
+    specific_users: "Specific Users",
+    specific_groups: "Specific Groups",
+    new_users: "New Users",
+    first_booking: "First Booking Only",
+}
 
 export default function ViewCoupon() {
     const { id } = useParams()
@@ -8,6 +17,11 @@ export default function ViewCoupon() {
     const { data: couponData, isLoading } = useGetCoupon(Number(id))
 
     const coupon = couponData?.data?.data || couponData?.data || couponData
+
+    const { data: serviceBoyData } = useGetServiceBoyDetails(coupon?.service_boy_id, {
+        enabled: !!coupon && coupon.service_boy_id > 0,
+    })
+    const serviceBoyName = serviceBoyData?.data?.data?.name || serviceBoyData?.data?.name || ""
 
     if (isLoading) {
         return (
@@ -52,7 +66,7 @@ export default function ViewCoupon() {
                     <div className="space-y-1">
                         <label className="text-sm font-bold text-gray-700">Audience Type</label>
                         <div className="w-full h-[58px] px-4 rounded-xl border border-gray-100 bg-gray-50 flex items-center font-medium">
-                            {coupon?.audience_type || "N/A"}
+                            {audienceTypeLabels[coupon?.audience_type] || coupon?.audience_type || "N/A"}
                         </div>
                     </div>
                     <div className="space-y-1">
@@ -83,6 +97,12 @@ export default function ViewCoupon() {
                         </div>
                     </div>
                     <div className="space-y-1">
+                        <label className="text-sm font-bold text-gray-700">Service Boy</label>
+                        <div className="w-full h-[58px] px-4 rounded-xl border border-gray-100 bg-gray-50 flex items-center font-medium">
+                            {coupon?.service_boy_id > 0 ? serviceBoyName || "Loading..." : "Not linked"}
+                        </div>
+                    </div>
+                    <div className="space-y-1">
                         <label className="text-sm font-bold text-gray-700">Start Date</label>
                         <div className="w-full h-[58px] px-4 rounded-xl border border-gray-100 bg-gray-50 flex items-center font-medium">
                             {coupon?.start_at || "N/A"}
@@ -103,6 +123,12 @@ export default function ViewCoupon() {
                     className="px-8 py-3 bg-[#4CAF50] text-white font-bold rounded-[10px] hover:bg-[#388E3C] transition-colors"
                 >
                     Edit Coupon
+                </button>
+                <button
+                    onClick={() => navigate(`/services&extra/manage/coupon/${id}/bookings`)}
+                    className="px-8 py-3 bg-[#2196F3] text-white font-bold rounded-[10px] hover:bg-[#1976D2] transition-colors"
+                >
+                    View Bookings & Commission
                 </button>
             </div>
         </main>

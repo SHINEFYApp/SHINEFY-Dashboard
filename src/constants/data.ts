@@ -58,7 +58,11 @@ export const routeConfig: Record<string, { title: string; breadcrumbs: string[];
     },
     '/users&staff/manage/users/manageGroup': {
         title: 'Users & Stuff',
-        breadcrumbs: ['Users & Stuff', 'Manage Users' , 'Manage Group']
+        breadcrumbs: ['Users & Stuff', 'Manage Users', 'Manage Group']
+    },
+    '/users&staff/manage/tags': {
+        title: 'Users & Stuff',
+        breadcrumbs: ['Users & Stuff', 'User Tags']
     },
     '/users&staff/manage/subAdmin': {
         title: 'Users & Stuff',
@@ -413,6 +417,10 @@ export const sidebarMenuItems = [
             {
                 label: 'Manage Users Wallet',
                 path: '/users&staff/manageUsersWallet'
+            },
+            {
+                label: 'User Tags',
+                path: '/users&staff/manage/tags'
             }
         ],
     },

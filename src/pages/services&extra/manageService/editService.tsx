@@ -22,6 +22,8 @@ export default function EditService() {
         serviceDiscount: "",
         engishServiceDescription: "",
         arabicServiceDescription: "",
+        shortDescriptionEnglish: "",
+        shortDescriptionArabic: "",
         image: null,
         apply_add_extra_service: "No",
     })
@@ -54,6 +56,8 @@ export default function EditService() {
                 serviceDiscount: svc.service_discount ?? "",
                 engishServiceDescription: svc.service_description || "",
                 arabicServiceDescription: svc.service_description_arabic || "",
+                shortDescriptionEnglish: svc.short_description || "",
+                shortDescriptionArabic: svc.short_description_arabic || "",
                 image: null,
                 apply_add_extra_service: svc.apply_add_extra_service ? "Yes" : "No",
             })
@@ -80,6 +84,8 @@ export default function EditService() {
                     formData.append("service_name", values.serviceNameEnglish)
                     formData.append("service_label", values.serviceLabelEnglish)
                     formData.append("service_description", values.engishServiceDescription)
+                    formData.append("short_description", values.shortDescriptionEnglish || "")
+                    formData.append("short_description_arabic", values.shortDescriptionArabic || "")
                     formData.append("service_name_arabic", values.serviceNameArabic)
                     formData.append("service_label_arabic", values.serviceLabelArabic)
                     formData.append("service_description_arabic", values.arabicServiceDescription)
@@ -176,6 +182,24 @@ export default function EditService() {
                                         ))}
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-5 mt-5 border-b border-[#E9EAEC] pb-10">
+                            <div className="grid grid-cols-1 gap-5">
+                                <FormInput
+                                    name="shortDescriptionEnglish"
+                                    label="Short Description (English)"
+                                    placeholder="e.g. Full exterior car wash"
+                                    type="text"
+                                />
+                            </div>
+                            <div className="grid grid-cols-1 gap-5">
+                                <FormInput
+                                    name="shortDescriptionArabic"
+                                    label="Short Description (Arabic)"
+                                    placeholder="مثال: غسيل خارجي كامل للسيارة"
+                                    type="text"
+                                />
                             </div>
                         </div>
                         <div className="grid grid-cols-3 gap-5 mt-5 pb-10">

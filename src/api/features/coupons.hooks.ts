@@ -6,6 +6,7 @@ import {
     editCoupon,
     deleteCoupon,
     exportCoupons,
+    getCouponBookings,
 } from "./coupons";
 import type {
     GetCouponsParams,
@@ -69,4 +70,16 @@ export const useExportCoupons = () => {
     // Usually triggered manually, not a mutation per se but convenient wrap
     // Or just a direct function call in key handlers.
     return (type: 'csv' | 'excel' | 'pdf', search: string) => exportCoupons(type, search);
+};
+
+// GET Coupon Bookings
+export const useGetCouponBookings = (
+    couponId: number,
+    params: { start?: number; limit?: number }
+) => {
+    return useQuery({
+        queryKey: ["coupon-bookings", couponId, params],
+        queryFn: () => getCouponBookings(couponId, params),
+        enabled: !!couponId,
+    });
 };
