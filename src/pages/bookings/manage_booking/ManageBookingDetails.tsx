@@ -133,8 +133,19 @@ const ManageBookingDetails = () => {
         options: { staleTime: 1000 * 30 },
     });
 
-    const allServices: ApiMainService[] = getServicesQuery.data?.all_service_arr?.sorted_main_services ?? [];
-    const allExtras: ApiExtraService[] = getServicesQuery.data?.all_service_arr?.sorted_extra_services ?? [];
+    /* For a package booking, restrict the editable services to the ones that
+       belong to the package this booking was made from (returned by the backend
+       as `package_services`, and NOT filtered by delete_flag). Fall back to the
+       global service list for normal bookings. */
+    const packageServices = data?.data?.package_services;
+    const isPackageBooking = !!booking?.user_package_id;
+
+    const allServices: ApiMainService[] = isPackageBooking && packageServices?.main_services
+        ? packageServices.main_services
+        : (getServicesQuery.data?.all_service_arr?.sorted_main_services ?? []);
+    const allExtras: ApiExtraService[] = isPackageBooking && packageServices?.extra_services
+        ? packageServices.extra_services
+        : (getServicesQuery.data?.all_service_arr?.sorted_extra_services ?? []);
 
     /* ─── Merge booking's service into dropdown if missing from API ─── */
     const mergedServices = useMemo(() => {
@@ -448,7 +459,11 @@ const ManageBookingDetails = () => {
                 setHasChanges(false);
             },
             onError: (err: any) => {
-                toast.error(err?.response?.data?.message || t("bookings.manageBookingDetails.updateFailed"));
+                // failResponse puts the reason in `data` (array); errorResponse uses `message`.
+                const apiData = err?.response?.data;
+                const reason = apiData?.message
+                    || (Array.isArray(apiData?.data) ? apiData.data[0] : apiData?.data);
+                toast.error(reason || t("bookings.manageBookingDetails.updateFailed"));
             },
         });
     };
@@ -530,6 +545,7 @@ const ManageBookingDetails = () => {
                     <InfoCard label={t("bookings.manageBookingDetails.customer")} value={booking.user?.customer_name || "—"} />
                     <InfoCard label={t("bookings.manageBookingDetails.customerPhone")} value={booking.user?.customer_phone || "—"} />
                     <InfoCard label={t("bookings.manageBookingDetails.dateTime")} value={`${booking.booking_date || "—"} at ${booking.booking_time || "—"}`} />
+                    <InfoCard label={t("bookings.manageBookingDetails.createdAt")} value={booking.createtime || "—"} />
                     <InfoCard label={t("bookings.manageBookingDetails.payment")} value={booking.payment_option || "—"} />
                     <InfoCard label={t("bookings.manageBookingDetails.totalPrice")} value={`EGP ${booking.total_price || "0"}`} highlight />
                     <InfoCard label={t("bookings.manageBookingDetails.orderType")} value={booking.order_pay_type || "—"} />

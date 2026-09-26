@@ -163,6 +163,22 @@ export default function ManageBooking() {
             ),
         },
         {
+            key: "createtime",
+            title: t("bookings.manageBooking.columns.createdAt"),
+            render: (_value: string, row: any) => {
+                if (!row.createtime) return <span className="text-gray-400 text-xs">—</span>;
+                const [datePart, timePart] = String(row.createtime).split(" ");
+                return (
+                    <div className="flex flex-col">
+                        <span className="text-gray-500 text-xs whitespace-nowrap">{formatDate(datePart)}</span>
+                        {timePart && (
+                            <span className="text-gray-400 text-[10px] whitespace-nowrap">{formatTime(timePart)}</span>
+                        )}
+                    </div>
+                );
+            },
+        },
+        {
             key: "status",
             title: t("bookings.manageBooking.columns.status"),
             sortable: true,

@@ -511,6 +511,7 @@ export interface Booking {
     booking_no: string;
     booking_date: string;
     booking_time?: string;
+    createtime?: string;
     status: string;
     total_price: string;
     customer_name: string;

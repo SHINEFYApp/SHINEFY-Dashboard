@@ -1,13 +1,13 @@
 import { useState, useMemo } from "react"
 import { Form, Formik } from "formik"
 import { Link } from "react-router"
-import { Search, ExternalLink, Copy } from "lucide-react"
+import { Search, ExternalLink, Copy, Download } from "lucide-react"
 import { FormInput } from "../../../common/FormInput"
 import { FormDropdown } from "../../../common/FormDropdown"
 import { CustomTable } from "../../../common/CustomTable"
 import { useGetUserPackages } from "../../../api/features/userPackages.hooks"
 import { useResendPaymentLink } from "../../../api/features/subscriptionPackage.hooks"
-import type { UserPackageItem } from "../../../api/features/userPackages"
+import { exportUserPackagesCsv, type UserPackageItem } from "../../../api/features/userPackages"
 import { toast } from "sonner"
 
 const statusLabels: Record<string, string> = {
@@ -20,6 +20,8 @@ export default function ManageSubscription() {
     const [currentPage, setCurrentPage] = useState(1)
     const [search, setSearch] = useState("")
     const [statusFilter, setStatusFilter] = useState("")
+    const [expiryFilter, setExpiryFilter] = useState("")
+    const [exporting, setExporting] = useState(false)
     const pageSize = 15
 
     const { data, isLoading } = useGetUserPackages({
@@ -27,6 +29,7 @@ export default function ManageSubscription() {
         per_page: pageSize,
         search: search || undefined,
         status: statusFilter || undefined,
+        expiry: (expiryFilter || undefined) as "expired" | "valid" | undefined,
     })
 
     const { mutate: resendLink, isPending: resending } = useResendPaymentLink({
@@ -70,6 +73,36 @@ export default function ManageSubscription() {
         setCurrentPage(1)
     }
 
+    const handleExpiryChange = (value: string) => {
+        setExpiryFilter(value)
+        setCurrentPage(1)
+    }
+
+    const handleExport = async () => {
+        try {
+            setExporting(true)
+            toast.info("Exporting subscriptions...")
+            const blob = await exportUserPackagesCsv({
+                search: search || undefined,
+                status: statusFilter || undefined,
+                expiry: (expiryFilter || undefined) as "expired" | "valid" | undefined,
+            })
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement("a")
+            link.href = url
+            link.setAttribute("download", `Subscriptions_${new Date().getTime()}.csv`)
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+            window.URL.revokeObjectURL(url)
+            toast.success("Export successful! Your download should start shortly.")
+        } catch {
+            toast.error("Export failed. Please try again.")
+        } finally {
+            setExporting(false)
+        }
+    }
+
     const columns = useMemo(() => [
         { key: "id", title: "ID" },
         { key: "user_name", title: "User Name" },
@@ -86,13 +119,37 @@ export default function ManageSubscription() {
                     finished: "text-gray-500 bg-gray-100 border-gray-400",
                 }
                 return (
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${colors[row.status] || "text-gray-500 bg-gray-100"}`}>
-                        {statusLabels[row.status] || row.status}
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${colors[row.status] || "text-gray-500 bg-gray-100"}`}>
+                            {statusLabels[row.status] || row.status}
+                        </span>
+                        {row.is_expired && (
+                            <span className="px-2 py-1 rounded-full text-xs font-semibold border text-red-600 bg-red-50 border-red-400">
+                                Expired
+                            </span>
+                        )}
+                    </div>
                 )
             },
         },
         { key: "total_price", title: "Total Price" },
+        {
+            key: "remaining_total",
+            title: "Remaining",
+            render: (_: any, row: UserPackageItem) => {
+                const details = (row.services_remaining || [])
+                    .map((s) => `${s.service_name}: ${s.remind_quantity}`)
+                    .join("\n")
+                return (
+                    <span
+                        className="font-semibold text-gray-800 cursor-help"
+                        title={details || "No remaining services"}
+                    >
+                        {row.remaining_total ?? 0}
+                    </span>
+                )
+            },
+        },
         { key: "payment_method", title: "Payment" },
         {
             key: "created_at_formatted",
@@ -162,8 +219,27 @@ export default function ManageSubscription() {
                                             onChangeExternal={handleStatusChange}
                                         />
                                     </div>
+                                    <div className="w-full md:w-[160px]">
+                                        <FormDropdown
+                                            name="expiry"
+                                            label=""
+                                            placeholder="All Expiry"
+                                            options={["valid", "expired"]}
+                                            className="mb-0"
+                                            onChangeExternal={handleExpiryChange}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="flex flex-col lg:flex-row items-center gap-5">
+                                    <button
+                                        type="button"
+                                        onClick={handleExport}
+                                        disabled={exporting}
+                                        className="w-full lg:w-[150px] py-3 bg-black rounded-lg text-white font-semibold transition-all hover:bg-black/85 shadow-sm hover:shadow-md whitespace-nowrap flex items-center justify-center gap-2 disabled:opacity-60"
+                                    >
+                                        <Download className="w-4 h-4" />
+                                        {exporting ? "Exporting..." : "Export CSV"}
+                                    </button>
                                     <Link
                                         to="/services&extra/manage/Package/addSubscriptionPackage"
                                         className="w-full lg:w-[180px] py-3 bg-primary rounded-lg text-secondary-900 font-semibold transition-all hover:bg-primary-600 shadow-sm hover:shadow-md whitespace-nowrap text-center"
